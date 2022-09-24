@@ -1,0 +1,9 @@
+.btn-primary {
+  background-color: var(--color-text-light);
+  padding: 1rem;
+  font-size: 2rem;
+  font-weight: bold;
+}
+.btn-primary:hover {
+  background-color: hsl(var(--color-base-hue), 100%, 20%);
+}
