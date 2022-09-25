@@ -28,15 +28,27 @@ const indexRouter = require("./routes/index");
 //     next(new Error("unauthorized"));
 //   }
 // });
-
+let activeUsers = new Set();
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  let tempNickname = socket.id.slice(15);
+  console.log("a user connected", "User" + tempNickname);
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    console.log("disconnect");
+    activeUsers.delete("User" + tempNickname);
+    io.emit("user online", [...activeUsers]);
   });
+  socket.on("user online", () => {
+    activeUsers.add("User" + tempNickname);
+    io.emit("user online", [...activeUsers]);
+  });
+
   socket.on("chat message", (msg, date) => {
-    console.log("message: " + msg + "date" + date);
-    io.emit("chat message", msg, date);
+    console.log("[server]:  message: " + msg + "date: " + date);
+    socket.broadcast.emit("chat message", msg, date);
+  });
+  socket.on("user typing", (username) => {
+    console.log("[server]:  username is typing: " + username);
+    socket.broadcast.emit("user typing", username);
   });
 });
 

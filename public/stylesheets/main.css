@@ -6,18 +6,28 @@ body {
   overflow: hidden;
 }
 .chat-container {
-  width: 20%;
+  width: 40%;
   overflow: hidden;
   height: 100vh;
+  position: relative;
 }
 .chat-window {
   background: linear-gradient(45deg, darkblue, rgb(68, 68, 206));
-  width: 99%;
+  width: 50%;
   margin-top: 2rem;
   height: 70%;
+  float: left;
   border: 2px solid var(--color-text-light);
   position: relative;
   overflow: scroll;
+}
+.chat-info {
+  width: 50%;
+  background: linear-gradient(45deg, darkblue, rgb(68, 68, 206));
+  border: 2px solid var(--color-text-light);
+  border-top: 0;
+  text-align: center;
+  overflow: inherit;
 }
 .chat-window::-webkit-scrollbar {
   display: none;
@@ -30,9 +40,22 @@ body {
   min-height: 20px;
   max-height: 100px;
   resize: vertical;
+  margin-top: 0.05rem;
 }
 .chat-container button {
   width: 100%;
+}
+.user-list-window {
+  background: linear-gradient(45deg, darkblue, rgb(68, 68, 206));
+  width: 45%;
+  margin-top: 2rem;
+  height: 70%;
+  border: 2px solid var(--color-text-light);
+
+  /* overflow: scroll; */
+  color: var(--color-base-chat);
+  text-align: center;
+  float: right;
 }
 .message-div {
   display: flex;
