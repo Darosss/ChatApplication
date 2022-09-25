@@ -3,9 +3,9 @@
   var formChat = document.getElementById("chat-form");
   var textareaChat = document.querySelector("textarea");
   var infoChat = document.querySelector(".chat-info");
-  var onlineUsers = document.querySelector(".user-list-window");
+  var onlineUsers = document.querySelector(".user-list");
 
-  socket.on("user online", function (onlineUsersList) {
+  socket.on("refresh users", function (onlineUsersList) {
     console.log(onlineUsersList);
     onlineUsers.innerHTML = "";
     onlineUsersList.forEach((user) => {
@@ -13,7 +13,7 @@
     });
   });
   socket.on("connect", function () {
-    socket.emit("user online");
+    socket.emit("online");
   });
 
   formChat.addEventListener("submit", function (e) {

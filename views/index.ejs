@@ -19,17 +19,7 @@
   <body>
     <div class="chat-container" id="chat-container">
       <div class="chat-window" id="chat-window">
-        <% messages.forEach(message =>{ %>
-        <div class="message-div">
-          <span class="message-container">
-            <span class="time"
-              ><%= message.sentTime.toISOString().split("T")[1].split(".")[0]
-              %></span
-            ><span class="username"><%= message.sender %></span><%=
-            message.message %></span
-          >
-        </div>
-        <%})%>
+        <%- include("partials/msg-database") %>
       </div>
       <div class="user-list-window">
         <h5 class="user-list-header">USERS</h5>

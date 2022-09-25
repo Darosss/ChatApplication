@@ -1,0 +1,10 @@
+<% messages.forEach(message =>{ %>
+<div class="message-div">
+  <span class="message-container">
+    <span class="time"
+      ><%= message.sentTime.toISOString().split("T")[1].split(".")[0] %></span
+    ><span class="username"><%= message.sender %></span><%= message.message
+    %></span
+  >
+</div>
+<%})%>

@@ -8,7 +8,10 @@ router.get("/", async (req, res) => {
   let messages;
   try {
     messages = [];
-    // messages = await Message.find({}).sort({ createdAt: "desc" }).exec();
+    messages = await Message.find({})
+      .sort({ createdAt: "desc" })
+      .limit(15)
+      .exec();
   } catch {
     messages = [];
   }

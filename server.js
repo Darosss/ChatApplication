@@ -6,58 +6,15 @@ const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const session = require("express-session");
 const io = new Server(server);
 const bodyParser = require("body-parser");
 const indexRouter = require("./routes/index");
-// const sessionMiddleware = session({
-//   secret: "changeit",
-//   resave: false,
-//   saveUninitialized: false,
-// });
-
-// const wrap = (middleware) => (socket, next) =>
-//   middleware(socket.request, {}, next);
-// io.use(wrap(sessionMiddleware));
-
-// io.use((socket, next) => {
-//   const session = socket.request.session;
-//   if (session && session.authenticated) {
-//     next();
-//   } else {
-//     next(new Error("unauthorized"));
-//   }
-// });
-let activeUsers = new Set();
-io.on("connection", (socket) => {
-  let tempNickname = socket.id.slice(15);
-  console.log("a user connected", "User" + tempNickname);
-  socket.on("disconnect", () => {
-    console.log("disconnect");
-    activeUsers.delete("User" + tempNickname);
-    io.emit("user online", [...activeUsers]);
-  });
-  socket.on("user online", () => {
-    activeUsers.add("User" + tempNickname);
-    io.emit("user online", [...activeUsers]);
-  });
-
-  socket.on("chat message", (msg, date) => {
-    console.log("[server]:  message: " + msg + "date: " + date);
-    socket.broadcast.emit("chat message", msg, date);
-  });
-  socket.on("user typing", (username) => {
-    console.log("[server]:  username is typing: " + username);
-    socket.broadcast.emit("user typing", username);
-  });
-});
+//socket io functions in another file for readability
+require("./socket")(io);
 
 //View engine
 app.set("view engine", "ejs");
-//Views
 app.set("views", __dirname + "/views");
-
-// app.use(sessionMiddleware);
 
 //Static folder
 app.use(express.static(__dirname + "/public"));
@@ -76,5 +33,5 @@ app.use("/", indexRouter);
 
 //Listen port
 server.listen(process.env.PORT || 3000, () => {
-  console.log(`application is running at: http://localhost:${3000}`);
+  console.log(`application is running at: */${process.env.PORT || 3000}`);
 });
