@@ -4,24 +4,26 @@ let activeUsers = new Set();
 let typingUsers = new Set();
 module.exports = function (io) {
   io.on("connection", (socket) => {
-    let tempNickname = socket.id.slice(15);
-    console.log("A user connected", "User" + tempNickname);
+    console.log("A user connected");
     //Connect = online
-    socket.on("online", () => {
-      activeUsers.add("User-" + tempNickname);
+    socket.on("online", (username) => {
+      activeUsers.add(username);
       io.emit("refresh users", [...activeUsers]);
-    });
-    //When disconnect remove from online
-    socket.on("disconnect", () => {
-      console.log("disconnect");
-      activeUsers.delete("User-" + tempNickname);
-      io.emit("refresh users", [...activeUsers]);
+
+      //When disconnect remove from online
+      socket.on("disconnect", () => {
+        console.log("disconnect");
+        activeUsers.delete(username);
+        io.emit("refresh users", [...activeUsers]);
+      });
     });
     //On chat message
-    socket.on("chat message", async (msg, date) => {
-      console.log("[server]:  message: " + msg + "date: " + date);
-      socket.broadcast.emit("chat message", msg, date);
-      saveMessageToDB("user", msg, date);
+    socket.on("chat message", async (user, msg, date) => {
+      console.log(
+        "[server]: user: " + user + "message: " + msg + "date: " + date
+      );
+      socket.broadcast.emit("chat message", user, msg, date);
+      saveMessageToDB(user, msg, date);
     });
     //Info about typing
     socket.on("refresh users typing", (username) => {

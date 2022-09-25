@@ -1,5 +1,7 @@
 (function () {
   const chatBoxes = document.getElementsByClassName("chat-container");
+  const chatWindow = document.querySelector(".chat-window");
+  chatWindow.scrollTop = chatWindow.scrollHeight;
   console.log(chatBoxes);
   for (let i = 0; i < chatBoxes.length; i++) {
     let sendBtn = chatBoxes[i].querySelector(".btn-primary");
