@@ -1,6 +1,7 @@
 const Message = require("./models/message");
 
 let activeUsers = new Set();
+let typingUsers = new Set();
 module.exports = function (io) {
   io.on("connection", (socket) => {
     let tempNickname = socket.id.slice(15);
@@ -23,9 +24,16 @@ module.exports = function (io) {
       saveMessageToDB("user", msg, date);
     });
     //Info about typing
-    socket.on("user typing", (username) => {
-      console.log("[server]:  username is typing: " + username);
-      socket.broadcast.emit("user typing", username);
+    socket.on("refresh users typing", (username) => {
+      typingUsers.add(username);
+      console.log(username);
+      console.log("[server]:  is typing: " + typingUsers);
+      socket.broadcast.emit("refresh users typing", [...typingUsers]);
+    });
+
+    socket.on("remove user typing", (username) => {
+      typingUsers.delete(username);
+      socket.broadcast.emit("refresh users typing", [...typingUsers]);
     });
   });
 

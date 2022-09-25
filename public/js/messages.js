@@ -13,6 +13,12 @@
     });
   });
   socket.on("connect", function () {
+    textareaChat.addEventListener("focus", function () {
+      socket.emit("refresh users typing", socket.id.slice(15));
+    });
+    textareaChat.addEventListener("focusout", function () {
+      socket.emit("remove user typing", socket.id.slice(15));
+    });
     socket.emit("online");
   });
 
@@ -23,7 +29,7 @@
       socket.emit("chat message", textareaChat.value, msgDate);
       msgDateFormat = msgDate.toISOString().split("T")[1].split(".")[0];
       addMessageToChatbox(
-        "user",
+        socket.id.slice(15),
         document.getElementById("chat-window"),
         textareaChat.value,
         msgDateFormat
@@ -56,12 +62,20 @@
 
     return msgBox;
   }
-  textareaChat.addEventListener("focus", function () {
-    socket.emit("user typing", "user");
+  //FIXME refresh typing users set for now fix later
+  socket.on("refresh users typing", function (typingUsers) {
+    infoChat.innerHTML = "";
+    let typingUsersLength = typingUsers.length;
+    let maxUsers = 2;
+    for (let i = 0; i < typingUsersLength; i++) {
+      if (i >= maxUsers) break;
+      infoChat.innerHTML += typingUsers[i];
+      if (typingUsersLength > 1 && i < typingUsersLength - 1)
+        infoChat.innerHTML += ", ";
+    }
+    if (typingUsersLength == 1) infoChat.innerHTML += " is typing";
+    if (typingUsersLength > maxUsers)
+      infoChat.innerHTML += `and ${typingUsersLength - maxUsers} others `;
+    if (typingUsersLength > 1) infoChat.innerHTML += ` are typing`;
   });
-
-  //   socket.on("user typing", function (username) {
-  //     console.log(username + " is typing");
-  //     infoChat.innerHTML = username + " is typing";
-  //   });
 })();

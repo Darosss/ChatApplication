@@ -22,12 +22,13 @@ body {
   overflow: scroll;
 }
 .chat-info {
-  width: 50%;
+  width: 99%;
   background: linear-gradient(45deg, darkblue, rgb(68, 68, 206));
   border: 2px solid var(--color-text-light);
   border-top: 0;
   text-align: center;
   overflow: inherit;
+  color: var(--color-base-chat);
 }
 .chat-window::-webkit-scrollbar {
   display: none;
