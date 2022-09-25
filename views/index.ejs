@@ -6,25 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/stylesheets/main.css" />
     <script defer src="/js/dynamic-resize-textarea.js"></script>
+
     <title>Chat application</title>
   </head>
 
   <body>
-    <div class="chat-container">
-      <div class="chat-window">
-        <div class="message-div">
-          <span class="message-container">
-            <span class="time">12:12:12</span>
-            <span class="username">user1:</span> oneoneoneoneoneone
-            oneoneoneoneoneone oneoneone
-          </span>
-        </div>
-        <div class="message-div">
-          <span class="message-container">
-            <span class="time">12:12:12</span
-            ><span class="username">user2:</span>two</span
-          >
-        </div>
+    <div class="chat-container" id="chat-container">
+      <div class="chat-window" id="chat-window">
         <% messages.forEach(message =>{ %>
         <div class="message-div">
           <span class="message-container">
@@ -37,7 +25,7 @@
         </div>
         <%})%>
       </div>
-      <form action="/" method="POST" class="chat-form">
+      <form action="" class="chat-form" id="chat-form">
         <textarea
           name="message"
           class="message-window"
@@ -46,5 +34,11 @@
         <button class="btn-primary" type="submit">Send</button>
       </form>
     </div>
+    <script
+      src="https://cdn.socket.io/4.5.0/socket.io.min.js"
+      integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/js/messages.js"></script>
   </body>
 </html>
