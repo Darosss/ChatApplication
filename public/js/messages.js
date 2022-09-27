@@ -1,85 +1,155 @@
 (function () {
-  var socket = io();
-  var formChat = document.getElementById("chat-form");
-  var textareaChat = document.querySelector("textarea");
-  var infoChat = document.querySelector(".chat-info");
-  var onlineUsers = document.querySelector(".user-list");
-  let tempUsers = ["Daro", "Kupa", "jajka321"];
-  let ranUser =
-    tempUsers[Math.floor(Math.random() * (tempUsers.length - 1))] +
-    Math.floor(Math.random() * 203);
+  $(document).ready(function () {
+    var socket = io({ autoConnect: true });
+    let tempUsers = ["Daro", "Kupa", "jajka321", "ktos nowy", "ziemniak"],
+      ranUser =
+        tempUsers[Math.floor(Math.random() * (tempUsers.length - 1))] +
+        Math.floor(Math.random() * 203);
 
-  socket.on("refresh users", function (onlineUsersList) {
-    console.log(onlineUsersList);
-    onlineUsers.innerHTML = "";
-    onlineUsersList.forEach((user) => {
-      onlineUsers.innerHTML += `${user}<br>`;
-    });
-  });
-  socket.on("connect", function () {
-    textareaChat.addEventListener("focus", function () {
-      socket.emit("refresh users typing", ranUser);
-    });
-    textareaChat.addEventListener("focusout", function () {
-      socket.emit("remove user typing", ranUser);
-    });
-    socket.emit("online", ranUser);
-  });
+    let chatContainers = $(".chat-container");
+    //Loop through all containers to set adequate sockets to chat rooms
+    chatContainers.each(function () {
+      let sendButton = this.querySelector(".btn-primary"),
+        chatForm = this.querySelector(".chat-form"),
+        chatTxtarea = this.querySelector("textarea"),
+        joinButton = $(this).find('button[id*="join"]'),
+        leaveButton = $(this).find('button[id*="leave"]'),
+        roomID = "#" + $(this).attr("id"),
+        typingInChat = false,
+        timeoutTyping = undefined;
+      sendButton.innerHTML = "Send as " + ranUser; //debug
+      // let kappa = this.querySelector(".testKappa");
+      // console.log(kappa);
+      // kappa.onclick = function () {
+      //   socket.emit("testch", ranUser);
+      // };
 
-  formChat.addEventListener("submit", function (e) {
-    e.preventDefault();
-    if (textareaChat.value) {
-      let msgDate = new Date();
-      socket.emit("chat message", ranUser, textareaChat.value, msgDate);
-      msgDateFormat = msgDate.toISOString().split("T")[1].split(".")[0];
-      addMessageToChatbox(
-        ranUser,
-        document.getElementById("chat-window"),
-        textareaChat.value,
-        msgDateFormat
+      $(joinButton).on("click", function () {
+        sendButton.style.display = "inline-block";
+        joinLeaveRoom(this, leaveButton, "join room", ranUser, roomID);
+      });
+      $(leaveButton).on("click", function () {
+        joinLeaveRoom(this, joinButton, "leave room", ranUser, roomID);
+        sendButton.style.display = "none";
+      });
+      //Submit form and send msg
+      $(chatForm).on(
+        "submit",
+        { textarea: chatTxtarea, room: roomID },
+        onSubmitMessage
       );
-      textareaChat.value = "";
+      //On key preess textarea(Typing user feature)
+      $(chatTxtarea).on("keypress", function (e) {
+        if (e.which != 13) {
+          typingTimeout(ranUser, roomID, (typingInChat = true));
+          clearTimeout(timeoutTyping);
+          timeoutTyping = setTimeout(
+            typingTimeout,
+            2500,
+            ranUser,
+            roomID,
+            (typingInChat = false)
+          );
+        } else {
+          typingInChat = false;
+          typingTimeout(ranUser, roomID, typingInChat);
+          clearTimeout(timeoutTyping);
+        }
+      });
+    });
+    //END For each chat room
+    socket.onAny((event, ...args) => {
+      console.log("onAny", event, args);
+    });
+    //DEBUG ON ALL EVENTS
+    socket.on("chat message", function (data) {
+      addMessageToChatbox(
+        data.user,
+        data.roomTarget + " .chat-window",
+        data.msg,
+        data.date.split("T")[0].split(".")[0]
+      );
+    });
+    socket.on("connect", function () {
+      console.log("CONNECT?");
+    });
+    socket.on("disconnect", () => {
+      console.log("DISC");
+    });
+    socket.on("user typing", (data) => {
+      const chatInfo = document.querySelector(data.roomName + " .chat-info");
+      if (!data.isTyping) {
+        chatInfo.innerHTML = "";
+      } else {
+        chatInfo.innerHTML = `${data.username} is typing`;
+      }
+    });
+    socket.on("user online room", function (data) {
+      let roomUserList = document.querySelector(data.roomName + " .user-list");
+      roomUserList.innerHTML = "";
+      data.roomUsers.forEach((user) => {
+        let userBtn = document.createElement("button");
+        userBtn.textContent = user;
+        userBtn.className = "btn-user";
+        // userBtn.onclick = function () {
+        //   // socket.emit("private msg", user, "randommsg");
+        // };
+        roomUserList.appendChild(userBtn);
+      });
+    });
+    // socket.on("private msg", function (fromUser, msg) {
+    //   console.log("PRIV MSG", fromUser, msg);
+    // });
+    function typingTimeout(user, room, typing) {
+      socket.emit("user typing", {
+        username: user,
+        roomName: room,
+        isTyping: typing,
+      });
     }
-  });
-  socket.on("chat message", function (user, msg, msgDate) {
-    window.scrollTo(0, document.body.scrollHeight);
-    //TODOfrom user where he used chat
-    let msgDest = document.getElementById("chat-window");
-    //
-    msgDateFormat = msgDate.split("T")[1].split(".")[0];
-    addMessageToChatbox(user, msgDest, msg, msgDateFormat);
-  });
-
-  function addMessageToChatbox(username, box, msg, date) {
-    var msgBox = messageFormat(username, msg, date);
-    box.innerHTML = box.innerHTML + msgBox;
-    box.scrollTop = box.scrollHeight;
-  }
-
-  function messageFormat(user, msg, time) {
-    let msgBox = `<div class="message-div">
-    <span class="message-container">
-      <span class="time">${time}</span>
-      <span class="username">${user}:</span>
-      ${msg}
-    </span>
-  </div>`;
-    return msgBox;
-  }
-  //FIXME refresh typing users set for now fix later
-  socket.on("refresh users typing", function (typingUsers) {
-    infoChat.innerHTML = "";
-    let typingUsersLength = typingUsers.length;
-    let maxUsers = 2;
-    for (let i = 0; i < typingUsersLength; i++) {
-      if (i >= maxUsers) break;
-      infoChat.innerHTML += typingUsers[i];
-      if (typingUsersLength > 1 && i < typingUsersLength - 1)
-        infoChat.innerHTML += ", ";
+    function joinLeaveRoom(btnPressed, btnToEnable, evnName, user, roomName) {
+      socket.emit(evnName, { username: user, roomName: roomName });
+      btnPressed.disabled = true;
+      $(btnToEnable).removeAttr("disabled");
     }
-    if (typingUsersLength == 1) infoChat.innerHTML += " is typing";
-    if (typingUsersLength > maxUsers)
-      infoChat.innerHTML += `and ${typingUsersLength - maxUsers} others `;
-    if (typingUsersLength > 1) infoChat.innerHTML += ` are typing`;
+    function onSubmitMessage(event) {
+      event.preventDefault();
+      let chatTextarea = event.data.textarea,
+        roomName = event.data.room;
+      if (chatTextarea.value) {
+        let msgDate = new Date();
+        socket.emit("chat message", {
+          user: ranUser,
+          roomTarget: roomName,
+          msg: chatTextarea.value,
+          date: msgDate,
+        });
+        msgDate = msgDate.toISOString().split("T")[1].split(".")[0];
+        addMessageToChatbox(
+          ranUser,
+          roomName + " .chat-window",
+          chatTextarea.value,
+          msgDate
+        );
+        chatTextarea.value = "";
+      }
+    }
+    function addMessageToChatbox(username, room, msg, date) {
+      var msgBox = messageFormat(username, msg, date);
+      roomTarget = document.querySelector(room);
+      roomTarget.innerHTML += msgBox;
+      roomTarget.scrollTop = roomTarget.scrollHeight;
+    }
+    function messageFormat(user, msg, time) {
+      let msgBox = `
+        <div class="message-div">
+          <span class="message-container">
+            <span class="time">${time}</span>
+            <span class="username">${user}:</span>
+            ${msg}
+          </span>
+        </div>`;
+      return msgBox;
+    }
   });
 })();

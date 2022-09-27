@@ -1,5 +1,10 @@
 @import "shared/variables.css";
 @import "shared/buttons.css";
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 body {
   background: linear-gradient(45deg, blue, aqua);
   height: 100vh;
@@ -10,6 +15,7 @@ body {
   overflow: hidden;
   height: 100vh;
   position: relative;
+  float: left;
 }
 .chat-window {
   background: linear-gradient(45deg, darkblue, rgb(68, 68, 206));
@@ -61,7 +67,7 @@ body {
 .message-div {
   display: flex;
   flex-grow: 1;
-  width: 99%;
+  width: 100%;
   overflow: hidden;
 }
 .message-div span.message-container {
@@ -69,13 +75,16 @@ body {
   /* background-color: red; */
   color: var(--color-base-chat);
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 12px;
+  font-size: 1.5vw;
+
   word-wrap: normal;
   overflow: hidden;
   border-bottom: 1px solid var(--color-base-chat);
 }
 .time {
-  font-size: 0.5rem;
+  font-size: 12px;
+  font-size: 0.9vw;
   float: left;
   margin-top: -0.25rem;
   position: absolute;

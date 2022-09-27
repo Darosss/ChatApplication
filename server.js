@@ -3,10 +3,12 @@ if (process.env.NODE_ENV !== "producuction") {
 }
 const express = require("express");
 const app = express();
-const http = require("http");
-const server = http.createServer(app);
+const { createServer } = require("http");
 const { Server } = require("socket.io");
-const io = new Server(server);
+
+const httpServer = createServer(app);
+const io = new Server(httpServer);
+
 const bodyParser = require("body-parser");
 const indexRouter = require("./routes/index");
 //socket io functions in another file for readability
@@ -32,6 +34,6 @@ db.once("open", (error) => console.log("Connected to Mongoose"));
 app.use("/", indexRouter);
 
 //Listen port
-server.listen(process.env.PORT || 3000, () => {
+httpServer.listen(process.env.PORT || 3000, () => {
   console.log(`application is running at: */${process.env.PORT || 3000}`);
 });
