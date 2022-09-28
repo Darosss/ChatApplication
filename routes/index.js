@@ -3,6 +3,7 @@ const router = express.Router();
 const Message = require("../models/message");
 
 router.get("/", async (req, res) => {
+  console.log("kek", req.session.passport);
   // console.log(`[get]: user is authenticated, session is ${req.session.id}`);
 
   let messages;
