@@ -2,7 +2,6 @@ const Message = require("./models/message");
 
 module.exports = function (io) {
   console.log("--------------NEW CONNECTION--------------");
-
   io.on("connection", (socket) => {
     let rooms = {};
     socket.onAny((event, ...args) => {

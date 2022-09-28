@@ -1,12 +1,14 @@
 <div class="chat-container" id="<%= chatWindow %>">
-  <div class="chat-window" id="chat-window">
-    <%#- include("partials/msg-database") here queries about rooms %>
-  </div>
+  <div class="chat-row">
+    <div class="chat-window chat-inner">
+      <%#- include("partials/msg-database") %>
+    </div>
 
-  <div class="user-list-window">
-    <button class="testKappa">TEST</button>
-    <h5 class="user-list-header">USERS <%= chatWindow %></h5>
-    <span class="user-list"></span>
+    <div class="user-list-window chat-inner">
+      <!-- <button class="testKappa">TEST</button> -->
+      <h5 class="user-list-header">USERS <br /><%= chatWindow %></h5>
+      <span class="user-list"></span>
+    </div>
   </div>
   <div class="chat-info"></div>
   <div class="chat-buttons">

@@ -5,7 +5,7 @@
       ranUser =
         tempUsers[Math.floor(Math.random() * (tempUsers.length - 1))] +
         Math.floor(Math.random() * 203);
-
+    let typingTime = 5000;
     let chatContainers = $(".chat-container");
     //Loop through all containers to set adequate sockets to chat rooms
     chatContainers.each(function () {
@@ -15,6 +15,8 @@
         joinButton = $(this).find('button[id*="join"]'),
         leaveButton = $(this).find('button[id*="leave"]'),
         roomID = "#" + $(this).attr("id"),
+        usersList = this.querySelector(".user-list-window"),
+        showUsersButton = this.querySelector(".btn-chat-users"),
         typingInChat = false,
         timeoutTyping = undefined;
       sendButton.innerHTML = "Send as " + ranUser; //debug
@@ -32,6 +34,9 @@
         joinLeaveRoom(this, joinButton, "leave room", ranUser, roomID);
         sendButton.style.display = "none";
       });
+      $(showUsersButton).on("click", function () {
+        $(usersList).toggle();
+      });
       //Submit form and send msg
       $(chatForm).on(
         "submit",
@@ -45,7 +50,7 @@
           clearTimeout(timeoutTyping);
           timeoutTyping = setTimeout(
             typingTimeout,
-            2500,
+            typingTime,
             ranUser,
             roomID,
             (typingInChat = false)
@@ -67,7 +72,7 @@
         data.user,
         data.roomTarget + " .chat-window",
         data.msg,
-        data.date.split("T")[0].split(".")[0]
+        data.date.split("T")[1].split(".")[0]
       );
     });
     socket.on("connect", function () {
@@ -142,13 +147,13 @@
     }
     function messageFormat(user, msg, time) {
       let msgBox = `
-        <div class="message-div">
-          <span class="message-container">
-            <span class="time">${time}</span>
-            <span class="username">${user}:</span>
-            ${msg}
-          </span>
-        </div>`;
+          <div class="message-div">
+            <div class="message-container">
+              <div class="time">${time}</div>
+              <div class="username">${user}:</div>
+              <div class="message">${msg}</div>
+            </div>
+          </div>`;
       return msgBox;
     }
   });

@@ -1,11 +1,22 @@
 :root {
-  --color-base-hue: 65;
+  --color-base-hue: 123;
   --color-danger-hue-offset: 180;
   --color-danger-hue: calc(
     var(--color-base-hue) - var(--color-danger-hue-offset)
   );
-  --color-base-chat: hsl(var(--color-base-hue), 81%, 66%);
-  --color-background-dark: hsl(var(--color-base-hue), 81%, 12%);
+  --color-base-chat: hsl(var(--color-base-hue), 81%, 86%);
+  --color-base-chat-dark: hsl(var(--color-base-hue), 100%, 32%);
+  --color-background-dark: hsl(var(--color-base-hue), 54%, 12%);
   --color-background-light: hsl(var(--color-base-hue), 60%, 22%);
   --color-text-light: hsl(var(--color-base-hue), 100%, 88%);
+  --background-linear-gradient-bright: linear-gradient(
+    45deg,
+    var(--color-base-chat),
+    rgb(80, 80, 138)
+  );
+  --background-linear-gradient: linear-gradient(
+    45deg,
+    var(--color-background-dark),
+    rgb(23, 43, 54)
+  );
 }
