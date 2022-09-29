@@ -4,15 +4,13 @@ $(window).ready(function () {
   let chatContainers = $(".chat-container");
   //Loop through all containers to set adequate sockets to chat rooms
   chatContainers.each(function () {
-    let sendButton = document.querySelector(".btn-primary"),
-      chatWindow = document.querySelector(".chat-window"),
-      chatForm = document.querySelector(".chat-form"),
-      chatTxtarea = document.querySelector("textarea"),
-      joinButton = document.querySelector('button[id*="join"]'),
-      leaveButton = document.querySelector('button[id*="leave"]'),
+    let sendButton = this.querySelector(".btn-primary"),
+      chatWindow = this.querySelector(".chat-window"),
+      chatForm = this.querySelector(".chat-form"),
+      chatTxtarea = this.querySelector("textarea"),
+      joinButton = this.querySelector('button[id*="join"]'),
+      leaveButton = this.querySelector('button[id*="leave"]'),
       roomID = "#" + $(this).attr("id"),
-      usersList = document.querySelector(".user-list-window"),
-      showUsersButton = document.querySelector(".btn-chat-users"),
       typingInChat = false,
       timeoutTyping = undefined;
 
@@ -28,35 +26,37 @@ $(window).ready(function () {
       joinLeaveRoom(this, joinButton, "leave room", roomID);
       sendButton.style.display = "none";
     });
-    $(showUsersButton).on("click", function () {
-      $(usersList).toggle();
-    });
     //Submit form and send msg
     $(chatForm).on(
       "submit",
       { textarea: chatTxtarea, room: roomID },
       onSubmitMessage
     );
-    //On key preess textarea(Typing user feature)
-    $(chatTxtarea).on("keypress", function (e) {
-      if (e.which != 13) {
-        typingTimeout(roomID, (typingInChat = true));
-        clearTimeout(timeoutTyping);
-        timeoutTyping = setTimeout(
-          typingTimeout,
-          typingTime,
-
-          roomID,
-          (typingInChat = false)
-        );
-      } else {
-        typingInChat = false;
-        typingTimeout(roomID, typingInChat);
-        clearTimeout(timeoutTyping);
-      }
-    });
+    // On key preess textarea(Typing user feature)
+    $(chatTxtarea).on(
+      "keypress",
+      { room: roomID, timeout: timeoutTyping, typing: typingInChat },
+      typingInfoOnKeypress
+    );
   });
   //END For each chat room
+  function typingInfoOnKeypress(e) {
+    console.log("TIMEOUT", e.data.timeout);
+    if (e.which != 13) {
+      typingTimeout(e.data.room, (e.data.typing = true));
+      clearTimeout(e.data.timeout);
+      e.data.timeout = setTimeout(
+        typingTimeout,
+        typingTime,
+        e.data.room,
+        (e.data.typing = false)
+      );
+    } else {
+      e.data.typing = false;
+      typingTimeout(e.data.room, e.data.typing);
+      clearTimeout(e.data.timeout);
+    }
+  }
   socket.on("chat message", function (data) {
     addMessageToChatbox(
       data.username,
@@ -65,9 +65,9 @@ $(window).ready(function () {
       data.date.split("T")[1].split(".")[0]
     );
   });
-  socket.on("connect", function () {});
 
   socket.on("user typing", (data) => {
+    console.log("typing" + data);
     const chatInfo = document.querySelector(data.roomName + " .chat-info");
     if (!data.isTyping) {
       chatInfo.innerHTML = "";
@@ -148,7 +148,6 @@ $(window).ready(function () {
     this.style.height = 0;
     this.style.height = this.scrollHeight + "px";
   }
-
   function onFocusEnterSend() {
     this.addEventListener("keypress", enterToSendOnFocus);
   }
