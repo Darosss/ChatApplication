@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== "producuction") {
 }
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
+const expressSession = require("express-session");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const mongoose = require("mongoose");
@@ -17,8 +18,8 @@ const indexRouter = require("./routes/index");
 const profilRouter = require("./routes/profil");
 const loginRouter = require("./routes/login");
 const registerRouter = require("./routes/register");
+const { session } = require("passport");
 //socket io functions in another file for readability
-require("./socket")(io);
 
 //MONGODB database connection
 // mongoose.set("useNewUrlParser", true);
@@ -40,22 +41,22 @@ app.use(express.static(__dirname + "/public"));
 //Body parser
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(
-  require("express-session")({
-    secret: "Thats secret kappa",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+var sessionMiddleware = expressSession({
+  name: "COOKIE_NAME_HERE",
+  secret: "COOKIE_SECRET_HERE",
+  resave: false,
+  saveUninitialized: false,
+  store: new (require("connect-mongo")(expressSession))({
+    url: process.env.DATABASE_URL,
+  }),
+});
 
+require("./socket")(io, sessionMiddleware);
+app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 
-// passport.use(new LocalStrategy(User.authenticate()));
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
-
-//Routes(later login logout)
+//Use routes
 app.use("/", indexRouter);
 app.use("/profil", profilRouter);
 app.use("/login", loginRouter);

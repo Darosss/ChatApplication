@@ -5,6 +5,14 @@
 *::after {
   box-sizing: border-box;
 }
+a {
+  font-size: 1rem;
+  text-decoration: none;
+  color: var(--color-base-chat);
+}
+a:hover {
+  background-color: var(--color-base-chat-dark);
+}
 body {
   background: var(--background-linear-gradient);
   height: 100vh;
@@ -13,7 +21,7 @@ body {
 .chat-container {
   width: 40%;
   overflow: hidden;
-  height: 100vh;
+  height: 80vh;
   position: relative;
   float: left;
   margin: 0.5rem 1rem 0 0.5rem;

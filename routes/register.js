@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
         return res.render("register");
       }
       passport.authenticate("local")(req, res, function () {
-        res.render("/");
+        res.render("index", { username: req.session.passport.user });
       });
     }
   );

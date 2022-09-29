@@ -1,24 +1,31 @@
 const express = require("express");
 const router = express.Router();
 const Message = require("../models/message");
+// router.get("/", async (req, res) => {
+//   if (!req.user) return res.redirect("/login");
+//   let messages;
+//   try {
+//     messages = [];
+//     messages = await Message.find({})
+//       .sort({ createdAt: "desc" })
+//       .limit(15)
+//       .exec();
+//   } catch {
+//     messages = [];
+//   }
+//   res.render("index", { username: req.user.username });
+// });
+router.get("/", isLoggedIn, function (req, res) {
+  res.render("index", { username: req.session.passport.user });
 
-router.get("/", async (req, res) => {
-  console.log("kek", req.session.passport);
-  // console.log(`[get]: user is authenticated, session is ${req.session.id}`);
-
-  let messages;
-  try {
-    messages = [];
-    messages = await Message.find({})
-      .sort({ createdAt: "desc" })
-      .limit(15)
-      .exec();
-  } catch {
-    messages = [];
-  }
-  res.render("index", { messages: messages });
+  console.log("session pass", req.session.passport);
 });
+function isLoggedIn(req, res, next) {
+  console.log("IS LOGGED IN", req.isAuthenticated());
+  if (req.isAuthenticated()) return next();
 
+  res.redirect("/login");
+}
 // router.post("/", async (req, res) => {
 //   const message = new Message({
 //     message: req.body.message,

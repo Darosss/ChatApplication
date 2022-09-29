@@ -9,6 +9,10 @@ const messageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  whereSent: {
+    type: String,
+    required: true,
+  },
   sentTime: {
     type: Date,
     required: true,

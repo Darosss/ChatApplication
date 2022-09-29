@@ -1,25 +1,33 @@
 const Message = require("./models/message");
-
-module.exports = function (io) {
+const User = require("./models/user");
+let onlineUsers = {};
+let rooms = {};
+module.exports = function (io, sessionMiddleware) {
   console.log("--------------NEW CONNECTION--------------");
-  io.on("connection", (socket) => {
-    let rooms = {};
+  io.use(function (socket, next) {
+    sessionMiddleware(socket.request, {}, next);
+  }).on("connection", (socket) => {
+    var userId = socket.request.session.passport.user;
+    console.log(`User: ${userId} joined the site`);
+    onlineUsers[socket.id] = userId;
+    console.log(onlineUsers);
+
     socket.onAny((event, ...args) => {
       console.log("On any: Event:", event, args);
     });
-    // TODO Add new users to 'global' online users with socket id  and username
     socket.on("join room", (data) => {
       let roomName = data.roomName;
       if (!rooms[roomName]) rooms[roomName] = [];
-      rooms[roomName].push(data.username);
+      rooms[roomName].push(userId);
       socket.join(roomName);
       data.roomUsers = rooms[roomName];
       io.to(roomName).emit("user online room", data);
     });
+
     socket.on("leave room", (data) => {
       let roomName = data.roomName;
       let room = rooms[roomName];
-      room.splice(room.indexOf(data.username), 1);
+      room.splice(room.indexOf(userId), 1);
       data.roomUsers = rooms[roomName];
       io.to(roomName).emit("user online room", data);
       socket.leave(roomName);
@@ -27,14 +35,13 @@ module.exports = function (io) {
 
     //When disconnect remove from online
     socket.on("disconnect", () => {
-      // Object.keys(rooms).forEach((key) => {
-      //   console.log(rooms[key]);
-      // const found = rooms[key].find(user => user == 'ss' );
-      //TODO Clear online users when disconnect
+      delete onlineUsers[socket.id];
     });
     //On chat message
     socket.on("chat message", (data) => {
-      socket.to(data.roomTarget).emit("chat message", data);
+      data.username = userId;
+      data.date = new Date();
+      io.to(data.roomTarget).emit("chat message", data);
       // saveMessageToDB(user, msg, date);
     });
     socket.on("join channel", (user, channelName) => {
@@ -54,7 +61,11 @@ module.exports = function (io) {
 
     //   //Info about typing
     socket.on("user typing", (data) => {
+      data.username = userId;
       socket.to(data.roomName).emit("user typing", data);
+    });
+    socket.on("test", () => {
+      console.log("test pass");
     });
   });
 
