@@ -1,6 +1,5 @@
 $(window).ready(function () {
   var socket = io({ autoConnect: true });
-  console.log("strona??");
   let typingTime = 5000;
   let chatContainers = $(".chat-container");
   //Loop through all containers to set adequate sockets to chat rooms
@@ -53,10 +52,6 @@ $(window).ready(function () {
     });
   });
   //END For each chat room
-  socket.onAny((event, ...args) => {
-    console.log("onAny", event, args);
-  });
-  //DEBUG ON ALL EVENTS
   socket.on("chat message", function (data) {
     addMessageToChatbox(
       data.username,
@@ -65,13 +60,8 @@ $(window).ready(function () {
       data.date.split("T")[1].split(".")[0]
     );
   });
-  socket.on("connect", function () {
-    console.log("CONNECT?");
-  });
+  socket.on("connect", function () {});
 
-  socket.on("disconnect", (err) => {
-    console.log(err);
-  });
   socket.on("user typing", (data) => {
     const chatInfo = document.querySelector(data.roomName + " .chat-info");
     if (!data.isTyping) {

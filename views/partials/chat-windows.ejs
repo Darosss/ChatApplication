@@ -1,8 +1,20 @@
 <div class="chat-container" id="<%= chatWindow %>">
   <div class="chat-row">
     <div class="chat-window chat-inner">
-      <%#- include("partials/msg-database") %>
+      <% messages.forEach(message =>{ %> <% if(message.whereSent.slice(1) !=
+      chatWindow) {%> <% return; }%>
       <div class="message-div">
+        <div class="message-container">
+          <div class="time">
+            (<%= message.sentTime.toISOString().split("T")[0] %>) <%=
+            message.sentTime.toISOString().split("T")[1].split(".")[0] %>
+          </div>
+          <div class="username"><%= message.sender %>:</div>
+          <div class="message"><%= message.message%></div>
+        </div>
+      </div>
+      <%})%>
+      <!-- <div class="message-div">
         <div class="message-container">
           <div class="time">06:24:08</div>
           <div class="username">Kupa162:</div>
@@ -42,7 +54,7 @@
           <div class="username">Kupa162:</div>
           <div class="message">test sadsadsadsadsa sa sad sad sasa dsa</div>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div class="user-list-window chat-inner">

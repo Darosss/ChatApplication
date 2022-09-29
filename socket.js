@@ -1,5 +1,4 @@
 const Message = require("./models/message");
-const User = require("./models/user");
 let onlineUsers = {};
 let rooms = {};
 module.exports = function (io, sessionMiddleware) {
@@ -10,7 +9,6 @@ module.exports = function (io, sessionMiddleware) {
     var userId = socket.request.session.passport.user;
     console.log(`User: ${userId} joined the site`);
     onlineUsers[socket.id] = userId;
-    console.log(onlineUsers);
 
     socket.onAny((event, ...args) => {
       console.log("On any: Event:", event, args);
@@ -35,22 +33,31 @@ module.exports = function (io, sessionMiddleware) {
 
     //When disconnect remove from online
     socket.on("disconnect", () => {
+      Object.keys(rooms).forEach((room) => {
+        let userIndex = rooms[room].indexOf(userId);
+        rooms[room].splice(userIndex, 1);
+        if (userIndex >= 0)
+          socket.to(room).emit("user online room", {
+            roomUsers: rooms[room],
+            roomName: room,
+          });
+      });
       delete onlineUsers[socket.id];
     });
     //On chat message
-    socket.on("chat message", (data) => {
+    socket.on("chat message", async (data) => {
       data.username = userId;
       data.date = new Date();
       io.to(data.roomTarget).emit("chat message", data);
-      // saveMessageToDB(user, msg, date);
+      await saveMessageToDB(
+        data.username,
+        data.msg,
+        data.date,
+        data.roomTarget
+      );
     });
     socket.on("join channel", (user, channelName) => {
       socket.join(channelName);
-    });
-
-    socket.on("testch", (user) => {
-      console.log(user);
-      console.log("rooms", socket.rooms);
     });
 
     // socket.on("private msg", (toUser, msg) => {
@@ -64,16 +71,14 @@ module.exports = function (io, sessionMiddleware) {
       data.username = userId;
       socket.to(data.roomName).emit("user typing", data);
     });
-    socket.on("test", () => {
-      console.log("test pass");
-    });
   });
 
-  async function saveMessageToDB(username, msg, date) {
+  async function saveMessageToDB(username, msg, date, room) {
     const message = new Message({
       sender: username,
       message: msg,
       sentTime: date,
+      whereSent: room,
     });
     try {
       await message.save();
