@@ -4,16 +4,21 @@ $(window).ready(function () {
   let chatContainers = $(".chat-container");
   //Loop through all containers to set adequate sockets to chat rooms
   chatContainers.each(function () {
-    let sendButton = this.querySelector(".btn-primary"),
-      chatForm = this.querySelector(".chat-form"),
-      chatTxtarea = this.querySelector("textarea"),
-      joinButton = $(this).find('button[id*="join"]'),
-      leaveButton = $(this).find('button[id*="leave"]'),
+    let sendButton = document.querySelector(".btn-primary"),
+      chatWindow = document.querySelector(".chat-window"),
+      chatForm = document.querySelector(".chat-form"),
+      chatTxtarea = document.querySelector("textarea"),
+      joinButton = document.querySelector('button[id*="join"]'),
+      leaveButton = document.querySelector('button[id*="leave"]'),
       roomID = "#" + $(this).attr("id"),
-      usersList = this.querySelector(".user-list-window"),
-      showUsersButton = this.querySelector(".btn-chat-users"),
+      usersList = document.querySelector(".user-list-window"),
+      showUsersButton = document.querySelector(".btn-chat-users"),
       typingInChat = false,
       timeoutTyping = undefined;
+
+    textareaEventListeners(chatTxtarea, sendButton);
+    dynamicResizeTextarea(chatTxtarea);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
 
     $(joinButton).on("click", function () {
       sendButton.style.display = "inline-block";
@@ -126,5 +131,34 @@ $(window).ready(function () {
             </div>
           </div>`;
     return msgBox;
+  }
+  function dynamicResizeTextarea(textarea) {
+    textarea.setAttribute(
+      "style",
+      "height:" + textarea.scrollHeight + "px;overflow-y:hidden;"
+    );
+  }
+  function textareaEventListeners(textarea, btn) {
+    textarea.addEventListener("input", textareaSizeDynamical, false);
+    textarea.addEventListener("focus", onFocusEnterSend, false);
+    textarea.sendButton = btn;
+    textarea.addEventListener("focusout", onFocusOutDisableEnter, false);
+  }
+  function textareaSizeDynamical() {
+    this.style.height = 0;
+    this.style.height = this.scrollHeight + "px";
+  }
+
+  function onFocusEnterSend() {
+    this.addEventListener("keypress", enterToSendOnFocus);
+  }
+  function onFocusOutDisableEnter() {
+    this.removeEventListener("keypress", onFocusEnterSend, true);
+  }
+  function enterToSendOnFocus(e) {
+    if ((e.code == "Enter" || e.code == "NumpadEnter") && !e.shiftKey) {
+      e.preventDefault();
+      e.currentTarget.sendButton.click();
+    }
   }
 });

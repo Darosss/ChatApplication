@@ -1,25 +1,5 @@
-<!-- <div class="chat-container" id="chat-container">
-      <div class="chat-window" id="chat-window">
-        <%#- include("partials/msg-database") %>
-      </div>
-      <div class="user-list-window">
-        <h5 class="user-list-header">USERS</h5>
-        <span class="user-list"></span>
-      </div>
-      <div class="chat-info"></div>
-      <form action="" class="chat-form" id="chat-form">
-        <textarea
-          name="message"
-          class="message-window"
-          placeholder="Type message to send"
-        ></textarea>
-        <button class="btn-primary" type="submit">Send</button>
-      </form>
-    </div> -->
 <div class="chat-info">Logged in as: <%= username %></div>
 <%- include("partials/chat-windows", {chatWindow:"room-normal"}) %> <%-
 include("partials/chat-windows", {chatWindow:"room-admins"}) %>
 
 <script defer src="/js/messages.js"></script>
-
-<script defer src="/js/chat-functions.js"></script>

@@ -16,27 +16,26 @@
     );
   }
   function textareaEventListeners(textarea, btn) {
-    textarea.addEventListener("input", textareaOnInput, false);
-    textarea.addEventListener("focus", textareaOnFocus, false);
+    textarea.addEventListener("input", textareaSizeDynamical, false);
+    textarea.addEventListener("focus", onFocusEnterSend, false);
     textarea.sendButton = btn;
-    textarea.addEventListener("focusout", textareaOnFocusOut, false);
+    textarea.addEventListener("focusout", onFocusOutDisableEnter, false);
+  }
+  function textareaSizeDynamical() {
+    this.style.height = 0;
+    this.style.height = this.scrollHeight + "px";
+  }
 
-    function textareaOnInput() {
-      this.style.height = 0;
-      this.style.height = this.scrollHeight + "px";
-    }
-
-    function textareaOnFocus() {
-      this.addEventListener("keypress", handleKeypress);
-    }
-    function textareaOnFocusOut() {
-      this.removeEventListener("keypress", textareaOnFocus, true);
-    }
-    function handleKeypress(e) {
-      if ((e.code == "Enter" || e.code == "NumpadEnter") && !e.shiftKey) {
-        e.preventDefault();
-        e.currentTarget.sendButton.click();
-      }
+  function onFocusEnterSend() {
+    this.addEventListener("keypress", enterToSendOnFocus);
+  }
+  function onFocusOutDisableEnter() {
+    this.removeEventListener("keypress", onFocusEnterSend, true);
+  }
+  function enterToSendOnFocus(e) {
+    if ((e.code == "Enter" || e.code == "NumpadEnter") && !e.shiftKey) {
+      e.preventDefault();
+      e.currentTarget.sendButton.click();
     }
   }
 })();

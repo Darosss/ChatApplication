@@ -4,12 +4,12 @@ const Message = require("../models/message");
 
 router.get("/", isLoggedIn, async function (req, res) {
   let messages;
-
+  const limitMsgs = 500;
   try {
     messages = [];
     messages = await Message.find({})
       .sort({ createdAt: "desc" })
-      .limit(15)
+      .limit(limitMsgs)
       .exec();
   } catch {
     messages = [];
