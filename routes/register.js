@@ -10,8 +10,16 @@ router.get("/", (req, res) => {
 router.post("/", async (req, res) => {
   let username = req.body.username;
   let password = req.body.password;
+  let firstname = req.body.firstname;
+  let surname = req.body.surname;
+  let birthday = req.body.birthday;
   User.register(
-    new User({ username: username }),
+    new User({
+      username: username,
+      firstname: firstname,
+      surname: surname,
+      birthday: birthday,
+    }),
     password,
     function (err, user) {
       if (err) {
@@ -19,7 +27,7 @@ router.post("/", async (req, res) => {
         return res.render("register");
       }
       passport.authenticate("local")(req, res, function () {
-        res.render("index", { username: req.session.passport.user });
+        res.redirect("profil");
       });
     }
   );

@@ -44,8 +44,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 var sessionMiddleware = expressSession({
   name: "COOKIE_NAME_HERE",
   secret: "COOKIE_SECRET_HERE",
-  resave: false,
-  saveUninitialized: false,
+  resave: true,
+  saveUninitialized: true,
   store: new (require("connect-mongo")(expressSession))({
     url: process.env.DATABASE_URL,
   }),

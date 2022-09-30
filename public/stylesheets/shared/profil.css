@@ -1,0 +1,13 @@
+.profil-details {
+  font-size: 0.9rem;
+}
+.table-profil td:first-child {
+  border-right: 0.2rem solid black;
+  padding-right: 1rem;
+  width: 50%;
+}
+.table-profil td {
+  padding-left: 0.3rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+}

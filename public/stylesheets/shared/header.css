@@ -1,0 +1,19 @@
+.header-nav {
+  display: flex;
+}
+.header-nav ul {
+  display: flex;
+}
+.header-nav li {
+  list-style: none;
+}
+.header-nav ul a {
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 1rem;
+}
+
+.header-title {
+  font-size: 3rem;
+  font-weight: bold;
+}

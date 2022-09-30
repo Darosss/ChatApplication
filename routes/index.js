@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Message = require("../models/message");
+const isLoggedIn = require("./middlewares/isLogedIn");
 
 router.get("/", isLoggedIn, async function (req, res) {
   let messages;
@@ -19,11 +20,5 @@ router.get("/", isLoggedIn, async function (req, res) {
     messages: messages,
   });
 });
-function isLoggedIn(req, res, next) {
-  console.log("IS LOGGED IN", req.isAuthenticated());
-  if (req.isAuthenticated()) return next();
-
-  res.redirect("/login");
-}
 
 module.exports = router;

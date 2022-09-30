@@ -1,0 +1,13 @@
+.primary-form label {
+  display: flex;
+  font-size: 1.5rem;
+  color: var(--color-base-chat-dark);
+}
+.primary-form button {
+  display: block;
+}
+.primary-form input {
+  background-color: var(--color-text-dark);
+  color: var(--color-text-light);
+  font-size: 1.1rem;
+}

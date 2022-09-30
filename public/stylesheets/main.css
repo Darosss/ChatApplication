@@ -1,10 +1,20 @@
 @import "shared/variables.css";
+@import "shared/header.css";
 @import "shared/buttons.css";
+@import "shared/forms.css";
+@import "shared/profil.css";
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
+:root {
+  color: var(--color-base-chat);
+  background: var(--background-linear-gradient);
+  height: 100vh;
+  overflow: hidden;
+}
+
 a {
   font-size: 1rem;
   text-decoration: none;
@@ -13,11 +23,7 @@ a {
 a:hover {
   background-color: var(--color-base-chat-dark);
 }
-body {
-  background: var(--background-linear-gradient);
-  height: 100vh;
-  overflow: hidden;
-}
+
 .chat-container {
   width: 40%;
   overflow: hidden;

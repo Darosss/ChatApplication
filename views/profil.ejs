@@ -1,4 +1,31 @@
-This is user profil: <%= username %>
+<h1>Profil: <%= userDetails.username %></h1>
+
+<table class="table-profil">
+  <tr>
+    <td>Username</td>
+    <td><%= userDetails.username %></td>
+  </tr>
+  <tr>
+    <td>Firstname</td>
+    <td><%= userDetails.firstname %></td>
+  </tr>
+  <tr>
+    <td>Surname</td>
+    <td><%= userDetails.surname %></td>
+  </tr>
+  <tr>
+    <td>Created at</td>
+    <td><%= userDetails.createdAt.toISOString() %></td>
+  </tr>
+  <tr>
+    <td>Birthday</td>
+    <td><%= userDetails.birthday.toISOString() %></td>
+  </tr>
+  <tr>
+    <td>Ranges</td>
+    <td><%= userDetails.range %></td>
+  </tr>
+</table>
 <form action="" method="POST">
-  <button type="submit">Logout</button>
+  <button class="btn-form-primary" type="submit">Logout</button>
 </form>

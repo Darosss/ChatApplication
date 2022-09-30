@@ -1,11 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
+const isLoggedIn = require("./middlewares/isLogedIn");
 
 router.get("/", isLoggedIn, function (req, res) {
-  res.render("profil", { username: req.session.passport.user });
-
-  console.log(req.session.passport);
+  User.findOne(
+    { username: req.session.passport.user },
+    function (err, foundUser) {
+      res.render("profil", { userDetails: foundUser });
+    }
+  );
 });
 
 router.post("/", (req, res, next) => {
@@ -17,10 +21,5 @@ router.post("/", (req, res, next) => {
     res.redirect("/");
   });
 });
-function isLoggedIn(req, res, next) {
-  console.log("IS LOGGED IN", req.isAuthenticated());
-  if (req.isAuthenticated()) return next();
 
-  res.redirect("/login");
-}
 module.exports = router;

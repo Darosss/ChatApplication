@@ -9,6 +9,7 @@
   --color-background-dark: hsl(var(--color-base-hue), 54%, 12%);
   --color-background-light: hsl(var(--color-base-hue), 60%, 22%);
   --color-text-light: hsl(var(--color-base-hue), 100%, 88%);
+  --color-text-dark: hsl(var(--color-base-hue), 100%, 23%);
   --background-linear-gradient-bright: linear-gradient(
     45deg,
     var(--color-base-chat),

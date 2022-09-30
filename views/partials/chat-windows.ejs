@@ -1,8 +1,8 @@
 <div class="chat-container" id="<%= chatWindow %>">
   <div class="chat-row">
     <div class="chat-window chat-inner">
-      <% messages.forEach(message =>{ %> <%# if(message.whereSent.slice(1) !=
-      chatWindow) {%> <%# return; }%>
+      <% messages.forEach(message =>{ %> <% if(message.whereSent.slice(1) !=
+      chatWindow) {%> <% return; }%>
       <div class="message-div">
         <div class="message-container">
           <div class="time">
