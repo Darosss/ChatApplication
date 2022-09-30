@@ -12,8 +12,14 @@
   font-weight: bold;
   padding: 1rem;
 }
-
 .header-title {
   font-size: 3rem;
   font-weight: bold;
+}
+.header-nav a {
+  text-decoration: none;
+  color: var(--color-base-chat);
+}
+.header-nav a:hover {
+  background-color: var(--color-base-chat-dark);
 }

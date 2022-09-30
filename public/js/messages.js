@@ -41,7 +41,6 @@ $(window).ready(function () {
   });
   //END For each chat room
   function typingInfoOnKeypress(e) {
-    console.log("TIMEOUT", e.data.timeout);
     if (e.which != 13) {
       typingTimeout(e.data.room, (e.data.typing = true));
       clearTimeout(e.data.timeout);
@@ -67,7 +66,6 @@ $(window).ready(function () {
   });
 
   socket.on("user typing", (data) => {
-    console.log("typing" + data);
     const chatInfo = document.querySelector(data.roomName + " .chat-info");
     if (!data.isTyping) {
       chatInfo.innerHTML = "";

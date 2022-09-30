@@ -16,7 +16,6 @@ router.get("/", isLoggedIn, async function (req, res) {
     messages = [];
   }
   res.render("index", {
-    username: req.session.passport.user,
     messages: messages,
   });
 });

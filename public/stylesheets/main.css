@@ -1,5 +1,6 @@
 @import "shared/variables.css";
 @import "shared/header.css";
+@import "shared/chat.css";
 @import "shared/buttons.css";
 @import "shared/forms.css";
 @import "shared/profil.css";
@@ -12,90 +13,4 @@
   color: var(--color-base-chat);
   background: var(--background-linear-gradient);
   height: 100vh;
-  overflow: hidden;
-}
-
-a {
-  font-size: 1rem;
-  text-decoration: none;
-  color: var(--color-base-chat);
-}
-a:hover {
-  background-color: var(--color-base-chat-dark);
-}
-
-.chat-container {
-  width: 40%;
-  overflow: hidden;
-  height: 80vh;
-  position: relative;
-  float: left;
-  margin: 0.5rem 1rem 0 0.5rem;
-}
-.chat-row {
-  display: flex;
-  width: 100%;
-  height: 70%;
-  color: var(--color-base-chat);
-}
-.chat-inner {
-  background: var(--background-linear-gradient);
-  width: 50%;
-  border: 0.1rem solid var(--color-text-light);
-  overflow: scroll;
-}
-.chat-inner::-webkit-scrollbar {
-  display: none;
-}
-.user-list-window {
-  float: right;
-  background-color: red;
-}
-.chat-info {
-  width: 100%;
-  background: var(--background-linear-gradient);
-  text-align: center;
-  overflow: inherit;
-  color: var(--color-base-chat);
-}
-.user-list-header {
-  text-align: center;
-}
-.message-window {
-  background-color: var(--color-text-light);
-  width: 100%;
-  text-align: center;
-  height: auto;
-  min-height: 20px;
-  max-height: 100px;
-  resize: vertical;
-  margin-top: 0.05rem;
-}
-.chat-container button {
-  width: 100%;
-}
-.message-div .message-container {
-  padding: 0.05rem;
-  color: var(--color-base-chat);
-  font-weight: bold;
-  font-size: 12px;
-  font-size: 1.5vw;
-  margin-left: 0.2rem;
-  border-bottom: 0.1rem solid var(--color-base-chat);
-}
-.message {
-  word-wrap: break-word;
-  word-break: break-all;
-}
-.time {
-  color: var(--color-base-chat-dark);
-  font-size: 12px;
-  font-size: 0.9vw;
-  margin-top: 0.3rem;
-}
-
-.username {
-  color: red; /* take from database later */
-  float: left;
-  margin-right: 0.25rem;
 }
