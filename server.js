@@ -18,6 +18,7 @@ const indexRouter = require("./routes/index");
 const profilRouter = require("./routes/profil");
 const loginRouter = require("./routes/login");
 const registerRouter = require("./routes/register");
+const logoutRouter = require("./routes/logout");
 const { session } = require("passport");
 //socket io functions in another file for readability
 
@@ -58,10 +59,11 @@ app.use(passport.session());
 
 //Use routes
 app.use("/", indexRouter);
-app.use("/profil", profilRouter);
+
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
-
+app.use("/profil", profilRouter);
+app.use("/logout", logoutRouter);
 //Listen port
 httpServer.listen(process.env.PORT || 3000, () => {
   console.log(`application is running at: */${process.env.PORT || 3000}`);

@@ -1,31 +1,36 @@
 <h1>Profil: <%= userDetails.username %></h1>
-
-<table class="table-profil">
-  <tr>
-    <td>Username</td>
-    <td><%= userDetails.username %></td>
-  </tr>
-  <tr>
-    <td>Firstname</td>
-    <td><%= userDetails.firstname %></td>
-  </tr>
-  <tr>
-    <td>Surname</td>
-    <td><%= userDetails.surname %></td>
-  </tr>
-  <tr>
-    <td>Created at</td>
-    <td><%= userDetails.createdAt.toISOString() %></td>
-  </tr>
-  <tr>
-    <td>Birthday</td>
-    <td><%= userDetails.birthday.toISOString() %></td>
-  </tr>
-  <tr>
-    <td>Ranges</td>
-    <td><%= userDetails.range %></td>
-  </tr>
-</table>
 <form action="" method="POST">
+  <table class="table-profil">
+    <tr>
+      <td>Username</td>
+      <td><%=  userDetails.username %></td>
+    </tr>
+    <tr>
+      <td>Firstname</td>
+      <td><input type="text" name="firstname" value="<%=  userDetails.firstname %>"></input></td>
+    </tr>
+    <tr>
+      <td>Surname</td>
+      <td><input type="text" name="surname" value="<%=  userDetails.surname %>"></input></td>
+    </tr>
+    <tr>
+      <td>Birthday</td>
+      <td><input type="date" name="birthday" value="<%=   userDetails.birthday.toISOString().split("T")[0] %>"></input></td>
+    </tr>
+    <tr>
+      <td>Created at</td>
+     <td><%= userDetails.createdAt.toISOString() %></td>
+    </tr>
+
+    <tr>
+      <td>Ranges</td>
+      <td><%= userDetails.range %></td>
+    </tr>
+  </table>
+
+  <button class="btn-form-primary" type="submit">Edit</button>
+</form>
+
+<form action="logout" method="POST">
   <button class="btn-form-primary" type="submit">Logout</button>
 </form>

@@ -12,14 +12,19 @@ router.get("/", isLoggedIn, function (req, res) {
   );
 });
 
-router.post("/", (req, res, next) => {
-  req.logout(function (err) {
-    if (err) {
-      console.log("err", err);
-      return next(err);
-    }
-    res.redirect("/");
-  });
+router.post("/", async (req, res, next) => {
+  const filter = { username: req.session.passport.user };
+  const update = {
+    firstname: req.body.firstname,
+    surname: req.body.surname,
+    birthday: req.body.birthday,
+  };
+  try {
+    await User.findOneAndUpdate(filter, update);
+    res.redirect("profil");
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 module.exports = router;
