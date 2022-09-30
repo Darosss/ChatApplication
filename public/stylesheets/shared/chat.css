@@ -34,6 +34,7 @@
   min-height: 30px;
   max-height: 100px;
   resize: vertical;
+  overflow: hidden;
 }
 .chat-container button {
   width: 100%;
