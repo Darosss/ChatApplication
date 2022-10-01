@@ -8,9 +8,14 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  font-size: 2.5vmin;
 }
 :root {
   color: var(--color-base-chat);
   background: var(--background-linear-gradient);
   height: 100vh;
+}
+.site-header {
+  font-size: 5vmax;
+  font-weight: bold;
 }

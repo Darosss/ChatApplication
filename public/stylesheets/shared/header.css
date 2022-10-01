@@ -8,12 +8,12 @@
   list-style: none;
 }
 .header-nav ul a {
-  font-size: 2rem;
+  font-size: 3vmin;
   font-weight: bold;
-  padding: 1rem;
+  padding: 2vmin;
 }
 .header-title {
-  font-size: 3rem;
+  font-size: 6vmin;
   font-weight: bold;
 }
 .header-nav a {
