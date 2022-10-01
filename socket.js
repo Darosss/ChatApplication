@@ -74,6 +74,7 @@ module.exports = function (io, sessionMiddleware) {
   });
 
   async function saveMessageToDB(username, msg, date, room) {
+    console.log("room", room);
     const message = new Message({
       sender: username,
       message: msg,
@@ -83,7 +84,7 @@ module.exports = function (io, sessionMiddleware) {
     try {
       await message.save();
     } catch (error) {
-      console.log("Message couldn't be saved");
+      console.log(error, "Message couldn't be saved");
     }
   }
   function getKeyByValue(object, value) {

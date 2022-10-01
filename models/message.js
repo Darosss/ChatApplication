@@ -9,14 +9,15 @@ const messageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  whereSent: {
-    type: String,
-    required: true,
-  },
   sentTime: {
     type: Date,
     required: true,
     default: Date.now,
+  },
+  whereSent: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "User",
   },
 });
 

@@ -5,6 +5,11 @@
   position: relative;
   float: left;
   margin: 0.5vmin 1vmin 0 0.5vmin;
+  /* resize: both; */
+  display: none;
+}
+.display-none {
+  display: block;
 }
 .chat-row {
   display: flex;
@@ -23,7 +28,7 @@
 .user-list-header {
   text-align: center;
 }
-.message-window {
+.message-textarea {
   background: var(--color-base-chat);
   color: var(--color-base-chat-inverted-dark);
   font-size: 3vmin;
@@ -61,4 +66,8 @@
   color: var(--color-base-chat-dark); /* take from database later */
   float: left;
   margin-right: 0.25rem;
+}
+
+.chat-room-container {
+  display: inline-flex;
 }

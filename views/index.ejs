@@ -1,4 +1,13 @@
-<%- include("partials/chat-windows", {chatWindow:"room-normal"}) %> <%-
-include("partials/chat-windows", {chatWindow:"room-admins"}) %>
+<%#- include("partials/chat-windows", {chatWindow:"room-normal"}) %> <%#-
+include("partials/chat-windows", {chatWindow:"room-admins"}) %> <%
+chatRooms.forEach(room=>{ %>
+<div class="chat-room-container">
+  <button class="chat-room-button" value="<%= room.id %>">
+    <%= room.name %>
+  </button>
+</div>
+
+<% }) %> <% chatRooms.forEach(room=>{ %> <%- include("partials/chat-windows",
+{roomName:room.id, chatName:room.name, messages:messages }) %> <% }) %>
 
 <script defer src="/js/messages.js"></script>

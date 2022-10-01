@@ -2,17 +2,40 @@ document.addEventListener("DOMContentLoaded", function (event) {
   var socket = io({ autoConnect: true });
   let typingTime = 5000;
   let chatContainers = document.getElementsByClassName("chat-container");
+  let chatButtons = document.getElementsByClassName("chat-room-button");
   let timeoutTyping = undefined,
     typingInChat = false;
   //Loop through all containers to set adequate sockets to chat rooms
-  [...chatContainers].forEach((chat) => {
+
+  [...chatButtons].forEach((roomButton) => {
+    let btnValueRoom = roomButton.value;
+    let displayNoneClass = "display-none";
+    roomButton.addEventListener("click", function () {
+      let chatRoom = document.getElementById(btnValueRoom);
+
+      if (chatRoom.classList.contains(displayNoneClass)) {
+        chatRoom.classList.remove(displayNoneClass);
+      } else {
+        chatRoom.classList.add(displayNoneClass);
+      }
+    });
+  });
+
+  [...chatContainers].forEach((chat, index) => {
+    // if (index == 0) chat.style.display = "inline"; //TODO show first chat later remove
     let sendButton = chat.querySelector(".btn-primary"),
       chatWindow = chat.querySelector(".chat-window"),
       chatForm = chat.querySelector(".chat-form"),
       chatTxtarea = chat.querySelector("textarea"),
       joinButton = chat.querySelector('button[id*="join"]'),
       leaveButton = chat.querySelector('button[id*="leave"]'),
-      roomID = "#" + chat.getAttribute("id");
+      roomID = chat.getAttribute("id");
+
+    //When submiting form prevent default and emit 'message' to socket
+    chatForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      onSubmitMessage(chatTxtarea, roomID);
+    });
 
     textareaEventListeners(chatTxtarea, sendButton);
     chatWindow.scrollTop = chatWindow.scrollHeight;
@@ -26,13 +49,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
       joinLeaveRoom(this, joinButton, "leave room", roomID);
       sendButton.style.display = "none";
     });
-    //When submiting form prevent default and emit 'message' to socket
-    chatForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      onSubmitMessage(chatTxtarea, roomID);
-    });
+
     // On keypress at textarea emit 'typing' to socket
-    chatTxtarea.addEventListener("keypress", function (e) {
+    chatTxtarea.addEventListener("keydown", function (e) {
       typingInfoOnKeypress(e, roomID);
     });
   });
@@ -59,14 +78,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
   socket.on("chat message", function (data) {
     addMessageToChatbox(
       data.username,
-      data.roomTarget + " .chat-window",
+      data.roomTarget,
       data.msg,
       data.date.split("T")[1].split(".")[0]
     );
   });
   //Trigger when someone is typing in your room
   socket.on("user typing", (data) => {
-    const chatInfo = document.querySelector(data.roomName + " .chat-info");
+    const chatInfo = document
+      .getElementById(data.roomName)
+      .querySelector(".chat-info");
+
     if (!data.isTyping) {
       chatInfo.innerHTML = "";
     } else {
@@ -75,7 +97,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
   });
   //Trigger when someone is going offline or online in room
   socket.on("user online room", function (data) {
-    let roomUserList = document.querySelector(data.roomName + " .user-list");
+    let roomUserList = document
+      .getElementById(data.roomName)
+      .querySelector(".user-list");
     roomUserList.innerHTML = "";
     data.roomUsers.forEach((user) => {
       let userBtn = document.createElement("button");
@@ -117,7 +141,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
   //When gets message this function paste it to div
   function addMessageToChatbox(username, room, msg, date) {
     var msgBox = messageFormat(username, msg, date);
-    roomTarget = document.querySelector(room);
+    let roomTarget = document
+      .getElementById(room)
+      .querySelector(".chat-window");
     roomTarget.innerHTML += msgBox;
     roomTarget.scrollTop = roomTarget.scrollHeight;
   }
