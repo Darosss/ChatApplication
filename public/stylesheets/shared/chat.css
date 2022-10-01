@@ -71,3 +71,9 @@
 .chat-room-container {
   display: inline-flex;
 }
+
+.create-room-link {
+  float: right;
+  color: var(--color-base-chat-inverted-dark);
+  text-decoration: none;
+}

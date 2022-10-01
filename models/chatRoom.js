@@ -9,6 +9,10 @@ const chatRoomSchema = new mongoose.Schema({
     type: Array,
     required: true,
   },
+  createdBy: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("chatRoom", chatRoomSchema);
