@@ -22,9 +22,24 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   range: {
-    type: String,
+    type: Array,
     required: true,
     default: "user",
+  },
+  country: {
+    type: String,
+  },
+  gender: {
+    type: String,
+  },
+  nickColor: {
+    type: String,
+  },
+  email: {
+    type: String,
+  },
+  phoneNumber: {
+    type: String,
   },
 });
 userSchema.plugin(passportLocalMongoose);

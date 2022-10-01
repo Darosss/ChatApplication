@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
   function joinLeaveRoom(btnPressed, btnToEnable, evnName, roomName) {
     socket.emit(evnName, { roomName: roomName });
     btnPressed.disabled = true;
-    $(btnToEnable).removeAttr("disabled");
+    btnToEnable.removeAttribute("disabled");
   }
   //Emit message to each room and emit
   function onSubmitMessage(textarea, room) {

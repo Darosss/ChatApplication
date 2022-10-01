@@ -13,12 +13,22 @@ router.post("/", async (req, res) => {
   let firstname = req.body.firstname;
   let surname = req.body.surname;
   let birthday = req.body.birthday;
+  let country = req.body.country;
+  let gender = req.body.gender;
+  let nickColor = req.body.nickColor;
+  let email = req.body.email;
+  let phoneNumber = req.body.phoneNumber;
   User.register(
     new User({
       username: username,
       firstname: firstname,
       surname: surname,
       birthday: birthday,
+      country: country,
+      gender: gender,
+      nickColor: nickColor,
+      email: email,
+      phoneNumber: phoneNumber,
     }),
     password,
     function (err, user) {

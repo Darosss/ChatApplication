@@ -18,6 +18,11 @@ router.post("/", async (req, res, next) => {
     firstname: req.body.firstname,
     surname: req.body.surname,
     birthday: req.body.birthday,
+    country: req.body.country,
+    gender: req.body.gender,
+    nickColor: req.body.nickColor,
+    email: req.body.email,
+    phoneNumber: req.body.phoneNumber,
   };
   try {
     await User.findOneAndUpdate(filter, update);

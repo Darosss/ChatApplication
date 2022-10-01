@@ -50,6 +50,7 @@ var sessionMiddleware = expressSession({
   store: new (require("connect-mongo")(expressSession))({
     url: process.env.DATABASE_URL,
   }),
+  expires: new Date(Date.now() + 1000 * 60 * 30),
 });
 
 require("./socket")(io, sessionMiddleware);
