@@ -8,13 +8,14 @@ router.get("/", (req, res) => {
 
 router.post("/", async (req, res) => {
   if (req.body.name.length <= 0) res.redirect("/chatroom");
+  let creatorName = req.session.passport.user;
   let name = prefixName + req.body.name;
   let ranges = req.body.ranges.split(",");
-  let createdBy = req.session.passport.user;
+  ranges.push(creatorName);
   const room = new chatRoom({
     name: name,
     availableRanges: ranges,
-    createdBy: createdBy,
+    createdBy: creatorName,
   });
   try {
     const newRoom = await room.save();

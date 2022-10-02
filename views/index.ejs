@@ -9,6 +9,6 @@
 </div>
 
 <% }) %> <% chatRooms.forEach(room=>{ %> <%- include("partials/chat-windows",
-{roomName:room.id, chatName:room.name, messages:messages }) %> <% }) %>
+{roomName:room.id, chatName:room.name, messages:messages[room.id] }) %> <% }) %>
 
 <script defer src="/js/messages.js"></script>

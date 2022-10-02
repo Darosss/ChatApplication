@@ -2,8 +2,7 @@
   <div class="chat-container" id="<%= roomName %>">
     <div class="chat-row">
       <div class="chat-window chat-inner">
-        <% messages.forEach(message =>{ %> <% if(message.whereSent != roomName)
-        {%> <% return; }%>
+        <% messages.forEach(message =>{ %>
         <div class="message-div">
           <div class="message-container">
             <div class="time">
