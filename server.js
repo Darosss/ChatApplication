@@ -1,4 +1,4 @@
-if (process.env.NODE_ENV !== "producuction") {
+if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 const express = require("express");
@@ -8,7 +8,7 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-var methodOverride = require("method-override");
+const methodOverride = require("method-override");
 const passport = require("passport");
 
 const app = express();
@@ -25,10 +25,6 @@ const { session } = require("passport");
 //socket io functions in another file for readability
 
 //MONGODB database connection
-// mongoose.set("useNewUrlParser", true);
-// mongoose.set("useFindAndModify", true);
-// mongoose.set("useCreateIndex", true);
-// mongoose.set("useUnifedTopology", true);
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));

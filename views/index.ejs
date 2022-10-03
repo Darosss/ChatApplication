@@ -1,5 +1,4 @@
-<%-include("partials/create-room-btn", {href: "chatrooms/create"});%> <%
-chatRooms.forEach(room=>{ %>
+<% chatRooms.forEach(room=>{ %>
 <div class="chat-room-container">
   <button class="chat-room-button" value="<%= room.id %>">
     <%= room.name %>

@@ -5,6 +5,7 @@ const chatRoom = require("../models/chatRoom");
 const Message = require("../models/message");
 const User = require("../models/user");
 const isLoggedIn = require("./middlewares/isLogedIn");
+const layoutAuth = require("./middlewares/layoutAuth");
 
 router.get("/", isLoggedIn, async function (req, res) {
   let messages = {},
@@ -41,6 +42,7 @@ router.get("/", isLoggedIn, async function (req, res) {
   res.render("index", {
     chatRooms: chatRooms,
     messages: messages,
+    layout: layoutAuth(req),
   });
 });
 

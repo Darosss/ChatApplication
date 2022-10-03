@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/user");
 const chatRoom = require("../models/chatRoom");
 const isLoggedIn = require("./middlewares/isLogedIn");
+const layoutAuth = require("./middlewares/layoutAuth");
 
 router.get("/", isLoggedIn, async function (req, res) {
   let user = req.session.passport.user;
@@ -13,7 +14,11 @@ router.get("/", isLoggedIn, async function (req, res) {
     chatRooms = await chatRoom.find({ createdBy: user });
   } catch {}
 
-  res.render("profil/profil", { userDetails: userDB, chatRooms: chatRooms });
+  res.render("profil/profil", {
+    userDetails: userDB,
+    chatRooms: chatRooms,
+    layout: layoutAuth(req),
+  });
 });
 
 router.post("/edit", async (req, res, next) => {

@@ -3,6 +3,7 @@ const router = express.Router();
 const chatRoom = require("../models/chatRoom");
 const prefixName = "chat-";
 const dir = "chatrooms";
+const layoutAuth = require("./middlewares/layoutAuth");
 
 router.get("/", async (req, res) => {
   let user = req.session.passport.user;
@@ -10,11 +11,14 @@ router.get("/", async (req, res) => {
   try {
     usersChatRooms = await chatRoom.find({ createdBy: user });
   } catch (error) {}
-  res.render(dir + "/index", { chatRooms: usersChatRooms });
+  res.render(dir + "/index", {
+    chatRooms: usersChatRooms,
+    layout: layoutAuth(req),
+  });
 });
 
 router.get("/create", (req, res) => {
-  res.render(dir + "/create");
+  res.render(dir + "/create", { layout: layoutAuth(req) });
 });
 
 //Create new chatroom
@@ -41,7 +45,10 @@ router.post("/create", async (req, res) => {
 router.get("/edit/:id", async (req, res) => {
   const chatRoomEdit = await chatRoom.findById(req.params.id);
 
-  res.render(dir + "/edit", { chatRoom: chatRoomEdit });
+  res.render(dir + "/edit", {
+    chatRoom: chatRoomEdit,
+    layout: layoutAuth(req),
+  });
 });
 
 //Edit chatroom by id route
