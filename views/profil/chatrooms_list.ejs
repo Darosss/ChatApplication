@@ -1,0 +1,20 @@
+<table class="table-profil">
+  <tr>
+    <td>Chat room</td>
+    <td>Ranges</td>
+  </tr>
+  <% chatRooms.forEach(room => { %>
+  <tr>
+    <td><%= room.name %></td>
+
+    <td><%= room.availableRanges.join(" | ") %></td>
+    <td>
+      <a href="chatroom/edit/<%= room.id %>">
+        <button class="btn-form-small">Edit</button></a
+      >
+    </td>
+  </tr>
+  <%});%>
+</table>
+
+<button class="btn-form-primary" type="submit">Edit chatrooms</button>

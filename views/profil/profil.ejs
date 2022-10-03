@@ -1,0 +1,9 @@
+<div class="site-header">Profil: <%= userDetails.username %></div>
+
+<form action="logout" method="POST" class="logout-form">
+  <button class="btn-form-primary" type="submit">Logout</button>
+</form>
+
+<a href="/chatrooms"> <button class="btn-form-primary">Your rooms</button></a>
+
+<%- include("./details_form.ejs") %> <%#- include("./chatrooms_list.ejs") %>

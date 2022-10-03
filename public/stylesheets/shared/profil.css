@@ -1,18 +1,6 @@
-.table-profil td:first-child {
-  border-right: 0.2rem double var(--color-base-chat-dark);
-  padding-right: 1vw;
-  width: 50%;
-}
-.table-profil {
-  font-size: 3vmin;
-}
-.table-profil td {
-  padding-left: 0.3rem;
-
-  font-weight: bold;
-}
 .profil-form {
   float: left;
+  margin-right: 3vw;
 }
 .logout-form {
   color: red;

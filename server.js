@@ -8,6 +8,7 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+var methodOverride = require("method-override");
 const passport = require("passport");
 
 const app = express();
@@ -42,6 +43,7 @@ app.use(expressLayouts);
 app.use(express.static(__dirname + "/public"));
 //Body parser
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(methodOverride("_method"));
 
 var sessionMiddleware = expressSession({
   name: "COOKIE_NAME_HERE",
@@ -66,7 +68,7 @@ app.use("/login", loginRouter);
 app.use("/register", registerRouter);
 app.use("/profil", profilRouter);
 app.use("/logout", logoutRouter);
-app.use("/chatroom", chatRoomRouter);
+app.use("/chatrooms", chatRoomRouter);
 //Listen port
 httpServer.listen(process.env.PORT || 3000, () => {
   console.log(`application is running at: */${process.env.PORT || 3000}`);

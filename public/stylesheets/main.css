@@ -4,6 +4,7 @@
 @import "shared/buttons.css";
 @import "shared/forms.css";
 @import "shared/profil.css";
+@import "shared/tables-details.css";
 *,
 *::before,
 *::after {

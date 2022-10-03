@@ -1,0 +1,51 @@
+<form action="/profil/edit" method="POST" class="profil-form">
+    <table class="table-details">
+      <tr>
+        <td>Username</td>
+        <td><%=  userDetails.username %></td>
+      </tr>
+      <tr>
+        <td>Created at</td>
+       <td><%= userDetails.createdAt.toISOString() %></td>
+      </tr>
+  
+      <tr>
+        <td>Ranges</td>
+        <td><%= userDetails.range.join(" | ") %></td>
+      </tr>
+      <tr>
+        <td>Firstname</td>
+        <td><input type="text" name="firstname" value="<%=  userDetails.firstname %>"></input></td>
+      </tr>
+      <tr>
+        <td>Surname</td>
+        <td><input type="text" name="surname" value="<%=  userDetails.surname %>"></input></td>
+      </tr>
+      <tr>
+        <td>Birthday</td>
+        <td><input type="text" name="birthday" value="<%=   userDetails.birthday.toISOString().split("T")[0] %>"></input></td>
+      </tr>
+      <tr>
+        <td>Country</td>
+        <td><input type="text" name="country" value="<%= userDetails.country %>"></input></td>
+      </tr>
+      <tr>
+        <td>Gender</td>
+        <td><input type="text" name="gender" value="<%= userDetails.gender %>"></input></td>
+      </tr>
+      <tr>
+        <td>Nick color</td>
+        <td><input type="text" name="nickColor" value="<%= userDetails.nickColor %>"></input></td>
+      </tr>
+      <tr>
+        <td>Email</td>
+        <td><input type="text" name="email" value="<%= userDetails.email %>"></input></td>
+      </tr>
+      <tr>
+        <td>Phone number</td>
+        <td><input type="number" name="phoneNumber" value="<%= userDetails.phoneNumber %>"></input></td>
+      </tr>
+    </table>
+    <button class="btn-form-primary" type="submit">Edit</button>
+  </form>
+  

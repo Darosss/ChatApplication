@@ -24,3 +24,8 @@ button:hover {
   padding: 2vmin;
   font-size: 3vmin;
 }
+
+.btn-form-small {
+  padding: 0.5vmin;
+  font-size: 3vmin;
+}

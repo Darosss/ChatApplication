@@ -1,0 +1,22 @@
+<form action="" method="POST">
+  <table class="table-details">
+    <tr>
+      <td>Chat room</td>
+      <td>Ranges</td>
+    </tr>
+    <tr>
+      <td><input type="text" name="name" value="<%=chatRoom.name %>" /></td>
+      <td>
+        <input
+          type="text"
+          name="ranges"
+          value="<%=chatRoom.availableRanges %>"
+        />
+      </td>
+    </tr>
+  </table>
+  <button class="btn-form-primary" type="submit">Edit</button>
+</form>
+<form action="?_method=DELETE" method="POST">
+  <button class="btn-form-primary" type="submit">Delete</button>
+</form>

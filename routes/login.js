@@ -10,7 +10,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-router.get("/", async (req, res) => {
+router.get("/", (req, res) => {
   res.render("login");
 });
 router.post(

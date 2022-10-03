@@ -2,12 +2,24 @@ const express = require("express");
 const router = express.Router();
 const chatRoom = require("../models/chatRoom");
 const prefixName = "chat-";
-router.get("/", (req, res) => {
-  res.render("chatroom/create");
+const dir = "chatrooms";
+
+router.get("/", async (req, res) => {
+  let user = req.session.passport.user;
+  let usersChatRooms;
+  try {
+    usersChatRooms = await chatRoom.find({ createdBy: user });
+  } catch (error) {}
+  res.render(dir + "/index", { chatRooms: usersChatRooms });
 });
 
-router.post("/", async (req, res) => {
-  if (req.body.name.length <= 0) res.redirect("/chatroom");
+router.get("/create", (req, res) => {
+  res.render(dir + "/create");
+});
+
+//Create new chatroom
+router.post("/create", async (req, res) => {
+  if (req.body.name.length <= 0) res.redirect("/chatrooms");
   let creatorName = req.session.passport.user;
   let name = prefixName + req.body.name;
   let ranges = req.body.ranges.split(",");
@@ -18,11 +30,43 @@ router.post("/", async (req, res) => {
     createdBy: creatorName,
   });
   try {
-    const newRoom = await room.save();
+    await room.save();
     res.redirect("/");
   } catch {
     console.log("Cannot create room");
   }
 });
 
+//Get chatroom by id
+router.get("/edit/:id", async (req, res) => {
+  const chatRoomEdit = await chatRoom.findById(req.params.id);
+
+  res.render(dir + "/edit", { chatRoom: chatRoomEdit });
+});
+
+//Edit chatroom by id route
+router.post("/edit/:id", async (req, res) => {
+  const update = {
+    name: req.body.name,
+    availableRanges: req.body.ranges.split(","),
+  };
+  try {
+    await chatRoom.findByIdAndUpdate(req.params.id, update);
+
+    res.redirect("/chatrooms");
+  } catch (e) {
+    console.log(e);
+  }
+});
+//Remove chatroom route
+router.delete("/edit/:id", async (req, res) => {
+  let room;
+  try {
+    room = await chatRoom.findById(req.params.id);
+    await room.remove();
+    res.redirect("../../" + dir);
+  } catch {
+    res.redirect("back");
+  }
+});
 module.exports = router;
