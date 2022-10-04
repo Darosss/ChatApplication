@@ -5,14 +5,14 @@ const rangeSchema = new mongoose.Schema({
     required: true,
     index: { unique: true },
   },
-  rangeStrength: {
-    type: Number,
-    required: true,
-  },
   createdAt: {
     type: Date,
     required: true,
     default: Date.now,
+  },
+  createdBy: {
+    type: String,
+    required: true,
   },
 });
 

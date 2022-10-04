@@ -6,9 +6,9 @@ module.exports = function (io, sessionMiddleware) {
   io.use(function (socket, next) {
     sessionMiddleware(socket.request, {}, next);
   }).on("connection", (socket) => {
-    var userId = socket.request.session.passport.user;
-    console.log(`User: ${userId} joined the site`);
-    onlineUsers[socket.id] = userId;
+    var userNick = socket.request.session.passport.user.username;
+    console.log(`User: ${userNick} joined the site`);
+    onlineUsers[socket.id] = userNick;
 
     socket.onAny((event, ...args) => {
       console.log("On any: Event:", event, args);
@@ -16,7 +16,7 @@ module.exports = function (io, sessionMiddleware) {
     socket.on("join room", (data) => {
       let roomName = data.roomName;
       if (!rooms[roomName]) rooms[roomName] = [];
-      rooms[roomName].push(userId);
+      rooms[roomName].push(userNick);
       socket.join(roomName);
       data.roomUsers = rooms[roomName];
       io.to(roomName).emit("user online room", data);
@@ -25,7 +25,7 @@ module.exports = function (io, sessionMiddleware) {
     socket.on("leave room", (data) => {
       let roomName = data.roomName;
       let room = rooms[roomName];
-      room.splice(room.indexOf(userId), 1);
+      room.splice(room.indexOf(userNick), 1);
       data.roomUsers = rooms[roomName];
       io.to(roomName).emit("user online room", data);
       socket.leave(roomName);
@@ -34,7 +34,7 @@ module.exports = function (io, sessionMiddleware) {
     //When disconnect remove from online
     socket.on("disconnect", () => {
       Object.keys(rooms).forEach((room) => {
-        let userIndex = rooms[room].indexOf(userId);
+        let userIndex = rooms[room].indexOf(userNick);
         rooms[room].splice(userIndex, 1);
         if (userIndex >= 0)
           socket.to(room).emit("user online room", {
@@ -46,7 +46,7 @@ module.exports = function (io, sessionMiddleware) {
     });
     //On chat message
     socket.on("chat message", async (data) => {
-      data.username = userId;
+      data.username = userNick;
       data.date = new Date();
       io.to(data.roomTarget).emit("chat message", data);
       await saveMessageToDB(
@@ -68,7 +68,7 @@ module.exports = function (io, sessionMiddleware) {
 
     //   //Info about typing
     socket.on("user typing", (data) => {
-      data.username = userId;
+      data.username = userNick;
       socket.to(data.roomName).emit("user typing", data);
     });
   });

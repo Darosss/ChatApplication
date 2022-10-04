@@ -21,10 +21,19 @@ const userSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  range: {
+  ranges: {
     type: Array,
-    required: true,
     default: "user",
+  },
+  administrator: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  moderator: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
   country: {
     type: String,
@@ -40,6 +49,15 @@ const userSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: String,
+  },
+  isBanned: {
+    type: Boolean,
+  },
+  bannedDate: {
+    type: Date,
+  },
+  banExpiresDate: {
+    type: Date,
   },
 });
 userSchema.plugin(passportLocalMongoose);

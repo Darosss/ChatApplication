@@ -1,18 +1,39 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
-
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-const passportLocalMongoose = require("passport-local-mongoose");
-const layoutAuth = require("./middlewares/layoutAuth");
 
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.use(
+  new LocalStrategy(function (username, password, done) {
+    User.findOne({ username: username }, function (err, user) {
+      if (err) {
+        return done(err);
+      }
+      if (!user) {
+        return done(null, false);
+      }
+      if (user.password === password) {
+        return done(null, false);
+      }
+      return done(null, {
+        _id: user._id,
+        username: user.username,
+      });
+    });
+  })
+);
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
 
+passport.deserializeUser(function (id, done) {
+  User.findById(id, function (err, user) {
+    done(err, user);
+  });
+});
 router.get("/", (req, res) => {
-  res.render("login", { layout: layoutAuth(req) });
+  res.render("login", {});
 });
 router.post(
   "/",

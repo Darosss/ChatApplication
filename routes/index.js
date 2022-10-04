@@ -4,24 +4,20 @@ const router = express.Router();
 const chatRoom = require("../models/chatRoom");
 const Message = require("../models/message");
 const User = require("../models/user");
-const isLoggedIn = require("./middlewares/isLogedIn");
-const layoutAuth = require("./middlewares/layoutAuth");
 
-router.get("/", isLoggedIn, async function (req, res) {
+router.get("/", async function (req, res) {
   let messages = {},
     chatRooms,
     connectedUser;
   const limitMsgs = 300;
 
   try {
-    connectedUser = await User.findOne({
-      username: req.session.passport.user,
-    });
+    connectedUser = await User.findById(req.session.passport.user._id);
     const chatRoomFilter = {
       $or: [
         { createdBy: connectedUser.username },
         {
-          availableRanges: { $in: connectedUser.range },
+          availableRanges: { $in: connectedUser.ranges },
         },
         { availableRanges: { $all: connectedUser.username } },
       ],
@@ -42,7 +38,6 @@ router.get("/", isLoggedIn, async function (req, res) {
   res.render("index", {
     chatRooms: chatRooms,
     messages: messages,
-    layout: layoutAuth(req),
   });
 });
 

@@ -1,31 +1,27 @@
 const express = require("express");
 const router = express.Router();
 const chatRoom = require("../models/chatRoom");
-const prefixName = "chat-";
 const dir = "chatrooms";
-const layoutAuth = require("./middlewares/layoutAuth");
 
 router.get("/", async (req, res) => {
-  let user = req.session.passport.user;
+  let user = req.session.passport.user.username;
   let usersChatRooms;
   try {
     usersChatRooms = await chatRoom.find({ createdBy: user });
   } catch (error) {}
   res.render(dir + "/index", {
     chatRooms: usersChatRooms,
-    layout: layoutAuth(req),
   });
 });
 
 router.get("/create", (req, res) => {
-  res.render(dir + "/create", { layout: layoutAuth(req) });
+  res.render(dir + "/create", {});
 });
 
 //Create new chatroom
 router.post("/create", async (req, res) => {
-  if (req.body.name.length <= 0) res.redirect("/chatrooms");
-  let creatorName = req.session.passport.user;
-  let name = prefixName + req.body.name;
+  let creatorName = req.session.passport.user.username;
+  let name = req.body.name;
   let ranges = req.body.ranges.split(",");
   ranges.push(creatorName);
   const room = new chatRoom({
@@ -47,7 +43,6 @@ router.get("/edit/:id", async (req, res) => {
 
   res.render(dir + "/edit", {
     chatRoom: chatRoomEdit,
-    layout: layoutAuth(req),
   });
 });
 
@@ -60,7 +55,7 @@ router.post("/edit/:id", async (req, res) => {
   try {
     await chatRoom.findByIdAndUpdate(req.params.id, update);
 
-    res.redirect("/chatrooms");
+    res.redirect("/" + dir);
   } catch (e) {
     console.log(e);
   }

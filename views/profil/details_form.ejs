@@ -8,10 +8,17 @@
         <td>Created at</td>
        <td><%= userDetails.createdAt.toISOString() %></td>
       </tr>
-  
       <tr>
         <td>Ranges</td>
-        <td><%= userDetails.range.join(" | ") %></td>
+        <td><%= userDetails.ranges.join(" | ") %></td>
+      </tr>
+      <tr>
+        <td>Moderator</td>
+        <td><%= userDetails.moderator %></td>
+      </tr>
+      <tr>
+        <td>Administrator</td>
+        <td><%= userDetails.administrator %></td>
       </tr>
       <tr>
         <td>Firstname</td>

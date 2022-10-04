@@ -3,10 +3,8 @@ const router = express.Router();
 const User = require("../models/user");
 const passport = require("passport");
 
-const layoutAuth = require("./middlewares/layoutAuth");
-
 router.get("/", (req, res) => {
-  res.render("register", { layout: layoutAuth(req) });
+  res.render("register");
 });
 
 router.post("/", async (req, res) => {

@@ -1,4 +1,4 @@
-<%-include("../partials/create-room-btn", {href: "chatrooms/create"});%>
+<%-include("../partials/create-btn", {href: "chatrooms/create", btnName:"Create room"})%>
 <table class="table-details">
   <tr>
     <td>Chat rooms</td>
@@ -9,9 +9,7 @@
     <td><%= room.name %></td>
     <td><%= room.availableRanges %></td>
     <td>
-      <a href="chatrooms/edit/<%= room.id %>"
-        ><button class="btn-form-small">Edit</button></a
-      >
+      <a href="chatrooms/edit/<%= room.id %>"><button class="btn-form-small">Edit</button></a>
     </td>
   </tr>
 

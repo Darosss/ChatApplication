@@ -2,27 +2,22 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
 const chatRoom = require("../models/chatRoom");
-const isLoggedIn = require("./middlewares/isLogedIn");
-const layoutAuth = require("./middlewares/layoutAuth");
 
-router.get("/", isLoggedIn, async function (req, res) {
+router.get("/", async function (req, res) {
   let user = req.session.passport.user;
+  console.log("sess", user);
   let userDB, chatRooms;
-  // TODO later availalbe ranges from database for selection not input
-  try {
-    userDB = await User.findOne({ username: user });
-    chatRooms = await chatRoom.find({ createdBy: user });
-  } catch {}
+  userDB = await User.findOne({ username: user.username });
+  chatRooms = await chatRoom.find({ createdBy: user.username });
 
   res.render("profil/profil", {
     userDetails: userDB,
     chatRooms: chatRooms,
-    layout: layoutAuth(req),
   });
 });
 
-router.post("/edit", async (req, res, next) => {
-  const filter = { username: req.session.passport.user };
+router.post("/edit", async (req, res) => {
+  const filter = req.session.passport.user._id;
   const update = {
     firstname: req.body.firstname,
     surname: req.body.surname,
@@ -34,7 +29,7 @@ router.post("/edit", async (req, res, next) => {
     phoneNumber: req.body.phoneNumber,
   };
   try {
-    await User.findOneAndUpdate(filter, update);
+    await User.findByIdAndUpdate(filter, update);
     res.redirect("back");
   } catch (e) {
     console.log(e);
