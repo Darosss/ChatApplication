@@ -1,11 +1,14 @@
-module.exports = function (req, res, next) {
+const isAdmin = require("./isAdmin");
+module.exports = async function (req, res, next) {
   if (req.isAuthenticated()) {
-    console.log("is auth so lay auth");
-    req.app.locals.settings.layout = "layouts/authenticated";
+    let userId = req.session.passport.user._id;
+    if (await isAdmin(userId)) {
+      req.app.locals.settings.layout = "layouts/administrator";
+    } else {
+      req.app.locals.settings.layout = "layouts/authenticated";
+    }
     return next();
   }
-
-  console.log("is NOT auth so lay normal");
   req.app.locals.settings.layout = "layouts/layout";
   return next();
 };

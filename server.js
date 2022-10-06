@@ -26,7 +26,7 @@ const usersRouter = require("./routes/users");
 const { session } = require("passport");
 const isLogedIn = require("./routes/middlewares/isLogedIn");
 const layoutAuth = require("./routes/middlewares/layoutAuth");
-const isAdministrator = require("./routes/middlewares/isAdministrator");
+const isAdminForwarding = require("./routes/middlewares/isAdminForwarding");
 //socket io functions in another file for readability
 
 //MONGODB database connection
@@ -81,8 +81,8 @@ app.use("/register", registerRouter);
 app.use("/profil", profilRouter);
 app.use("/logout", logoutRouter);
 app.use("/chatrooms", chatRoomRouter);
-app.use("/ranges", isAdministrator, rangesRouter);
-app.use("/users", isAdministrator, usersRouter);
+app.use("/ranges", isAdminForwarding, rangesRouter);
+app.use("/users", isAdminForwarding, usersRouter);
 
 //Listen port
 httpServer.listen(process.env.PORT || 3000, () => {
