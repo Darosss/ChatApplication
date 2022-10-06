@@ -1,18 +1,16 @@
 <form action="" method="POST">
   <table class="table-details">
     <tr>
-      <td>Chat room</td>
-      <td>Ranges</td>
+      <td class="table-details-header" colspan="2">Chat room</td>
     </tr>
     <tr>
+      <td>Name </td>
       <td><input type="text" name="name" value="<%=chatRoom.name %>" /></td>
-      <td>
-        <input
-          type="text"
-          name="ranges"
-          value="<%=chatRoom.availableRanges %>"
-        />
-      </td>
+    </tr>
+
+    <tr>
+      <%- include("../partials/available-ranges-form", {ranges: ranges, containingRanges:chatRoom.availableRanges}) %>
+
     </tr>
   </table>
   <button class="btn-form-primary" type="submit">Edit</button>

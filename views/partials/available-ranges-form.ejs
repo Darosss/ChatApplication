@@ -1,0 +1,21 @@
+<tr>
+  <td class="table-details-header" colspan="2"> Available ranges</td>
+</tr>
+<% if(locals.containingRanges === undefined) {%> kappa <%locals.containingRanges = []} %>
+<% ranges.forEach(range=>{ %>
+<tr>
+  <% if(locals.containingRanges.indexOf(range.name) != -1){ %>
+  <td>
+    <input type="checkbox" id="<%= range.name %>" name="ranges" value="<%= range.name %>" checked>
+  </td>
+  <td> <label for="<%= range.name %>"> <%= range.name %></label>
+  </td>
+  <% }else{ %>
+  <td>
+    <input type="checkbox" id="<%= range.name %>" name="ranges" value="<%= range.name %>">
+  </td>
+  <td> <label for="<%= range.name %>"> <%= range.name %></label>
+  </td>
+  <%} %>
+</tr>
+<% })%>

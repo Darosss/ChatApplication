@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const user = require("../models/user");
 const range = require("../models/range");
+const chatRoom = require("../models/chatRoom");
 const dir = "users";
 router.get("/", async (req, res) => {
   let users;
@@ -17,9 +18,11 @@ router.get("/", async (req, res) => {
 router.get("/edit/:id", async (req, res) => {
   const userEdit = await user.findById(req.params.id);
   const ranges = await range.find({});
+  const chatRooms = await chatRoom.find({ createdBy: userEdit.username });
   res.render(dir + "/edit", {
     user: userEdit,
     ranges: ranges,
+    chatRooms: chatRooms,
   });
 });
 

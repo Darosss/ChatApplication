@@ -1,33 +1,38 @@
-<form action="" method="POST">
-  <table class="table-details">
-    <tr>
-      <td>User</td>
-      <td><input type="text" name="name" value="<%= user.username %>" /></td>
-    </tr>
-    <tr>
-      <td>Ranges</td>
-      <td><%= user.ranges.join(" | ") %></td>
-    </tr>
+<table class="table-details table-details-ranges">
+  <form action="" method="POST" class="primary-form"></form>
+  <tr>
+    <td class="table-details-header" colspan="2"> User details</td>
+  </tr>
+  <tr>
+    <td>User</td>
+    <td><input type="text" name="name" value="<%= user.username %>" /></td>
+  </tr>
+  <tr>
+    <td>Ranges</td>
+    <td><%= user.ranges.join(" | ") %></td>
+  </tr>
 
-    <% ranges.forEach(range=>{ %>
-    <tr>
-      <% if(user.ranges.indexOf(range.name) != -1){ %>
-      <td>
-        <input type="checkbox" id="<%= range.name %>" name="ranges" value="<%= range.name %>" checked>
-        <label for="<%= range.name %>"> <%= range.name %></label>
-      </td>
-      <% }else{ %>
-      <td>
-        <input type="checkbox" id="<%= range.name %>" name="ranges" value="<%= range.name %>">
-        <label for="<%= range.name %>"> <%= range.name %></label>
-      </td>
-      <%} %>
-    </tr>
-    <% })%>
+  <%- include("../partials/available-ranges-form", {ranges: ranges, containingRanges:user.ranges}) %>
+  <tr>
+    <td colspan="2" class="table-details-submit"><button class="btn-form-primary" type="submit">Edit</button></td>
+  </tr>
+  </form>
+</table>
 
-  </table>
-  <button class="btn-form-primary" type="submit">ADD RANGE</button>
-</form>
-<form action="?_method=DELETE" method="POST">
-  <button class="btn-form-primary" type="submit">Delete</button>
-</form>
+<table class="table-details table-details-rooms">
+  <tr>
+    <td class="table-details-header" colspan="2"> User rooms</td>
+  </tr>
+
+  <% chatRooms.forEach(room=>{ %>
+  <tr>
+    <td> <%= room.name %> </td>
+    <td>
+      <a href="../../chatrooms/edit/<%= room.id %>"><button class="btn-form-small">Edit</button></a>
+    </td>
+  </tr>
+  <% })%>
+</table>
+
+
+<!-- TASK IS TO MAKE ALL ROOMS OF THIS USER -->

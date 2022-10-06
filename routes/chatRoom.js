@@ -1,11 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const chatRoom = require("../models/chatRoom");
+const range = require("../models/range");
 const dir = "chatrooms";
+const chatRoomValidation = require("./middlewares/chatRoomValidation");
 
 router.get("/", async (req, res) => {
-  let user = req.session.passport.user.username;
-  let usersChatRooms;
+  let user = req.session.passport.user.username,
+    usersChatRooms;
+
   try {
     usersChatRooms = await chatRoom.find({ createdBy: user });
   } catch (error) {}
@@ -14,16 +17,16 @@ router.get("/", async (req, res) => {
   });
 });
 
-router.get("/create", (req, res) => {
-  res.render(dir + "/create", {});
+router.get("/create", async (req, res) => {
+  const ranges = await range.find({});
+  res.render(dir + "/create", { ranges: ranges });
 });
 
 //Create new chatroom
 router.post("/create", async (req, res) => {
   let creatorName = req.session.passport.user.username;
   let name = req.body.name;
-  let ranges = req.body.ranges.split(",");
-  ranges.push(creatorName);
+  let ranges = req.body.ranges;
   const room = new chatRoom({
     name: name,
     availableRanges: ranges,
@@ -39,18 +42,26 @@ router.post("/create", async (req, res) => {
 
 //Get chatroom by id
 router.get("/edit/:id", async (req, res) => {
+  const ranges = await range.find({});
+
+  let user = req.session.passport.user;
   const chatRoomEdit = await chatRoom.findById(req.params.id);
 
-  res.render(dir + "/edit", {
-    chatRoom: chatRoomEdit,
-  });
+  if (await chatRoomValidation(chatRoomEdit, user.username, user._id)) {
+    res.render(dir + "/edit", {
+      chatRoom: chatRoomEdit,
+      ranges: ranges,
+    });
+  } else {
+    res.redirect("/");
+  }
 });
 
 //Edit chatroom by id route
 router.post("/edit/:id", async (req, res) => {
   const update = {
     name: req.body.name,
-    availableRanges: req.body.ranges.split(","),
+    availableRanges: req.body.ranges,
   };
   try {
     await chatRoom.findByIdAndUpdate(req.params.id, update);
