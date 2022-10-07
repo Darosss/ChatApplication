@@ -7,7 +7,10 @@
   <%users.forEach(user =>{ %>
   <tr>
     <td><%= user.username %></td>
-    <td><%= user.ranges.join(" | ") %></td>
+    <td><% user.ranges.forEach(range =>{ %>
+      <%=range.name + " | " %>
+      <%}) %>
+    </td>
     <td>
       <a href="users/edit/<%= user.id %>"><button class="btn-form-small">Edit</button></a>
     </td>

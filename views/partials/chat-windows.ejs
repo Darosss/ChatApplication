@@ -9,13 +9,13 @@
               (<%= message.sentTime.toISOString().split("T")[0] %>) <%=
               message.sentTime.toISOString().split("T")[1].split(".")[0] %>
             </div>
-            <div class="username"><%= message.sender %>:</div>
+            <div class="username"><%= message.sender.username %>:</div>
             <div class="message"><%= message.message%></div>
           </div>
         </div>
         <%})%>
       </div>
-
+      
       <div class="user-list-window chat-inner">
         <h5 class="user-list-header">USERS</h5>
         <span class="user-list"></span>
@@ -31,11 +31,7 @@
       </button>
     </div>
     <form action="" class="chat-form" id="chat-form">
-      <textarea
-        name="message"
-        class="message-textarea"
-        placeholder="Type message to send"
-      ></textarea>
+      <textarea name="message" class="message-textarea" placeholder="Type message to send"></textarea>
       <button class="btn-primary" type="submit">Send</button>
     </form>
   </div>

@@ -9,11 +9,11 @@
   <tr>
     <td><%= range.name %></td>
     <td><%= range.createdAt.toISOString().split("T")[0] %></td>
-    <td><%= range.createdBy %></td>
+    <td><%= range.createdBy.username %></td>
     <td>
       <a href="ranges/edit/<%= range.id %>"><button class="btn-form-small">Edit</button></a>
     </td>
   </tr>
-
+  
   <% }) %>
 </table>

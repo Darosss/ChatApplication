@@ -5,7 +5,7 @@ const dir = "ranges";
 router.get("/", async (req, res) => {
   let ranges;
   try {
-    ranges = await range.find({});
+    ranges = await range.find({}).populate("createdBy");
   } catch (error) {}
   res.render(dir + "/index", {
     ranges: ranges,
@@ -18,11 +18,11 @@ router.get("/create", (req, res) => {
 
 //Create new range
 router.post("/create", async (req, res) => {
-  let creatorName = req.session.passport.user.username;
+  let creatorName = req.session.passport.user;
   let name = req.body.name;
   const newRange = new range({
     name: name,
-    createdBy: creatorName,
+    createdBy: creatorName.id,
   });
   try {
     await newRange.save();

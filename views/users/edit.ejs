@@ -1,21 +1,24 @@
+<% let userRanges = [] %>
 <table class="table-details table-details-ranges">
-  <form action="" method="POST" class="primary-form"></form>
-  <tr>
-    <td class="table-details-header" colspan="2"> User details</td>
-  </tr>
-  <tr>
-    <td>User</td>
-    <td><input type="text" name="name" value="<%= user.username %>" /></td>
-  </tr>
-  <tr>
-    <td>Ranges</td>
-    <td><%= user.ranges.join(" | ") %></td>
-  </tr>
-
-  <%- include("../partials/available-ranges-form", {ranges: ranges, containingRanges:user.ranges}) %>
-  <tr>
-    <td colspan="2" class="table-details-submit"><button class="btn-form-primary" type="submit">Edit</button></td>
-  </tr>
+  <form action="" method="POST" class="primary-form">
+    <tr>
+      <td class="table-details-header" colspan="2"> User details</td>
+    </tr>
+    <tr>
+      <td>User</td>
+      <td><input type="text" name="name" value="<%= user.username %>" /></td>
+    </tr>
+    <tr>
+      <td>Ranges</td>
+      <td><% user.ranges.forEach(range =>{ %>
+        <%=range.name + " | " %> <% userRanges.push(range.id)%>
+        <%}) %>
+    </tr>
+    
+    <%- include("../partials/available-ranges-form", {ranges: ranges, containingRanges:userRanges}) %>
+    <tr>
+      <td colspan="2" class="table-details-submit"><button class="btn-form-primary" type="submit">Edit</button></td>
+    </tr>
   </form>
 </table>
 
@@ -23,7 +26,7 @@
   <tr>
     <td class="table-details-header" colspan="2"> User rooms</td>
   </tr>
-
+  
   <% chatRooms.forEach(room=>{ %>
   <tr>
     <td> <%= room.name %> </td>

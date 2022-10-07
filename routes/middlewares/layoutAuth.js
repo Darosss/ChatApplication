@@ -1,4 +1,4 @@
-const isAdmin = require("./isAdmin");
+const isAdmin = require("../partials/isAdmin");
 module.exports = async function (req, res, next) {
   if (req.isAuthenticated()) {
     let userId = req.session.passport.user._id;

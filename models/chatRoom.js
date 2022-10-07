@@ -8,10 +8,12 @@ const chatRoomSchema = new mongoose.Schema({
   availableRanges: {
     type: Array,
     required: true,
+    ref: "Range",
   },
   createdBy: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
+    ref: "User",
   },
 });
 

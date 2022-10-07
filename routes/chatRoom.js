@@ -3,15 +3,20 @@ const router = express.Router();
 const chatRoom = require("../models/chatRoom");
 const range = require("../models/range");
 const dir = "chatrooms";
-const chatRoomValidation = require("./middlewares/chatRoomValidation");
+const chatRoomValidation = require("./partials/chatRoomValidation");
 
 router.get("/", async (req, res) => {
-  let user = req.session.passport.user.username,
+  let user = req.session.passport.user,
     usersChatRooms;
 
   try {
-    usersChatRooms = await chatRoom.find({ createdBy: user });
-  } catch (error) {}
+    usersChatRooms = await chatRoom
+      .find({ createdBy: user._id })
+      .populate("createdBy")
+      .populate("availableRanges");
+  } catch (error) {
+    console.log(error);
+  }
   res.render(dir + "/index", {
     chatRooms: usersChatRooms,
   });
@@ -24,7 +29,7 @@ router.get("/create", async (req, res) => {
 
 //Create new chatroom
 router.post("/create", async (req, res) => {
-  let creatorName = req.session.passport.user.username;
+  let creatorName = req.session.passport.user._id;
   let name = req.body.name;
   let ranges = req.body.ranges;
   const room = new chatRoom({
@@ -35,19 +40,18 @@ router.post("/create", async (req, res) => {
   try {
     await room.save();
     res.redirect("/");
-  } catch {
-    console.log("Cannot create room");
+  } catch (error) {
+    console.log("Cannot create room", error);
   }
 });
 
 //Get chatroom by id
 router.get("/edit/:id", async (req, res) => {
+  let user = req.session.passport.user;
   const ranges = await range.find({});
 
-  let user = req.session.passport.user;
   const chatRoomEdit = await chatRoom.findById(req.params.id);
-
-  if (await chatRoomValidation(chatRoomEdit, user.username, user._id)) {
+  if (await chatRoomValidation(chatRoomEdit, user._id)) {
     res.render(dir + "/edit", {
       chatRoom: chatRoomEdit,
       ranges: ranges,
@@ -67,9 +71,7 @@ router.post("/edit/:id", async (req, res) => {
     await chatRoom.findByIdAndUpdate(req.params.id, update);
 
     res.redirect("/" + dir);
-  } catch (e) {
-    console.log(e);
-  }
+  } catch {}
 });
 //Remove chatroom route
 router.delete("/edit/:id", async (req, res) => {

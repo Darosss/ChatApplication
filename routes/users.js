@@ -7,18 +7,18 @@ const dir = "users";
 router.get("/", async (req, res) => {
   let users;
   try {
-    users = await user.find({});
-  } catch (error) {}
+    users = await user.find({}).populate("ranges");
+  } catch {}
+
   res.render(dir + "/index", {
     users: users,
   });
 });
-
 //Get user by id
 router.get("/edit/:id", async (req, res) => {
-  const userEdit = await user.findById(req.params.id);
+  const userEdit = await user.findById(req.params.id).populate("ranges");
   const ranges = await range.find({});
-  const chatRooms = await chatRoom.find({ createdBy: userEdit.username });
+  const chatRooms = await chatRoom.find({ createdBy: userEdit.id });
   res.render(dir + "/edit", {
     user: userEdit,
     ranges: ranges,
@@ -39,5 +39,4 @@ router.post("/edit/:id", async (req, res) => {
     console.log(e);
   }
 });
-
 module.exports = router;

@@ -1,18 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
-const chatRoom = require("../models/chatRoom");
-
 router.get("/", async function (req, res) {
   let user = req.session.passport.user;
-  console.log("sess", user);
-  let userDB, chatRooms;
-  userDB = await User.findOne({ username: user.username });
-  chatRooms = await chatRoom.find({ createdBy: user.username });
+  let userDB = await User.findOne({ username: user.username }).populate(
+    "ranges"
+  );
 
   res.render("profil/profil", {
     userDetails: userDB,
-    chatRooms: chatRooms,
   });
 });
 

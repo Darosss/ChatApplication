@@ -6,7 +6,9 @@ module.exports = function (io, sessionMiddleware) {
   io.use(function (socket, next) {
     sessionMiddleware(socket.request, {}, next);
   }).on("connection", (socket) => {
-    var userNick = socket.request.session.passport.user.username;
+    var user = socket.request.session.passport.user;
+    var userNick = user.username;
+    var userId = user._id;
     console.log(`User: ${userNick} joined the site`);
     onlineUsers[socket.id] = userNick;
 
@@ -49,12 +51,7 @@ module.exports = function (io, sessionMiddleware) {
       data.username = userNick;
       data.date = new Date();
       io.to(data.roomTarget).emit("chat message", data);
-      await saveMessageToDB(
-        data.username,
-        data.msg,
-        data.date,
-        data.roomTarget
-      );
+      await saveMessageToDB(userId, data.msg, data.date, data.roomTarget);
     });
     socket.on("join channel", (user, channelName) => {
       socket.join(channelName);

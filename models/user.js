@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
   },
   ranges: {
     type: Array,
-    default: "user",
+    ref: "Range",
   },
   administrator: {
     type: Boolean,

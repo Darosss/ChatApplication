@@ -10,16 +10,14 @@ router.get("/", async function (req, res) {
     chatRooms,
     connectedUser;
   const limitMsgs = 300;
-
   try {
     connectedUser = await User.findById(req.session.passport.user._id);
     const chatRoomFilter = {
       $or: [
-        { createdBy: connectedUser.username },
+        { createdBy: connectedUser.id },
         {
           availableRanges: { $in: connectedUser.ranges },
         },
-        { availableRanges: { $all: connectedUser.username } },
       ],
     };
     chatRooms = await chatRoom.find(chatRoomFilter);
@@ -29,6 +27,7 @@ router.get("/", async function (req, res) {
         whereSent: chatRoom._id,
       })
         .sort({ createdAt: "desc" })
+        .populate("sender")
         .limit(limitMsgs)
         .exec();
     }

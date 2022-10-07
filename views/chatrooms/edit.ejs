@@ -7,10 +7,10 @@
       <td>Name </td>
       <td><input type="text" name="name" value="<%=chatRoom.name %>" /></td>
     </tr>
-
+    
     <tr>
       <%- include("../partials/available-ranges-form", {ranges: ranges, containingRanges:chatRoom.availableRanges}) %>
-
+      
     </tr>
   </table>
   <button class="btn-form-primary" type="submit">Edit</button>

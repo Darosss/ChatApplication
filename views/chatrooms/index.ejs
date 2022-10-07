@@ -7,11 +7,13 @@
   <%chatRooms.forEach(room =>{ %>
   <tr>
     <td><%= room.name %></td>
-    <td><%= room.availableRanges %></td>
+    <% room.availableRanges.forEach(range => { %>
+    <td><%= range.name + " | " %></td>
+    <% }) %>
     <td>
       <a href="chatrooms/edit/<%= room.id %>"><button class="btn-form-small">Edit</button></a>
     </td>
   </tr>
-
+  
   <% }) %>
 </table>

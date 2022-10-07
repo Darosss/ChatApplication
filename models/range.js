@@ -11,9 +11,10 @@ const rangeSchema = new mongoose.Schema({
     default: Date.now,
   },
   createdBy: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
+    ref: "User",
   },
 });
 
-module.exports = mongoose.model("range", rangeSchema);
+module.exports = mongoose.model("Range", rangeSchema);
