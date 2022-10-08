@@ -15,8 +15,21 @@ router.get("/", async function (req, res) {
     const chatRoomFilter = {
       $or: [
         { createdBy: connectedUser.id },
+        //if room created by user
+
         {
           availableRanges: { $in: connectedUser.ranges },
+          //user has range that chatrom require
+        },
+        {
+          allowedUsers: { $eq: connectedUser.id },
+          //user is allowed in chatroom
+        },
+      ],
+      $and: [
+        {
+          bannedUsers: { $ne: connectedUser.id },
+          //user is not banned in chatroom
         },
       ],
     };
