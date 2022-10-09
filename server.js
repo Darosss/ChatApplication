@@ -15,6 +15,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 
+// ROUTES //
 const indexRouter = require("./routes/index");
 const profilRouter = require("./routes/profil");
 const loginRouter = require("./routes/login");
@@ -23,11 +24,12 @@ const logoutRouter = require("./routes/logout");
 const chatRoomRouter = require("./routes/chatRoom");
 const rangesRouter = require("./routes/ranges");
 const usersRouter = require("./routes/users");
-const { session } = require("passport");
+
+// ROUTES MIDDLEWARES //
 const isLogedIn = require("./routes/middlewares/isLogedIn");
 const layoutAuth = require("./routes/middlewares/layoutAuth");
 const isAdminForwarding = require("./routes/middlewares/isAdminForwarding");
-//socket io functions in another file for readability
+const isBannedForwarding = require("./routes/middlewares/isBannedForwarding");
 
 //MONGODB database connection
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
@@ -38,10 +40,10 @@ db.once("open", (error) => console.log("Connected to Mongoose"));
 //View engine
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
+
 app.use(expressLayouts);
-//Static folder
 app.use(express.static(__dirname + "/public"));
-//Body parser
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(methodOverride("_method"));
 
@@ -72,9 +74,23 @@ var isLogedInFilter = function (req, res, next) {
     isLogedIn(req, res, next);
   }
 };
+var isBannedForwardingFilter = function (req, res, next) {
+  let path = req._parsedUrl.pathname;
+  if (
+    path === "/profil" ||
+    path === "/logout" ||
+    path === "/login" ||
+    path === "/register"
+  )
+    next();
+  else {
+    isBannedForwarding(req, res, next);
+  }
+};
 
 app.use(isLogedInFilter);
 app.use(layoutAuth);
+app.use(isBannedForwardingFilter);
 app.use("/", indexRouter);
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
