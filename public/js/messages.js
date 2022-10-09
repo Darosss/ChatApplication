@@ -101,7 +101,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
   });
 
   socket.on("user online", function (data) {
-    console.log(data, "user online");
     let usersOnline = "";
     Object.keys(data).forEach((key) => {
       usersOnline += `<div id='${key}'> ${data[key]} </div> `;
@@ -110,7 +109,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
   });
   //Trigger when someone is going offline or online in room
   socket.on("user online room", function (data) {
-    console.log("I GET USER ONLINE ROOM");
     let roomUserList = document
       .getElementById(data.roomName)
       .querySelector(".user-list");
