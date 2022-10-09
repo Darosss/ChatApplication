@@ -22,7 +22,7 @@ router.post("/create", async (req, res) => {
   let name = req.body.name;
   const newRange = new range({
     name: name,
-    createdBy: creatorName.id,
+    createdBy: creatorName._id,
   });
   try {
     await newRange.save();

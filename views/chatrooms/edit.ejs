@@ -1,5 +1,5 @@
-<form action="" method="POST">
-  <table class="table-details">
+<table class="table-details">
+  <form action="" method="POST">
     <tr>
       <td class="table-details-header" colspan="2">Chat room</td>
     </tr>
@@ -10,11 +10,38 @@
     
     <tr>
       <%- include("../partials/available-ranges-form", {ranges: ranges, containingRanges:chatRoom.availableRanges}) %>
-      
     </tr>
-  </table>
-  <button class="btn-form-primary" type="submit">Edit</button>
-</form>
+    <tr>
+      <td class="table-details-header" colspan="2">Allowed and banned users</td>
+    </tr>
+    <tr>
+      <td> Banned users</td>
+      <td>
+        <% chatRoom.bannedUsers.forEach(user =>{ %>
+        <%=user.username + " | " %>
+        <% }) %>
+      </td>
+    </tr>
+    <tr>
+      <td> Allowed users</td>
+      <td>
+        <% chatRoom.allowedUsers.forEach(user =>{ %>
+        <%=user.username + " | " %>
+        <% }) %>
+      </td>
+    </tr>
+    <tr>
+      <%- include("_ban_form.ejs") %>
+    <tr>
+      <td class="table-details-submit" colspan="2">
+        <button class="btn-form-primary" type="submit">Edit</button>
+      </td>
+    </tr>
+  </form>
+</table>
+
+
+
 <form action="?_method=DELETE" method="POST">
   <button class="btn-form-primary" type="submit">Delete</button>
 </form>

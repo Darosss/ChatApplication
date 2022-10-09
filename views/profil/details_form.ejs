@@ -6,8 +6,20 @@
     </tr>
     <tr>
       <td>Created at</td>
-      <td><%= userDetails.createdAt.toISOString() %></td>
+      <td><%= userDetails.createdAt.toISOString().replace("T", " | ") %></td>
+      
     </tr>
+    
+    <% if(userDetails.isBanned) { %>
+    <tr>
+      <td> Banned:</td>
+      <td> Yes </td>
+    </tr>
+    <tr>
+      <td> Ban expires at: </td>
+      <td> <%= userDetails.banExpiresDate.toISOString().replace("T", " | ") %> </td>
+    </tr>
+    <% }%>
     <tr>
       <td>Ranges</td>
       <td><% userDetails.ranges.forEach(range => { %>

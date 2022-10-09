@@ -2,7 +2,7 @@
   <tr>
     <td>User</td>
     <td>Ranges</td>
-
+    
   </tr>
   <%users.forEach(user =>{ %>
   <tr>
@@ -15,12 +15,17 @@
       <a href="users/edit/<%= user.id %>"><button class="btn-form-small">Edit</button></a>
     </td>
     <td>
-      <a href=""><button class="btn-form-small">BAN</button></a>
+      <form action="users/ban/<%= user.id %>" method="POST">
+        <input type="number" name="banTime">
+        <a href=""><button type="submit" class="btn-form-small">BAN</button></a>
+      </form>
     </td>
     <td>
-      <a href=""><button class="btn-form-small">UNBAN</button></a>
+      <form action="users/unban/<%= user.id %>" method="POST">
+        <a href=""><button type="submit" class="btn-form-small">UNBAN</button></a>
+      </form>
     </td>
   </tr>
-
+  
   <% }) %>
 </table>

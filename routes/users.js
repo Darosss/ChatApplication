@@ -26,11 +26,42 @@ router.get("/edit/:id", async (req, res) => {
   });
 });
 
-//Edit range by id route
+//Edit user by id route
 router.post("/edit/:id", async (req, res) => {
   const update = {
     username: req.body.name,
     ranges: req.body.ranges,
+  };
+  try {
+    await user.findByIdAndUpdate(req.params.id, update);
+    res.redirect("/" + dir);
+  } catch (e) {
+    console.log(e);
+  }
+});
+//Ban user by id route
+router.post("/ban/:id", async (req, res) => {
+  let bannedDate = new Date();
+  let banExpiresDate = new Date();
+  let banMinutes = banExpiresDate.getMinutes() + parseInt(req.body.banTime);
+  banExpiresDate.setMinutes(banMinutes);
+
+  const update = {
+    isBanned: true,
+    bannedDate: bannedDate,
+    banExpiresDate: banExpiresDate,
+  };
+  try {
+    await user.findByIdAndUpdate(req.params.id, update);
+    res.redirect("/" + dir);
+  } catch (e) {
+    console.log(e);
+  }
+});
+//Unban user by id route
+router.post("/unban/:id", async (req, res) => {
+  const update = {
+    isBanned: false,
   };
   try {
     await user.findByIdAndUpdate(req.params.id, update);

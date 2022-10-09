@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const chatRoom = require("../models/chatRoom");
+const User = require("../models/user");
 const range = require("../models/range");
 const dir = "chatrooms";
 const chatRoomValidation = require("./partials/chatRoomValidation");
@@ -24,7 +25,8 @@ router.get("/", async (req, res) => {
 
 router.get("/create", async (req, res) => {
   const ranges = await range.find({});
-  res.render(dir + "/create", { ranges: ranges });
+  const users = await User.find({});
+  res.render(dir + "/create", { ranges: ranges, users: users });
 });
 
 //Create new chatroom
@@ -35,6 +37,8 @@ router.post("/create", async (req, res) => {
   const room = new chatRoom({
     name: name,
     availableRanges: ranges,
+    allowedUsers: req.body.allowedUsers,
+    bannedUsers: req.body.bannedUsers,
     createdBy: creatorName,
   });
   try {
@@ -49,12 +53,16 @@ router.post("/create", async (req, res) => {
 router.get("/edit/:id", async (req, res) => {
   let user = req.session.passport.user;
   const ranges = await range.find({});
-
-  const chatRoomEdit = await chatRoom.findById(req.params.id);
+  const users = await User.find({});
+  const chatRoomEdit = await chatRoom
+    .findById(req.params.id)
+    .populate("allowedUsers")
+    .populate("bannedUsers");
   if (await chatRoomValidation(chatRoomEdit, user._id)) {
     res.render(dir + "/edit", {
       chatRoom: chatRoomEdit,
       ranges: ranges,
+      users: users,
     });
   } else {
     res.redirect("/");
@@ -66,6 +74,8 @@ router.post("/edit/:id", async (req, res) => {
   const update = {
     name: req.body.name,
     availableRanges: req.body.ranges,
+    allowedUsers: req.body.allowedUsers,
+    bannedUsers: req.body.bannedUsers,
   };
   try {
     await chatRoom.findByIdAndUpdate(req.params.id, update);

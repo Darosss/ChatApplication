@@ -6,9 +6,9 @@ module.exports = function (io, sessionMiddleware) {
   io.use(function (socket, next) {
     sessionMiddleware(socket.request, {}, next);
   }).on("connection", (socket) => {
-    var user = socket.request.session.passport.user;
-    var userNick = user.username;
-    var userId = user._id;
+    let user = socket.request.session.passport.user;
+    let userNick = user.username;
+    let userId = user._id;
     console.log(`User: ${userNick} joined the site`);
     onlineUsers[socket.id] = userNick;
 
