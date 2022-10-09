@@ -13,12 +13,13 @@ passport.use(
       if (!user) {
         return done(null, false);
       }
-      if (user.password === password) {
-        return done(null, false);
-      }
-      return done(null, {
-        _id: user._id,
-        username: user.username,
+      user.comparePassword(password, function (err, isMatch) {
+        if (err) throw err;
+        if (!isMatch) return done(null, false);
+        return done(null, {
+          _id: user._id,
+          username: user.username,
+        });
       });
     });
   })

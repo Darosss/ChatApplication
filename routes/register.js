@@ -22,6 +22,7 @@ router.post("/", async (req, res) => {
     new User({
       username: username,
       firstname: firstname,
+      password: password,
       surname: surname,
       birthday: birthday,
       country: country,
