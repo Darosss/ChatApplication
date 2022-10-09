@@ -3,7 +3,7 @@
   --color-hue-offset: 180;
   --color-hue: calc(var(--color-base-hue) - var(--color-hue-offset));
   --color-base-chat: hsl(var(--color-base-hue), 81%, 86%);
-  --color-base-chat-dark: hsl(var(--color-hue), 100%, 44%);
+  --color-base-chat-dark: hsl(var(--color-base-hue), 100%, 22%);
   --color-base-chat-inverted: hsl(var(--color-hue-offset), 100%, 80%);
   --color-base-chat-inverted-dark: hsl(var(--color-hue-offset), 100%, 25%);
   --color-background-dark: hsl(var(--color-base-hue), 54%, 12%);

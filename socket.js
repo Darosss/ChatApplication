@@ -15,6 +15,11 @@ module.exports = function (io, sessionMiddleware) {
     socket.onAny((event, ...args) => {
       console.log("On any: Event:", event, args);
     });
+
+    socket.on("user online", (data) => {
+      io.emit("user online", onlineUsers);
+    });
+
     socket.on("join room", (data) => {
       let roomName = data.roomName;
       if (!rooms[roomName]) rooms[roomName] = [];
@@ -45,6 +50,7 @@ module.exports = function (io, sessionMiddleware) {
           });
       });
       delete onlineUsers[socket.id];
+      io.emit("user online", onlineUsers);
     });
     //On chat message
     socket.on("chat message", async (data) => {

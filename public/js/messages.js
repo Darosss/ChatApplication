@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
   let typingTime = 5000;
   let chatContainers = document.getElementsByClassName("chat-container");
   let chatButtons = document.getElementsByClassName("chat-room-button");
+  let userList = document.querySelector("#global-user-list");
   let timeoutTyping = undefined,
     typingInChat = false;
   //Loop through all containers to set adequate sockets to chat rooms
@@ -22,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
   });
 
   [...chatContainers].forEach((chat, index) => {
-    // if (index == 0) chat.style.display = "inline"; //TODO show first chat later remove
     let sendButton = chat.querySelector(".btn-primary"),
       chatWindow = chat.querySelector(".chat-window"),
       chatForm = chat.querySelector(".chat-form"),
@@ -74,6 +74,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
       clearTimeout(timeoutTyping);
     }
   }
+  socket.on("connect", () => {
+    socket.emit("user online");
+  });
+
   //Trigger when gets 'chat message'
   socket.on("chat message", function (data) {
     addMessageToChatbox(
@@ -95,8 +99,18 @@ document.addEventListener("DOMContentLoaded", function (event) {
       chatInfo.innerHTML = `${data.username} is typing`;
     }
   });
+
+  socket.on("user online", function (data) {
+    console.log(data, "user online");
+    let usersOnline = "";
+    Object.keys(data).forEach((key) => {
+      usersOnline += `<div id='${key}'> ${data[key]} </div> `;
+    });
+    userList.innerHTML = usersOnline;
+  });
   //Trigger when someone is going offline or online in room
   socket.on("user online room", function (data) {
+    console.log("I GET USER ONLINE ROOM");
     let roomUserList = document
       .getElementById(data.roomName)
       .querySelector(".user-list");

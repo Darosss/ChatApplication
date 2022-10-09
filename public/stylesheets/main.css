@@ -1,6 +1,7 @@
 @import "shared/variables.css";
 @import "shared/header.css";
 @import "shared/chat.css";
+@import "shared/user-list.css";
 @import "shared/buttons.css";
 @import "shared/forms.css";
 @import "shared/profil.css";
