@@ -35,19 +35,24 @@ router.get("/", async function (req, res) {
 
   chatRooms = await chatRoom.find(chatRoomFilter);
   //gets messages depens what rooms user sees
-  for await (const chatRoom of chatRooms) {
-    messages[chatRoom._id] = await Message.find({
-      whereSent: chatRoom._id,
-    })
-      .sort({ createdAt: "desc" })
-      .populate("sender")
-      .limit(limitMsgs)
-      .exec();
-  }
-  res.render("index", {
-    chatRooms: chatRooms,
-    messages: messages,
-  });
+  // for await (const chatRoom of chatRooms) {
+  //   messages[chatRoom._id] = await Message.find({
+  //     whereSent: chatRoom._id,
+  //   })
+  //     .sort({ createdAt: "desc" })
+  //     .populate("sender")
+  //     .limit(limitMsgs)
+  //     .exec();
+  // }
+
+  messages = await Message.find({}).populate("sender").populate("whereSent");
+
+  //add limit user / id
+  res.send({ messages: messages });
+  // res.render("index", {
+  //   chatRooms: chatRooms,
+  //   messages: messages,
+  // });
 });
 
 module.exports = router;

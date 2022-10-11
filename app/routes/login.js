@@ -34,7 +34,8 @@ passport.deserializeUser(function (id, done) {
   });
 });
 router.get("/", (req, res) => {
-  res.render("login", {});
+  // res.render("login", {});
+  res.send({ test: ["TEST", "ADWADWA", "EWQEWQWQ"] });
 });
 router.post(
   "/",
