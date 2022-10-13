@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/user");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const { use } = require("passport");
 
 passport.use(
   new LocalStrategy(function (username, password, done) {
@@ -16,7 +17,8 @@ passport.use(
       user.comparePassword(password, function (err, isMatch) {
         if (err) throw err;
         if (!isMatch) return done(null, false);
-        return done(null, user);
+        const userDetails = { username: user.username };
+        return done(null, userDetails);
       });
     });
   })
@@ -35,15 +37,13 @@ passport.deserializeUser(function (id, done) {
 // });
 router.post("/", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
-    console.log(req.body);
-    console.log(err, user, info);
     if (err) throw err;
     if (!user) res.send("No user");
     else {
       req.logIn(user, (er) => {
         if (err) throw err;
-        res.send("LOGGED ");
-        console.log(req.user);
+        console.log("send", req.user);
+        res.send(req.user);
       });
     }
   })(req, res, next);
