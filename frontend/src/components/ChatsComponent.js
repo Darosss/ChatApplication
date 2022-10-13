@@ -1,8 +1,10 @@
 import React, { Component } from "react";
+
 import axios from "axios";
 import TableRow from "./TableRow";
+// import SocketIO from "./SocketIO";
 
-export default class LoginComponent extends Component {
+export default class ChatsComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,7 +15,6 @@ export default class LoginComponent extends Component {
     axios
       .get("/index")
       .then((response) => {
-        console.log(response);
         this.setState({ messages: response.data.messages });
       })
       .catch(function (error) {
@@ -21,8 +22,10 @@ export default class LoginComponent extends Component {
       });
   }
   tabRow() {
-    return this.state.messages.map(function (object, i) {
-      return <TableRow obj={object} key={i} />;
+    return Object.keys(this.state.messages).map((key, index) => {
+      return this.state.messages[key].map((key, index) => {
+        return <TableRow obj={key} key={index} />;
+      });
     });
   }
 
@@ -30,6 +33,7 @@ export default class LoginComponent extends Component {
     return (
       <div className="container">
         <h2> Chat rooms </h2>
+        {/* <SocketIO></SocketIO> */}
         <table className="table table-hover">
           <thead>
             <tr>

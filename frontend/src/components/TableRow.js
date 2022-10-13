@@ -4,9 +4,9 @@ class TableRow extends Component {
   render() {
     return (
       <tr>
-        <td>{this.props.obj.whereSent.name}</td>
-        <td>{this.props.obj.message}</td>
         <td>{this.props.obj.sender.username}</td>
+        <td>{this.props.obj.message}</td>
+        <td>{this.props.obj.whereSent.name}</td>
         <td>
           <button className="btn btn-primary">Edit</button>
         </td>

@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 
 import ChatsComponent from "./components/ChatsComponent";
-import LoginComponent from "./components/loginComponent";
+import LoginComponent from "./components/LoginComponent";
+import RegisterComponent from "./components/RegisterComponent";
 
 class App extends Component {
   render() {
@@ -38,6 +39,7 @@ class App extends Component {
         <Routes>
           <Route exact path="/" element={<ChatsComponent />} />
           <Route exact path="/login" element={<LoginComponent />} />
+          <Route exact path="/register" element={<RegisterComponent />} />
         </Routes>
       </div>
     );

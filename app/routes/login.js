@@ -16,10 +16,7 @@ passport.use(
       user.comparePassword(password, function (err, isMatch) {
         if (err) throw err;
         if (!isMatch) return done(null, false);
-        return done(null, {
-          _id: user._id,
-          username: user.username,
-        });
+        return done(null, user);
       });
     });
   })
@@ -33,18 +30,23 @@ passport.deserializeUser(function (id, done) {
     done(err, user);
   });
 });
-router.get("/", (req, res) => {
-  // res.render("login", {});
-  res.send({ test: ["TEST", "ADWADWA", "EWQEWQWQ"] });
+// router.get("/", (req, res) => {
+//   res.send({ test: ["TEST", "ADWADWA", "EWQEWQWQ"] });
+// });
+router.post("/", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    console.log(req.body);
+    console.log(err, user, info);
+    if (err) throw err;
+    if (!user) res.send("No user");
+    else {
+      req.logIn(user, (er) => {
+        if (err) throw err;
+        res.send("LOGGED ");
+        console.log(req.user);
+      });
+    }
+  })(req, res, next);
 });
-router.post(
-  "/",
-  passport.authenticate("local", {
-    successRedirect: "/profil",
-    failureRedirect: "/login",
-  }),
-  (req, res) => {
-    console.log("Post");
-  }
-);
+
 module.exports = router;

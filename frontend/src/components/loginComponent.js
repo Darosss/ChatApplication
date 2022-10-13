@@ -9,13 +9,13 @@ export default class LoginComponent extends Component {
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
-      name: "",
+      username: "",
       password: "",
     };
   }
   onChangeUsername(e) {
     this.setState({
-      name: e.target.value,
+      username: e.target.value,
     });
   }
   onChangePassword(e) {
@@ -25,22 +25,21 @@ export default class LoginComponent extends Component {
   }
   onSubmit(e) {
     e.preventDefault();
+    axios({
+      method: "POST",
+      data: {
+        username: this.state.username,
+        password: this.state.password,
+      },
 
-    const userData = {
-      username: this.state.name,
-      password: this.state.password,
-    };
-    axios
-      .post("http://localhost:5000/login", userData)
-      .then((res) => console.log("??", res.data))
-      .catch((err) => {
-        console.log(err);
-      });
-    console.log("???", userData);
-    // this.setState({
-    //   name: "",
-    //   port: "",
-    // });
+      withCredentials: true,
+      url: "/login",
+    }).then((res) => console.log("res", res));
+
+    this.setState({
+      username: "",
+      password: "",
+    });
   }
 
   render() {
@@ -53,7 +52,7 @@ export default class LoginComponent extends Component {
             <input
               type="text"
               className="form-control"
-              value={this.state.name}
+              value={this.state.username}
               onChange={this.onChangeUsername}
             />
           </div>
