@@ -6,8 +6,7 @@ module.exports = function (req, res, next) {
     else {
       req.logIn(user, (er) => {
         if (err) throw err;
-        console.log("Logged in user: ", req.user);
-        res.send(req.user);
+        return next();
       });
     }
   })(req, res, next);
