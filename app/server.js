@@ -45,11 +45,7 @@ app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(
-  cors({
-    credentials: true,
-  })
-);
+app.use(cors({ credentials: true }));
 app.use(expressLayouts);
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
@@ -69,6 +65,7 @@ require("./socket")(io, sessionMiddleware);
 app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
+require("./passportConfig")(passport);
 
 // var isLogedInFilter = function (req, res, next) {
 //   if (
