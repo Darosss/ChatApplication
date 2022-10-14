@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { Routes, Route, Link } from "react-router-dom";
+import { ReactSession } from "react-client-session";
 
 import ChatsComponent from "./components/ChatsComponent";
 import LoginComponent from "./components/LoginComponent";
 import RegisterComponent from "./components/RegisterComponent";
+import Profil from "./components/Profil";
 
+ReactSession.setStoreType("localStorage");
 class App extends Component {
   render() {
     return (
@@ -40,6 +43,7 @@ class App extends Component {
           <Route exact path="/" element={<ChatsComponent />} />
           <Route exact path="/login" element={<LoginComponent />} />
           <Route exact path="/register" element={<RegisterComponent />} />
+          <Route exact path="/profil" element={<Profil />} />
         </Routes>
       </div>
     );
