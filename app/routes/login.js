@@ -3,8 +3,9 @@ const router = express.Router();
 const authenticateUser = require("./middlewares/authenticateUser");
 
 router.get("/", (req, res) => {
-  // console.log(req.isAuthenticated());
-  res.send(req.user);
+  console.log("Authenicated", req.isAuthenticated());
+  res.send("LOGIN GET");
+  // res.send(req.user);
 });
 
 router.post("/", authenticateUser, (req, res, next) => {

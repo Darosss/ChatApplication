@@ -1,5 +1,4 @@
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 
 router.post("/", (req, res, next) => {
   req.logout(function (err) {
@@ -7,7 +6,7 @@ router.post("/", (req, res, next) => {
       console.log("err", err);
       return next(err);
     }
-    res.redirect("/login");
+    res.send("Logged out");
   });
 });
 module.exports = router;

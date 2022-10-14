@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ReactSession } from "react-client-session";
-
 function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  // const [userDetails, setUserDetails] = useState("");
-
   useEffect(() => {
-    console.log(ReactSession.get("username"));
     axios({
       method: "GET",
       withCredentials: false,
@@ -25,8 +21,9 @@ function App() {
       },
       withCredentials: true,
       url: "/login",
-    }).then((res) => ReactSession.set("username", res.data.username));
+    }).then((res) => ReactSession.set("authenticated", true));
   };
+
   return (
     <div>
       <h2>Login to chat room</h2>
@@ -51,10 +48,6 @@ function App() {
           <input type="submit" value="Login"></input>
         </div>
       </form>
-      {/* {userDetails ? <h1> {userDetails.username}</h1> : null} */}
-      {ReactSession.get("username") ? (
-        <h1> {ReactSession.get("username")}</h1>
-      ) : null}
     </div>
   );
 }
