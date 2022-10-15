@@ -1,10 +1,16 @@
 Refactor to react from ejs
 
-    [] refactor: login route
+    app:
+        [] show links depends if logged/logout
+
+    [x] refactor: login route
     [] refactor: login frontend
+
+    [] login styles
 
     [] refactor: register route
     [] refactor: register frontend
+    [] register styles
 
     [] refactor: chat rooms route
     [] refactor: chat rooms frontend

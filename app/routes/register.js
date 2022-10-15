@@ -4,44 +4,32 @@ const User = require("../models/user");
 const passport = require("passport");
 
 router.get("/", (req, res) => {
-  res.render("register");
+  res.send("Register site");
 });
 
 router.post("/", async (req, res) => {
-  let username = req.body.username;
-  let password = req.body.password;
-  let firstname = req.body.firstname;
-  let surname = req.body.surname;
-  let birthday = req.body.birthday;
-  let country = req.body.country;
-  let gender = req.body.gender;
-  let nickColor = req.body.nickColor;
-  let email = req.body.email;
-  let phoneNumber = req.body.phoneNumber;
-  User.register(
-    new User({
-      username: username,
-      firstname: firstname,
-      password: password,
-      surname: surname,
-      birthday: birthday,
-      country: country,
-      gender: gender,
-      nickColor: nickColor,
-      email: email,
-      phoneNumber: phoneNumber,
-    }),
-    password,
-    function (err, user) {
-      if (err) {
-        console.log(err);
-        return res.render("register");
-      }
-      passport.authenticate("local")(req, res, function () {
-        res.redirect("profil");
-      });
+  console.log(req.body);
+  let userData = {
+    username: req.body.username,
+    password: req.body.password,
+    firstname: req.body.firstname,
+    surname: req.body.surname,
+    birthday: req.body.birthday,
+    country: req.body.country,
+    gender: req.body.gender,
+    nickColor: req.body.nickColor,
+    email: req.body.email,
+    phoneNumber: req.body.phone,
+  };
+  User.findOne({ username: req.body.username }, async (err, doc) => {
+    if (err) throw err;
+    if (doc) res.send("User already exist");
+    if (!doc) {
+      const newUser = new User(userData);
+      await newUser.save();
     }
-  );
+  });
+  res.send("Account created");
 });
 
 module.exports = router;

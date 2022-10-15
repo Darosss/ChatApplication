@@ -1,29 +1,41 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { ReactSession } from "react-client-session";
-function App() {
+import React, { useState /*useEffect*/ } from "react";
+// import axios from "axios";
+// import { ReactSession } from "react-client-session";
+import { useAuth } from "../auth/useAuth";
+// import { useNavigate } from "react-router-dom";
+function Login() {
+  // const navigate = useNavigate();
+  const auth = useAuth();
+  console.log(auth);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  useEffect(() => {
-    axios({
-      method: "GET",
-      withCredentials: false,
-      url: "/login",
-    }).then((res) => console.log(res.data));
-  }, []);
+  // useEffect(() => {
+  //   axios({
+  //     method: "GET",
+  //     withCredentials: false,
+  //     url: "/login",
+  //   }).then((res) => console.log(res.data));
+  // }, []);
+  // const login = (e) => {
+  //   e.preventDefault();
+  //   axios({
+  //     method: "POST",
+  //     data: {
+  //       username: username,
+  //       password: password,
+  //     },
+  //     withCredentials: true,
+  //     url: "/login",
+  //   }).then((res) => {
+  //     ReactSession.set("authenticated", true);
+
+  //     // navigate("/profil");
+  //   });
+  // };
   const login = (e) => {
     e.preventDefault();
-    axios({
-      method: "POST",
-      data: {
-        username: username,
-        password: password,
-      },
-      withCredentials: true,
-      url: "/login",
-    }).then((res) => ReactSession.set("authenticated", true));
+    auth.login({ username: username, password: password });
   };
-
   return (
     <div>
       <h2>Login to chat room</h2>
@@ -52,4 +64,4 @@ function App() {
   );
 }
 
-export default App;
+export default Login;

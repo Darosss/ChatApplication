@@ -7,6 +7,7 @@ const User = require("../models/user");
 
 router.get("/", async function (req, res) {
   console.log("INDEX");
+  console.log(req.user);
   // let messages = {},
   //   chatRooms,
   //   connectedUser;
