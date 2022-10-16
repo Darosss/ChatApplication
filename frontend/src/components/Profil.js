@@ -1,11 +1,20 @@
 import React from "react";
-import { useAuth } from "../auth/useAuth";
+import axios from "axios";
 function Profile({ auth }) {
-  const authLogout = useAuth().logout;
   const logout = (e) => {
     e.preventDefault();
-    console.log("looggin out...");
-    authLogout();
+    axios({
+      method: "POST",
+      withCredentials: true,
+      url: "http://localhost:5000/logout",
+    })
+      .then((res) => {
+        console.log(res, "res");
+        window.location.reload(false);
+      })
+      .catch((err) => {
+        console.log(err, "err");
+      });
   };
   return (
     <div className="App">

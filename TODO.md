@@ -1,9 +1,11 @@
 Refactor to react from ejs
 
     app:
-        [] show links depends if logged/logout
+        [x] show links depends if logged/logout
+        [x] redirect depends if logged/logout
 
     [x] refactor: login route
+        [] add validation
     [] refactor: login frontend
 
     [] login styles

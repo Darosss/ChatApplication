@@ -1,15 +1,27 @@
 import React from "react";
-import { useAuth } from "../auth/useAuth";
+import axios from "axios";
 import { Button } from "react-bootstrap";
 function Logout() {
-  const auth = useAuth();
-  const logout = () => {
-    auth.logout();
+  const logout = (e) => {
+    e.preventDefault();
+    axios({
+      method: "POST",
+      withCredentials: true,
+      url: "http://localhost:5000/logout",
+    })
+      .then((res) => {
+        console.log(res, "res");
+        window.location.reload(false);
+      })
+      .catch((err) => {
+        console.log(err, "err");
+      });
   };
   return (
     <li className="nav-item">
-      <Button type="button" onClick={logout} class="btn btn-danger">
-        Primary
+      {/* add form */}
+      <Button type="button" onClick={logout} className="btn btn-danger">
+        Logout
       </Button>
     </li>
   );

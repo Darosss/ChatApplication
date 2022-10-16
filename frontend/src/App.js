@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Routes, Route } from "react-router-dom";
-import Chats from "./components/Chat";
+import Home from "./components/Home";
+import Chats from "./components/Chats";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Profil from "./components/Profil";
 import Rooms from "./components/Rooms";
 import NavigationLink from "./components/NavigationLink";
+import Logout from "./components/Logout";
 
 function App() {
   const [auth, setAuth] = useState(null);
@@ -35,6 +37,7 @@ function App() {
             {!auth ? <NavigationLink url="/register" name="Register" /> : null}
             {auth ? <NavigationLink url="/rooms" name="Rooms" /> : null}
             {auth ? <NavigationLink url="/profil" name="Profil" /> : null}
+            {auth ? <Logout /> : null}
           </ul>
         </div>
       </nav>
@@ -44,7 +47,8 @@ function App() {
           path="/login"
           element={auth ? <Profil auth={auth} /> : <Login />}
         />
-        <Route path="/" element={<Chats />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/chats" element={<Chats />} />
         <Route path="/register" element={<Register />} />
         <Route
           path="/profil"

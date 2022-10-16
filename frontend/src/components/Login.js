@@ -1,13 +1,23 @@
 import React, { useState } from "react";
-import { useAuth } from "../auth/useAuth";
+import axios from "axios";
 function Login() {
-  const auth = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const login = (e) => {
     e.preventDefault();
-    auth.login({ username: username, password: password });
+    axios({
+      method: "POST",
+      data: {
+        username: username,
+        password: password,
+      },
+      withCredentials: true,
+      url: "http://localhost:5000/login",
+    }).then((res) => {
+      console.log(res);
+      window.location.reload(false);
+    });
   };
   return (
     <div>
