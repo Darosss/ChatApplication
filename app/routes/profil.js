@@ -1,15 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
-router.get("/", async function (req, res) {
-  let user = req.session.passport.user;
-  let userDB = await User.findOne({ username: user.username }).populate(
-    "ranges"
-  );
 
-  res.render("profil/profil", {
-    userDetails: userDB,
-  });
+router.get("/", async function (req, res) {
+  return res.send("PRIVATE ROUTE");
+  // let user = req.session.passport.user;
+  // let userDB = await User.findOne({ username: user.username }).populate(
+  //   "ranges"
+  // );
+
+  // res.render("profil/profil", {
+  //   userDetails: userDB,
+  // });
 });
 
 router.post("/edit", async (req, res) => {

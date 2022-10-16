@@ -6,8 +6,10 @@ const Message = require("../models/message");
 const User = require("../models/user");
 
 router.get("/", async function (req, res) {
-  console.log("INDEX");
-  console.log(req.user);
+  if (req.isAuthenticated()) console.log("logged in as:", req.user.username);
+  // console.log("sess", req.session.cookie);
+  console.log(req.sessionID);
+  res.send("Index");
   // let messages = {},
   //   chatRooms,
   //   connectedUser;

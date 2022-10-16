@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import axios from "axios";
+// import axios from "axios";
 import TableRow from "./TableRow";
 // import SocketIO from "./SocketIO";
 
@@ -11,16 +11,16 @@ export default class ChatsComponent extends Component {
       messages: [],
     };
   }
-  componentDidMount() {
-    axios
-      .get("/index")
-      .then((response) => {
-        this.setState({ messages: response.data.messages });
-      })
-      .catch(function (error) {
-        console.log(error, "??");
-      });
-  }
+  // componentDidMount() {
+  //   axios
+  //     .get("/index")
+  //     .then((response) => {
+  //       this.setState({ messages: response.data.messages });
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error, "??");
+  //     });
+  // }
   tabRow() {
     return Object.keys(this.state.messages).map((key, index) => {
       return this.state.messages[key].map((key, index) => {

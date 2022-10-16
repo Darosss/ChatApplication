@@ -1,12 +1,10 @@
 const router = require("express").Router();
 
 router.post("/", (req, res, next) => {
-  req.logout(function (err) {
-    if (err) {
-      console.log("err", err);
-      return next(err);
-    }
-    res.send("Logged out");
-  });
+  req.logOut();
+  req.session = null;
+  console.log("ses", req.session);
+
+  res.send({ message: "Logout succes" });
 });
 module.exports = router;

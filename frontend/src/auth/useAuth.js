@@ -1,14 +1,14 @@
 import React, { createContext, useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import axios from "axios";
 const authContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState({});
-  const navigate = useNavigate();
-
+  const reloadSite = () => {
+    window.location.reload(false);
+  };
   const login = (userDetails) => {
-    setUser(userDetails);
     axios({
       method: "POST",
       data: {
@@ -16,23 +16,29 @@ export function AuthProvider({ children }) {
         password: userDetails.password,
       },
       withCredentials: true,
-      url: "/login",
+      url: "http://localhost:5000/login",
     }).then((res) => {
       console.log(res);
+      setUser(userDetails);
+      reloadSite();
     });
-    navigate("/profil");
   };
 
   const logout = () => {
+    console.log("IS LOGGED OUT WHY?");
     setUser({});
     axios({
       method: "POST",
       withCredentials: true,
-      url: "/logout",
-    }).then((res) => {
-      console.log(res);
-    });
-    navigate("/");
+      url: "http://localhost:5000/logout",
+    })
+      .then((res) => {
+        console.log(res, "res");
+        reloadSite();
+      })
+      .catch((err) => {
+        console.log(err, "err");
+      });
   };
 
   return (
