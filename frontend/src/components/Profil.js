@@ -23,7 +23,6 @@ function Profile({ auth }) {
         <p>
           You are logged in as {auth && auth.username ? auth.username : null}
         </p>
-
         <ProfilDetails user={userDetails} />
       </header>
     </div>

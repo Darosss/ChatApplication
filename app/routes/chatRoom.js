@@ -7,20 +7,17 @@ const dir = "chatrooms";
 const chatRoomValidation = require("./partials/chatRoomValidation");
 
 router.get("/", async (req, res) => {
-  let user = req.session.passport.user,
+  let userId = req.session.passport.user,
     usersChatRooms;
-
   try {
     usersChatRooms = await chatRoom
-      .find({ createdBy: user._id })
+      .find({ createdBy: userId })
       .populate("createdBy")
       .populate("availableRanges");
   } catch (error) {
     console.log(error);
   }
-  res.render(dir + "/index", {
-    chatRooms: usersChatRooms,
-  });
+  res.send(usersChatRooms);
 });
 
 router.get("/create", async (req, res) => {

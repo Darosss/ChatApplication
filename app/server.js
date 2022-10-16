@@ -121,7 +121,7 @@ app.use("/login", loginRouter);
 app.use("/register", registerRouter);
 app.use("/profil", jwtRequired, profilRouter);
 app.use("/logout", logoutRouter);
-app.use("/chatrooms", chatRoomRouter);
+app.use("/rooms", chatRoomRouter);
 app.use("/ranges", rangesRouter);
 app.use("/users", usersRouter);
 //Listen port
