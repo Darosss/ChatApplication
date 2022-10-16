@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
+import Loading from "./components/Loading";
 import Chats from "./components/Chats";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -23,7 +24,7 @@ function App() {
       });
   }, []);
   if (auth === null) {
-    return "LOADING";
+    return <Loading />;
   }
   return (
     <div className="App">
@@ -47,7 +48,7 @@ function App() {
           path="/login"
           element={auth ? <Profil auth={auth} /> : <Login />}
         />
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home auth={auth} />} />
         <Route path="/chats" element={<Chats />} />
         <Route path="/register" element={<Register />} />
         <Route
