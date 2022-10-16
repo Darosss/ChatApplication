@@ -54,7 +54,7 @@ function App() {
           path="/profil"
           element={auth ? <Profil auth={auth} /> : <Chats />}
         />
-        <Route path="/rooms" element={<Rooms />} />
+        <Route path="/rooms" element={auth ? <Rooms /> : <Login />} />
       </Routes>
     </div>
   );
