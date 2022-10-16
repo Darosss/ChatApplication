@@ -1,30 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import ProfilDetails from "./profilDetails";
 function Profile({ auth }) {
-  const logout = (e) => {
-    e.preventDefault();
-    axios({
-      method: "POST",
+  const [userDetails, setUserDetails] = useState([]);
+  useEffect(() => {
+    const axiosConfig = {
+      method: "get",
       withCredentials: true,
-      url: "http://localhost:5000/logout",
-    })
-      .then((res) => {
-        console.log(res, "res");
-        window.location.reload(false);
-      })
-      .catch((err) => {
-        console.log(err, "err");
-      });
-  };
+      url: "http://localhost:5000/profil",
+    };
+
+    axios(axiosConfig).then((res) => {
+      console.log(res.data.userDetails, "profil");
+
+      setUserDetails(res.data.userDetails);
+    });
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
         <p>
           You are logged in as {auth && auth.username ? auth.username : null}
         </p>
-        <form method="POST" onSubmit={logout}>
-          <input type="submit" className="App-link" value="Logout" />
-        </form>
+
+        <ProfilDetails user={userDetails} />
       </header>
     </div>
   );

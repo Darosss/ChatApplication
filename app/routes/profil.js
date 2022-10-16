@@ -3,15 +3,13 @@ const router = express.Router();
 const User = require("../models/user");
 
 router.get("/", async function (req, res) {
-  return res.send("PRIVATE ROUTE");
-  // let user = req.session.passport.user;
-  // let userDB = await User.findOne({ username: user.username }).populate(
-  //   "ranges"
-  // );
+  let user = req.user;
+  let userDB = await User.findOne(
+    { username: user.username },
+    { password: 0, __v: 0 }
+  ).populate("ranges");
 
-  // res.render("profil/profil", {
-  //   userDetails: userDB,
-  // });
+  return res.send({ userDetails: userDB });
 });
 
 router.post("/edit", async (req, res) => {

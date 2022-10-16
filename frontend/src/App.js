@@ -1,3 +1,4 @@
+import "./App.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Routes, Route } from "react-router-dom";
@@ -9,7 +10,6 @@ import Profil from "./components/Profil";
 import Rooms from "./components/Rooms";
 import NavigationLink from "./components/NavigationLink";
 import Logout from "./components/Logout";
-
 function App() {
   const [auth, setAuth] = useState(null);
   useEffect(() => {
@@ -26,9 +26,9 @@ function App() {
     return "LOADING";
   }
   return (
-    <div className="container">
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <span className="navbar-brand">Chat room</span>
+    <div className="App">
+      <nav className="navbar navbar-expand-sm navbar-dark bg-dark hidden-xs">
+        <span className="navbar-brand  m-2 ">Chat room</span>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             <NavigationLink url="/" name="Home" />
