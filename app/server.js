@@ -25,12 +25,12 @@ const io = new Server(httpServer);
 
 // ROUTES //
 const currSessionRouter = require("./routes/currSessionRouter");
-const indexRouter = require("./routes/index");
+const chatsRouter = require("./routes/chats");
 const profilRouter = require("./routes/profil");
 const loginRouter = require("./routes/login");
 const registerRouter = require("./routes/register");
 const logoutRouter = require("./routes/logout");
-const chatRoomRouter = require("./routes/chatRoom");
+const roomsRouter = require("./routes/rooms");
 const rangesRouter = require("./routes/ranges");
 const usersRouter = require("./routes/users");
 //MONGODB database connection
@@ -115,13 +115,13 @@ app.use(methodOverride("_method"));
 app.use(passport.initialize());
 app.use(passport.session());
 // require("./passportConfig")(passport);
-app.use("/", indexRouter);
+app.use("/chats", chatsRouter);
 app.use("/api", currSessionRouter);
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
 app.use("/profil", jwtRequired, profilRouter);
 app.use("/logout", logoutRouter);
-app.use("/rooms", chatRoomRouter);
+app.use("/rooms", roomsRouter);
 app.use("/ranges", rangesRouter);
 app.use("/users", usersRouter);
 //Listen port
