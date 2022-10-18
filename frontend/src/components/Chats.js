@@ -1,50 +1,78 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 
-// import axios from "axios";
-import TableRow from "./TableRow";
+// import { Button } from "react-bootstrap";
+import axios from "axios";
+import ChatRoom from "./ChatRoom";
 // import SocketIO from "./SocketIO";
 
-export default class ChatsComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      messages: [],
+function Chats() {
+  const [chatRooms, setChatRooms] = useState([]);
+  const [messages, setMessages] = useState([]);
+  useEffect(() => {
+    const axiosConfig = {
+      method: "get",
+      withCredentials: true,
+      url: "http://localhost:5000/chats",
     };
-  }
-  // componentDidMount() {
-  //   axios
-  //     .get("/index")
-  //     .then((response) => {
-  //       this.setState({ messages: response.data.messages });
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error, "??");
-  //     });
-  // }
-  tabRow() {
-    return Object.keys(this.state.messages).map((key, index) => {
-      return this.state.messages[key].map((key, index) => {
-        return <TableRow obj={key} key={index} />;
-      });
-    });
-  }
+    axios(axiosConfig).then((res) => {
+      console.log(res.data);
 
-  render() {
+      setMessages(res.data.rooms);
+      setChatRooms(res.data.userChatRooms);
+    });
+  }, []);
+
+  const chatRoomsButtons = () => {
     return (
-      <div className="container">
-        <h2> Chat rooms </h2>
-        {/* <SocketIO></SocketIO> */}
-        <table className="table table-hover">
-          <thead>
-            <tr>
-              <td>User</td>
-              <td>Message</td>
-              <td>Chat room</td>
-            </tr>
-          </thead>
-          <tbody>{this.tabRow()}</tbody>
-        </table>
+      <div class="btn-group btn-group-justified">
+        <button
+          className="btn btn-primary"
+          type="button"
+          data-toggle="collapse"
+          data-target=".multi-collapse"
+          aria-expanded="false"
+        >
+          Toggle all chats
+        </button>
+        {chatRooms.map((room, index) => {
+          return (
+            <button
+              className="btn btn-primary"
+              data-toggle="collapse"
+              href={"#" + room.name}
+              aria-expanded="false"
+              aria-controls={room.name}
+            >
+              {room.name}
+            </button>
+          );
+        })}
       </div>
     );
-  }
+  };
+
+  const chatRoomsTable = () => {
+    return (
+      <div className="row">
+        {chatRooms.map((room, index) => {
+          return (
+            <div>
+              <ChatRoom room={room} messages={messages[room._id]} key={index} />
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h2> Chat rooms </h2>
+        {/* <SocketIO></SocketIO> */}
+        {chatRoomsButtons()}
+        {chatRoomsTable()}
+      </header>
+    </div>
+  );
 }
+export default Chats;
