@@ -1,17 +1,25 @@
 Refactor to react from ejs
 
     app:
-        [x] show links depends if logged/logout
-        [x] redirect depends if logged/logout
+        backend:
+            [] users/ ranges etc. should be admin / ranges route all :)(admin routes) (later maybe moderator routes?)
+
+    [x] show links depends if logged/logout
+    [x] redirect depends if logged/logout
+
+    [] refactor: chats(index) backend
+    [] refactor: chats(index) frontend
+        [] chat socket io(later)
+
 
     [x] refactor: login route
     [x] refactor: login frontend
          [] add validation
-        [] login styles
+        [x] login styles
 
     [] refactor: register route
     [] refactor: register frontend
-        [] register styles
+        [x] register styles
         [] validation
     [] refactor: chat rooms route
     [] refactor: chat rooms frontend

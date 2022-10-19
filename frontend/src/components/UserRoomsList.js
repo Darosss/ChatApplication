@@ -14,10 +14,10 @@ function UserRoomsList({ rooms }) {
             <tr key={index}>
               <td> {room.name}</td>
               <td>
-                <Button className="btn btn-primary"> EDIT </Button>
+                <Button className="btn btn-primary w-100"> EDIT </Button>
               </td>
               <td>
-                <Button className="btn btn-danger"> DELETE </Button>
+                <Button className="btn btn-danger w-75"> DELETE </Button>
               </td>
             </tr>
           );

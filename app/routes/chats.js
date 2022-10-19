@@ -33,7 +33,6 @@ router.get("/", async function (req, res) {
     ],
   };
   chatRooms = await chatRoom.find(chatRoomFilter);
-  console.log("test", chatRooms);
   //gets messages depens what rooms user sees
   for await (const chatRoom of chatRooms) {
     roomsMsgArr[chatRoom._id] = await Message.find({

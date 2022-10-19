@@ -17,13 +17,13 @@ router.get("/", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-  res.send(usersChatRooms);
+  res.send({ usersRooms: usersChatRooms });
 });
 
 router.get("/create", async (req, res) => {
   const ranges = await range.find({});
   const users = await User.find({});
-  res.render(dir + "/create", { ranges: ranges, users: users });
+  res.send({ availableRanges: ranges });
 });
 
 //Create new chatroom
