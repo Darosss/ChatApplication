@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import UserRoomsList from "./UserRoomsList";
-import CreateRoomModal from "./CreateRoomModal";
+import EditNewRoomModal from "./EditNewRoomModal";
 function Rooms() {
   const [rooms, setRooms] = useState([]);
   const [ranges, setRanges] = useState([]);
@@ -17,7 +17,6 @@ function Rooms() {
       url: "http://localhost:5000/rooms/create",
     };
     axios(axiosConfigRooms).then((res) => {
-      console.log(res);
       setRooms(res.data.usersRooms);
     });
     axios(axiosConfigCreateRooms).then((res) => {
@@ -41,7 +40,7 @@ function Rooms() {
             NEW ROOM
           </button>
         </div>
-        {<CreateRoomModal id="createRoom" availableRanges={ranges} />}
+        {<EditNewRoomModal id="createRoom" availableRanges={ranges} />}
         {<UserRoomsList rooms={rooms} />}
       </header>
     </div>

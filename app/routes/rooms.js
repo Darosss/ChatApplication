@@ -28,21 +28,21 @@ router.get("/create", async (req, res) => {
 
 //Create new chatroom
 router.post("/create", async (req, res) => {
-  let creatorName = req.session.passport.user._id;
-  let name = req.body.name;
-  let ranges = req.body.ranges;
+  let createdBy = req.user;
+  let name = req.body.roomName;
+  let ranges = req.body.availableRanges;
   const room = new chatRoom({
     name: name,
     availableRanges: ranges,
-    allowedUsers: req.body.allowedUsers,
-    bannedUsers: req.body.bannedUsers,
-    createdBy: creatorName,
+    // allowedUsers: req.body.allowedUsers,
+    // bannedUsers: req.body.bannedUsers,
+    createdBy: createdBy.id,
   });
   try {
     await room.save();
-    res.redirect("/");
+    res.send({ message: "Room created succesfully!" });
   } catch (error) {
-    console.log("Cannot create room", error);
+    res.send({ message: "Cannot create room!" });
   }
 });
 
