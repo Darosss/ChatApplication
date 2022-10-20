@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import UserRoomsList from "./UserRoomsList";
-import EditNewRoomModal from "./EditNewRoomModal";
+import EditCreateRoomModal from "./EditCreateRoomModal";
 function Rooms() {
   const [rooms, setRooms] = useState([]);
   const [ranges, setRanges] = useState([]);
@@ -11,15 +11,15 @@ function Rooms() {
       withCredentials: true,
       url: "http://localhost:5000/rooms",
     };
-    const axiosConfigCreateRooms = {
+    axios(axiosConfigRooms).then((res) => {
+      setRooms(res.data.usersRooms);
+    });
+    const axiosConfigCreateRoom = {
       method: "get",
       withCredentials: true,
       url: "http://localhost:5000/rooms/create",
     };
-    axios(axiosConfigRooms).then((res) => {
-      setRooms(res.data.usersRooms);
-    });
-    axios(axiosConfigCreateRooms).then((res) => {
+    axios(axiosConfigCreateRoom).then((res) => {
       setRanges(res.data.availableRanges);
     });
   }, []);
@@ -30,18 +30,25 @@ function Rooms() {
     <div className="App">
       <header className="App-header">
         <div className="d-inline-flex">
-          <div className="m-1">Your chat rooms </div>
+          <div className="m-1">Your chat rooms</div>
           <button
             className="btn btn-primary"
             onClick={createRoomPopup}
             data-toggle="modal"
-            data-target="#createRoom"
+            data-target="#create-room"
           >
             NEW ROOM
           </button>
         </div>
-        {<EditNewRoomModal id="createRoom" availableRanges={ranges} />}
-        {<UserRoomsList rooms={rooms} />}
+        {
+          <EditCreateRoomModal
+            id="create-room"
+            sectionName="Create"
+            postSuffix="create"
+            availableRanges={ranges}
+          />
+        }
+        {<UserRoomsList rooms={rooms} availableRanges={ranges} />}
       </header>
     </div>
   );

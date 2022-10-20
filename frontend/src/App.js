@@ -8,7 +8,7 @@ import Chats from "./components/Chats";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Profil from "./components/Profil";
-import Rooms from "./components/Rooms";
+import Rooms from "./components/rooms/Rooms";
 import NavigationLink from "./components/NavigationLink";
 import Logout from "./components/Logout";
 function App() {

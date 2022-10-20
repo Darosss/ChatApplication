@@ -3,11 +3,10 @@ const router = express.Router();
 const chatRoom = require("../models/chatRoom");
 const User = require("../models/user");
 const range = require("../models/range");
-const dir = "chatrooms";
 const chatRoomValidation = require("./partials/chatRoomValidation");
 
 router.get("/", async (req, res) => {
-  let userId = req.session.passport.user,
+  let userId = req.user.id,
     usersChatRooms;
   try {
     usersChatRooms = await chatRoom
@@ -47,48 +46,51 @@ router.post("/create", async (req, res) => {
 });
 
 //Get chatroom by id
-router.get("/edit/:id", async (req, res) => {
-  let user = req.session.passport.user;
+router.get("/:roomId", async (req, res) => {
+  let user = req.user;
   const ranges = await range.find({});
-  const users = await User.find({});
+  const users = await User.find({}, "_id username"); //TODO this add to method model user
   const chatRoomEdit = await chatRoom
-    .findById(req.params.id)
+    .findById(req.params.roomId)
     .populate("allowedUsers")
     .populate("bannedUsers");
-  if (await chatRoomValidation(chatRoomEdit, user._id)) {
-    res.render(dir + "/edit", {
+  if (await chatRoomValidation(chatRoomEdit, user.id)) {
+    res.send({
       chatRoom: chatRoomEdit,
-      ranges: ranges,
-      users: users,
+      availableRanges: ranges,
+      usersList: users,
     });
   } else {
-    res.redirect("/");
+    res.send({ message: "You are not owner or admin to edit that room." });
   }
 });
 
 //Edit chatroom by id route
-router.post("/edit/:id", async (req, res) => {
+router.post("/:roomId", async (req, res) => {
   const update = {
-    name: req.body.name,
-    availableRanges: req.body.ranges,
-    allowedUsers: req.body.allowedUsers,
-    bannedUsers: req.body.bannedUsers,
+    name: req.body.roomName,
+    availableRanges: req.body.availableRanges,
+    // allowedUsers: req.body.allowedUsers,
+    // bannedUsers: req.body.bannedUsers,
   };
   try {
-    await chatRoom.findByIdAndUpdate(req.params.id, update);
-
-    res.redirect("/" + dir);
-  } catch {}
-});
-//Remove chatroom route
-router.delete("/edit/:id", async (req, res) => {
-  let room;
-  try {
-    room = await chatRoom.findById(req.params.id);
-    await room.remove();
-    res.redirect("../../" + dir);
-  } catch {
-    res.redirect("back");
+    await chatRoom.findByIdAndUpdate(req.params.roomId, update).then(() => {
+      res.send({ message: "Successfully edited room" });
+    });
+  } catch (err) {
+    res.send({ message: "Can't edit room" });
+    console.log(err);
   }
 });
+//Remove chatroom route
+// router.delete("/edit/:id", async (req, res) => {
+//   let room;
+//   try {
+//     room = await chatRoom.findById(req.params.id);
+//     await room.remove();
+//     res.redirect("../../" + dir);
+//   } catch {
+//     res.redirect("back");
+//   }
+// });
 module.exports = router;
