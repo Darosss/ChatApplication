@@ -6,12 +6,12 @@ const Message = require("../models/message");
 const User = require("../models/user");
 
 router.get("/", async function (req, res) {
-  let messages = {},
+  const userId = req.user.id;
+  let roomsMsgArr = {},
     chatRooms,
     connectedUser;
   const limitMsgs = 300;
-  connectedUser = await User.findById(req.session.passport.user._id).exec();
-
+  connectedUser = await User.findById(userId).exec();
   const chatRoomFilter = {
     $or: [
       { createdBy: connectedUser.id },
@@ -32,22 +32,20 @@ router.get("/", async function (req, res) {
       },
     ],
   };
-
   chatRooms = await chatRoom.find(chatRoomFilter);
   //gets messages depens what rooms user sees
   for await (const chatRoom of chatRooms) {
-    messages[chatRoom._id] = await Message.find({
+    roomsMsgArr[chatRoom._id] = await Message.find({
       whereSent: chatRoom._id,
     })
       .sort({ createdAt: "desc" })
       .populate("sender")
+      .populate("whereSent")
       .limit(limitMsgs)
       .exec();
   }
-  res.render("index", {
-    chatRooms: chatRooms,
-    messages: messages,
-  });
+
+  res.send({ rooms: roomsMsgArr, userChatRooms: chatRooms });
 });
 
 module.exports = router;
