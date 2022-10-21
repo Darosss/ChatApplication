@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import EditCreateRoomModal from "./EditCreateRoomModal";
+import DeleteRoomModal from "./DeleteRoomModal";
 
 function UserRoomsList(props) {
-  const [editedRoom, setEditedRoom] = useState([]);
+  const [selectedRoom, setSelectedRoom] = useState([]);
   const [availableRanges, setAvailableRanges] = useState([]);
   const [usersList, setUsersList] = useState([]);
   const showRoom = (e) => {
@@ -14,9 +15,22 @@ function UserRoomsList(props) {
       url: "http://localhost:5000/rooms/" + buttonId,
     };
     axios(axiosConfigRoom).then((res) => {
-      setEditedRoom(res.data.chatRoom);
+      setSelectedRoom(res.data.chatRoom);
       setAvailableRanges(res.data.availableRanges);
       setUsersList(res.data.usersList);
+    });
+  };
+
+  const getRemoveRoom = (e) => {
+    const buttonId = e.target.id;
+    const axiosConfigRoom = {
+      method: "get",
+      withCredentials: true,
+      url: "http://localhost:5000/rooms/delete/" + buttonId,
+    };
+    axios(axiosConfigRoom).then((res) => {
+      console.log(res, "delete");
+      setSelectedRoom(res.data.chatRoomDelete);
     });
   };
 
@@ -45,7 +59,15 @@ function UserRoomsList(props) {
                   </button>
                 </td>
                 <td>
-                  <button className="btn btn-danger w-100"> DELETE </button>
+                  <button
+                    id={room._id}
+                    className="btn btn-danger w-100"
+                    onClick={getRemoveRoom}
+                    data-toggle="modal"
+                    data-target="#remove-room"
+                  >
+                    DELETE
+                  </button>
                 </td>
               </tr>
             );
@@ -55,10 +77,15 @@ function UserRoomsList(props) {
       <EditCreateRoomModal
         id="edit-room"
         sectionName="Edit"
-        postSuffix={editedRoom._id}
+        postSuffix={selectedRoom._id}
         availableRanges={availableRanges}
-        editedRoom={editedRoom}
+        editedRoom={selectedRoom}
         usersList={usersList}
+      />
+      <DeleteRoomModal
+        id="remove-room"
+        roomName={selectedRoom.name}
+        postSuffix={selectedRoom._id}
       />
     </div>
   );

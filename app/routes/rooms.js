@@ -79,15 +79,26 @@ router.post("/:roomId", async (req, res) => {
     console.log(err);
   }
 });
-//Remove chatroom route
-// router.delete("/edit/:id", async (req, res) => {
-//   let room;
-//   try {
-//     room = await chatRoom.findById(req.params.id);
-//     await room.remove();
-//     res.redirect("../../" + dir);
-//   } catch {
-//     res.redirect("back");
-//   }
-// });
+
+router.get("/delete/:roomId", async (req, res) => {
+  await chatRoom.findById(req.params.roomId).then((room, err) => {
+    res.send({ chatRoomDelete: room });
+  });
+});
+
+// Remove chatroom route
+router.delete("/delete/:roomId", async (req, res) => {
+  let user = req.user;
+  let room = await chatRoom.findById(req.params.roomId);
+  try {
+    if (await chatRoomValidation(room, user.id)) {
+      await room.remove();
+      res.send({ message: "Succesfully removed room" });
+    } else {
+      res.send({ message: "It's not your room" });
+    }
+  } catch {
+    res.send({ message: "Can't remove room" });
+  }
+});
 module.exports = router;

@@ -5,7 +5,7 @@ Refactor to react from ejs
             [] users/ ranges etc. should be admin / ranges route all :)(admin routes) (later maybe moderator routes?)
             [] add method for user to find all users without password and _v and only id/name
             [] same for find one user without password and _v
-
+            [] add validation if room is user or admin
 
     [] navigation for mobiles
     [x] show links depends if logged/logout
