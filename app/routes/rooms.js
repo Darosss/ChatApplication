@@ -8,11 +8,12 @@ const chatRoomValidation = require("./partials/chatRoomValidation");
 router.get("/", async (req, res) => {
   let userId = req.user.id,
     usersChatRooms;
+  console.log(req.user);
   try {
     usersChatRooms = await chatRoom
       .find({ createdBy: userId })
-      .populate("createdBy")
-      .populate("availableRanges");
+      .populate("createdBy", "_id username")
+      .populate("availableRanges", "_id name");
   } catch (error) {
     console.log(error);
   }
@@ -48,7 +49,7 @@ router.post("/create", async (req, res) => {
 //Get chatroom by id
 router.get("/:roomId", async (req, res) => {
   let user = req.user;
-  const ranges = await range.find({});
+  const ranges = await range.find({}, "_id name");
   const users = await User.find({}, "_id username"); //TODO this add to method model user
   const chatRoomEdit = await chatRoom.findById(req.params.roomId);
   if (await chatRoomValidation(chatRoomEdit, user.id)) {
@@ -64,6 +65,8 @@ router.get("/:roomId", async (req, res) => {
 
 //Edit chatroom by id route
 router.post("/:roomId", async (req, res) => {
+  console.log(req.params);
+  let userId = req.user.id;
   const update = {
     name: req.body.roomName,
     availableRanges: req.body.availableRanges,
