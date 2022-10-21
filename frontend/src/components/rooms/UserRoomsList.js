@@ -45,7 +45,7 @@ function UserRoomsList(props) {
                   </button>
                 </td>
                 <td>
-                  <button className="btn btn-danger w-75"> DELETE </button>
+                  <button className="btn btn-danger w-100"> DELETE </button>
                 </td>
               </tr>
             );
