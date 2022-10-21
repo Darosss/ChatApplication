@@ -7,7 +7,7 @@ import Loading from "./components/Loading";
 import Chats from "./components/Chats";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import Profil from "./components/Profil";
+import Profil from "./components/profil/Profil";
 import Rooms from "./components/rooms/Rooms";
 import NavigationLink from "./components/NavigationLink";
 import Logout from "./components/Logout";

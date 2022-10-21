@@ -2,13 +2,11 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
 
-router.get("/", async function (req, res) {
-  let user = req.user;
-  let userDB = await User.findOne(
-    { username: user.username },
-    { password: 0, __v: 0 }
-  ).populate("ranges");
-
+router.get("/:userId", async function (req, res) {
+  let userDB = await User.findById(req.params.userId, {
+    password: 0,
+    __v: 0,
+  }).populate("ranges");
   return res.send({ userDetails: userDB });
 });
 

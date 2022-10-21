@@ -2,7 +2,8 @@ const User = require("./models/user");
 const passport = require("passport");
 
 const LocalStrategy = require("passport-local");
-const JwtStrategy = require("passport-jwt").Strategy;
+const JwtStrategy = require("passport-jwt").Strategy,
+  ExtractJwt = require("passport-jwt").ExtractJwt;
 console.log("process.env.JWT_SECRET_KEY", process.env.JWT_SECRET_KEY);
 const localStrategy = new LocalStrategy(function (username, password, done) {
   User.findOne({ username: username }, function (err, user) {
@@ -21,11 +22,16 @@ const jwtStrategy = new JwtStrategy(
     jwtFromRequest: (req) => req.session.jwt,
     secretOrKey: process.env.JWT_SECRET_KEY,
   },
-  (payload, done) => {
+  async (payload, done) => {
     // TODO: add additional jwt token verification
-    return done(null, payload);
+    let user = await User.findOne(
+      { username: payload.username },
+      "_id username"
+    );
+    return done(null, user);
   }
 );
+
 passport.serializeUser(function (user, done) {
   done(null, user.id);
 });

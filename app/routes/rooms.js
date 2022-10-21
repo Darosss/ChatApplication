@@ -8,7 +8,6 @@ const chatRoomValidation = require("./middlewares/chatRoomValidation");
 router.get("/", async (req, res) => {
   let userId = req.user.id,
     usersChatRooms;
-  console.log(req.user);
   try {
     usersChatRooms = await chatRoom
       .find({ createdBy: userId })
