@@ -21,8 +21,8 @@ router.get("/", async (req, res) => {
 
 router.get("/create", async (req, res) => {
   const ranges = await range.find({});
-  const users = await User.find({});
-  res.send({ availableRanges: ranges });
+  const users = await User.find({}, "_id username"); //TODO this add to method model user
+  res.send({ availableRanges: ranges, usersList: users });
 });
 
 //Create new chatroom
@@ -33,8 +33,8 @@ router.post("/create", async (req, res) => {
   const room = new chatRoom({
     name: name,
     availableRanges: ranges,
-    // allowedUsers: req.body.allowedUsers,
-    // bannedUsers: req.body.bannedUsers,
+    allowedUsers: req.body.allowedUsers,
+    bannedUsers: req.body.bannedUsers,
     createdBy: createdBy.id,
   });
   try {
@@ -50,10 +50,7 @@ router.get("/:roomId", async (req, res) => {
   let user = req.user;
   const ranges = await range.find({});
   const users = await User.find({}, "_id username"); //TODO this add to method model user
-  const chatRoomEdit = await chatRoom
-    .findById(req.params.roomId)
-    .populate("allowedUsers")
-    .populate("bannedUsers");
+  const chatRoomEdit = await chatRoom.findById(req.params.roomId);
   if (await chatRoomValidation(chatRoomEdit, user.id)) {
     res.send({
       chatRoom: chatRoomEdit,
@@ -70,8 +67,8 @@ router.post("/:roomId", async (req, res) => {
   const update = {
     name: req.body.roomName,
     availableRanges: req.body.availableRanges,
-    // allowedUsers: req.body.allowedUsers,
-    // bannedUsers: req.body.bannedUsers,
+    allowedUsers: req.body.allowedUsers,
+    bannedUsers: req.body.bannedUsers,
   };
   try {
     await chatRoom.findByIdAndUpdate(req.params.roomId, update).then(() => {

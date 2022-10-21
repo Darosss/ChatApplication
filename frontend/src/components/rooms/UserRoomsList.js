@@ -4,6 +4,8 @@ import EditCreateRoomModal from "./EditCreateRoomModal";
 
 function UserRoomsList(props) {
   const [editedRoom, setEditedRoom] = useState([]);
+  const [availableRanges, setAvailableRanges] = useState([]);
+  const [usersList, setUsersList] = useState([]);
   const showRoom = (e) => {
     const buttonId = e.target.id;
     const axiosConfigRoom = {
@@ -13,6 +15,8 @@ function UserRoomsList(props) {
     };
     axios(axiosConfigRoom).then((res) => {
       setEditedRoom(res.data.chatRoom);
+      setAvailableRanges(res.data.availableRanges);
+      setUsersList(res.data.usersList);
     });
   };
 
@@ -52,8 +56,9 @@ function UserRoomsList(props) {
         id="edit-room"
         sectionName="Edit"
         postSuffix={editedRoom._id}
-        availableRanges={props.availableRanges}
+        availableRanges={availableRanges}
         editedRoom={editedRoom}
+        usersList={usersList}
       />
     </div>
   );

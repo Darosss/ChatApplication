@@ -6,6 +6,8 @@ Refactor to react from ejs
             [] add method for user to find all users without password and _v and only id/name
             [] same for find one user without password and _v
 
+
+    [] navigation for mobiles
     [x] show links depends if logged/logout
     [x] redirect depends if logged/logout
 
@@ -19,8 +21,8 @@ Refactor to react from ejs
          [] add validation
         [x] login styles
 
-    [] refactor: register route
-    [] refactor: register frontend
+    [x] refactor: register route
+    [x] refactor: register frontend
         [x] register styles
         [] validation
     [] refactor: chat rooms route

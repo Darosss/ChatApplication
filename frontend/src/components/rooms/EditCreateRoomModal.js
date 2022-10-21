@@ -3,12 +3,15 @@ import axios from "axios";
 function EditCreateRoomModal(props) {
   const [roomName, setRoomName] = useState("");
   const [roomRanges, setRoomRanges] = useState([]);
-  const [createInfo, setCreateInfo] = useState("");
-
+  const [roomAllowedUsers, setRoomAllowedUsers] = useState([]);
+  const [roomBannedUsers, setRoomBannedUsers] = useState([]);
+  const [postInfo, setPostInfo] = useState("");
   useEffect(() => {
     if (props.editedRoom) {
       setRoomName(props.editedRoom.name);
       setRoomRanges(props.editedRoom.availableRanges);
+      setRoomBannedUsers(props.editedRoom.bannedUsers);
+      setRoomAllowedUsers(props.editedRoom.allowedUsers);
     }
   }, [props]);
 
@@ -18,16 +21,36 @@ function EditCreateRoomModal(props) {
       data: {
         roomName: roomName,
         availableRanges: roomRanges,
+        allowedUsers: roomAllowedUsers,
+        bannedUsers: roomBannedUsers,
       },
       withCredentials: true,
       url: "http://localhost:5000/rooms/" + props.postSuffix,
     };
     axios(axiosCreateConfig).then((res) => {
-      setCreateInfo(res.data.message);
+      setPostInfo(res.data.message);
     });
   };
 
-  const createSelectRanges = () => {
+  const createSelect = (label, funcOnChange, funcOptions, selectValue) => {
+    return (
+      <div>
+        <label className="form-label">{label}</label>
+        <select
+          className="form-select bg-dark text-light"
+          id="room-ranges"
+          multiple
+          value={selectValue}
+          aria-label={"multiple select " + label}
+          onChange={(e) => funcOnChange(e.target.selectedOptions)}
+        >
+          {funcOptions()}
+        </select>
+      </div>
+    );
+  };
+
+  const createSelectRangesOptions = () => {
     return props.availableRanges.map((range, index) => {
       return (
         <option key={index} value={range._id}>
@@ -36,13 +59,31 @@ function EditCreateRoomModal(props) {
       );
     });
   };
-
-  const handleMultipleSelectChange = (options) => {
+  const createSelectUsersListOptions = () => {
+    return props.usersList.map((user, index) => {
+      return (
+        <option key={index} value={user._id}>
+          {user.username}
+        </option>
+      );
+    });
+  };
+  /* FIXME remove repeat */
+  const handleMultipleSelectRanges = (options) => {
     const selectedOptions = [...options].map((option) => option.value);
     setRoomRanges(selectedOptions);
   };
+  const handleMultipleSelectUsers = (options) => {
+    const selectedOptions = [...options].map((option) => option.value);
+    setRoomAllowedUsers(selectedOptions);
+  };
+  const handleMultipleSelectBannedUsers = (options) => {
+    const selectedOptions = [...options].map((option) => option.value);
+    setRoomBannedUsers(selectedOptions);
+  };
+  /* FIXME Repeat */
 
-  const createRoomInputs = () => {
+  const createNameRoomInput = () => {
     return (
       <div>
         <label className="form-label">Room name</label>
@@ -54,21 +95,33 @@ function EditCreateRoomModal(props) {
           value={roomName || ""}
           onChange={(e) => setRoomName(e.target.value)}
         />
-        <label className="form-label">
-          Available ranges(ctrl + click to select more)
-        </label>
+      </div>
+    );
+  };
+  const createModalBody = () => {
+    return (
+      <div>
+        {createNameRoomInput()}
 
-        <select
-          className="form-select bg-dark text-light"
-          id="room-ranges"
-          multiple
-          value={roomRanges}
-          aria-label="multiple select example"
-          onChange={(e) => handleMultipleSelectChange(e.target.selectedOptions)}
-        >
-          {createSelectRanges()}
-        </select>
-        <p className="text-danger font-weight-bold"> {createInfo} </p>
+        {createSelect(
+          "Available ranges",
+          handleMultipleSelectRanges,
+          createSelectRangesOptions,
+          roomRanges
+        )}
+        {createSelect(
+          "Allow users",
+          handleMultipleSelectUsers,
+          createSelectUsersListOptions,
+          roomAllowedUsers
+        )}
+        {createSelect(
+          "Ban users",
+          handleMultipleSelectBannedUsers,
+          createSelectUsersListOptions,
+          roomBannedUsers
+        )}
+        <p className="text-danger font-weight-bold"> {postInfo} </p>
       </div>
     );
   };
@@ -97,7 +150,7 @@ function EditCreateRoomModal(props) {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div className="modal-body">{createRoomInputs()}</div>
+            <div className="modal-body">{createModalBody()}</div>
             <div className="modal-footer">
               <button
                 type="button"
