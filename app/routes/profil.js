@@ -10,11 +10,12 @@ router.get("/:userId", async function (req, res) {
   return res.send({ userDetails: userDB });
 });
 
-router.post("/edit", async (req, res) => {
+router.post("/:userId", async (req, res) => {
   let user,
-    oldpassword = req.body.oldpassword,
-    newpassword = req.body.newpassword;
-  const filter = req.session.passport.user._id;
+    oldPassword = req.body.oldPassword,
+    newPassword = req.body.newPassword;
+
+  const filter = req.user.id;
   const update = {
     firstname: req.body.firstname,
     surname: req.body.surname,
@@ -23,27 +24,29 @@ router.post("/edit", async (req, res) => {
     gender: req.body.gender,
     nickColor: req.body.nickColor,
     email: req.body.email,
-    phoneNumber: req.body.phoneNumber,
+    phoneNumber: req.body.phone,
   };
+  console.log(req.body.oldPassword, "old", update);
   try {
     user = await User.findByIdAndUpdate(filter, update, { new: true });
-    if (req.body.oldpassword)
-      await changePassword(user, oldpassword, newpassword, update);
+    if (req.body.oldPassword)
+      await changePassword(user, oldPassword, newPassword, update);
 
-    res.redirect("back");
+    res.send({ message: "Succesfully edited profile" });
   } catch (e) {
-    console.log(e);
+    res.send({ message: "Can't edit profile" });
   }
 });
 
-async function changePassword(user, oldpassword, newpassword) {
-  await user.comparePassword(oldpassword, async function (err, isMatch) {
+async function changePassword(user, oldPassword, newPassword) {
+  await user.comparePassword(oldPassword, async function (err, isMatch) {
     if (err) console.log(err);
     else if (isMatch) {
-      user.password = newpassword;
+      user.password = newPassword;
       await user.save();
     } else {
       console.log("Cant change not same passwords");
+      //Todo later do as middleware to res.send(message: old password != same  )
     }
   });
 }
