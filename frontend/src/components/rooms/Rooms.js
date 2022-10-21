@@ -5,6 +5,7 @@ import EditCreateRoomModal from "./EditCreateRoomModal";
 function Rooms() {
   const [rooms, setRooms] = useState([]);
   const [ranges, setRanges] = useState([]);
+  const [usersList, setUsersList] = useState([]);
   useEffect(() => {
     const axiosConfigRooms = {
       method: "get",
@@ -21,10 +22,9 @@ function Rooms() {
     };
     axios(axiosConfigCreateRoom).then((res) => {
       setRanges(res.data.availableRanges);
+      setUsersList(res.data.usersList);
     });
   }, []);
-
-  const createRoomPopup = () => {};
 
   return (
     <div className="App">
@@ -33,7 +33,6 @@ function Rooms() {
           <div className="m-1">Your chat rooms</div>
           <button
             className="btn btn-primary"
-            onClick={createRoomPopup}
             data-toggle="modal"
             data-target="#create-room"
           >
@@ -46,9 +45,10 @@ function Rooms() {
             sectionName="Create"
             postSuffix="create"
             availableRanges={ranges}
+            usersList={usersList}
           />
         }
-        {<UserRoomsList rooms={rooms} availableRanges={ranges} />}
+        {<UserRoomsList rooms={rooms} />}
       </header>
     </div>
   );

@@ -3,16 +3,17 @@ const router = express.Router();
 const chatRoom = require("../models/chatRoom");
 const User = require("../models/user");
 const range = require("../models/range");
-const chatRoomValidation = require("./partials/chatRoomValidation");
+const chatRoomValidation = require("./middlewares/chatRoomValidation");
 
 router.get("/", async (req, res) => {
   let userId = req.user.id,
     usersChatRooms;
+  console.log(req.user);
   try {
     usersChatRooms = await chatRoom
       .find({ createdBy: userId })
-      .populate("createdBy")
-      .populate("availableRanges");
+      .populate("createdBy", "_id username")
+      .populate("availableRanges", "_id name");
   } catch (error) {
     console.log(error);
   }
@@ -21,8 +22,8 @@ router.get("/", async (req, res) => {
 
 router.get("/create", async (req, res) => {
   const ranges = await range.find({});
-  const users = await User.find({});
-  res.send({ availableRanges: ranges });
+  const users = await User.find({}, "_id username"); //TODO this add to method model user
+  res.send({ availableRanges: ranges, usersList: users });
 });
 
 //Create new chatroom
@@ -33,8 +34,8 @@ router.post("/create", async (req, res) => {
   const room = new chatRoom({
     name: name,
     availableRanges: ranges,
-    // allowedUsers: req.body.allowedUsers,
-    // bannedUsers: req.body.bannedUsers,
+    allowedUsers: req.body.allowedUsers,
+    bannedUsers: req.body.bannedUsers,
     createdBy: createdBy.id,
   });
   try {
@@ -47,34 +48,27 @@ router.post("/create", async (req, res) => {
 
 //Get chatroom by id
 router.get("/:roomId", async (req, res) => {
-  let user = req.user;
-  const ranges = await range.find({});
+  const ranges = await range.find({}, "_id name");
   const users = await User.find({}, "_id username"); //TODO this add to method model user
-  const chatRoomEdit = await chatRoom
-    .findById(req.params.roomId)
-    .populate("allowedUsers")
-    .populate("bannedUsers");
-  if (await chatRoomValidation(chatRoomEdit, user.id)) {
-    res.send({
-      chatRoom: chatRoomEdit,
-      availableRanges: ranges,
-      usersList: users,
-    });
-  } else {
-    res.send({ message: "You are not owner or admin to edit that room." });
-  }
+  const chatRoomEdit = await chatRoom.findById(req.params.roomId);
+  res.send({
+    chatRoom: chatRoomEdit,
+    availableRanges: ranges,
+    usersList: users,
+  });
 });
 
 //Edit chatroom by id route
-router.post("/:roomId", async (req, res) => {
+router.post("/:roomId", chatRoomValidation, async (req, res, next) => {
+  let roomIdParam = req.params.roomId;
   const update = {
     name: req.body.roomName,
     availableRanges: req.body.availableRanges,
-    // allowedUsers: req.body.allowedUsers,
-    // bannedUsers: req.body.bannedUsers,
+    allowedUsers: req.body.allowedUsers,
+    bannedUsers: req.body.bannedUsers,
   };
   try {
-    await chatRoom.findByIdAndUpdate(req.params.roomId, update).then(() => {
+    await chatRoom.findByIdAndUpdate(roomIdParam, update).then(() => {
       res.send({ message: "Successfully edited room" });
     });
   } catch (err) {
@@ -82,15 +76,22 @@ router.post("/:roomId", async (req, res) => {
     console.log(err);
   }
 });
-//Remove chatroom route
-// router.delete("/edit/:id", async (req, res) => {
-//   let room;
-//   try {
-//     room = await chatRoom.findById(req.params.id);
-//     await room.remove();
-//     res.redirect("../../" + dir);
-//   } catch {
-//     res.redirect("back");
-//   }
-// });
+
+router.get("/delete/:roomId", chatRoomValidation, async (req, res) => {
+  await chatRoom.findById(req.params.roomId).then((room, err) => {
+    res.send({ chatRoomDelete: room });
+  });
+});
+
+// Remove chatroom route
+router.delete("/delete/:roomId", chatRoomValidation, async (req, res) => {
+  let user = req.user;
+  let room = await chatRoom.findById(req.params.roomId);
+  try {
+    await room.remove();
+    res.send({ message: "Succesfully removed room" });
+  } catch {
+    res.send({ message: "Can't remove room" });
+  }
+});
 module.exports = router;

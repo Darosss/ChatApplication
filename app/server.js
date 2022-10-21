@@ -128,3 +128,4 @@ app.use("/users", usersRouter);
 httpServer.listen(process.env.PORT || 5000, () => {
   console.log(`application is running at: */${process.env.PORT || 5000}`);
 });
+//TODO make verification with jwt or other idk
