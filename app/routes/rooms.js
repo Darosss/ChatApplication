@@ -3,7 +3,7 @@ const router = express.Router();
 const chatRoom = require("../models/chatRoom");
 const User = require("../models/user");
 const range = require("../models/range");
-const chatRoomValidation = require("./partials/chatRoomValidation");
+const chatRoomValidation = require("./middlewares/chatRoomValidation");
 
 router.get("/", async (req, res) => {
   let userId = req.user.id,
@@ -48,25 +48,19 @@ router.post("/create", async (req, res) => {
 
 //Get chatroom by id
 router.get("/:roomId", async (req, res) => {
-  let user = req.user;
   const ranges = await range.find({}, "_id name");
   const users = await User.find({}, "_id username"); //TODO this add to method model user
   const chatRoomEdit = await chatRoom.findById(req.params.roomId);
-  if (await chatRoomValidation(chatRoomEdit, user.id)) {
-    res.send({
-      chatRoom: chatRoomEdit,
-      availableRanges: ranges,
-      usersList: users,
-    });
-  } else {
-    res.send({ message: "You are not owner or admin to edit that room." });
-  }
+  res.send({
+    chatRoom: chatRoomEdit,
+    availableRanges: ranges,
+    usersList: users,
+  });
 });
 
 //Edit chatroom by id route
-router.post("/:roomId", async (req, res) => {
-  console.log(req.params);
-  let userId = req.user.id;
+router.post("/:roomId", chatRoomValidation, async (req, res, next) => {
+  let roomIdParam = req.params.roomId;
   const update = {
     name: req.body.roomName,
     availableRanges: req.body.availableRanges,
@@ -74,7 +68,7 @@ router.post("/:roomId", async (req, res) => {
     bannedUsers: req.body.bannedUsers,
   };
   try {
-    await chatRoom.findByIdAndUpdate(req.params.roomId, update).then(() => {
+    await chatRoom.findByIdAndUpdate(roomIdParam, update).then(() => {
       res.send({ message: "Successfully edited room" });
     });
   } catch (err) {
@@ -83,23 +77,19 @@ router.post("/:roomId", async (req, res) => {
   }
 });
 
-router.get("/delete/:roomId", async (req, res) => {
+router.get("/delete/:roomId", chatRoomValidation, async (req, res) => {
   await chatRoom.findById(req.params.roomId).then((room, err) => {
     res.send({ chatRoomDelete: room });
   });
 });
 
 // Remove chatroom route
-router.delete("/delete/:roomId", async (req, res) => {
+router.delete("/delete/:roomId", chatRoomValidation, async (req, res) => {
   let user = req.user;
   let room = await chatRoom.findById(req.params.roomId);
   try {
-    if (await chatRoomValidation(room, user.id)) {
-      await room.remove();
-      res.send({ message: "Succesfully removed room" });
-    } else {
-      res.send({ message: "It's not your room" });
-    }
+    await room.remove();
+    res.send({ message: "Succesfully removed room" });
   } catch {
     res.send({ message: "Can't remove room" });
   }
