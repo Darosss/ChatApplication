@@ -25,21 +25,25 @@ Refactor to react from ejs
     [x] refactor: register frontend
         [x] register styles
         [] validation
-    [] refactor: chat rooms route
-    [] refactor: chat rooms frontend
+    [x] refactor: chat rooms route
+    [x] refactor: chat rooms frontend
         [x] show users rooms
-        [] edit users rooms
+        [x] create users rooms
+        [x] edit users rooms
             [x] add edit user rooms
             [x] change name room
             [x] change available ranges for room
-            [] allow / ban users for room
-    [] refactor: index(chats) route
-    [] refactor: index(chats) frontend
+            [x] allow / ban users for room
 
     [] refactor: profil route
+        [] add validation if its same user or admin
     [] refactor: profil frontend
         [x] profil details
-        [] profil edit
+        [x] profil edit
+        [] add list of countries for select? maybe in database?
+        [] genders list
+        [] color picker
+
     [] refactor: ranges route
     [] refactor: ranges frontend
         [] all ranges list
@@ -53,8 +57,3 @@ Refactor to react from ejs
         [] add ranges for users
         [] edit users
         [] edit rooms of user
-
-repeated:
-
-    [] all users in chatroom (banned / not banned) [in create and edit]
-    [] all ranges in chatroom repeated [in created and edit]
