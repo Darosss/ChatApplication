@@ -11,8 +11,6 @@ function Profile({ auth }) {
       url: "http://localhost:5000/profil/" + auth._id,
     };
     axios(axiosConfig).then((res) => {
-      console.log(res.data.userDetails, "profil");
-
       setUserDetails(res.data.userDetails);
     });
   }, [auth]);

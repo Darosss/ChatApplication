@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 function EditProfileModal(props) {
-  console.log("editproile", props);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -44,7 +43,6 @@ function EditProfileModal(props) {
       url: "http://localhost:5000/profil/" + props.user._id,
     };
     axios(axiosEditProfile).then((res) => {
-      console.log(res, "kek");
       setPostInfo(res.data.message);
     });
     window.location.reload(false);

@@ -36,9 +36,14 @@ Refactor to react from ejs
             [x] allow / ban users for room
 
     [] refactor: profil route
+        [] add validation if its same user or admin
     [] refactor: profil frontend
         [x] profil details
-        [] profil edit
+        [x] profil edit
+        [] add list of countries for select? maybe in database?
+        [] genders list
+        [] color picker
+
     [] refactor: ranges route
     [] refactor: ranges frontend
         [] all ranges list
@@ -52,8 +57,3 @@ Refactor to react from ejs
         [] add ranges for users
         [] edit users
         [] edit rooms of user
-
-repeated:
-
-    [] all users in chatroom (banned / not banned) [in create and edit]
-    [] all ranges in chatroom repeated [in created and edit]
