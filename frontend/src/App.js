@@ -11,7 +11,7 @@ import Register from "./components/Register";
 import Profil from "./components/profil/Profil";
 import Rooms from "./components/rooms/Rooms";
 import Logout from "./components/Logout";
-import Users from "./components/Users";
+import Users from "./components/users/Users";
 import Ranges from "./components/Ranges";
 function App() {
   const [auth, setAuth] = useState(null);
