@@ -23,6 +23,9 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 
+// CUSTOM MIDDLEWARES //
+const isAdmin = require("./routes/middlewares/isAdmin");
+
 // ROUTES //
 const currSessionRouter = require("./routes/currSessionRouter");
 const chatsRouter = require("./routes/chats");
@@ -120,10 +123,10 @@ app.use("/api", currSessionRouter);
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
 app.use("/profil", jwtRequired, profilRouter);
-app.use("/logout", logoutRouter);
-app.use("/rooms", roomsRouter);
-app.use("/ranges", rangesRouter);
-app.use("/users", usersRouter);
+app.use("/logout", jwtRequired, logoutRouter);
+app.use("/rooms", jwtRequired, roomsRouter);
+app.use("/ranges", jwtRequired, isAdmin, rangesRouter);
+app.use("/users", jwtRequired, isAdmin, usersRouter);
 //Listen port
 httpServer.listen(process.env.PORT || 5000, () => {
   console.log(`application is running at: */${process.env.PORT || 5000}`);
