@@ -46,14 +46,17 @@ function App() {
       <Routes>
         <Route
           path="/login"
-          element={auth ? <Profil auth={auth} /> : <Login />}
+          element={auth ? <Home auth={auth} /> : <Login />}
         />
         <Route path="/" element={<Home auth={auth} />} />
         <Route path="/chats" element={<Chats />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/register"
+          element={!auth ? <Register /> : <Home auth={auth} />}
+        />
         <Route
           path="/profil"
-          element={auth ? <Profil auth={auth} /> : <Chats />}
+          element={auth ? <Profil auth={auth} /> : <Login />}
         />
         <Route path="/rooms" element={auth ? <Rooms /> : <Login />} />
       </Routes>
