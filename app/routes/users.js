@@ -53,25 +53,29 @@ router.post("/edit/:userId", async (req, res) => {
   }
 });
 
-// //Ban user by id route
-// router.post("/ban/:id", async (req, res) => {
-//   let bannedDate = new Date();
-//   let banExpiresDate = new Date();
-//   let banMinutes = banExpiresDate.getMinutes() + parseInt(req.body.banTime);
-//   banExpiresDate.setMinutes(banMinutes);
+//Ban user by id route
+router.post("/ban/:userId/", async (req, res) => {
+  let banTime = req.body.banTime;
+  if (!banTime) banTime = 5;
 
-//   const update = {
-//     isBanned: true,
-//     bannedDate: bannedDate,
-//     banExpiresDate: banExpiresDate,
-//   };
-//   try {
-//     await user.findByIdAndUpdate(req.params.userId, update);
-//     res.send({ message: "User banned" });
-//   } catch (e) {
-//     console.log(e);
-//   }
-// });
+  let bannedDate,
+    banExpiresDate = new Date();
+  let banMinutes = banExpiresDate.getMinutes() + parseInt(banTime);
+  banExpiresDate.setMinutes(banMinutes);
+
+  const update = {
+    isBanned: true,
+    bannedDate: bannedDate,
+    banExpiresDate: banExpiresDate,
+  };
+  try {
+    await user.findByIdAndUpdate(req.params.userId, update);
+    res.send({ message: "User banned" });
+  } catch (e) {
+    //Fe. add validation if admin want to ban admin or sth like that
+    res.send({ message: "User can't be banned" });
+  }
+});
 // //Unban user by id route
 // router.post("/unban/:id", async (req, res) => {
 //   const update = {
