@@ -1,27 +1,21 @@
 import React, { useState } from "react";
+import axios from "axios";
 import EditUserModal from "./EditUserModal";
 import BanUserModal from "./BanUserModal";
 
 function UsersList(props) {
   const [selectedUserId, setSelectedUserId] = useState("");
 
-  const showUser = (e) => {
-    const buttonId = e.target.id;
-    setSelectedUserId(buttonId);
+  const unbanUser = (e) => {
+    const axiosConfig = {
+      method: "post",
+      withCredentials: true,
+      url: "http://localhost:5000/users/unban/" + e,
+    };
+    axios(axiosConfig);
+    window.location.reload(false);
   };
-  //   const getBanUser = (e) => {
-  //     const buttonId = e.target.id;
-  //     const axiosConfigRoom = {
-  //       method: "get",
-  //       withCredentials: true,
-  //       url: "http://localhost:5000/rooms/delete/" + buttonId,
-  //     };
-  //     axios(axiosConfigRoom).then((res) => {
-  //       console.log(res, "delete");
-  //       setSelectedUser(res.data.chatRoomDelete);
-  //     });
-  //   };
-  console.log("props", props.users);
+
   const banButton = (userId) => {
     return (
       <button
@@ -35,6 +29,7 @@ function UsersList(props) {
       </button>
     );
   };
+
   const unbanButton = (userId) => {
     return (
       <button
@@ -42,11 +37,13 @@ function UsersList(props) {
         className="btn btn-secondary w-100"
         data-toggle="modal"
         data-target="#unban-user"
+        onClick={(e) => unbanUser(e.target.id)}
       >
         UNBAN
       </button>
     );
   };
+
   return (
     <div className="container d-flex justify-content-center">
       <table className="table table-sm table-dark w-50">
@@ -66,7 +63,7 @@ function UsersList(props) {
                     className="btn btn-primary w-100"
                     data-toggle="modal"
                     data-target="#edit-user"
-                    onClick={showUser}
+                    onClick={(e) => setSelectedUserId(e.target.id)}
                   >
                     EDIT
                   </button>
