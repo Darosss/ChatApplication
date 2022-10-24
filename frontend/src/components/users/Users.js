@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import UsersList from "./UsersList";
 
-function Loading() {
+function Users() {
   const [usersList, setUsersList] = useState([]);
   useEffect(() => {
     const axiosConfig = {
@@ -23,4 +23,4 @@ function Loading() {
   );
 }
 
-export default Loading;
+export default Users;
