@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import EditUserModal from "./EditUserModal";
+import BanUserModal from "./BanUserModal";
 
 function UsersList(props) {
   const [selectedUserId, setSelectedUserId] = useState("");
@@ -20,14 +21,15 @@ function UsersList(props) {
   //       setSelectedUser(res.data.chatRoomDelete);
   //     });
   //   };
-
+  console.log("props", props.users);
   const banButton = (userId) => {
     return (
       <button
         id={userId}
         className="btn btn-danger w-100"
         data-toggle="modal"
-        data-target="#remove-user"
+        data-target="#ban-user"
+        onClick={(e) => setSelectedUserId(e.target.id)}
       >
         BAN
       </button>
@@ -39,7 +41,7 @@ function UsersList(props) {
         id={userId}
         className="btn btn-secondary w-100"
         data-toggle="modal"
-        data-target="#remove-user"
+        data-target="#unban-user"
       >
         UNBAN
       </button>
@@ -71,7 +73,7 @@ function UsersList(props) {
                 </td>
                 <td>
                   {/* if banned unban if not ban */}
-                  {user.isBanned ? banButton(user._id) : unbanButton(user._id)}
+                  {user.isBanned ? unbanButton(user._id) : banButton(user._id)}
                 </td>
               </tr>
             );
@@ -81,6 +83,11 @@ function UsersList(props) {
       <EditUserModal
         id="edit-user"
         sectionName="Edit user"
+        userId={selectedUserId}
+      />
+      <BanUserModal
+        id="ban-user"
+        sectionName="Ban user"
         userId={selectedUserId}
       />
     </div>
