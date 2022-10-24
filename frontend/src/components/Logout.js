@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import { Button } from "react-bootstrap";
 function Logout() {
   const logout = (e) => {
     e.preventDefault();
@@ -20,9 +19,9 @@ function Logout() {
   return (
     <li className="nav-item">
       {/* add form */}
-      <Button type="button" onClick={logout} className="btn btn-danger">
+      <button onClick={logout} className="btn btn-danger w-100">
         Logout
-      </Button>
+      </button>
     </li>
   );
 }

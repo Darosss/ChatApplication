@@ -26,7 +26,7 @@ const jwtStrategy = new JwtStrategy(
     // TODO: add additional jwt token verification
     let user = await User.findOne(
       { username: payload.username },
-      "_id username"
+      "_id username administrator"
     );
     return done(null, user);
   }

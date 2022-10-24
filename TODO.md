@@ -6,6 +6,7 @@ Refactor to react from ejs
             [] add method for user to find all users without password and _v and only id/name
             [] same for find one user without password and _v
             [x] add validation if room is user or admin
+            [] add reason of  bann
 
     [] navigation for mobiles
     [x] show links depends if logged/logout
@@ -48,12 +49,17 @@ Refactor to react from ejs
     [] refactor: ranges frontend
         [] all ranges list
         [] add ranges
+
+
         [] remove ranges
         [] edit ranges
+
     [] refactor: users route
     [] refactor: users frontend
-        [] list of users
-        [] ban users
-        [] add ranges for users
-        [] edit users
+        [x] list of users
+        [x] ban users
+        [x] add ranges for users
+        [x] edit users
+        [x] unban users
+        [] list of users room
         [] edit rooms of user

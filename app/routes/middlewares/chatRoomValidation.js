@@ -1,4 +1,4 @@
-const isAdmin = require("../partials/isAdmin");
+const isAdmin = require("../partials/_isAdminUser");
 const chatRoom = require("../../models/chatRoom");
 module.exports = async function (req, res, next) {
   let roomId = req.params.roomId;

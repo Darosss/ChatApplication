@@ -3,23 +3,27 @@ const router = express.Router();
 const user = require("../models/user");
 const range = require("../models/range");
 const chatRoom = require("../models/chatRoom");
-const dir = "users";
+
 router.get("/", async (req, res) => {
   let users;
   try {
-    users = await user.find({}).populate("ranges");
-  } catch {}
-
-  res.render(dir + "/index", {
-    users: users,
-  });
+    users = await user.find({}, { password: 0, __v: 0 });
+    res.send({ usersList: users });
+  } catch {
+    res.send({ message: "Can't get users" });
+  }
 });
+
 //Get user by id
-router.get("/edit/:id", async (req, res) => {
-  const userEdit = await user.findById(req.params.id).populate("ranges");
+router.get("/:userId", async (req, res) => {
+  const userEdit = await user.findById(req.params.userId, {
+    password: 0,
+    __v: 0,
+    createdAt: 0,
+  });
   const ranges = await range.find({});
   const chatRooms = await chatRoom.find({ createdBy: userEdit.id });
-  res.render(dir + "/edit", {
+  res.send({
     user: userEdit,
     ranges: ranges,
     chatRooms: chatRooms,
@@ -27,23 +31,36 @@ router.get("/edit/:id", async (req, res) => {
 });
 
 //Edit user by id route
-router.post("/edit/:id", async (req, res) => {
+router.post("/edit/:userId", async (req, res) => {
+  const body = req.body;
   const update = {
-    username: req.body.name,
-    ranges: req.body.ranges,
+    username: body.username,
+    firstname: body.firstname,
+    surname: body.surname,
+    country: body.country,
+    gender: body.gender,
+    nickColor: body.nickColor,
+    email: body.email,
+    phoneNumber: body.phoneNumber,
+    ranges: body.ranges,
   };
   try {
-    await user.findByIdAndUpdate(req.params.id, update);
-    res.redirect("/" + dir);
+    await user.findByIdAndUpdate(req.params.userId, update);
+    res.send({ message: "User edited" });
   } catch (e) {
+    res.send({ message: "Can't edit user" });
     console.log(e);
   }
 });
+
 //Ban user by id route
-router.post("/ban/:id", async (req, res) => {
-  let bannedDate = new Date();
-  let banExpiresDate = new Date();
-  let banMinutes = banExpiresDate.getMinutes() + parseInt(req.body.banTime);
+router.post("/ban/:userId/", async (req, res) => {
+  let banTime = req.body.banTime;
+  if (!banTime) banTime = 5;
+
+  let bannedDate = new Date(),
+    banExpiresDate = new Date();
+  let banMinutes = banExpiresDate.getMinutes() + parseInt(banTime);
   banExpiresDate.setMinutes(banMinutes);
 
   const update = {
@@ -52,21 +69,24 @@ router.post("/ban/:id", async (req, res) => {
     banExpiresDate: banExpiresDate,
   };
   try {
-    await user.findByIdAndUpdate(req.params.id, update);
-    res.redirect("/" + dir);
+    await user.findByIdAndUpdate(req.params.userId, update);
+    res.send({ message: "User banned" });
   } catch (e) {
-    console.log(e);
+    //Fe. add validation if admin want to ban admin or sth like that
+    res.send({ message: "User can't be banned" });
   }
 });
+
 //Unban user by id route
-router.post("/unban/:id", async (req, res) => {
+router.post("/unban/:userId", async (req, res) => {
   const update = {
     isBanned: false,
   };
   try {
-    await user.findByIdAndUpdate(req.params.id, update);
-    res.redirect("/" + dir);
+    await user.findByIdAndUpdate(req.params.userId, update);
+    res.send({ message: "User unbanned" });
   } catch (e) {
+    res.send({ message: "User can't be unbanned" });
     console.log(e);
   }
 });

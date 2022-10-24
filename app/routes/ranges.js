@@ -1,23 +1,20 @@
 const express = require("express");
 const router = express.Router();
 const range = require("../models/range");
-const dir = "ranges";
+const isAdmin = require("../routes/middlewares/isAdmin");
+
 router.get("/", async (req, res) => {
   let ranges;
   try {
-    ranges = await range.find({}).populate("createdBy");
+    ranges = await range
+      .find({}, { __v: 0 })
+      .populate("createdBy", "_id username");
   } catch (error) {}
-  res.render(dir + "/index", {
-    ranges: ranges,
-  });
-});
-
-router.get("/create", (req, res) => {
-  res.render(dir + "/create");
+  res.send({ ranges: ranges });
 });
 
 //Create new range
-router.post("/create", async (req, res) => {
+router.post("/create", isAdmin, async (req, res) => {
   let creatorName = req.session.passport.user;
   let name = req.body.name;
   const newRange = new range({
@@ -26,43 +23,45 @@ router.post("/create", async (req, res) => {
   });
   try {
     await newRange.save();
-    res.redirect("../" + dir);
+    console.log("Created new range");
   } catch (error) {
     console.log("Cannot create range", error);
   }
 });
 
 //Get range by id
-router.get("/edit/:id", async (req, res) => {
-  const rangeEdit = await range.findById(req.params.id);
+router.get("/:id/", isAdmin, async (req, res) => {
+  const rangeEdit = await range.findById(req.params.id, { __v: 0 });
+  res.send({ range: rangeEdit });
 
-  res.render(dir + "/edit", {
-    range: rangeEdit,
-  });
+  //TODO try
 });
 
 //Edit range by id route
-router.post("/edit/:id", async (req, res) => {
+router.post("/edit/:id/", isAdmin, async (req, res) => {
   const update = {
     name: req.body.name,
   };
   try {
     await range.findByIdAndUpdate(req.params.id, update);
 
-    res.redirect("/" + dir);
+    res.send({ message: "Successfully updated range" });
   } catch (e) {
+    res.send({ message: "Can't update range" });
     console.log(e);
   }
 });
+
 //Remove range route
-router.delete("/edit/:id", async (req, res) => {
-  let editRange;
+router.delete("/delete/:id/", isAdmin, async (req, res) => {
+  let rangeToDelete;
   try {
-    editRange = await range.findById(req.params.id);
-    await editRange.remove();
-    res.redirect("../../" + dir);
+    rangeToDelete = await range.findById(req.params.id);
+    await rangeToDelete.remove();
+    res.send({ message: "Successfully deleted range" });
   } catch {
-    res.redirect("back");
+    res.send({ message: "Can't delete range" });
   }
 });
+
 module.exports = router;

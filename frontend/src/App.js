@@ -2,15 +2,17 @@ import "./App.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Routes, Route } from "react-router-dom";
-import Home from "./components/Home";
+import NavigationLink from "./components/NavigationLink";
 import Loading from "./components/Loading";
+import Home from "./components/Home";
 import Chats from "./components/Chats";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Profil from "./components/profil/Profil";
 import Rooms from "./components/rooms/Rooms";
-import NavigationLink from "./components/NavigationLink";
 import Logout from "./components/Logout";
+import Users from "./components/users/Users";
+import Ranges from "./components/ranges/Ranges";
 function App() {
   const [auth, setAuth] = useState(null);
   useEffect(() => {
@@ -27,9 +29,9 @@ function App() {
     return <Loading />;
   }
   return (
-    <div className="App">
-      <nav className="navbar navbar-expand-sm navbar-dark bg-dark hidden-xs">
-        <span className="navbar-brand  m-2 ">Chat room</span>
+    <div>
+      <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
+        <span className="navbar-brand m-2">Chat room</span>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             <NavigationLink url="/" name="Home" />
@@ -38,6 +40,16 @@ function App() {
             {!auth ? <NavigationLink url="/register" name="Register" /> : null}
             {auth ? <NavigationLink url="/rooms" name="Rooms" /> : null}
             {auth ? <NavigationLink url="/profil" name="Profil" /> : null}
+          </ul>
+        </div>
+        <div className="m-2">
+          <ul className="navbar-nav mr-auto">
+            {auth && auth.administrator ? (
+              <NavigationLink url="/users" name="Users" />
+            ) : null}
+            {auth && auth.administrator ? (
+              <NavigationLink url="/ranges" name="Ranges" />
+            ) : null}
             {auth ? <Logout /> : null}
           </ul>
         </div>
@@ -46,16 +58,28 @@ function App() {
       <Routes>
         <Route
           path="/login"
-          element={auth ? <Profil auth={auth} /> : <Login />}
+          element={auth ? <Home auth={auth} /> : <Login />}
         />
         <Route path="/" element={<Home auth={auth} />} />
         <Route path="/chats" element={<Chats />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/register"
+          element={!auth ? <Register /> : <Home auth={auth} />}
+        />
         <Route
           path="/profil"
-          element={auth ? <Profil auth={auth} /> : <Chats />}
+          element={auth ? <Profil auth={auth} /> : <Login />}
         />
         <Route path="/rooms" element={auth ? <Rooms /> : <Login />} />
+
+        <Route
+          path="/users"
+          element={auth && auth.administrator ? <Users /> : <Home />}
+        />
+        <Route
+          path="/ranges"
+          element={auth && auth.administrator ? <Ranges /> : <Home />}
+        />
       </Routes>
     </div>
   );
