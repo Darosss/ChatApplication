@@ -1,26 +1,13 @@
 import React, { useState } from "react";
-import axios from "axios";
 import EditUserModal from "./EditUserModal";
-// import EditCreateRoomModal from "./EditCreateRoomModal";
-// import DeleteRoomModal from "./DeleteRoomModal";
 
 function UsersList(props) {
-  const [selectedUser, setSelectedUser] = useState([]);
-  const [availableRanges, setAvailableRanges] = useState([]);
+  const [selectedUserId, setSelectedUserId] = useState("");
 
   const showUser = (e) => {
     const buttonId = e.target.id;
-    const axiosConfigRoom = {
-      method: "get",
-      withCredentials: true,
-      url: "http://localhost:5000/users/" + buttonId,
-    };
-    axios(axiosConfigRoom).then((res) => {
-      setSelectedUser(res.data.user);
-      setAvailableRanges(res.data.ranges);
-    });
+    setSelectedUserId(buttonId);
   };
-
   //   const getBanUser = (e) => {
   //     const buttonId = e.target.id;
   //     const axiosConfigRoom = {
@@ -33,6 +20,7 @@ function UsersList(props) {
   //       setSelectedUser(res.data.chatRoomDelete);
   //     });
   //   };
+
   const banButton = (userId) => {
     return (
       <button
@@ -93,9 +81,7 @@ function UsersList(props) {
       <EditUserModal
         id="edit-user"
         sectionName="Edit user"
-        postSuffix={selectedUser._id}
-        user={selectedUser}
-        availableRanges={availableRanges}
+        userId={selectedUserId}
       />
     </div>
   );

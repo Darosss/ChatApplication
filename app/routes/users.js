@@ -13,6 +13,7 @@ router.get("/", async (req, res) => {
     res.send({ message: "Can't get users" });
   }
 });
+
 //Get user by id
 router.get("/:userId", async (req, res) => {
   const userEdit = await user.findById(req.params.userId, {
@@ -31,14 +32,27 @@ router.get("/:userId", async (req, res) => {
 
 //Edit user by id route
 router.post("/edit/:userId", async (req, res) => {
+  const body = req.body;
+  const update = {
+    username: body.username,
+    firstname: body.firstname,
+    surname: body.surname,
+    country: body.country,
+    gender: body.gender,
+    nickColor: body.nickColor,
+    email: body.email,
+    phoneNumber: body.phoneNumber,
+    ranges: body.ranges,
+  };
   try {
-    await user.findByIdAndUpdate(req.params.userId, req.body.userDetails);
+    await user.findByIdAndUpdate(req.params.userId, update);
     res.send({ message: "User edited" });
   } catch (e) {
     res.send({ message: "Can't edit user" });
     console.log(e);
   }
 });
+
 // //Ban user by id route
 // router.post("/ban/:id", async (req, res) => {
 //   let bannedDate = new Date();

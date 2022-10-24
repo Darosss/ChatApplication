@@ -1,11 +1,74 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+
 function EditUserModal(props) {
-  const [userDetails, setUserDetails] = useState({});
+  const [userId, setUserId] = useState("");
+
+  const [username, setUsername] = useState("");
+  const [userRanges, setUserRanges] = useState([]);
+  const [firstname, setFirstname] = useState("");
+  const [surname, setSurname] = useState("");
+  const [country, setCountry] = useState("");
+  const [gender, setGender] = useState("");
+  const [nickColor, setNickColor] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+
+  const [ranges, setRanges] = useState([]);
+
   const [postInfo, setPostInfo] = useState("");
   useEffect(() => {
-    setUserDetails(props.user);
+    if (!props.userId) return;
+    setUserId(props.userId);
   }, [props]);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const axiosConfig = {
+      method: "get",
+      withCredentials: true,
+      url: "http://localhost:5000/users/" + userId,
+    };
+
+    axios(axiosConfig).then((res) => {
+      const userDetails = res.data.user;
+      setUsername(userDetails.username);
+      setFirstname(userDetails.firstname);
+      setSurname(userDetails.surname);
+      setUserRanges(userDetails.ranges);
+      setCountry(userDetails.country);
+      setGender(userDetails.gender);
+      setPhoneNumber(userDetails.phoneNumber);
+      setNickColor(userDetails.nickColor);
+      setEmail(userDetails.email);
+
+      setRanges(res.data.ranges);
+    });
+  }, [userId]);
+
+  const editUser = () => {
+    const axiosEditUser = {
+      method: "post",
+      data: {
+        username: username,
+        firstname: firstname,
+        surname: surname,
+        country: country,
+        gender: gender,
+        nickColor: nickColor,
+        email: email,
+        phoneNumber: phoneNumber,
+        ranges: userRanges,
+      },
+      withCredentials: true,
+      url: "http://localhost:5000/users/edit/" + userId,
+    };
+    axios(axiosEditUser).then((res) => {
+      setPostInfo(res.data.message);
+    });
+    window.location.reload(false);
+  };
 
   const createSelect = (label) => {
     return (
@@ -15,7 +78,7 @@ function EditUserModal(props) {
           className="form-select bg-dark text-light"
           id="user-ranges"
           multiple
-          value={userDetails.ranges}
+          value={userRanges}
           aria-label={"multiple select " + label}
           onChange={(e) => handleMultipleSelectRanges(e.target.selectedOptions)}
         >
@@ -25,30 +88,8 @@ function EditUserModal(props) {
     );
   };
 
-  const editUser = () => {
-    const axiosEditUser = {
-      method: "post",
-      data: {
-        userDetails: userDetails,
-      },
-      withCredentials: true,
-      url: "http://localhost:5000/users/edit/" + props.postSuffix,
-    };
-    axios(axiosEditUser).then((res) => {
-      setPostInfo(res.data.message);
-    });
-    window.location.reload(false);
-  };
-
-  const setUserDetailsOnChange = (e) => {
-    const { name, value } = e;
-    setUserDetails((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
   const createSelectRangesOptions = () => {
-    return props.availableRanges.map((range, index) => {
+    return ranges.map((range, index) => {
       return (
         <option key={index} value={range._id}>
           {range.name}
@@ -60,40 +101,40 @@ function EditUserModal(props) {
   /* FIXME remove repeat */
   const handleMultipleSelectRanges = (options) => {
     const selectedOptions = [...options].map((option) => option.value);
-
-    setUserDetails((prevState) => ({
-      ...prevState,
-      ["ranges"]: selectedOptions,
-    }));
+    setUserRanges(selectedOptions);
   };
 
   /* FIXME Repeat */
-  const userDetailsInput = (label, name, value, type = "text") => {
+
+  const setUserDetailsOnChange = (e, setStateFn) => {
+    setStateFn(e);
+  };
+
+  const userDetailsInput = (label, value, setStateFn) => {
     return (
       <div>
         <label className="form-label ">{label}</label>
         <input
-          name={name}
-          type={type}
+          type="text"
           className="form-control"
           value={value || ""}
-          onChange={(e) => setUserDetailsOnChange(e.target)}
+          onChange={(e) => setUserDetailsOnChange(e.target.value, setStateFn)}
         />
       </div>
     );
   };
-
   const createModalBody = () => {
     return (
       <div>
-        {userDetailsInput("Username", "username", userDetails.username)}
-        {userDetailsInput("Firstname", "firstname", userDetails.firstname)}
-        {userDetailsInput("Surname", "surname", userDetails.surname)}
-        {userDetailsInput("Email", "email", userDetails.email)}
-        {userDetailsInput("Phone", "phoneNumber", userDetails.phoneNumber)}
-        {userDetailsInput("Nick Color", "nickColor", userDetails.nickColor)}
+        {userDetailsInput("Username", username, setUsername)}
+        {userDetailsInput("Firstname", firstname, setFirstname)}
+        {userDetailsInput("Surname", surname, setUsername)}
+        {userDetailsInput("Email", email, setEmail)}
+        {userDetailsInput("Phone", phoneNumber, setPhoneNumber)}
+        {userDetailsInput("Nick Color", nickColor, setNickColor)}
+        {userDetailsInput("Gender", gender, setGender)}
+        {userDetailsInput("Country", country, setCountry)}
         {createSelect("Available ranges")}
-
         <p className="text-danger font-weight-bold"> {postInfo} </p>
       </div>
     );
