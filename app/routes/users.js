@@ -58,7 +58,7 @@ router.post("/ban/:userId/", async (req, res) => {
   let banTime = req.body.banTime;
   if (!banTime) banTime = 5;
 
-  let bannedDate,
+  let bannedDate = new Date(),
     banExpiresDate = new Date();
   let banMinutes = banExpiresDate.getMinutes() + parseInt(banTime);
   banExpiresDate.setMinutes(banMinutes);
@@ -76,16 +76,18 @@ router.post("/ban/:userId/", async (req, res) => {
     res.send({ message: "User can't be banned" });
   }
 });
-// //Unban user by id route
-// router.post("/unban/:id", async (req, res) => {
-//   const update = {
-//     isBanned: false,
-//   };
-//   try {
-//     await user.findByIdAndUpdate(req.params.userId, update);
-//     res.send({ message: "User unbanned" });
-//   } catch (e) {
-//     console.log(e);
-//   }
-// });
+
+//Unban user by id route
+router.post("/unban/:userId", async (req, res) => {
+  const update = {
+    isBanned: false,
+  };
+  try {
+    await user.findByIdAndUpdate(req.params.userId, update);
+    res.send({ message: "User unbanned" });
+  } catch (e) {
+    res.send({ message: "User can't be unbanned" });
+    console.log(e);
+  }
+});
 module.exports = router;
