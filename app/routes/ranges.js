@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const range = require("../models/range");
+const isAdmin = require("../routes/middlewares/isAdmin");
+
 router.get("/", async (req, res) => {
   let ranges;
   try {
@@ -12,7 +14,7 @@ router.get("/", async (req, res) => {
 });
 
 //Create new range
-router.post("/create", async (req, res) => {
+router.post("/create", isAdmin, async (req, res) => {
   let creatorName = req.session.passport.user;
   let name = req.body.name;
   const newRange = new range({
@@ -28,7 +30,7 @@ router.post("/create", async (req, res) => {
 });
 
 //Get range by id
-router.get("/:id/", async (req, res) => {
+router.get("/:id/", isAdmin, async (req, res) => {
   const rangeEdit = await range.findById(req.params.id, { __v: 0 });
   res.send({ range: rangeEdit });
 
@@ -36,7 +38,7 @@ router.get("/:id/", async (req, res) => {
 });
 
 //Edit range by id route
-router.post("/edit/:id/", async (req, res) => {
+router.post("/edit/:id/", isAdmin, async (req, res) => {
   const update = {
     name: req.body.name,
   };
@@ -51,7 +53,7 @@ router.post("/edit/:id/", async (req, res) => {
 });
 
 //Remove range route
-router.delete("/delete/:id/", async (req, res) => {
+router.delete("/delete/:id/", isAdmin, async (req, res) => {
   let rangeToDelete;
   try {
     rangeToDelete = await range.findById(req.params.id);
