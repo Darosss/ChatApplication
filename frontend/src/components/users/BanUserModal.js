@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
+import ModalCore from "../Modal";
 import axios from "axios";
 
 function EditUserModal(props) {
@@ -10,9 +9,6 @@ function EditUserModal(props) {
   // TODO: add ban info
 
   const [postInfo, setPostInfo] = useState("");
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   const banUser = () => {
     const axiosConfig = {
@@ -30,7 +26,7 @@ function EditUserModal(props) {
     window.location.reload(false);
   };
 
-  const createModalBody = () => {
+  const modalBody = () => {
     return (
       <div>
         <label className="form-label ">Ban time (empty = 5min)</label>
@@ -46,28 +42,7 @@ function EditUserModal(props) {
   };
 
   return (
-    <>
-      <Button variant="danger w-100" onClick={handleShow}>
-        Ban user
-      </Button>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Ban user - {props.username} </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="bg-dark text-light">
-          {createModalBody()}
-        </Modal.Body>
-        <Modal.Footer className="bg-dark">
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="danger" onClick={banUser}>
-            Ban
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+    <ModalCore actionName="Ban user" body={modalBody()} onClickFn={banUser} />
   );
 }
 
