@@ -58,15 +58,7 @@ function UsersList(props) {
               <tr key={index}>
                 <td> {user.username}</td>
                 <td>
-                  <button
-                    id={user._id}
-                    className="btn btn-primary w-100"
-                    data-toggle="modal"
-                    data-target="#edit-user"
-                    onClick={(e) => setSelectedUserId(e.target.id)}
-                  >
-                    EDIT
-                  </button>
+                  <EditUserModal sectionName="Edit user" userId={user._id} />
                 </td>
                 <td>
                   {/* if banned unban if not ban */}
@@ -77,11 +69,7 @@ function UsersList(props) {
           })}
         </tbody>
       </table>
-      <EditUserModal
-        id="edit-user"
-        sectionName="Edit user"
-        userId={selectedUserId}
-      />
+
       <BanUserModal
         id="ban-user"
         sectionName="Ban user"
