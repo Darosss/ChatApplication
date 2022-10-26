@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 
 function EditUserModal(props) {
-  const [userId, setUserId] = useState("");
+  const [show, setShow] = useState(false);
+
   const [banTime, setBanTime] = useState("");
-  // add ban info
+  // TODO: add ban info
 
   const [postInfo, setPostInfo] = useState("");
 
-  useEffect(() => {
-    if (!props.userId) return;
-    setUserId(props.userId);
-  }, [props]);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const banUser = () => {
     const axiosConfig = {
@@ -20,12 +21,13 @@ function EditUserModal(props) {
         banTime: banTime,
       },
       withCredentials: true,
-      url: "http://localhost:5000/users/ban/" + userId,
+      url: "http://localhost:5000/users/ban/" + props.userId,
     };
 
     axios(axiosConfig).then((res) => {
       setPostInfo(res.data.message);
     });
+    window.location.reload(false);
   };
 
   const createModalBody = () => {
@@ -43,54 +45,30 @@ function EditUserModal(props) {
     );
   };
 
-  const createModal = () => {
-    return (
-      <div
-        className="modal fade"
-        id={props.id}
-        tabIndex="-1"
-        role="dialog"
-        aria-labelledby="createRoomLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered" role="document">
-          <div className="modal-content bg-dark">
-            <div className="modal-header">
-              <h5 className="modal-title" id="createRoomLabel">
-                {props.sectionName}
-              </h5>
-              <button
-                className="close bg-secondary"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">{createModalBody()}</div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-dismiss="modal"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={banUser}
-                className="btn btn-danger"
-              >
-                {props.sectionName}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
+  return (
+    <>
+      <Button variant="danger w-100" onClick={handleShow}>
+        Ban user
+      </Button>
 
-  return createModal();
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Ban user - {props.username} </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="bg-dark text-light">
+          {createModalBody()}
+        </Modal.Body>
+        <Modal.Footer className="bg-dark">
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="danger" onClick={banUser}>
+            Ban
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
 }
 
 export default EditUserModal;

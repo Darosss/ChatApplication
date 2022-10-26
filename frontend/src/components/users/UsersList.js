@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import axios from "axios";
 import EditUserModal from "./EditUserModal";
 import BanUserModal from "./BanUserModal";
 
 function UsersList(props) {
-  const [selectedUserId, setSelectedUserId] = useState("");
-
   const unbanUser = (e) => {
     const axiosConfig = {
       method: "post",
@@ -14,34 +12,6 @@ function UsersList(props) {
     };
     axios(axiosConfig);
     window.location.reload(false);
-  };
-
-  const banButton = (userId) => {
-    return (
-      <button
-        id={userId}
-        className="btn btn-danger w-100"
-        data-toggle="modal"
-        data-target="#ban-user"
-        onClick={(e) => setSelectedUserId(e.target.id)}
-      >
-        BAN
-      </button>
-    );
-  };
-
-  const unbanButton = (userId) => {
-    return (
-      <button
-        id={userId}
-        className="btn btn-secondary w-100"
-        data-toggle="modal"
-        data-target="#unban-user"
-        onClick={(e) => unbanUser(e.target.id)}
-      >
-        UNBAN
-      </button>
-    );
   };
 
   return (
@@ -61,20 +31,23 @@ function UsersList(props) {
                   <EditUserModal sectionName="Edit user" userId={user._id} />
                 </td>
                 <td>
-                  {/* if banned unban if not ban */}
-                  {user.isBanned ? unbanButton(user._id) : banButton(user._id)}
+                  {user.isBanned ? (
+                    <button
+                      id={user._id}
+                      className="btn btn-secondary w-100"
+                      onClick={(e) => unbanUser(e.target.id)}
+                    >
+                      Unban
+                    </button>
+                  ) : (
+                    <BanUserModal userId={user._id} username={user.username} />
+                  )}
                 </td>
               </tr>
             );
           })}
         </tbody>
       </table>
-
-      <BanUserModal
-        id="ban-user"
-        sectionName="Ban user"
-        userId={selectedUserId}
-      />
     </div>
   );
 }
