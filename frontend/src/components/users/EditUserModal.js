@@ -141,12 +141,12 @@ function EditUserModal(props) {
   return (
     <>
       <Button variant="primary w-100" onClick={handleShow}>
-        {props.sectionName}
+        Edit user
       </Button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{props.sectionName}</Modal.Title>
+          <Modal.Title>Edit user - {props.username} </Modal.Title>
         </Modal.Header>
         <Modal.Body className="bg-dark text-light">
           {createModalBody()}{" "}
@@ -156,7 +156,7 @@ function EditUserModal(props) {
             Close
           </Button>
           <Button variant="primary" onClick={editUser}>
-            {props.sectionName}
+            Edit
           </Button>
         </Modal.Footer>
       </Modal>

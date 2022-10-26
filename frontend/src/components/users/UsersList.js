@@ -28,7 +28,7 @@ function UsersList(props) {
               <tr key={index}>
                 <td> {user.username}</td>
                 <td>
-                  <EditUserModal sectionName="Edit user" userId={user._id} />
+                  <EditUserModal userId={user._id} username={user.username} />
                 </td>
                 <td>
                   {user.isBanned ? (
