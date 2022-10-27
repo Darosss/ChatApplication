@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import ModalCore from "../Modal";
 
 function EditProfileModal(props) {
   const [oldPassword, setOldPassword] = useState("");
@@ -13,6 +14,7 @@ function EditProfileModal(props) {
   const [gender, setGender] = useState("");
   const [nickColor, setNickColor] = useState("");
   const [postInfo, setPostInfo] = useState("");
+
   useEffect(() => {
     setFirstname(props.user.firstname);
     setSurname(props.user.surname);
@@ -48,157 +50,68 @@ function EditProfileModal(props) {
     window.location.reload(false);
   };
 
-  const createModalBody = () => {
+  const createProfileInput = (name, onChangeFn, value = "", type = "text") => {
     return (
-      <div>
-        {createProfileInputs()}
-        <p className="text-danger font-weight-bold"> {postInfo} </p>
-      </div>
+      <input
+        name={name}
+        type={type}
+        className="form-control"
+        value={value}
+        onChange={(e) => onChangeFn(e.target.value)}
+      />
+    );
+  };
+  const createTwoInputGroup = (labelName, firstInput, secondInput) => {
+    return (
+      <>
+        <label className="form-label">{labelName}</label>
+        <div className="input-group">
+          {firstInput}
+          {secondInput}
+        </div>
+      </>
     );
   };
 
-  const createModal = () => {
-    return (
-      <div
-        className="modal fade"
-        id={props.id}
-        tabIndex="-1"
-        role="dialog"
-        aria-labelledby="editProfileLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered" role="document">
-          <div className="modal-content bg-dark">
-            <div className="modal-header">
-              <h5 className="modal-title" id="editProfileLabel">
-                {props.sectionName}
-              </h5>
-              <button
-                className="close bg-secondary"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">{createModalBody()}</div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-dismiss="modal"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={editProfile}
-                className="btn btn-primary"
-              >
-                Edit
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const createProfileInputs = () => {
+  const modalBody = () => {
     return (
       <div>
-        <label className="form-label">Old password / New password</label>
-        <div className="input-group">
-          <input
-            name="oldPassword"
-            type="password"
-            className="form-control"
-            onChange={(e) => setOldPassword(e.target.value)}
-          />
-          <input
-            name="password"
-            type="password"
-            className="form-control"
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-        </div>
-
-        <label className="form-label">Firstname and surname</label>
-        <div className="input-group">
-          <input
-            name="firstname"
-            value={firstname || ""}
-            type="text"
-            className="form-control"
-            onChange={(e) => setFirstname(e.target.value)}
-          />
-          <input
-            name="surname"
-            value={surname || ""}
-            type="text"
-            className="form-control"
-            onChange={(e) => setSurname(e.target.value)}
-          />
-        </div>
+        {createTwoInputGroup(
+          "Old password / New password",
+          createProfileInput("oldPassword", setOldPassword, "", "password"),
+          createProfileInput("newPassword", setNewPassword, "", "password")
+        )}
+        {createTwoInputGroup(
+          "Firstname / Surname",
+          createProfileInput("firstname", setFirstname, firstname),
+          createProfileInput("surname", setSurname, surname)
+        )}
 
         <label className="form-label">Email</label>
-        <input
-          name="email"
-          type="text"
-          className="form-control"
-          value={email || ""}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-
+        {createProfileInput("email", setEmail, email)}
         <label className="form-label">Birthday</label>
-        <input
-          name="birthday"
-          type="date"
-          value={birthday ? birthday.split("T")[0] : ""}
-          className="form-control"
-          onChange={(e) => setBirthday(e.target.value)}
-        />
-
+        {createProfileInput("birthday", setBirthday, birthday)}
         <label className="form-label">Country</label>
-        <input
-          name="country"
-          type="text"
-          value={country || ""}
-          className="form-control"
-          onChange={(e) => setCountry(e.target.value)}
-        />
-
+        {createProfileInput("country", setCountry, country)}
         <label className="form-label">Gender</label>
-        <input
-          name="gender"
-          type="text"
-          value={gender || ""}
-          className="form-control"
-          onChange={(e) => setGender(e.target.value)}
-        />
-
+        {createProfileInput("gender", setGender, gender)}
         <label className="form-label">Phone</label>
-        <input
-          name="phone"
-          type="text"
-          value={phone || ""}
-          className="form-control"
-          onChange={(e) => setPhone(e.target.value)}
-        />
-
+        {createProfileInput("phone", setPhone, phone)}
         <label className="form-label">Nick color</label>
-        <input
-          name="nickColor"
-          value={nickColor || ""}
-          type="text"
-          className="form-control"
-          onChange={(e) => setNickColor(e.target.value)}
-        />
+        {createProfileInput("nickColor", setGender, nickColor)}
       </div>
     );
   };
 
-  return createModal();
+  return (
+    <ModalCore
+      actionName="Edit"
+      body={modalBody()}
+      onClickFn={editProfile}
+      actionBtnVariant="danger"
+      postInfo={postInfo}
+    />
+  );
 }
 
 export default EditProfileModal;
