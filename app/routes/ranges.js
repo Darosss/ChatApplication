@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
 
 //Create new range
 router.post("/create", isAdmin, async (req, res) => {
-  let creatorName = req.session.passport.user;
+  let creatorName = req.user;
   let name = req.body.name;
   const newRange = new range({
     name: name,
