@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
+import ModalCore from "../Modal";
 import axios from "axios";
 
 function EditUserModal(props) {
-  const [show, setShow] = useState(false);
-
   const [username, setUsername] = useState("");
   const [userRanges, setUserRanges] = useState([]);
   const [firstname, setFirstname] = useState("");
@@ -19,9 +16,6 @@ function EditUserModal(props) {
   const [ranges, setRanges] = useState([]);
 
   const [postInfo, setPostInfo] = useState("");
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   useEffect(() => {
     const axiosConfig = {
@@ -66,8 +60,6 @@ function EditUserModal(props) {
     axios(axiosEditUser).then((res) => {
       setPostInfo(res.data.message);
     });
-    handleClose();
-    // window.location.reload(false);
   };
 
   const createSelect = (label) => {
@@ -121,7 +113,7 @@ function EditUserModal(props) {
     setStateFn(e);
   };
 
-  const createModalBody = () => {
+  const modalBody = () => {
     return (
       <div>
         {userDetailsInput("Username", username, setUsername)}
@@ -133,34 +125,18 @@ function EditUserModal(props) {
         {userDetailsInput("Gender", gender, setGender)}
         {userDetailsInput("Country", country, setCountry)}
         {createSelect("Available ranges")}
-        <p className="text-danger font-weight-bold"> {postInfo} </p>
       </div>
     );
   };
 
   return (
-    <>
-      <Button variant="primary w-100" onClick={handleShow}>
-        Edit user
-      </Button>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit user - {props.username} </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="bg-dark text-light">
-          {createModalBody()}{" "}
-        </Modal.Body>
-        <Modal.Footer className="bg-dark">
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={editUser}>
-            Edit
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+    <ModalCore
+      actionName="Edit user"
+      body={modalBody()}
+      onClickFn={editUser}
+      actionBtnVariant="primary"
+      postInfo={postInfo}
+    />
   );
 }
 
