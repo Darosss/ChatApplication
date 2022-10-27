@@ -20,7 +20,7 @@ function Rooms() {
   return (
     <div className="App">
       <header className="App-header">
-        <div className="d-inline-flex">
+        <div>
           <div className="m-1">Your chat rooms</div>
           <EditCreateRoomModal sectionName="Create" />
         </div>
