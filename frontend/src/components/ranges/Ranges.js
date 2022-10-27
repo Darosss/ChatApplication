@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import EditRangeModal from "./EditRangeModal";
+import EditCreateRangeModal from "./EditCreateRangeModal";
 import DeleteRangeModal from "./DeleteRangeModal";
 
 function Ranges() {
   const [avilableRanges, setAvailableRanges] = useState([]);
-  const [selectedRangeId, setSelectedRangeId] = useState("");
 
   useEffect(() => {
     const axiosConfig = {
@@ -20,7 +19,12 @@ function Ranges() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Ranges</h1>
+        <div className="d-flex w-25">
+          <div className="w-100">Ranges</div>
+          <div className="w-100">
+            <EditCreateRangeModal sectionName="Create" />
+          </div>
+        </div>
         <div className="container d-flex justify-content-center">
           <table className="table table-sm table-dark w-50">
             <thead>
@@ -39,42 +43,23 @@ function Ranges() {
                     <td>{range.createdBy.username}</td>
                     <td>{range.createdAt.split("T")[0]}</td>
                     <td>
-                      <button
-                        id={range._id}
-                        className="btn btn-primary w-100"
-                        data-toggle="modal"
-                        data-target="#edit-range"
-                        onClick={(e) => setSelectedRangeId(e.target.id)}
-                      >
-                        EDIT
-                      </button>
+                      <EditCreateRangeModal
+                        sectionName="Edit"
+                        rangeId={range._id}
+                        isEdit="true"
+                      />
                     </td>
                     <td>
-                      <button
-                        id={range._id}
-                        className="btn btn-danger w-100"
-                        data-toggle="modal"
-                        data-target="#delete-range"
-                        onClick={(e) => setSelectedRangeId(e.target.id)}
-                      >
-                        DELETE
-                      </button>
+                      <DeleteRangeModal
+                        rangeName={range.name}
+                        rangeId={range._id}
+                      />
                     </td>
                   </tr>
                 );
               })}
             </tbody>
           </table>
-          <EditRangeModal
-            id="edit-range"
-            sectionName="Edit range"
-            rangeId={selectedRangeId}
-          />
-          <DeleteRangeModal
-            id="delete-range"
-            sectionName="Delete range"
-            rangeId={selectedRangeId}
-          />
         </div>
       </header>
     </div>

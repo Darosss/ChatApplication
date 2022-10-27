@@ -9,13 +9,7 @@ function ProfilDetails({ user }) {
           <tr>
             <td></td>
             <td>
-              <button
-                className="btn btn-primary w-50"
-                data-toggle="modal"
-                data-target="#edit-profile"
-              >
-                Edit
-              </button>
+              <EditProfile user={user} />
             </td>
           </tr>
           <tr>
@@ -76,7 +70,6 @@ function ProfilDetails({ user }) {
           ) : null}
         </tbody>
       </table>
-      <EditProfile id={"edit-profile"} user={user} />
     </div>
   );
 }

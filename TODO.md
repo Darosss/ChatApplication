@@ -47,12 +47,10 @@ Refactor to react from ejs
 
     [] refactor: ranges route
     [] refactor: ranges frontend
-        [] all ranges list
+        [x] all ranges list
         [] add ranges
-
-
-        [] remove ranges
-        [] edit ranges
+        [x] remove ranges
+        [x] edit ranges
 
     [] refactor: users route
     [] refactor: users frontend
