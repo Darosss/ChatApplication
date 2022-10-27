@@ -1,21 +1,39 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import ModalCore from "../Modal";
+
 function EditCreateRoomModal(props) {
+  const [usersList, setUsersList] = useState([]);
+  const [availableRanges, setAvailableRanges] = useState([]);
+
   const [roomName, setRoomName] = useState("");
   const [roomRanges, setRoomRanges] = useState([]);
   const [roomAllowedUsers, setRoomAllowedUsers] = useState([]);
   const [roomBannedUsers, setRoomBannedUsers] = useState([]);
+
   const [postInfo, setPostInfo] = useState("");
+
   useEffect(() => {
-    if (props.editedRoom) {
-      setRoomName(props.editedRoom.name);
-      setRoomRanges(props.editedRoom.availableRanges);
-      setRoomBannedUsers(props.editedRoom.bannedUsers);
-      setRoomAllowedUsers(props.editedRoom.allowedUsers);
-    }
+    const axiosConfigRoom = {
+      method: "get",
+      withCredentials: true,
+      url:
+        "http://localhost:5000/rooms/" +
+        (props.roomId ? props.roomId : "create"),
+    };
+    axios(axiosConfigRoom).then((res) => {
+      setUsersList(res.data.usersList);
+      setAvailableRanges(res.data.availableRanges);
+      if (!props.roomId) return; //if roomId = undefined is not editing so return
+
+      setRoomName(res.data.chatRoom.name);
+      setRoomRanges(res.data.chatRoom.availableRanges);
+      setRoomAllowedUsers(res.data.chatRoom.allowedUsers);
+      setRoomBannedUsers(res.data.chatRoom.bannedUsers);
+    });
   }, [props]);
 
-  const createNewRoom = () => {
+  const createOrEdit = () => {
     const axiosCreateConfig = {
       method: "post",
       data: {
@@ -25,15 +43,16 @@ function EditCreateRoomModal(props) {
         bannedUsers: roomBannedUsers,
       },
       withCredentials: true,
-      url: "http://localhost:5000/rooms/" + props.postSuffix,
+      url:
+        "http://localhost:5000/rooms/" +
+        (props.roomId ? props.roomId : "create"),
     };
     axios(axiosCreateConfig).then((res) => {
       setPostInfo(res.data.message);
     });
-    window.location.reload(false);
   };
 
-  const createSelect = (label, funcOnChange, funcOptions, selectValue) => {
+  const createSelect = (label, setState, funcOptions, selectValue) => {
     return (
       <div>
         <label className="form-label">{label}</label>
@@ -43,7 +62,9 @@ function EditCreateRoomModal(props) {
           multiple
           value={selectValue}
           aria-label={"multiple select " + label}
-          onChange={(e) => funcOnChange(e.target.selectedOptions)}
+          onChange={(e) =>
+            handleMultipleSelect(e.target.selectedOptions, setState)
+          }
         >
           {funcOptions()}
         </select>
@@ -52,7 +73,7 @@ function EditCreateRoomModal(props) {
   };
 
   const createSelectRangesOptions = () => {
-    return props.availableRanges.map((range, index) => {
+    return availableRanges.map((range, index) => {
       return (
         <option key={index} value={range._id}>
           {range.name}
@@ -60,8 +81,9 @@ function EditCreateRoomModal(props) {
       );
     });
   };
+
   const createSelectUsersListOptions = () => {
-    return props.usersList.map((user, index) => {
+    return usersList.map((user, index) => {
       return (
         <option key={index} value={user._id}>
           {user.username}
@@ -69,20 +91,10 @@ function EditCreateRoomModal(props) {
       );
     });
   };
-  /* FIXME remove repeat */
-  const handleMultipleSelectRanges = (options) => {
+  const handleMultipleSelect = (options, setState) => {
     const selectedOptions = [...options].map((option) => option.value);
-    setRoomRanges(selectedOptions);
+    setState(selectedOptions);
   };
-  const handleMultipleSelectUsers = (options) => {
-    const selectedOptions = [...options].map((option) => option.value);
-    setRoomAllowedUsers(selectedOptions);
-  };
-  const handleMultipleSelectBannedUsers = (options) => {
-    const selectedOptions = [...options].map((option) => option.value);
-    setRoomBannedUsers(selectedOptions);
-  };
-  /* FIXME Repeat */
 
   const createNameRoomInput = () => {
     return (
@@ -99,82 +111,42 @@ function EditCreateRoomModal(props) {
       </div>
     );
   };
-  const createModalBody = () => {
+  const modalBody = () => {
     return (
       <div>
         {createNameRoomInput()}
 
         {createSelect(
           "Available ranges",
-          handleMultipleSelectRanges,
+          setRoomRanges,
           createSelectRangesOptions,
           roomRanges
         )}
         {createSelect(
           "Allow users",
-          handleMultipleSelectUsers,
+          setRoomAllowedUsers,
           createSelectUsersListOptions,
           roomAllowedUsers
         )}
         {createSelect(
           "Ban users",
-          handleMultipleSelectBannedUsers,
+          setRoomBannedUsers,
           createSelectUsersListOptions,
           roomBannedUsers
         )}
-        <p className="text-danger font-weight-bold"> {postInfo} </p>
       </div>
     );
   };
 
-  const createModal = () => {
-    return (
-      <div
-        className="modal fade"
-        id={props.id}
-        tabIndex="-1"
-        role="dialog"
-        aria-labelledby="createRoomLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered" role="document">
-          <div className="modal-content bg-dark">
-            <div className="modal-header">
-              <h5 className="modal-title" id="createRoomLabel">
-                {props.sectionName}
-              </h5>
-              <button
-                className="close bg-secondary"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">{createModalBody()}</div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-dismiss="modal"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={createNewRoom}
-                className="btn btn-primary"
-              >
-                {props.sectionName}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  return createModal();
+  return (
+    <ModalCore
+      actionName={props.sectionName}
+      body={modalBody()}
+      onClickFn={createOrEdit}
+      actionBtnVariant="primary"
+      postInfo={postInfo}
+    />
+  );
 }
 
 export default EditCreateRoomModal;
