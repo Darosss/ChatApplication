@@ -3,7 +3,7 @@ const router = express.Router();
 const user = require("../models/user");
 const range = require("../models/range");
 const chatRoom = require("../models/chatRoom");
-
+const isAdmin = require("./middlewares/isAdmin");
 router.get("/", async (req, res) => {
   let users;
   try {
@@ -31,7 +31,7 @@ router.get("/:userId", async (req, res) => {
 });
 
 //Edit user by id route
-router.post("/edit/:userId", async (req, res) => {
+router.post("/edit/:userId", isAdmin, async (req, res) => {
   const body = req.body;
   const update = {
     username: body.username,
@@ -54,7 +54,7 @@ router.post("/edit/:userId", async (req, res) => {
 });
 
 //Ban user by id route
-router.post("/ban/:userId/", async (req, res) => {
+router.post("/ban/:userId/", isAdmin, async (req, res) => {
   let banTime = req.body.banTime;
   if (!banTime) banTime = 5;
 
@@ -78,7 +78,7 @@ router.post("/ban/:userId/", async (req, res) => {
 });
 
 //Unban user by id route
-router.post("/unban/:userId", async (req, res) => {
+router.post("/unban/:userId", isAdmin, async (req, res) => {
   const update = {
     isBanned: false,
   };
