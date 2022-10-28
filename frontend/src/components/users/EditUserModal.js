@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ModalCore from "../Modal";
 import axios from "axios";
+import EditCreateRoomModal from "../rooms/EditCreateRoomModal";
 
 function EditUserModal(props) {
   const [username, setUsername] = useState("");
@@ -12,6 +13,8 @@ function EditUserModal(props) {
   const [nickColor, setNickColor] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+
+  const [userChatRooms, setUserChatRooms] = useState([]);
 
   const [ranges, setRanges] = useState([]);
 
@@ -37,6 +40,8 @@ function EditUserModal(props) {
       setEmail(userDetails.email);
 
       setRanges(res.data.ranges);
+
+      setUserChatRooms(res.data.chatRooms);
     });
   }, [props]);
 
@@ -113,6 +118,29 @@ function EditUserModal(props) {
     setStateFn(e);
   };
 
+  const userChatRoomsList = () => {
+    if (!userChatRooms.length) return;
+    return (
+      <>
+        <p className="text-center display-6"> User chat rooms </p>
+        {userChatRooms.map((room, index) => {
+          return (
+            <div key={index}>
+              <div className="d-flex bg-secondary m-1">
+                <span className="w-100 text-center">{room.name}</span>
+                <EditCreateRoomModal
+                  sectionName="Edit"
+                  roomId={room._id}
+                  isEdit="true"
+                />
+              </div>
+            </div>
+          );
+        })}
+      </>
+    );
+  };
+
   const modalBody = () => {
     return (
       <div>
@@ -125,6 +153,7 @@ function EditUserModal(props) {
         {userDetailsInput("Gender", gender, setGender)}
         {userDetailsInput("Country", country, setCountry)}
         {createSelect("Available ranges")}
+        {userChatRoomsList()}
       </div>
     );
   };
