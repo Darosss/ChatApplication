@@ -61,7 +61,7 @@ function App() {
           element={auth ? <Home auth={auth} /> : <Login />}
         />
         <Route path="/" element={<Home auth={auth} />} />
-        <Route path="/chats" element={<Chats />} />
+        <Route path="/chats" element={<Chats auth={auth} />} />
         <Route
           path="/register"
           element={!auth ? <Register /> : <Home auth={auth} />}
