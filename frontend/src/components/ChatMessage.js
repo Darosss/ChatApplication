@@ -3,15 +3,16 @@ import React from "react";
 function ChatMessages({ message }) {
   return (
     <tr>
-      <td>{message.sender.username}</td>
-      <td>{message.message}</td>
-      <td>{message.whereSent.name}</td>
-      <td>
-        <button className="btn btn-primary">Edit</button>
+      <td className="w-25">
+        <span
+          className="text-muted message-time fs-6"
+          style={{ fontSize: "2vmin" }}
+        >
+          {message.sentTime.replace("T", " ").split(".")[0]}:
+        </span>
+        <span> {message.sender.username}</span>
       </td>
-      <td>
-        <button className="btn btn-danger">Delete</button>
-      </td>
+      <td className="w-75 text-wrap text-break">{message.message}</td>
     </tr>
   );
 }
