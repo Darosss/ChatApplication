@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ChatRoom from "./ChatRoom";
-// import SocketIO from "./SocketIO";
-function Chats() {
+
+function Chats(props) {
   const [chatRooms, setChatRooms] = useState([]);
   const [messages, setMessages] = useState([]);
+  const auth = props.auth;
+
   useEffect(() => {
     const axiosConfig = {
       method: "get",
@@ -12,8 +14,6 @@ function Chats() {
       url: "http://localhost:5000/chats",
     };
     axios(axiosConfig).then((res) => {
-      console.log(res.data);
-
       setMessages(res.data.rooms);
       setChatRooms(res.data.userChatRooms);
     });
@@ -21,7 +21,7 @@ function Chats() {
 
   return (
     <div className="container-fluid bg-dark App-header">
-      <ChatRoom chatRooms={chatRooms} messages={messages} />
+      <ChatRoom auth={auth} chatRooms={chatRooms} messages={messages} />
     </div>
   );
 }
