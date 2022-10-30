@@ -1,16 +1,19 @@
 const Message = require("./models/message");
 let onlineUsers = {};
 let rooms = {};
-module.exports = function (io, sessionMiddleware) {
+module.exports = function (io) {
   console.log("--------------NEW CONNECTION--------------");
-  io.use(function (socket, next) {
-    sessionMiddleware(socket.request, {}, next);
-  }).on("connection", (socket) => {
-    let user = socket.request.session.passport.user;
+  io.on("connection", (socket) => {
+    let user = { username: "TEST", _id: "43242141" };
     let userNick = user.username;
     let userId = user._id;
-    console.log(`User: ${userNick} joined the site`);
+
+    console.log(`User: ${userNick} joined the site ${socket.id}`);
     onlineUsers[socket.id] = userNick;
+
+    setTimeout(() => {
+      socket.emit("join channels");
+    }, 2000);
 
     socket.onAny((event, ...args) => {
       console.log("On any: Event:", event, args);
@@ -20,47 +23,50 @@ module.exports = function (io, sessionMiddleware) {
       io.emit("user online", onlineUsers);
     });
 
-    socket.on("join room", (data) => {
-      let roomName = data.roomName;
-      if (!rooms[roomName]) rooms[roomName] = [];
-      rooms[roomName].push(userNick);
-      socket.join(roomName);
-      data.roomUsers = rooms[roomName];
-      io.to(roomName).emit("user online room", data);
-    });
+    // socket.on("join room", (data) => {
+    //   let roomName = data.roomName;
+    //   if (!rooms[roomName]) rooms[roomName] = [];
+    //   rooms[roomName].push(userNick);
+    //   socket.join(roomName);
+    //   data.roomUsers = rooms[roomName];
+    //   io.to(roomName).emit("user online room", data);
+    // });
 
-    socket.on("leave room", (data) => {
-      let roomName = data.roomName;
-      let room = rooms[roomName];
-      room.splice(room.indexOf(userNick), 1);
-      data.roomUsers = rooms[roomName];
-      io.to(roomName).emit("user online room", data);
-      socket.leave(roomName);
-    });
+    // socket.on("leave room", (data) => {
+    //   let roomName = data.roomName;
+    //   let room = rooms[roomName];
+    //   room.splice(room.indexOf(userNick), 1);
+    //   data.roomUsers = rooms[roomName];
+    //   io.to(roomName).emit("user online room", data);
+    //   socket.leave(roomName);
+    // });
 
     //When disconnect remove from online
     socket.on("disconnect", () => {
-      Object.keys(rooms).forEach((room) => {
-        let userIndex = rooms[room].indexOf(userNick);
-        rooms[room].splice(userIndex, 1);
-        if (userIndex >= 0)
-          socket.to(room).emit("user online room", {
-            roomUsers: rooms[room],
-            roomName: room,
-          });
-      });
-      delete onlineUsers[socket.id];
-      io.emit("user online", onlineUsers);
+      console.log("disconnect");
+      // Object.keys(rooms).forEach((room) => {
+      //   let userIndex = rooms[room].indexOf(userNick);
+      //   rooms[room].splice(userIndex, 1);
+      //   if (userIndex >= 0)
+      //     socket.to(room).emit("user online room", {
+      //       roomUsers: rooms[room],
+      //       roomName: room,
+      //     });
+      // });
+      // delete onlineUsers[socket.id];
+      // io.emit("user online", onlineUsers);
     });
+
+    socket.on("join channel", (data) => {
+      console.log("Room joined");
+      socket.join(data.roomId);
+    });
+
     //On chat message
     socket.on("chat message", async (data) => {
-      data.username = userNick;
       data.date = new Date();
-      io.to(data.roomTarget).emit("chat message", data);
-      await saveMessageToDB(userId, data.msg, data.date, data.roomTarget);
-    });
-    socket.on("join channel", (user, channelName) => {
-      socket.join(channelName);
+      io.to(data.roomId).emit("chat message", data);
+      // await saveMessageToDB(data.userId, data.message, data.date, data.roomId);
     });
 
     // socket.on("private msg", (toUser, msg) => {
