@@ -1,6 +1,6 @@
 import React from "react";
 
-function ChatMessages({ message }) {
+function ChatMessage(props) {
   return (
     <tr>
       <td className="w-25">
@@ -8,13 +8,13 @@ function ChatMessages({ message }) {
           className="text-muted message-time fs-6"
           style={{ fontSize: "2vmin" }}
         >
-          {message.sentTime.replace("T", " ").split(".")[0]}:
+          {props.sentTime.replace("T", " ").split(".")[0]}:
         </span>
-        <span> {message.sender.username}</span>
+        <span> {props.sender}</span>
       </td>
-      <td className="w-75 text-wrap text-break">{message.message}</td>
+      <td className="w-75 text-wrap text-break">{props.message}</td>
     </tr>
   );
 }
 
-export default ChatMessages;
+export default ChatMessage;
