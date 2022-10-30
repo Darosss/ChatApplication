@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useReducer } from "react";
 import ChatMessage from "./ChatMessage";
 import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
@@ -12,10 +12,13 @@ const socket = io.connect("http://localhost:5000");
 
 function ChatRoom(props) {
   const [isConnected, setIsConnected] = useState(socket.connected);
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
   const [msgToSend, setMsgToSend] = useState("");
-  // const [lastPong, setLastPong] = useState(null);
 
+  const [localMessages, setLocalMessages] = useState([]);
+
+  // const [lastPong, setLastPong] = useState(null);
   const chatRooms = props.chatRooms;
   const messages = props.messages;
   const auth = props.auth;
@@ -24,6 +27,7 @@ function ChatRoom(props) {
 
   let roomsList = [];
   let roomsContent = [];
+  const tableMessages = useRef();
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -41,10 +45,6 @@ function ChatRoom(props) {
     //   setLastPong(new Date().toISOString());
     // });
 
-    socket.on("chat message", (data) => {
-      console.log("new message", data);
-    });
-
     return () => {
       socket.off("connect");
       socket.off("disconnect");
@@ -54,6 +54,30 @@ function ChatRoom(props) {
     };
   }, []);
 
+  useEffect(() => {
+    socket.on("chat message", (data) => {
+      forceUpdate();
+
+      console.log("new message", data);
+      let tempLocalMsgs = localMessages;
+      let roomId = data.roomId;
+
+      let messageComp = (
+        <ChatMessage
+          message={data.message}
+          sentTime={data.date}
+          sender={data.username}
+          key={data.username + data.date}
+        />
+      );
+      console.log("msg comp", messageComp);
+      if (tempLocalMsgs[roomId]) tempLocalMsgs[roomId].push(messageComp);
+      else tempLocalMsgs[roomId] = [messageComp];
+      setLocalMessages(tempLocalMsgs);
+    });
+  }, [localMessages]);
+
+  console.log("localmessages", localMessages);
   useEffect(() => {
     socket.on("join channels", () => {
       chatRooms.forEach((room) => {
@@ -74,7 +98,7 @@ function ChatRoom(props) {
       roomId: e.target.id,
       userId: userId,
       username: username,
-      msg: msgToSend,
+      message: msgToSend,
     };
 
     socket.emit("chat message", data);
@@ -93,7 +117,16 @@ function ChatRoom(props) {
             <td colSpan={2}>
               <div className="chat-scrollable">
                 <Table className="text-light">
-                  <tbody>{chatMsgsTable(room._id)}</tbody>
+                  <tbody ref={tableMessages}>
+                    {chatMsgsTable(room._id)}
+
+                    {localMessages[room._id]
+                      ? localMessages[room._id].map((msg, index) => {
+                          console.log(msg, "lul");
+                          return msg;
+                        })
+                      : null}
+                  </tbody>
                 </Table>
               </div>
             </td>
@@ -102,9 +135,16 @@ function ChatRoom(props) {
             </td>
           </tr>
           <tr>
-            <td>
+            <td className="d-inline-flex w-100">
+              <textarea
+                className="form-control w-100 m-1 bg-dark text-light"
+                id="messageTextArea"
+                rows="3"
+                onChange={(e) => setMsgToSend(e.target.value)}
+              ></textarea>
+
               <Button
-                className="w-75 btn-secondary"
+                className="w-25 btn-secondary"
                 id={room._id}
                 onClick={sendMessage}
               >
@@ -118,8 +158,30 @@ function ChatRoom(props) {
   };
 
   const chatMsgsTable = (roomId) => {
-    return props.messages[roomId].map((msg, indxMsg) => {
-      return <ChatMessage message={msg} key={indxMsg} />;
+    return messages[roomId].map((msg, indxMsg) => {
+      return (
+        <ChatMessage
+          message={msg.message}
+          sentTime={msg.sentTime}
+          sender={msg.sender.username}
+          key={indxMsg}
+        />
+      );
+    });
+  };
+
+  const chatLocalMsgsTable = (roomId) => {
+    if (localMessages.length < 1) return;
+    console.log("exec chat");
+    return localMessages[roomId].map((msg, indxMsg) => {
+      return (
+        <ChatMessage
+          message={msg.message}
+          sentTime={msg.sentTime}
+          sender={msg.sender}
+          key={indxMsg}
+        />
+      );
     });
   };
 
