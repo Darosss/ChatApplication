@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useReducer } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import ChatMessage from "./ChatMessage";
 import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
@@ -12,13 +12,12 @@ const socket = io.connect("http://localhost:5000");
 
 function ChatRoom(props) {
   const [isConnected, setIsConnected] = useState(socket.connected);
-  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+  const [, forceUpdate] = useReducer((x) => x + 1, 0); //update state
 
   const [msgToSend, setMsgToSend] = useState("");
 
   const [localMessages, setLocalMessages] = useState([]);
 
-  // const [lastPong, setLastPong] = useState(null);
   const chatRooms = props.chatRooms;
   const messages = props.messages;
   const auth = props.auth;
@@ -27,12 +26,10 @@ function ChatRoom(props) {
 
   let roomsList = [];
   let roomsContent = [];
-  const tableMessages = useRef();
 
   useEffect(() => {
     socket.on("connect", () => {
       console.log("Connect");
-
       setIsConnected(true);
     });
 
@@ -41,14 +38,9 @@ function ChatRoom(props) {
       setIsConnected(false);
     });
 
-    // socket.on("pong", () => {
-    //   setLastPong(new Date().toISOString());
-    // });
-
     return () => {
       socket.off("connect");
       socket.off("disconnect");
-      socket.off("chat message");
       socket.off("join channels");
       socket.off("pong");
     };
@@ -58,7 +50,6 @@ function ChatRoom(props) {
     socket.on("chat message", (data) => {
       forceUpdate();
 
-      console.log("new message", data);
       let tempLocalMsgs = localMessages;
       let roomId = data.roomId;
 
@@ -70,14 +61,16 @@ function ChatRoom(props) {
           key={data.username + data.date}
         />
       );
-      console.log("msg comp", messageComp);
       if (tempLocalMsgs[roomId]) tempLocalMsgs[roomId].push(messageComp);
       else tempLocalMsgs[roomId] = [messageComp];
       setLocalMessages(tempLocalMsgs);
     });
+
+    return () => {
+      socket.off("chat message");
+    };
   }, [localMessages]);
 
-  console.log("localmessages", localMessages);
   useEffect(() => {
     socket.on("join channels", () => {
       chatRooms.forEach((room) => {
@@ -87,11 +80,6 @@ function ChatRoom(props) {
       });
     });
   }, [username, userId, chatRooms]);
-
-  // const sendPing = () => {
-  //   console.log("lol", socket);
-  //   socket.emit("ping");
-  // };
 
   const sendMessage = (e) => {
     let data = {
@@ -117,12 +105,11 @@ function ChatRoom(props) {
             <td colSpan={2}>
               <div className="chat-scrollable">
                 <Table className="text-light">
-                  <tbody ref={tableMessages}>
+                  <tbody>
                     {chatMsgsTable(room._id)}
 
                     {localMessages[room._id]
-                      ? localMessages[room._id].map((msg, index) => {
-                          console.log(msg, "lul");
+                      ? localMessages[room._id].map((msg) => {
                           return msg;
                         })
                       : null}
@@ -164,21 +151,6 @@ function ChatRoom(props) {
           message={msg.message}
           sentTime={msg.sentTime}
           sender={msg.sender.username}
-          key={indxMsg}
-        />
-      );
-    });
-  };
-
-  const chatLocalMsgsTable = (roomId) => {
-    if (localMessages.length < 1) return;
-    console.log("exec chat");
-    return localMessages[roomId].map((msg, indxMsg) => {
-      return (
-        <ChatMessage
-          message={msg.message}
-          sentTime={msg.sentTime}
-          sender={msg.sender}
           key={indxMsg}
         />
       );
