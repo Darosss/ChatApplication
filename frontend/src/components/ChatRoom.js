@@ -20,6 +20,9 @@ function ChatRoom(props) {
   const [msgToSend, setMsgToSend] = useState("");
 
   const [localMessages, setLocalMessages] = useState([]);
+
+  const [onlineUsers, setOnlineUsers] = useState([]);
+
   const [roomsOnlineUsers, setRoomsOnlineUsers] = useState([]);
 
   const chatRooms = props.chatRooms;
@@ -33,13 +36,11 @@ function ChatRoom(props) {
 
   useEffect(() => {
     socket.on("connect", () => {
-      console.log("Connect");
       setIsConnected(true);
+      socket.emit("user_connected");
     });
 
     socket.on("disconnect", () => {
-      console.log("disconnect");
-
       setIsConnected(false);
     });
 
@@ -98,6 +99,22 @@ function ChatRoom(props) {
       socket.off("room_online_users");
     };
   }, [roomsOnlineUsers]);
+
+  useEffect(() => {
+    socket.on("user_connected", () => {
+      socket.emit("user_connected", username);
+    });
+
+    socket.on("refresh_online_users", (data) => {
+      setOnlineUsers(data);
+      forceUpdate();
+    });
+
+    return () => {
+      socket.off("user_connected");
+      socket.off("refresh_online_users");
+    };
+  }, [onlineUsers, username]);
 
   const sendMessage = (e) => {
     let data = {
@@ -215,15 +232,35 @@ function ChatRoom(props) {
   });
 
   return (
-    <Tab.Container id="left-tabs-chats" className="d-inline-flex">
+    <Tab.Container id="left-tabs-chats">
       <Row className="w-100">
-        <Col sm={3}>
+        <Col sm={2}>
           <Nav variant="pills" className="flex-column">
             {roomsList}
           </Nav>
         </Col>
-        <Col sm={9}>
+        <Col sm={7}>
           <Tab.Content>{roomsContent}</Tab.Content>
+        </Col>
+        <Col sm={3}>
+          <Table className="text-light">
+            <thead>
+              <tr>
+                <th>Online users:</th>
+              </tr>
+            </thead>
+            <tbody>
+              {onlineUsers
+                ? Object.keys(onlineUsers).map((user) => {
+                    return (
+                      <tr key={user}>
+                        <td>{onlineUsers[user]}</td>
+                      </tr>
+                    );
+                  })
+                : null}
+            </tbody>
+          </Table>
         </Col>
       </Row>
     </Tab.Container>
