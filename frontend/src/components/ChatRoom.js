@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useReducer } from "react";
 import ChatMessage from "./ChatMessage";
+import OnlineUsers from "./OnlineUsers";
 import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
@@ -12,11 +13,14 @@ const socket = io.connect("http://localhost:5000");
 
 function ChatRoom(props) {
   const [isConnected, setIsConnected] = useState(socket.connected);
+  // console.log(isConnected);
+
   const [, forceUpdate] = useReducer((x) => x + 1, 0); //update state
 
   const [msgToSend, setMsgToSend] = useState("");
 
   const [localMessages, setLocalMessages] = useState([]);
+  const [roomsOnlineUsers, setRoomsOnlineUsers] = useState([]);
 
   const chatRooms = props.chatRooms;
   const messages = props.messages;
@@ -34,7 +38,8 @@ function ChatRoom(props) {
     });
 
     socket.on("disconnect", () => {
-      console.log("Disconnect");
+      console.log("disconnect");
+
       setIsConnected(false);
     });
 
@@ -42,7 +47,6 @@ function ChatRoom(props) {
       socket.off("connect");
       socket.off("disconnect");
       socket.off("join channels");
-      socket.off("pong");
     };
   }, []);
 
@@ -81,6 +85,20 @@ function ChatRoom(props) {
     });
   }, [username, userId, chatRooms]);
 
+  useEffect(() => {
+    socket.on("room_online_users", (data) => {
+      let tempRoomsOnlineUsers = roomsOnlineUsers;
+      tempRoomsOnlineUsers[data.roomId] = data.roomUsers;
+
+      setRoomsOnlineUsers(tempRoomsOnlineUsers);
+      forceUpdate();
+    });
+
+    return () => {
+      socket.off("room_online_users");
+    };
+  }, [roomsOnlineUsers]);
+
   const sendMessage = (e) => {
     let data = {
       roomId: e.target.id,
@@ -118,7 +136,20 @@ function ChatRoom(props) {
               </div>
             </td>
             <td colSpan={2} className="w-25">
-              <div className="chat-scrollable">Online users</div>
+              <div className="chat-scrollable">
+                <Table className="text-light">
+                  <thead>
+                    <tr>
+                      <th>Online users:</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {roomsOnlineUsers[room._id]
+                      ? chatOnlineUsers(room._id)
+                      : null}
+                  </tbody>
+                </Table>
+              </div>
             </td>
           </tr>
           <tr>
@@ -157,6 +188,19 @@ function ChatRoom(props) {
     });
   };
 
+  const chatOnlineUsers = (roomId) => {
+    let roomUsers = roomsOnlineUsers[roomId];
+    let roomSockets = Object.keys(roomUsers);
+    return roomSockets.map((socket, index) => {
+      return (
+        <OnlineUsers
+          key={socket}
+          socketId={socket}
+          username={roomUsers[socket]}
+        />
+      );
+    });
+  };
   chatRooms.forEach((room) => {
     roomsList.push(
       <Nav.Item key={room._id} className="w-100">
