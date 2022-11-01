@@ -2,18 +2,18 @@ const Message = require("./models/message");
 
 module.exports = function (io) {
   console.log("--------------NEW CONNECTION--------------");
-  let onlineUsers = {};
+  let onlineUsers = {}; //FIXME: change to set
   let rooms = {};
 
   io.on("connection", (socket) => {
-    let userNick = "Kappa";
-
     console.log(`User: joined the site ${socket.id}`);
-    onlineUsers[socket.id] = userNick;
+    // socket.emit("user_connected", data);
 
     setTimeout(() => {
       //join channels after some delay
       socket.emit("join channels");
+
+      io.emit("user_connected");
     }, 1000);
 
     socket.onAny((event, ...args) => {
@@ -34,6 +34,13 @@ module.exports = function (io) {
           io.to(roomId).emit("room_online_users", data);
         }
       });
+
+      //remove from online users
+      let dcGlobalOnlineSocket = Object.keys(onlineUsers).find(
+        (sockedId) => sockedId === socket.id
+      );
+      delete onlineUsers[dcGlobalOnlineSocket];
+      io.emit("refresh_online_users", onlineUsers);
     });
 
     socket.on("join channel", (data) => {
@@ -53,6 +60,11 @@ module.exports = function (io) {
       data.date = new Date();
       io.to(data.roomId).emit("chat message", data);
       await saveMessageToDB(data.userId, data.message, data.date, data.roomId);
+    });
+
+    socket.on("user_connected", (data) => {
+      onlineUsers[socket.id] = data;
+      io.emit("refresh_online_users", onlineUsers);
     });
 
     // socket.on("private msg", (toUser, msg) => {
