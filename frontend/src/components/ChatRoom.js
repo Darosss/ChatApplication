@@ -37,7 +37,6 @@ function ChatRoom(props) {
   useEffect(() => {
     socket.on("connect", () => {
       setIsConnected(true);
-      socket.emit("user_connected");
     });
 
     socket.on("disconnect", () => {
@@ -250,11 +249,11 @@ function ChatRoom(props) {
               </tr>
             </thead>
             <tbody>
-              {onlineUsers
-                ? Object.keys(onlineUsers).map((user) => {
+              {onlineUsers.length > 0
+                ? onlineUsers.map((user) => {
                     return (
-                      <tr key={user}>
-                        <td>{onlineUsers[user]}</td>
+                      <tr key={user[0]}>
+                        <td>{user[1]}</td>
                       </tr>
                     );
                   })
