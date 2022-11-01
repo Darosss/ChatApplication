@@ -2,7 +2,7 @@ const Message = require("./models/message");
 
 module.exports = function (io) {
   console.log("--------------NEW CONNECTION--------------");
-  let onlineUsers = {}; //FIXME: change to set
+  let onlineUsers = new Map(); //FIXME: change to set
   let rooms = {};
 
   io.on("connection", (socket) => {
@@ -36,10 +36,8 @@ module.exports = function (io) {
       });
 
       //remove from online users
-      let dcGlobalOnlineSocket = Object.keys(onlineUsers).find(
-        (sockedId) => sockedId === socket.id
-      );
-      delete onlineUsers[dcGlobalOnlineSocket];
+      if (onlineUsers.has(socket.id)) onlineUsers.delete(socket.id);
+
       io.emit("refresh_online_users", onlineUsers);
     });
 
@@ -62,9 +60,10 @@ module.exports = function (io) {
       await saveMessageToDB(data.userId, data.message, data.date, data.roomId);
     });
 
+    //When user emits it, it add user to onlineUsers map then emit refresh_onlinie_users
     socket.on("user_connected", (data) => {
-      onlineUsers[socket.id] = data;
-      io.emit("refresh_online_users", onlineUsers);
+      onlineUsers.set(socket.id, data);
+      io.emit("refresh_online_users", Array.from(onlineUsers));
     });
 
     // socket.on("private msg", (toUser, msg) => {
