@@ -2,12 +2,11 @@ const Message = require("./models/message");
 
 module.exports = function (io) {
   console.log("--------------NEW CONNECTION--------------");
-  let onlineUsers = new Map(); //FIXME: change to set
-  let rooms = {};
+  let onlineUsers = new Map();
+  let roomsUsers = new Map();
 
   io.on("connection", (socket) => {
     console.log(`User: joined the site ${socket.id}`);
-    // socket.emit("user_connected", data);
 
     setTimeout(() => {
       //join channels after some delay
@@ -22,21 +21,20 @@ module.exports = function (io) {
 
     socket.on("disconnect", () => {
       //When disconnect remove from online later fn
-      Object.keys(rooms).forEach((roomId) => {
-        let dcSocket = Object.keys(rooms[roomId]).find(
-          (sockedId) => sockedId === socket.id
-        );
-        if (dcSocket) {
-          //if user was in room delete and refresh emit
-          delete rooms[roomId][dcSocket];
-          let data = { roomId: roomId, roomUsers: rooms[roomId] };
+
+      for (const roomId of roomsUsers.keys()) {
+        let roomUsers = roomsUsers.get(roomId);
+        if (roomUsers.has(socket.id)) {
+          roomUsers.delete(socket.id);
+          let data = { roomId: roomId, roomUsers: Array.from(roomUsers) };
 
           io.to(roomId).emit("room_online_users", data);
         }
-      });
+      }
 
       //remove from online users
       if (onlineUsers.has(socket.id)) onlineUsers.delete(socket.id);
+      //FIXME
 
       io.emit("refresh_online_users", onlineUsers);
     });
@@ -81,10 +79,11 @@ module.exports = function (io) {
   });
 
   function addOnlineUserToRoom(roomId, username, socketId) {
-    if (!rooms[roomId]) rooms[roomId] = {};
-    rooms[roomId][socketId] = username;
+    if (!roomsUsers.has(roomId)) roomsUsers.set(roomId, new Map());
+    let userRoomMap = roomsUsers.get(roomId);
+    userRoomMap.set(socketId, username);
 
-    return rooms[roomId];
+    return Array.from(roomsUsers.get(roomId));
   }
 
   async function saveMessageToDB(username, msg, date, room) {
