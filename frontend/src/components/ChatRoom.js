@@ -206,14 +206,10 @@ function ChatRoom(props) {
 
   const chatOnlineUsers = (roomId) => {
     let roomUsers = roomsOnlineUsers[roomId];
-    let roomSockets = Object.keys(roomUsers);
-    return roomSockets.map((socket, index) => {
+
+    return roomUsers.map((user, index) => {
       return (
-        <OnlineUsers
-          key={socket}
-          socketId={socket}
-          username={roomUsers[socket]}
-        />
+        <OnlineUsers key={user[0]} socketId={user[0]} username={user[1]} />
       );
     });
   };
