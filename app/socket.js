@@ -36,7 +36,7 @@ module.exports = function (io) {
       if (onlineUsers.has(socket.id)) onlineUsers.delete(socket.id);
       //FIXME
 
-      io.emit("refresh_online_users", onlineUsers);
+      io.emit("refresh_online_users", Array.from(onlineUsers));
     });
 
     socket.on("join channel", (data) => {
