@@ -40,6 +40,22 @@ function ChatRoom(props) {
   let roomsContent = [];
 
   useEffect(() => {
+    const updateLocalMessages = (roomId, message, date, username) => {
+      let messageComp = (
+        <ChatMessage
+          message={message}
+          sentTime={date}
+          sender={username}
+          key={username + date}
+        />
+      );
+      setLocalMessages((prevState) => {
+        if (prevState[roomId]) prevState[roomId].push(messageComp);
+        else prevState[roomId] = [messageComp];
+        return prevState;
+      });
+    };
+
     initiateSocketConnection();
     userConnectedEmit(username);
 
@@ -64,23 +80,7 @@ function ChatRoom(props) {
     subscribeToChat((err, data) => {
       if (err) console.log(err);
 
-      let tempLocalMsgs = localMessages;
-      let roomId = data.roomId;
-
-      let messageComp = (
-        <ChatMessage
-          message={data.message}
-          sentTime={data.date}
-          sender={data.username}
-          key={data.username + data.date}
-        />
-      );
-      if (tempLocalMsgs[roomId]) tempLocalMsgs[roomId].push(messageComp);
-      else tempLocalMsgs[roomId] = [messageComp];
-      setLocalMessages(tempLocalMsgs);
-
-      //TODO: change messageComp to normal data then messagecomp inside map
-
+      updateLocalMessages(data.roomId, data.message, data.date, data.username);
       forceUpdate();
     });
 
