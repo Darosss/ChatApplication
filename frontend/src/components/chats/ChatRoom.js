@@ -56,6 +56,12 @@ function ChatRoom(props) {
       });
     };
 
+    const updateRoomsOnlineUsers = (roomId, roomUsers) => {
+      setRoomsOnlineUsers((prevState) => {
+        prevState[roomId] = roomUsers;
+        return prevState;
+      });
+    };
     initiateSocketConnection();
     userConnectedEmit(username);
 
@@ -70,10 +76,7 @@ function ChatRoom(props) {
     roomOnlineUsers((err, data) => {
       if (err) console.log(err, "err");
 
-      let tempRoomsOnlineUsers = roomsOnlineUsers;
-      tempRoomsOnlineUsers[data.roomId] = data.roomUsers;
-
-      setRoomsOnlineUsers(tempRoomsOnlineUsers);
+      updateRoomsOnlineUsers(data.roomId, data.roomUsers);
       forceUpdate();
     });
 
