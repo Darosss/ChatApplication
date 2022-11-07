@@ -8,13 +8,18 @@ import Tab from "react-bootstrap/Tab";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 
-import io from "socket.io-client";
-const socket = io.connect("http://localhost:5000");
+import {
+  initiateSocketConnection,
+  userConnectedEmit,
+  disconnectSocket,
+  subscribeToChat,
+  sendMessageSocket,
+  joinRoom,
+  refreshOnlineUsers,
+  roomOnlineUsers,
+} from "./Socket";
 
 function ChatRoom(props) {
-  const [isConnected, setIsConnected] = useState(socket.connected);
-  // console.log(isConnected);
-
   const [, forceUpdate] = useReducer((x) => x + 1, 0); //update state
 
   const [msgToSend, setMsgToSend] = useState("");
@@ -35,24 +40,29 @@ function ChatRoom(props) {
   let roomsContent = [];
 
   useEffect(() => {
-    socket.on("connect", () => {
-      setIsConnected(true);
+    initiateSocketConnection();
+    userConnectedEmit(username);
+
+    chatRooms.forEach((room) => {
+      joinRoom({ username: username, roomId: room._id });
     });
 
-    socket.on("disconnect", () => {
-      setIsConnected(false);
+    refreshOnlineUsers((err, data) => {
+      setOnlineUsers(data);
     });
 
-    return () => {
-      socket.off("connect");
-      socket.off("disconnect");
-      socket.off("join channels");
-    };
-  }, []);
+    roomOnlineUsers((err, data) => {
+      if (err) console.log(err, "err");
 
-  useEffect(() => {
-    socket.on("chat message", (data) => {
+      let tempRoomsOnlineUsers = roomsOnlineUsers;
+      tempRoomsOnlineUsers[data.roomId] = data.roomUsers;
+
+      setRoomsOnlineUsers(tempRoomsOnlineUsers);
       forceUpdate();
+    });
+
+    subscribeToChat((err, data) => {
+      if (err) console.log(err);
 
       let tempLocalMsgs = localMessages;
       let roomId = data.roomId;
@@ -68,62 +78,25 @@ function ChatRoom(props) {
       if (tempLocalMsgs[roomId]) tempLocalMsgs[roomId].push(messageComp);
       else tempLocalMsgs[roomId] = [messageComp];
       setLocalMessages(tempLocalMsgs);
-    });
 
-    return () => {
-      socket.off("chat message");
-    };
-  }, [localMessages]);
+      //TODO: change messageComp to normal data then messagecomp inside map
 
-  useEffect(() => {
-    socket.on("join channels", () => {
-      chatRooms.forEach((room) => {
-        let data = { username: username, userId: userId, roomId: room._id };
-
-        socket.emit("join channel", data);
-      });
-    });
-  }, [username, userId, chatRooms]);
-
-  useEffect(() => {
-    socket.on("room_online_users", (data) => {
-      let tempRoomsOnlineUsers = roomsOnlineUsers;
-      tempRoomsOnlineUsers[data.roomId] = data.roomUsers;
-
-      setRoomsOnlineUsers(tempRoomsOnlineUsers);
       forceUpdate();
     });
 
     return () => {
-      socket.off("room_online_users");
+      disconnectSocket();
     };
-  }, [roomsOnlineUsers]);
-
-  useEffect(() => {
-    socket.on("user_connected", () => {
-      socket.emit("user_connected", username);
-    });
-
-    socket.on("refresh_online_users", (data) => {
-      setOnlineUsers(data);
-      forceUpdate();
-    });
-
-    return () => {
-      socket.off("user_connected");
-      socket.off("refresh_online_users");
-    };
-  }, [onlineUsers, username]);
+  }, [chatRooms, username]);
 
   const sendMessage = (e) => {
-    let data = {
+    let msg = {
       roomId: e.target.id,
       userId: userId,
       username: username,
       message: msgToSend,
     };
-
-    socket.emit("chat message", data);
+    sendMessageSocket(msg);
   };
 
   const roomContent = (room) => {
