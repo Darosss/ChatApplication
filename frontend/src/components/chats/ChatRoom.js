@@ -23,11 +23,11 @@ function ChatRoom(props) {
   const [, forceUpdate] = useReducer((x) => x + 1, 0); //update state
 
   const [msgToSend, setMsgToSend] = useState("");
-
   const [localMessages, setLocalMessages] = useState([]);
 
-  const [onlineUsers, setOnlineUsers] = useState([]);
+  const [roomsList, setRoomsList] = useState([]);
 
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const [roomsOnlineUsers, setRoomsOnlineUsers] = useState([]);
 
   const chatRooms = props.chatRooms;
@@ -36,22 +36,12 @@ function ChatRoom(props) {
   const username = auth.username;
   const userId = auth._id;
 
-  let roomsList = [];
-  let roomsContent = [];
-
   useEffect(() => {
-    const updateLocalMessages = (roomId, message, date, username) => {
-      let messageComp = (
-        <ChatMessage
-          message={message}
-          sentTime={date}
-          sender={username}
-          key={username + date}
-        />
-      );
+    const updateLocalMessages = (msgData) => {
+      let roomId = msgData.roomId;
       setLocalMessages((prevState) => {
-        if (prevState[roomId]) prevState[roomId].push(messageComp);
-        else prevState[roomId] = [messageComp];
+        if (prevState[roomId]) prevState[roomId].push(msgData);
+        else prevState[roomId] = [msgData];
         return prevState;
       });
     };
@@ -62,6 +52,8 @@ function ChatRoom(props) {
         return prevState;
       });
     };
+    setRoomsList(chatRooms);
+
     initiateSocketConnection();
     userConnectedEmit(username);
 
@@ -83,7 +75,7 @@ function ChatRoom(props) {
     subscribeToChat((err, data) => {
       if (err) console.log(err);
 
-      updateLocalMessages(data.roomId, data.message, data.date, data.username);
+      updateLocalMessages(data);
       forceUpdate();
     });
 
@@ -120,7 +112,14 @@ function ChatRoom(props) {
 
                     {localMessages[room._id]
                       ? localMessages[room._id].map((msg) => {
-                          return msg;
+                          return (
+                            <ChatMessage
+                              message={msg.message}
+                              sentTime={msg.date}
+                              sender={msg.username}
+                              key={msg.username + msg.date}
+                            />
+                          );
                         })
                       : null}
                   </tbody>
@@ -189,29 +188,31 @@ function ChatRoom(props) {
       );
     });
   };
-  chatRooms.forEach((room) => {
-    roomsList.push(
-      <Nav.Item key={room._id} className="w-100">
-        <Nav.Link eventKey={room._id}> {room.name} </Nav.Link>
-      </Nav.Item>
-    );
-    roomsContent.push(
-      <Tab.Pane key={room._id} eventKey={room._id} className="w-100">
-        {roomContent(room)}
-      </Tab.Pane>
-    );
-  });
 
   return (
     <Tab.Container id="left-tabs-chats">
       <Row className="w-100">
         <Col sm={2}>
           <Nav variant="pills" className="flex-column">
-            {roomsList}
+            {roomsList.map((room) => {
+              return (
+                <Nav.Item key={room._id} className="w-100">
+                  <Nav.Link eventKey={room._id}> {room.name} </Nav.Link>
+                </Nav.Item>
+              );
+            })}
           </Nav>
         </Col>
         <Col sm={7}>
-          <Tab.Content>{roomsContent}</Tab.Content>
+          <Tab.Content>
+            {roomsList.map((room) => {
+              return (
+                <Tab.Pane key={room._id} eventKey={room._id} className="w-100">
+                  {roomContent(room)}
+                </Tab.Pane>
+              );
+            })}
+          </Tab.Content>
         </Col>
         <Col sm={3}>
           <Table className="text-light">
