@@ -8,13 +8,6 @@ module.exports = function (io) {
   io.on("connection", (socket) => {
     console.log(`User: joined the site ${socket.id}`);
 
-    setTimeout(() => {
-      //join channels after some delay
-      socket.emit("join channels");
-
-      io.emit("user_connected");
-    }, 1000);
-
     socket.onAny((event, ...args) => {
       if (event !== "join channel") console.log("On any: Event:", event, args);
     });
@@ -40,6 +33,7 @@ module.exports = function (io) {
     });
 
     socket.on("join channel", (data) => {
+      console.log("Joining the room ", data);
       //data:  username , userId, roomId
       socket.join(data.roomId);
 
