@@ -23,6 +23,8 @@ function ChatRoom(props) {
   const [, forceUpdate] = useReducer((x) => x + 1, 0); //update state
 
   const [msgToSend, setMsgToSend] = useState("");
+  const [roomIdToSend, setRoomIdToSend] = useState("");
+
   const [localMessages, setLocalMessages] = useState([]);
 
   const [roomsList, setRoomsList] = useState([]);
@@ -77,6 +79,9 @@ function ChatRoom(props) {
 
       updateLocalMessages(data);
       forceUpdate();
+      setTimeout(() => {
+        scrollToBottom("scrollable-" + data.roomId);
+      }, 50);
     });
 
     return () => {
@@ -84,14 +89,29 @@ function ChatRoom(props) {
     };
   }, [chatRooms, username]);
 
-  const sendMessage = (e) => {
+  const sendMessage = () => {
+    console.log(roomIdToSend);
     let msg = {
-      roomId: e.target.id,
+      roomId: roomIdToSend,
       userId: userId,
       username: username,
       message: msgToSend,
     };
     sendMessageSocket(msg);
+  };
+
+  const sendMessageOnKey = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      sendMessage();
+      e.target.value = "";
+      setMsgToSend("");
+    }
+  };
+
+  const scrollToBottom = (sectionId) => {
+    const chatMessages = document.querySelector("#" + sectionId);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
   };
 
   const roomContent = (room) => {
@@ -105,7 +125,7 @@ function ChatRoom(props) {
         <tbody>
           <tr>
             <td colSpan={2}>
-              <div className="chat-scrollable">
+              <div className="chat-scrollable" id={"scrollable-" + room._id}>
                 <Table className="text-light">
                   <tbody>
                     {chatMsgsTable(room._id)}
@@ -147,14 +167,18 @@ function ChatRoom(props) {
             <td className="d-inline-flex w-100">
               <textarea
                 className="form-control w-100 m-1 bg-dark text-light"
-                id="messageTextArea"
                 rows="3"
                 onChange={(e) => setMsgToSend(e.target.value)}
+                onFocus={(e) => setRoomIdToSend(room._id)}
+                onBlur={(e) => setRoomIdToSend("")}
+                onKeyDown={(e) => {
+                  sendMessageOnKey(e);
+                }}
               ></textarea>
 
               <Button
                 className="w-25 btn-secondary"
-                id={room._id}
+                room={room._id}
                 onClick={sendMessage}
               >
                 Send
