@@ -1,83 +1,84 @@
 const Message = require("./models/message");
-let onlineUsers = {};
-let rooms = {};
-module.exports = function (io, sessionMiddleware) {
+
+module.exports = function (io) {
   console.log("--------------NEW CONNECTION--------------");
-  io.use(function (socket, next) {
-    sessionMiddleware(socket.request, {}, next);
-  }).on("connection", (socket) => {
-    let user = socket.request.session.passport.user;
-    let userNick = user.username;
-    let userId = user._id;
-    console.log(`User: ${userNick} joined the site`);
-    onlineUsers[socket.id] = userNick;
+  let onlineUsers = new Map();
+  let roomsUsers = new Map();
+
+  io.on("connection", (socket) => {
+    console.log(`User: joined the site ${socket.id}`);
 
     socket.onAny((event, ...args) => {
-      console.log("On any: Event:", event, args);
+      if (event !== "join channel") console.log("On any: Event:", event, args);
     });
 
-    socket.on("user online", (data) => {
-      io.emit("user online", onlineUsers);
-    });
-
-    socket.on("join room", (data) => {
-      let roomName = data.roomName;
-      if (!rooms[roomName]) rooms[roomName] = [];
-      rooms[roomName].push(userNick);
-      socket.join(roomName);
-      data.roomUsers = rooms[roomName];
-      io.to(roomName).emit("user online room", data);
-    });
-
-    socket.on("leave room", (data) => {
-      let roomName = data.roomName;
-      let room = rooms[roomName];
-      room.splice(room.indexOf(userNick), 1);
-      data.roomUsers = rooms[roomName];
-      io.to(roomName).emit("user online room", data);
-      socket.leave(roomName);
-    });
-
-    //When disconnect remove from online
     socket.on("disconnect", () => {
-      Object.keys(rooms).forEach((room) => {
-        let userIndex = rooms[room].indexOf(userNick);
-        rooms[room].splice(userIndex, 1);
-        if (userIndex >= 0)
-          socket.to(room).emit("user online room", {
-            roomUsers: rooms[room],
-            roomName: room,
-          });
-      });
-      delete onlineUsers[socket.id];
-      io.emit("user online", onlineUsers);
+      //When disconnect remove from online later fn
+
+      for (const roomId of roomsUsers.keys()) {
+        let roomUsers = roomsUsers.get(roomId);
+        if (roomUsers.has(socket.id)) {
+          roomUsers.delete(socket.id);
+          let data = { roomId: roomId, roomUsers: Array.from(roomUsers) };
+
+          io.to(roomId).emit("room_online_users", data);
+        }
+      }
+
+      //remove from online users
+      if (onlineUsers.has(socket.id)) onlineUsers.delete(socket.id);
+      //FIXME
+
+      io.emit("refresh_online_users", Array.from(onlineUsers));
     });
+
+    socket.on("join channel", (data) => {
+      console.log("Joining the room ", data);
+      //data:  username , userId, roomId
+      socket.join(data.roomId);
+
+      data.roomUsers = addOnlineUserToRoom(
+        data.roomId,
+        data.username,
+        socket.id
+      );
+      io.to(data.roomId).emit("room_online_users", data);
+    });
+
     //On chat message
     socket.on("chat message", async (data) => {
-      data.username = userNick;
       data.date = new Date();
-      io.to(data.roomTarget).emit("chat message", data);
-      await saveMessageToDB(userId, data.msg, data.date, data.roomTarget);
-    });
-    socket.on("join channel", (user, channelName) => {
-      socket.join(channelName);
+      io.to(data.roomId).emit("chat message", data);
+      if (
+        await saveMessageToDB(data.userId, data.message, data.date, data.roomId)
+      )
+        //TODO: socket error message
+        console.log("xd");
+      else {
+        console.log("not XD");
+      }
     });
 
-    // socket.on("private msg", (toUser, msg) => {
-    //   socket
-    //     .to(getKeyByValue(activeUsers, toUser))
-    //     .emit("private msg", activeUsers[socket.id], msg);
-    // });
+    //When user emits it, it add user to onlineUsers map then emit refresh_onlinie_users
+    socket.on("user_connected", (data) => {
+      onlineUsers.set(socket.id, data);
+      io.emit("refresh_online_users", Array.from(onlineUsers));
+    });
 
-    //   //Info about typing
-    socket.on("user typing", (data) => {
-      data.username = userNick;
-      socket.to(data.roomName).emit("user typing", data);
+    socket.on("user_typing", (data) => {
+      socket.to(data.roomId).emit("user_typing", data);
     });
   });
 
+  function addOnlineUserToRoom(roomId, username, socketId) {
+    if (!roomsUsers.has(roomId)) roomsUsers.set(roomId, new Map());
+    let userRoomMap = roomsUsers.get(roomId);
+    userRoomMap.set(socketId, username);
+
+    return Array.from(roomsUsers.get(roomId));
+  }
+
   async function saveMessageToDB(username, msg, date, room) {
-    console.log("room", room);
     const message = new Message({
       sender: username,
       message: msg,
@@ -86,11 +87,10 @@ module.exports = function (io, sessionMiddleware) {
     });
     try {
       await message.save();
+      return true;
     } catch (error) {
       console.log(error, "Message couldn't be saved");
+      return false;
     }
-  }
-  function getKeyByValue(object, value) {
-    return Object.keys(object).find((key) => object[key] === value);
   }
 };

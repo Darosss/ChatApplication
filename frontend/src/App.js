@@ -5,7 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import NavigationLink from "./components/NavigationLink";
 import Loading from "./components/Loading";
 import Home from "./components/Home";
-import Chats from "./components/Chats";
+import Chats from "./components/chats/Chats";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Profil from "./components/profil/Profil";
@@ -61,7 +61,7 @@ function App() {
           element={auth ? <Home auth={auth} /> : <Login />}
         />
         <Route path="/" element={<Home auth={auth} />} />
-        <Route path="/chats" element={<Chats />} />
+        <Route path="/chats" element={<Chats auth={auth} />} />
         <Route
           path="/register"
           element={!auth ? <Register /> : <Home auth={auth} />}

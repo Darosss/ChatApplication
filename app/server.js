@@ -3,25 +3,26 @@ const path = require("path");
 
 /* Import config */ // THIS IS NEW :)
 dotenv.config({ path: path.resolve(__dirname, ".env") });
-const express = require("express");
-const expressLayouts = require("express-ejs-layouts");
-// const expressSession = require("express-session");
-const { createServer } = require("http");
-const { Server } = require("socket.io");
+
+const app = require("express")();
+const http = require("http").Server(app);
+const cors = require("cors");
+
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+
 const session = require("cookie-session");
 const helmet = require("helmet");
 const hpp = require("hpp");
-// const csurf = require("csurf");
-const cors = require("cors");
-const methodOverride = require("method-override");
+
 const passport = require("./passportConfig");
 const jwtRequired = passport.authenticate("jwt", { session: false });
-
-const app = express();
-const httpServer = createServer(app);
-const io = new Server(httpServer);
 
 // CUSTOM MIDDLEWARES //
 const isAdmin = require("./routes/middlewares/isAdmin");
@@ -61,11 +62,7 @@ app.use(
 // app.use(csurf());
 
 // app.use(limiter);
-const corsOptions = {
-  origin: "http://localhost:3000",
-  credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
-};
+
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -89,31 +86,15 @@ app.use(function (req, res, next) {
   // to the API (e.g. in case you use sessions)
   res.setHeader("Access-Control-Allow-Credentials", true);
 
-  // Pass to next layer of middleware
   next();
 });
-app.use(expressLayouts);
-app.use(express.static(__dirname + "/public"));
-app.use(methodOverride("_method"));
-// app.use(cookieParser());
 
-// var sessionMiddleware = expressSession({
-//   name: "COOKIE_NAME_HERE",
-//   secret: "COOKIE_SECRET_HERE",
-//   resave: true,
-//   saveUninitialized: true,
-//   store: new (require("connect-mongo")(expressSession))({
-//     url: process.env.DATABASE_URL,
-//     ttl: 14 * 24 * 60 * 60,
-//     autoRemove: "native",
-//   }),
-//   cookie: {
-//     maxAge: 360000,
-//     secure: false,
-//   },
-// });
-// require("./socket")(io, sessionMiddleware);
-// app.use(sessionMiddleware);
+const socketIO = require("socket.io")(http, {
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
+require("./socket")(socketIO);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -128,7 +109,7 @@ app.use("/rooms", jwtRequired, roomsRouter);
 app.use("/ranges", jwtRequired, isAdmin, rangesRouter);
 app.use("/users", jwtRequired, isAdmin, usersRouter);
 //Listen port
-httpServer.listen(process.env.PORT || 5000, () => {
+http.listen(process.env.PORT || 5000, () => {
   console.log(`application is running at: */${process.env.PORT || 5000}`);
 });
 //TODO make verification with jwt or other idk
