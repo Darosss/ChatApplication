@@ -18,7 +18,6 @@ function Logout() {
   };
   return (
     <li className="nav-item">
-      {/* add form */}
       <button onClick={logout} className="btn btn-danger w-100">
         Logout
       </button>
