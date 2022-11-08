@@ -207,7 +207,6 @@ function ChatRoom(props) {
                 rows="3"
                 onChange={(e) => setMsgToSend(e.target.value)}
                 onFocus={(e) => setRoomIdToSend(room._id)}
-                onBlur={(e) => setRoomIdToSend("")}
                 onKeyDown={(e) => {
                   textareaOnKey(e);
                 }}
