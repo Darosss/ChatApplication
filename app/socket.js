@@ -49,7 +49,14 @@ module.exports = function (io) {
     socket.on("chat message", async (data) => {
       data.date = new Date();
       io.to(data.roomId).emit("chat message", data);
-      await saveMessageToDB(data.userId, data.message, data.date, data.roomId);
+      if (
+        await saveMessageToDB(data.userId, data.message, data.date, data.roomId)
+      )
+        //TODO: socket error message
+        console.log("xd");
+      else {
+        console.log("not XD");
+      }
     });
 
     //When user emits it, it add user to onlineUsers map then emit refresh_onlinie_users
@@ -58,18 +65,9 @@ module.exports = function (io) {
       io.emit("refresh_online_users", Array.from(onlineUsers));
     });
 
-    // socket.on("private msg", (toUser, msg) => {
-    //   socket
-    //     .to(getKeyByValue(activeUsers, toUser))
-    //     .emit("private msg", activeUsers[socket.id], msg);
-    // });
-
-    //   //Info about typing
-
-    // socket.on("user typing", (data) => {
-    //   data.username = userNick;
-    //   socket.to(data.roomName).emit("user typing", data);
-    // });
+    socket.on("user_typing", (data) => {
+      socket.to(data.roomId).emit("user_typing", data);
+    });
   });
 
   function addOnlineUserToRoom(roomId, username, socketId) {
@@ -81,7 +79,6 @@ module.exports = function (io) {
   }
 
   async function saveMessageToDB(username, msg, date, room) {
-    console.log("room", room);
     const message = new Message({
       sender: username,
       message: msg,
@@ -90,8 +87,10 @@ module.exports = function (io) {
     });
     try {
       await message.save();
+      return true;
     } catch (error) {
       console.log(error, "Message couldn't be saved");
+      return false;
     }
   }
 };
