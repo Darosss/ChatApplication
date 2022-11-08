@@ -32,11 +32,13 @@ function ChatRoom(props) {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [roomsOnlineUsers, setRoomsOnlineUsers] = useState([]);
 
-  const chatRooms = props.chatRooms;
   const messages = props.messages;
-  const auth = props.auth;
-  const username = auth.username;
-  const userId = auth._id;
+  const username = props.auth.username;
+  const userId = props.auth._id;
+
+  useEffect(() => {
+    setRoomsList(props.chatRooms);
+  }, [props]);
 
   useEffect(() => {
     const updateLocalMessages = (msgData) => {
@@ -54,12 +56,11 @@ function ChatRoom(props) {
         return prevState;
       });
     };
-    setRoomsList(chatRooms);
 
     initiateSocketConnection();
     userConnectedEmit(username);
 
-    chatRooms.forEach((room) => {
+    roomsList.forEach((room) => {
       joinRoom({ username: username, roomId: room._id });
     });
 
@@ -87,7 +88,7 @@ function ChatRoom(props) {
     return () => {
       disconnectSocket();
     };
-  }, [chatRooms, username]);
+  }, [roomsList, username]);
 
   const sendMessage = () => {
     console.log(roomIdToSend);
