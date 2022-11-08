@@ -8,8 +8,6 @@ export const initiateSocketConnection = () => {
   console.log(`Connecting socket...`);
 };
 export const joinRoom = (room) => {
-  console.log(`Connecting to room id: ${room.roomId} id`);
-
   if (socket && room) socket.emit("join channel", room);
 };
 
