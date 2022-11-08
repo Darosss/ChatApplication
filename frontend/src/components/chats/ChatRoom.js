@@ -17,6 +17,8 @@ import {
   joinRoom,
   refreshOnlineUsers,
   roomOnlineUsers,
+  onUserTyping,
+  userTypingEmit,
 } from "./Socket";
 
 function ChatRoom(props) {
@@ -31,16 +33,20 @@ function ChatRoom(props) {
 
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [roomsOnlineUsers, setRoomsOnlineUsers] = useState([]);
+  const [roomsTypingUsers, setRoomsTypingUsers] = useState([]);
 
   const messages = props.messages;
   const username = props.auth.username;
   const userId = props.auth._id;
+
+  const typingTimeoutMs = 5000;
 
   useEffect(() => {
     setRoomsList(props.chatRooms);
   }, [props]);
 
   useEffect(() => {
+    let typingTimeout = undefined;
     const updateLocalMessages = (msgData) => {
       let roomId = msgData.roomId;
       setLocalMessages((prevState) => {
@@ -85,13 +91,29 @@ function ChatRoom(props) {
       }, 50);
     });
 
+    onUserTyping((err, data) => {
+      setRoomsTypingUsers((prevState) => {
+        prevState[data.roomId] = data.username;
+        return prevState;
+      });
+
+      clearTimeout(typingTimeout);
+      typingTimeout = setTimeout(() => {
+        setRoomsTypingUsers((prevState) => {
+          prevState[data.roomId] = undefined;
+          return prevState;
+        });
+        forceUpdate();
+      }, typingTimeoutMs);
+      forceUpdate();
+    });
+
     return () => {
       disconnectSocket();
     };
   }, [roomsList, username]);
 
   const sendMessage = () => {
-    console.log(roomIdToSend);
     let msg = {
       roomId: roomIdToSend,
       userId: userId,
@@ -101,13 +123,20 @@ function ChatRoom(props) {
     sendMessageSocket(msg);
   };
 
+  const textareaOnKey = (e) => {
+    if (e.key === "Enter") sendMessageOnKey(e);
+    else userTypingTimeout(e);
+  };
+
   const sendMessageOnKey = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      sendMessage();
-      e.target.value = "";
-      setMsgToSend("");
-    }
+    e.preventDefault();
+    sendMessage();
+    e.target.value = "";
+    setMsgToSend("");
+  };
+
+  const userTypingTimeout = (e) => {
+    userTypingEmit(username, roomIdToSend);
   };
 
   const scrollToBottom = (sectionId) => {
@@ -165,6 +194,13 @@ function ChatRoom(props) {
             </td>
           </tr>
           <tr>
+            <td>
+              {roomsTypingUsers[room._id]
+                ? roomsTypingUsers[room._id] + " is typing"
+                : null}
+            </td>
+          </tr>
+          <tr>
             <td className="d-inline-flex w-100">
               <textarea
                 className="form-control w-100 m-1 bg-dark text-light"
@@ -173,7 +209,7 @@ function ChatRoom(props) {
                 onFocus={(e) => setRoomIdToSend(room._id)}
                 onBlur={(e) => setRoomIdToSend("")}
                 onKeyDown={(e) => {
-                  sendMessageOnKey(e);
+                  textareaOnKey(e);
                 }}
               ></textarea>
 
