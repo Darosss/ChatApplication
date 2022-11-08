@@ -4,7 +4,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const JwtStrategy = require("passport-jwt").Strategy,
   ExtractJwt = require("passport-jwt").ExtractJwt;
-console.log("process.env.JWT_SECRET_KEY", process.env.JWT_SECRET_KEY);
+
 const localStrategy = new LocalStrategy(function (username, password, done) {
   User.findOne({ username: username }, function (err, user) {
     if (err) return done(err);
@@ -17,6 +17,7 @@ const localStrategy = new LocalStrategy(function (username, password, done) {
     });
   });
 });
+
 const jwtStrategy = new JwtStrategy(
   {
     jwtFromRequest: (req) => req.session.jwt,

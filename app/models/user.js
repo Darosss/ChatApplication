@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const passportLocalMongoose = require("passport-local-mongoose");
 const bcrypt = require("bcrypt");
+
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -77,6 +78,7 @@ userSchema.pre("save", function (next) {
     next();
   });
 });
+
 userSchema.methods = {
   comparePassword: function (candidatePassword, cb) {
     bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
