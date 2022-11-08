@@ -49,3 +49,15 @@ export const sendMessageSocket = (message) => {
 export const userConnectedEmit = (username) => {
   socket.emit("user_connected", username);
 };
+
+export const onUserTyping = (cb) => {
+  if (!socket) return true;
+
+  socket.on("user_typing", (data) => {
+    return cb(null, data);
+  });
+};
+
+export const userTypingEmit = (username, roomId) => {
+  socket.emit("user_typing", { username, roomId });
+};
