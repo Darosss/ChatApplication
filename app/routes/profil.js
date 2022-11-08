@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
+const isUsersProfile = require("./middlewares/isUsersProfile");
 
 router.get("/:userId", async function (req, res) {
   let userDB = await User.findById(req.params.userId, {
@@ -10,7 +11,7 @@ router.get("/:userId", async function (req, res) {
   return res.send({ userDetails: userDB });
 });
 
-router.post("/:userId", async (req, res) => {
+router.post("/:userId", isUsersProfile, async (req, res) => {
   let user,
     oldPassword = req.body.oldPassword,
     newPassword = req.body.newPassword;
@@ -26,7 +27,7 @@ router.post("/:userId", async (req, res) => {
     email: req.body.email,
     phoneNumber: req.body.phone,
   };
-  console.log(req.body.oldPassword, "old", update);
+
   try {
     user = await User.findByIdAndUpdate(filter, update, { new: true });
     if (req.body.oldPassword)

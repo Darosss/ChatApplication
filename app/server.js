@@ -23,9 +23,6 @@ const hpp = require("hpp");
 const passport = require("./passportConfig");
 const jwtRequired = passport.authenticate("jwt", { session: false });
 
-// CUSTOM MIDDLEWARES //
-const isAdmin = require("./routes/middlewares/isAdmin");
-
 // ROUTES //
 const currSessionRouter = require("./routes/currSessionRouter");
 const chatsRouter = require("./routes/chats");
@@ -90,15 +87,15 @@ require("./socket")(socketIO);
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use("/chats", chatsRouter);
+app.use("/chats", jwtRequired, chatsRouter);
 app.use("/api", currSessionRouter);
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
 app.use("/profil", jwtRequired, profilRouter);
 app.use("/logout", jwtRequired, logoutRouter);
 app.use("/rooms", jwtRequired, roomsRouter);
-app.use("/ranges", jwtRequired, isAdmin, rangesRouter);
-app.use("/users", jwtRequired, isAdmin, usersRouter);
+app.use("/ranges", jwtRequired, rangesRouter);
+app.use("/users", jwtRequired, usersRouter);
 
 //Listen port
 http.listen(process.env.PORT || 5000, () => {
