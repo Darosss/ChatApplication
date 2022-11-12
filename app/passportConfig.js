@@ -25,11 +25,16 @@ const jwtStrategy = new JwtStrategy(
   },
   async (payload, done) => {
     // TODO: add additional jwt token verification
+
     let user = await User.findOne(
       { username: payload.username },
       "_id username administrator"
     );
-    return done(null, user);
+    payload.id = user.id;
+    payload.administrator = user.administrator;
+
+    // console.log("test passportConf", payload);
+    return done(null, payload);
   }
 );
 
