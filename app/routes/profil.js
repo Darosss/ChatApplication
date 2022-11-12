@@ -25,7 +25,7 @@ router.post("/:userId", isUsersProfile, async (req, res) => {
     gender: req.body.gender,
     nickColor: req.body.nickColor,
     email: req.body.email,
-    phoneNumber: req.body.phone,
+    phoneNumber: req.body.phoneNumber, //TODO: i changed here need to change in front
   };
 
   try {
@@ -33,9 +33,9 @@ router.post("/:userId", isUsersProfile, async (req, res) => {
     if (req.body.oldPassword)
       await changePassword(user, oldPassword, newPassword, update);
 
-    res.send({ message: "Succesfully edited profile" });
+    res.status(201).send({ message: "Succesfully edited profile" });
   } catch (e) {
-    res.send({ message: "Can't edit profile" });
+    res.status(400).send({ message: "Can't edit profile" });
   }
 });
 
