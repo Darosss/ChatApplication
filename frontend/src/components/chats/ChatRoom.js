@@ -37,7 +37,7 @@ function ChatRoom(props) {
 
   const messages = props.messages;
   const username = props.auth.username;
-  const userId = props.auth._id;
+  const userId = props.auth.id;
 
   const typingTimeoutMs = 5000;
 
