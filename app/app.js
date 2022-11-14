@@ -7,12 +7,6 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
-const corsOptions = {
-  origin: "http://localhost:3000",
-  credentials: true,
-  optionSuccessStatus: 200,
-};
-
 const session = require("cookie-session");
 const helmet = require("helmet");
 const hpp = require("hpp");
@@ -43,34 +37,18 @@ app.use(
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
   })
 );
+const corsOptions = {
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+  optionSuccessStatus: 200,
+  allowedHeaders: "X-Requested-With,content-type",
+  methods: ["GET", "POST", "DELETE"],
+};
+
 app.use(cors(corsOptions));
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(express.json()); //For JSON requests
 app.use(express.urlencoded({ extended: true }));
-
-app.use(function (req, res, next) {
-  // Website you wish to allow to connect
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-
-  // Request methods you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  );
-
-  // Request headers you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type"
-  );
-
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
-  res.setHeader("Access-Control-Allow-Credentials", true);
-
-  next();
-});
 
 app.use(passport.initialize());
 app.use(passport.session());
