@@ -37,7 +37,7 @@ function EditProfileModal(props) {
         email: email,
         birthday: birthday,
         country: country,
-        phone: phone,
+        phoneNumber: phone,
         gender: gender,
         nickColor: nickColor,
       },

@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
 router.get("/create", async (req, res) => {
   const ranges = await range.find({});
   const users = await User.find({}, "_id username"); //TODO this add to method model user
-  res.send({ availableRanges: ranges, usersList: users });
+  res.status(200).send({ availableRanges: ranges, usersList: users });
 });
 
 //Create new chatroom
@@ -37,11 +37,12 @@ router.post("/create", async (req, res) => {
     bannedUsers: req.body.bannedUsers,
     createdBy: createdBy.id,
   });
+
   try {
     await room.save();
-    res.send({ message: "Room created succesfully!" });
+    res.status(201).send({ message: "Room created succesfully!" });
   } catch (error) {
-    res.send({ message: "Cannot create room!" });
+    res.status(400).send({ message: "Cannot create room!" });
   }
 });
 
@@ -88,9 +89,9 @@ router.delete("/delete/:roomId", chatRoomValidation, async (req, res) => {
   let room = await chatRoom.findById(req.params.roomId);
   try {
     await room.remove();
-    res.send({ message: "Succesfully removed room" });
+    res.status(201).send({ message: "Succesfully removed room" });
   } catch {
-    res.send({ message: "Can't remove room" });
+    res.status(403).send({ message: "Can't remove room" });
   }
 });
 module.exports = router;

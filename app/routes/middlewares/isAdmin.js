@@ -4,6 +4,6 @@ module.exports = async function (req, res, next) {
   if (await isAdmin(userId)) {
     return next();
   } else {
-    res.send({ message: "You do not have permission" });
+    res.status(403).send({ message: "You do not have permission" });
   }
 };

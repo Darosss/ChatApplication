@@ -15,24 +15,26 @@ router.get("/", async (req, res) => {
 
 //Create new range
 router.post("/create", isAdmin, async (req, res) => {
-  let creatorName = req.user;
+  let creatorId = req.user.id;
   let name = req.body.name;
   const newRange = new range({
     name: name,
-    createdBy: creatorName._id,
+    createdBy: creatorId,
   });
   try {
     await newRange.save();
-    console.log("Created new range");
+    // console.log("Created new range");
+    res.status(201).send({ message: "Created new range" });
   } catch (error) {
-    console.log("Cannot create range", error);
+    res.status(400).send({ message: "Cannot create new range" });
+    // console.log("Cannot create range", error);
   }
 });
 
 //Get range by id
 router.get("/:id/", isAdmin, async (req, res) => {
   const rangeEdit = await range.findById(req.params.id, { __v: 0 });
-  res.send({ range: rangeEdit });
+  res.status(200).send({ range: rangeEdit });
 
   //TODO try
 });

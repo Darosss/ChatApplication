@@ -29,9 +29,9 @@ router.post(
         const newUser = new User(userData);
         try {
           await newUser.save();
-          res.send("Account created");
+          res.status(201).send("Account created");
         } catch (err) {
-          res.send("Some fields can't be empty");
+          res.status(400).send("Some fields can't be empty");
         }
       }
     });
