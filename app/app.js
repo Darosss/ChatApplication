@@ -52,14 +52,15 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use("/chats", jwtRequired, chatsRouter);
-app.use("/api", currSessionRouter);
-app.use("/login", loginRouter);
-app.use("/register", registerRouter);
-app.use("/profil", jwtRequired, profilRouter);
-app.use("/logout", logoutRouter);
-app.use("/rooms", jwtRequired, roomsRouter);
-app.use("/ranges", jwtRequired, rangesRouter);
-app.use("/users", jwtRequired, usersRouter);
+
+app.use("/api/v1/chats", jwtRequired, chatsRouter);
+app.use("/api/v1/session", currSessionRouter);
+app.use("/api/v1/login", loginRouter);
+app.use("/api/v1/register", registerRouter);
+app.use("/api/v1/profil", jwtRequired, profilRouter);
+app.use("/api/v1/logout", logoutRouter);
+app.use("/api/v1/rooms", jwtRequired, roomsRouter);
+app.use("/api/v1/ranges", jwtRequired, rangesRouter);
+app.use("/api/v1/users", jwtRequired, usersRouter);
 
 module.exports = app;
