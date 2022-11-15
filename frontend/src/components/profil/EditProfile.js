@@ -98,7 +98,7 @@ function EditProfileModal(props) {
         <label className="form-label">Phone</label>
         {createProfileInput("phone", setPhone, phone)}
         <label className="form-label">Nick color</label>
-        {createProfileInput("nickColor", setGender, nickColor)}
+        {createProfileInput("nickColor", setNickColor, nickColor)}
       </div>
     );
   };
