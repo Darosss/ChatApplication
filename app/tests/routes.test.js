@@ -68,13 +68,13 @@ describe("routes", function () {
     authenticatedSessionAdmin = session(app);
 
     authenticatedSession
-      .post("/login")
+      .post("/api/v1/login")
       .send(userCredentials)
       .expect(200)
       .end(done);
 
     authenticatedSessionAdmin
-      .post("/login")
+      .post("/api/v1/login")
       .send(adminCredentials)
       .expect(200)
       .end(done);
@@ -94,7 +94,7 @@ describe("routes", function () {
 
     it("should register new user", function (done) {
       unauthorizedSession
-        .post("/register")
+        .post("/api/v1/register")
         .send(Object.assign(registerUserCredentials, accDetails))
         .expect(201)
         .end(done);
@@ -105,7 +105,7 @@ describe("routes", function () {
     describe("/chats authenticated", function () {
       it("should return user's rooms and msgs", function (done) {
         authenticatedSession
-          .get("/chats")
+          .get("/api/v1/chats")
           .expect(200)
           .expect("Content-Type", /json/)
           .end(done);
@@ -114,7 +114,7 @@ describe("routes", function () {
 
     describe("/chats not authenticated", function () {
       it("should fail accesing chats route", function (done) {
-        unauthorizedSession.get("/chats").expect(401).end(done);
+        unauthorizedSession.get("/api/v1/chats").expect(401).end(done);
       });
     });
   });
@@ -123,7 +123,7 @@ describe("routes", function () {
     describe("/profil route authenticated", function () {
       it("should return user profile", function (done) {
         authenticatedSession
-          .get(`/profil/${userId}`)
+          .get(`/api/v1/profil/${userId}`)
           .expect(200)
           .expect("Content-Type", /json/)
           .end(done);
@@ -131,7 +131,7 @@ describe("routes", function () {
 
       it("should succesfully edit user's profile", function (done) {
         authenticatedSession
-          .post(`/profil/${userId}`)
+          .post(`api/v1/profil/${userId}`)
           .send(accDetails)
           .expect(201)
           .expect("Content-Type", /json/)
@@ -140,7 +140,7 @@ describe("routes", function () {
 
       it("should succesfully edit user's with same passwords profile", function (done) {
         authenticatedSession
-          .post(`/profil/${userId}`)
+          .post(`api/v1/profil/${userId}`)
           .send(accDetails)
           .expect(201)
           .expect("Content-Type", /json/)
@@ -148,7 +148,7 @@ describe("routes", function () {
       });
       it("should fail edit other user profile", function (done) {
         authenticatedSession
-          .post(`/profil/${adminId}`)
+          .post(`api/v1/profil/${adminId}`)
           .send(accDetails)
           .expect(403)
           .expect("Content-Type", /json/)
@@ -157,8 +157,14 @@ describe("routes", function () {
     });
     describe("/profile not authenticated", function () {
       it("should fail accesing (GET and POST) profil route", function (done) {
-        unauthorizedSession.get(`/profil/${userId}`).expect(401).end(done);
-        unauthorizedSession.post(`/profil/${userId}`).expect(401).end(done);
+        unauthorizedSession
+          .get(`/api/v1/profil/${userId}`)
+          .expect(401)
+          .end(done);
+        unauthorizedSession
+          .post(`api/v1/profil/${userId}`)
+          .expect(401)
+          .end(done);
       });
     });
   });
@@ -180,7 +186,7 @@ describe("routes", function () {
     describe("/rooms authenticated", function () {
       it("should return user's rooms", function (done) {
         authenticatedSession
-          .get("/rooms")
+          .get("/api/v1/rooms")
           .expect(200)
           .expect("Content-Type", /json/)
           .end(done);
@@ -188,7 +194,7 @@ describe("routes", function () {
 
       it("should get available ranges and users", function (done) {
         authenticatedSession
-          .get("/rooms/create")
+          .get("/api/v1/rooms/create")
           .expect(200)
           .expect("Content-Type", /json/)
           .end(done);
@@ -196,7 +202,7 @@ describe("routes", function () {
 
       it("should create new room", function (done) {
         authenticatedSession
-          .post("/rooms/create")
+          .post("/api/v1/rooms/create")
           .send(newRoomDetails)
           .expect(201)
           .expect("Content-Type", /json/)
@@ -215,7 +221,7 @@ describe("routes", function () {
 
       it("should return bad request for create existing room", function (done) {
         authenticatedSession
-          .post("/rooms/create")
+          .post("/api/v1/rooms/create")
           .send(newRoomDetails)
           .expect(400)
           .expect("Content-Type", /json/)
@@ -223,12 +229,15 @@ describe("routes", function () {
       });
 
       it("should get room by id", function (done) {
-        authenticatedSession.get(`/rooms/${roomId}`).expect(200).end(done);
+        authenticatedSession
+          .get(`/api/v1/rooms/${roomId}`)
+          .expect(200)
+          .end(done);
       });
 
       it("should delete room by id", function (done) {
         authenticatedSession
-          .delete(`/rooms/delete/${roomId}`)
+          .delete(`api/v1/rooms/delete/${roomId}`)
           .expect(201)
           .end(done);
       });
@@ -236,13 +245,16 @@ describe("routes", function () {
 
     describe("/rooms not authenticated", function () {
       it("should fail accesing every rooms route", function (done) {
-        unauthorizedSession.get("/rooms").expect(401);
-        unauthorizedSession.get("/rooms/create").expect(401);
-        unauthorizedSession.post("/rooms/create").expect(401);
-        unauthorizedSession.get(`/rooms/${roomId}`).expect(401);
-        unauthorizedSession.post(`/rooms/${roomId}`).expect(401);
-        unauthorizedSession.get(`/rooms/${roomId}`).expect(401);
-        unauthorizedSession.delete(`/rooms/${roomId}`).expect(401).end(done);
+        unauthorizedSession.get("/api/v1/rooms").expect(401);
+        unauthorizedSession.get("/api/v1/rooms/create").expect(401);
+        unauthorizedSession.post("/api/v1/rooms/create").expect(401);
+        unauthorizedSession.get(`/api/v1/rooms/${roomId}`).expect(401);
+        unauthorizedSession.post(`api/v1/rooms/${roomId}`).expect(401);
+        unauthorizedSession.get(`/api/v1/rooms/${roomId}`).expect(401);
+        unauthorizedSession
+          .delete(`api/v1/rooms/${roomId}`)
+          .expect(401)
+          .end(done);
       });
     });
   });
@@ -261,7 +273,7 @@ describe("routes", function () {
     describe("/ranges as admin", function () {
       it("should create new range", function (done) {
         authenticatedSessionAdmin
-          .post("/ranges/create")
+          .post("/api/v1/ranges/create")
           .send(newRangeDetails)
           .expect(201)
           .end(function (err) {
@@ -276,14 +288,14 @@ describe("routes", function () {
 
       it("should get range by id", function (done) {
         authenticatedSessionAdmin
-          .get(`/ranges/${rangeId}`)
+          .get(`/api/v1/ranges/${rangeId}`)
           .expect(200)
           .end(done);
       });
 
       it("should edit range by id", function (done) {
         authenticatedSessionAdmin
-          .post(`/ranges/edit/${rangeId}`)
+          .post(`api/v1/ranges/edit/${rangeId}`)
           .send(newRangeDetails)
           .expect(200)
           .end(done);
@@ -291,7 +303,7 @@ describe("routes", function () {
 
       it("should remove range by id", function (done) {
         authenticatedSessionAdmin
-          .delete(`/ranges/delete/${rangeId}`)
+          .delete(`api/v1/ranges/delete/${rangeId}`)
           .expect(200)
           .end(done);
       });
@@ -299,33 +311,42 @@ describe("routes", function () {
 
     describe("/ranges authenticated", function () {
       it("should access range routes", function (done) {
-        authenticatedSession.get("/ranges").expect(200).end(done);
+        authenticatedSession.get("/api/v1/ranges").expect(200).end(done);
       });
 
       it("should fail accesing forbidden range routes", function (done) {
-        authenticatedSession.post("/ranges/create").expect(403).end(done);
-        authenticatedSession.get(`/ranges/${rangeId}`).expect(403).end(done);
         authenticatedSession
-          .post(`/ranges/edit/${rangeId}`)
+          .post("/api/v1/ranges/create")
           .expect(403)
           .end(done);
         authenticatedSession
-          .delete(`/ranges/delete/${rangeId}`)
+          .get(`/api/v1/ranges/${rangeId}`)
+          .expect(403)
+          .end(done);
+        authenticatedSession
+          .post(`api/v1/ranges/edit/${rangeId}`)
+          .expect(403)
+          .end(done);
+        authenticatedSession
+          .delete(`api/v1/ranges/delete/${rangeId}`)
           .expect(403)
           .end(done);
       });
     });
     describe("/ranges not authenticated", function () {
       it("should fail accesing every ranges route", function (done) {
-        unauthorizedSession.get("/ranges").expect(401).end(done);
-        unauthorizedSession.post("/ranges/create").expect(401).end(done);
-        unauthorizedSession.get(`/ranges/${rangeId}`).expect(401).end(done);
+        unauthorizedSession.get("/api/v1/ranges").expect(401).end(done);
+        unauthorizedSession.post("/api/v1/ranges/create").expect(401).end(done);
         unauthorizedSession
-          .get(`/ranges/edit/${rangeId}`)
+          .get(`/api/v1/ranges/${rangeId}`)
           .expect(401)
           .end(done);
         unauthorizedSession
-          .get(`/ranges/delete/${rangeId}`)
+          .get(`/api/v1/ranges/edit/${rangeId}`)
+          .expect(401)
+          .end(done);
+        unauthorizedSession
+          .get(`/api/v1/ranges/delete/${rangeId}`)
           .expect(401)
           .end(done);
       });
@@ -336,7 +357,7 @@ describe("routes", function () {
     describe("/users as admin", function () {
       it("should edit user", function (done) {
         authenticatedSessionAdmin
-          .post(`/users/edit/${userId}`)
+          .post(`api/v1/users/edit/${userId}`)
           .send(accDetails)
           .expect(200)
           .end(done);
@@ -344,14 +365,14 @@ describe("routes", function () {
 
       it("should ban user by id", function (done) {
         authenticatedSessionAdmin
-          .post(`/users/ban/${userId}`)
+          .post(`api/v1/users/ban/${userId}`)
           .expect(200)
           .end(done);
       });
 
       it("should unban user by id", function (done) {
         authenticatedSessionAdmin
-          .post(`/users/unban/${userId}`)
+          .post(`api/v1/users/unban/${userId}`)
           .expect(200)
           .end(done);
       });
@@ -359,39 +380,45 @@ describe("routes", function () {
 
     describe("/users authenticated", function () {
       it("should access all users list", function (done) {
-        authenticatedSession.get("/users").expect(200).end(done);
+        authenticatedSession.get("/api/v1/users").expect(200).end(done);
       });
 
       it("should access profile of other user", function (done) {
-        authenticatedSession.get("/users").expect(200).end(done);
+        authenticatedSession.get("/api/v1/users").expect(200).end(done);
       });
 
       it("should fail accesing forbidden users routes", function (done) {
         authenticatedSession
-          .post(`/users/edit/${adminId}`)
+          .post(`api/v1/users/edit/${adminId}`)
           .expect(403)
           .end(done);
         authenticatedSession
-          .post(`/users/ban/${adminId}`)
+          .post(`api/v1/users/ban/${adminId}`)
           .expect(403)
           .end(done);
         authenticatedSession
-          .post(`/users/unban/${adminId}`)
+          .post(`api/v1/users/unban/${adminId}`)
           .expect(403)
           .end(done);
       });
     });
     describe("/ranges not authenticated", function () {
       it("should fail accesing every users route", function (done) {
-        unauthorizedSession.get("/users").expect(401).end(done);
-        unauthorizedSession.get(`/users/${adminId}`).expect(401).end(done);
+        unauthorizedSession.get("/api/v1/users").expect(401).end(done);
         unauthorizedSession
-          .post(`/users/edit/${adminId}`)
+          .get(`/api/v1/users/${adminId}`)
           .expect(401)
           .end(done);
-        unauthorizedSession.post(`/users/ban/${adminId}`).expect(401).end(done);
         unauthorizedSession
-          .post(`/users/unban/${adminId}`)
+          .post(`api/v1/users/edit/${adminId}`)
+          .expect(401)
+          .end(done);
+        unauthorizedSession
+          .post(`api/v1/users/ban/${adminId}`)
+          .expect(401)
+          .end(done);
+        unauthorizedSession
+          .post(`api/v1/users/unban/${adminId}`)
           .expect(401)
           .end(done);
       });
@@ -399,7 +426,7 @@ describe("routes", function () {
 
     describe("/logout route", function () {
       it("should logout user", function (done) {
-        authenticatedSession.post("/logout").expect(200).end(done);
+        authenticatedSession.post("/api/v1/logout").expect(200).end(done);
       });
     });
   });
