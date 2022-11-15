@@ -6,7 +6,7 @@ function Logout() {
     axios({
       method: "POST",
       withCredentials: true,
-      url: "http://localhost:5000/logout",
+      url: "/api/v1/logout",
     })
       .then((res) => {
         console.log(res, "res");

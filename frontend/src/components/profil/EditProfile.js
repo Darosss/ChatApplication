@@ -42,7 +42,7 @@ function EditProfileModal(props) {
         nickColor: nickColor,
       },
       withCredentials: true,
-      url: "http://localhost:5000/profil/" + props.user._id,
+      url: "/api/v1/profil/" + props.user._id,
     };
     axios(axiosEditProfile).then((res) => {
       setPostInfo(res.data.message);
@@ -98,7 +98,7 @@ function EditProfileModal(props) {
         <label className="form-label">Phone</label>
         {createProfileInput("phone", setPhone, phone)}
         <label className="form-label">Nick color</label>
-        {createProfileInput("nickColor", setGender, nickColor)}
+        {createProfileInput("nickColor", setNickColor, nickColor)}
       </div>
     );
   };

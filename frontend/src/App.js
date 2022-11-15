@@ -17,7 +17,7 @@ function App() {
   const [auth, setAuth] = useState(null);
   useEffect(() => {
     axios
-      .get("/api/current-session")
+      .get("/api/v1/session")
       .then(({ data }) => {
         setAuth(data);
       })

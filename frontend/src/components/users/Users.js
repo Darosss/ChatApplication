@@ -8,7 +8,7 @@ function Users() {
     const axiosConfig = {
       method: "get",
       withCredentials: true,
-      url: "http://localhost:5000/users/",
+      url: "/api/v1/users/",
     };
     axios(axiosConfig).then((res) => {
       setUsersList(res.data.usersList);

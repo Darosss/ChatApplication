@@ -2,17 +2,18 @@ const app = require("./app");
 const http = require("http").Server(app);
 const mongoose = require("mongoose");
 
-//MONGODB database connection
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
-const db = mongoose.connection;
-
 const socketIO = require("socket.io")(http, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.FRONTEND_URL,
   },
 });
 require("./socket")(socketIO);
 
-http.listen(process.env.PORT || 5000, () => {
-  // console.log(`application is running at: */${process.env.PORT || 5000}`);
+//MONGODB database connection
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
+
+http.listen(process.env.BACKEND_PORT || 5000, () => {
+  console.log(
+    `application is running at: */${process.env.BACKEND_PORT || 5000}`
+  );
 });

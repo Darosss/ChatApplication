@@ -24,7 +24,7 @@ function EditUserModal(props) {
     const axiosConfig = {
       method: "get",
       withCredentials: true,
-      url: "http://localhost:5000/users/" + props.userId,
+      url: "/api/v1/users/" + props.userId,
     };
 
     axios(axiosConfig).then((res) => {
@@ -60,7 +60,7 @@ function EditUserModal(props) {
         ranges: userRanges,
       },
       withCredentials: true,
-      url: "http://localhost:5000/users/edit/" + props.userId,
+      url: "/api/v1/users/edit/" + props.userId,
     };
     axios(axiosEditUser).then((res) => {
       setPostInfo(res.data.message);

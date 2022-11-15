@@ -17,9 +17,7 @@ function EditCreateRoomModal(props) {
     const axiosConfigRoom = {
       method: "get",
       withCredentials: true,
-      url:
-        "http://localhost:5000/rooms/" +
-        (props.roomId ? props.roomId : "create"),
+      url: "/api/v1/rooms/" + (props.roomId ? props.roomId : "create"),
     };
     axios(axiosConfigRoom).then((res) => {
       setUsersList(res.data.usersList);
@@ -43,9 +41,7 @@ function EditCreateRoomModal(props) {
         bannedUsers: roomBannedUsers,
       },
       withCredentials: true,
-      url:
-        "http://localhost:5000/rooms/" +
-        (props.roomId ? props.roomId : "create"),
+      url: "/api/v1/rooms/" + (props.roomId ? props.roomId : "create"),
     };
     axios(axiosCreateConfig).then((res) => {
       setPostInfo(res.data.message);
