@@ -10,7 +10,7 @@ function Rooms() {
     const axiosConfigRooms = {
       method: "get",
       withCredentials: true,
-      url: "http://localhost:5000/rooms",
+      url: "/api/v1/rooms",
     };
     axios(axiosConfigRooms).then((res) => {
       setRooms(res.data.usersRooms);

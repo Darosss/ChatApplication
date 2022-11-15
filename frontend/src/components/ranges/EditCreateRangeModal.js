@@ -12,7 +12,7 @@ function EditRangeModal(props) {
     const axiosConfigRanges = {
       method: "get",
       withCredentials: true,
-      url: "http://localhost:5000/ranges/" + props.rangeId,
+      url: "/api/v1/ranges/" + props.rangeId,
     };
 
     axios(axiosConfigRanges).then((res) => {
@@ -28,7 +28,7 @@ function EditRangeModal(props) {
       },
       withCredentials: true,
       url:
-        "http://localhost:5000/ranges/" +
+        "/api/v1/ranges/" +
         (props.rangeId ? "edit/" + props.rangeId : "create"),
     };
     axios(axiosEditRange).then((res) => {

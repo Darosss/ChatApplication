@@ -30,7 +30,7 @@ function App() {
         phone: phone,
       },
       withCredentials: true,
-      url: "http://localhost:5000/register",
+      url: "/api/v1/register",
     }).then((res) => {
       console.log(res);
       navigate("/login");

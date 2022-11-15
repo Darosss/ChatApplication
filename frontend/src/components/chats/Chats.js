@@ -11,7 +11,7 @@ function Chats(props) {
     const axiosConfig = {
       method: "get",
       withCredentials: true,
-      url: "http://localhost:5000/chats",
+      url: "/api/v1/chats",
     };
     axios(axiosConfig).then((res) => {
       setMessages(res.data.rooms);

@@ -14,7 +14,7 @@ function Login() {
         password: password,
       },
       withCredentials: true,
-      url: "http://localhost:5000/login",
+      url: "/api/v1/login",
     }).then((res) => {
       console.log(res);
       window.location.reload(false);

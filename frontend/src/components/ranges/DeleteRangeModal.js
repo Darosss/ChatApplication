@@ -9,7 +9,7 @@ function DeleteRangeModal(props) {
     const axiosConfig = {
       method: "delete",
       withCredentials: true,
-      url: "http://localhost:5000/ranges/delete/" + props.rangeId,
+      url: "/api/v1/ranges/delete/" + props.rangeId,
     };
 
     axios(axiosConfig).then((res) => {

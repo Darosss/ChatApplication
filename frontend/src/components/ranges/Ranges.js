@@ -10,7 +10,7 @@ function Ranges() {
     const axiosConfig = {
       method: "get",
       withCredentials: true,
-      url: "http://localhost:5000/ranges/",
+      url: "/api/v1/ranges/",
     };
     axios(axiosConfig).then((res) => {
       setAvailableRanges(res.data.ranges);

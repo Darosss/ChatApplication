@@ -15,7 +15,7 @@ function EditUserModal(props) {
         banTime: banTime,
       },
       withCredentials: true,
-      url: "http://localhost:5000/users/ban/" + props.userId,
+      url: "/api/v1/users/ban/" + props.userId,
     };
 
     axios(axiosConfig).then((res) => {
