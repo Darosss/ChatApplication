@@ -13,21 +13,22 @@ import Rooms from "./components/rooms/Rooms";
 import Logout from "./components/Logout";
 import Users from "./components/users/Users";
 import Ranges from "./components/ranges/Ranges";
+
 function App() {
   const [auth, setAuth] = useState(null);
   useEffect(() => {
     axios
-      .get("/api/v1/session")
-      .then(({ data }) => {
-        setAuth(data);
+      .get(`${process.env.REACT_APP_API_URI}/session`, {
+        withCredentials: true,
       })
-      .catch((err) => {
-        console.log(err);
+      .then((res) => {
+        setAuth(res.data);
       });
   }, []);
   if (auth === null) {
     return <Loading />;
   }
+
   return (
     <div>
       <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
