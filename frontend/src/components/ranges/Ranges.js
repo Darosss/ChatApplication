@@ -10,7 +10,7 @@ function Ranges() {
     const axiosConfig = {
       method: "get",
       withCredentials: true,
-      url: "/api/v1/ranges/",
+      url: `${process.env.REACT_APP_API_URI}/ranges/`,
     };
     axios(axiosConfig).then((res) => {
       setAvailableRanges(res.data.ranges);

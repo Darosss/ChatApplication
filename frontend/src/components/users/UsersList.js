@@ -8,7 +8,7 @@ function UsersList(props) {
     const axiosConfig = {
       method: "post",
       withCredentials: true,
-      url: "/api/v1/users/unban/" + e,
+      url: `${process.env.REACT_APP_API_URI}/users/unban/` + e,
     };
     axios(axiosConfig);
     window.location.reload(false);

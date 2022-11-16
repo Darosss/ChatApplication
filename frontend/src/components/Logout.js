@@ -6,7 +6,7 @@ function Logout() {
     axios({
       method: "POST",
       withCredentials: true,
-      url: "/api/v1/logout",
+      url: `${process.env.REACT_APP_API_URI}/logout`,
     })
       .then((res) => {
         console.log(res, "res");

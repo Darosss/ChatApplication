@@ -8,7 +8,7 @@ function Users() {
     const axiosConfig = {
       method: "get",
       withCredentials: true,
-      url: "/api/v1/users/",
+      url: `${process.env.REACT_APP_API_URI}/users/`,
     };
     axios(axiosConfig).then((res) => {
       setUsersList(res.data.usersList);

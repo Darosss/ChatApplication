@@ -10,7 +10,7 @@ function Rooms() {
     const axiosConfigRooms = {
       method: "get",
       withCredentials: true,
-      url: "/api/v1/rooms",
+      url: `${process.env.REACT_APP_API_URI}/rooms`,
     };
     axios(axiosConfigRooms).then((res) => {
       setRooms(res.data.usersRooms);

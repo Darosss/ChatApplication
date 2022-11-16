@@ -4,7 +4,6 @@ import { Button } from "react-bootstrap";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   const login = (e) => {
     e.preventDefault();
     axios({
@@ -14,7 +13,7 @@ function Login() {
         password: password,
       },
       withCredentials: true,
-      url: "/api/v1/login",
+      url: `${process.env.REACT_APP_API_URI}/login`,
     }).then((res) => {
       console.log(res);
       window.location.reload(false);

@@ -30,7 +30,7 @@ function App() {
         phone: phone,
       },
       withCredentials: true,
-      url: "/api/v1/register",
+      url: `${process.env.REACT_APP_API_URI}/register`,
     }).then((res) => {
       console.log(res);
       navigate("/login");

@@ -8,7 +8,7 @@ function Profile({ auth }) {
     const axiosConfig = {
       method: "get",
       withCredentials: true,
-      url: "/api/v1/profil/" + auth.id,
+      url: `${process.env.REACT_APP_API_URI}/profil/` + auth.id,
     };
     axios(axiosConfig).then((res) => {
       setUserDetails(res.data.userDetails);
