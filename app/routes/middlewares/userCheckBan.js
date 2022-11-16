@@ -1,16 +1,13 @@
 const User = require("../../models/user");
 
 module.exports = async function (req, res, next) {
-  let userId = req.session.passport.user._id;
+  let userId = req.user.id;
   let user = await User.findById(userId);
 
-  if (!user.isBanned) return next();
-
-  if (!checkBanDate(user.banExpiresDate)) res.redirect("/profil");
-  else {
-    unban(user);
-    return next();
+  if (checkBanDate(user.banExpiresDate)) {
+    await unban(user);
   }
+  return next();
 };
 
 var unban = async function (user) {
