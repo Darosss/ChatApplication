@@ -18,6 +18,7 @@ function Profile({ auth }) {
   return (
     <div className="App">
       <header className="App-header">
+        <h1> Profil </h1>
         <ProfilDetails user={userDetails} />
       </header>
     </div>
