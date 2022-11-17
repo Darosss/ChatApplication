@@ -5,7 +5,7 @@ import DeleteRoomModal from "./DeleteRoomModal";
 function UserRoomsList(props) {
   return (
     <div className="container d-flex justify-content-center">
-      <table className="table table-sm table-dark w-50">
+      <table className="table table-sm table-dark w-100">
         <thead>
           <tr>
             <th> Rooms </th>
