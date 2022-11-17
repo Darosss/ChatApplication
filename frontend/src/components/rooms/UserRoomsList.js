@@ -8,7 +8,10 @@ function UserRoomsList(props) {
       <table className="table table-sm table-dark w-50">
         <thead>
           <tr>
-            <th colSpan={3}> Rooms </th>
+            <th> Rooms </th>
+            <th colSpan={2}>
+              <EditCreateRoomModal sectionName="Create" />
+            </th>
           </tr>
         </thead>
         <tbody>

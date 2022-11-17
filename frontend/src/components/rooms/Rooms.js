@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import UserRoomsList from "./UserRoomsList";
-import EditCreateRoomModal from "./EditCreateRoomModal";
 
 function Rooms() {
   const [rooms, setRooms] = useState([]);
@@ -20,11 +19,8 @@ function Rooms() {
   return (
     <div className="App">
       <header className="App-header">
-        <div>
-          <div className="m-1">Your chat rooms</div>
-          <EditCreateRoomModal sectionName="Create" />
-        </div>
-        {}
+        <h1> Your rooms </h1>
+
         {<UserRoomsList rooms={rooms} />}
       </header>
     </div>
