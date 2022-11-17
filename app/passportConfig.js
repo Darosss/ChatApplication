@@ -28,10 +28,11 @@ const jwtStrategy = new JwtStrategy(
 
     let user = await User.findOne(
       { username: payload.username },
-      "_id username administrator"
+      "_id username administrator isBanned"
     );
     payload.id = user.id;
     payload.administrator = user.administrator;
+    payload.isBanned = user.isBanned;
 
     // console.log("test passportConf", payload);
     return done(null, payload);

@@ -4,6 +4,7 @@ const user = require("../models/user");
 const range = require("../models/range");
 const chatRoom = require("../models/chatRoom");
 const isAdmin = require("./middlewares/isAdmin");
+
 router.get("/", async (req, res) => {
   let users;
   try {
@@ -55,8 +56,8 @@ router.post("/edit/:userId", isAdmin, async (req, res) => {
 
 //Ban user by id route
 router.post("/ban/:userId/", isAdmin, async (req, res) => {
-  let banTime = req.body.banTime;
-  if (!banTime) banTime = 5;
+  let banTime = req.body.banTime || 5;
+  let banReason = req.body.banReason;
 
   let bannedDate = new Date(),
     banExpiresDate = new Date();
@@ -67,6 +68,7 @@ router.post("/ban/:userId/", isAdmin, async (req, res) => {
     isBanned: true,
     bannedDate: bannedDate,
     banExpiresDate: banExpiresDate,
+    banReason: banReason,
   };
   try {
     await user.findByIdAndUpdate(req.params.userId, update);

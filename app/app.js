@@ -14,6 +14,10 @@ const hpp = require("hpp");
 const passport = require("./passportConfig");
 const jwtRequired = passport.authenticate("jwt", { session: false });
 
+//MIDDLEWARES//
+const userCheckBan = require("./routes/middlewares/userCheckBan");
+const isBanned = require("./routes/middlewares/isBanned");
+
 // ROUTES //
 const currSessionRouter = require("./routes/currSessionRouter");
 const chatsRouter = require("./routes/chats");
@@ -53,14 +57,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/api/v1/chats", jwtRequired, chatsRouter);
-app.use("/api/v1/session", currSessionRouter);
+app.use("/api/v1/chats", jwtRequired, isBanned, chatsRouter);
+app.use("/api/v1/session", userCheckBan, currSessionRouter);
 app.use("/api/v1/login", loginRouter);
 app.use("/api/v1/register", registerRouter);
-app.use("/api/v1/profil", jwtRequired, profilRouter);
+app.use("/api/v1/profil", jwtRequired, userCheckBan, profilRouter);
 app.use("/api/v1/logout", logoutRouter);
-app.use("/api/v1/rooms", jwtRequired, roomsRouter);
-app.use("/api/v1/ranges", jwtRequired, rangesRouter);
-app.use("/api/v1/users", jwtRequired, usersRouter);
+app.use("/api/v1/rooms", jwtRequired, isBanned, roomsRouter);
+app.use("/api/v1/ranges", jwtRequired, isBanned, rangesRouter);
+app.use("/api/v1/users", jwtRequired, isBanned, usersRouter);
 
 module.exports = app;

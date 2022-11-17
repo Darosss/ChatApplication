@@ -28,7 +28,6 @@ function App() {
   if (auth === null) {
     return <Loading />;
   }
-
   return (
     <div>
       <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
@@ -62,7 +61,12 @@ function App() {
           element={auth ? <Home auth={auth} /> : <Login />}
         />
         <Route path="/" element={<Home auth={auth} />} />
-        <Route path="/chats" element={<Chats auth={auth} />} />
+        <Route
+          path="/chats"
+          element={
+            !auth.isBanned ? <Chats auth={auth} /> : <Profil auth={auth} />
+          }
+        />
         <Route
           path="/register"
           element={!auth ? <Register /> : <Home auth={auth} />}
@@ -71,15 +75,38 @@ function App() {
           path="/profil"
           element={auth ? <Profil auth={auth} /> : <Login />}
         />
-        <Route path="/rooms" element={auth ? <Rooms /> : <Login />} />
+        <Route
+          path="/rooms"
+          element={
+            auth && !auth.isBanned ? (
+              <Rooms />
+            ) : auth.isBanned ? (
+              <Profil auth={auth} />
+            ) : (
+              <Login />
+            )
+          }
+        />
 
         <Route
           path="/users"
-          element={auth && auth.administrator ? <Users /> : <Home />}
+          element={
+            auth && auth.administrator && !auth.isBanned ? (
+              <Users />
+            ) : (
+              <Home auth={auth} />
+            )
+          }
         />
         <Route
           path="/ranges"
-          element={auth && auth.administrator ? <Ranges /> : <Home />}
+          element={
+            auth && auth.administrator && !auth.isBanned ? (
+              <Ranges />
+            ) : (
+              <Home auth={auth} />
+            )
+          }
         />
       </Routes>
     </div>

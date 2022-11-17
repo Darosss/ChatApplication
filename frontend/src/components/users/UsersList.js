@@ -16,10 +16,13 @@ function UsersList(props) {
 
   return (
     <div className="container d-flex justify-content-center">
-      <table className="table table-sm table-dark w-50">
+      <table className="table table-sm table-dark w-100">
         <thead>
           <tr>
             <th colSpan={3}> Users </th>
+            <th> Ban date </th>
+            <th> Ban expires </th>
+            <th> Ban reason </th>
           </tr>
         </thead>
         <tbody>
@@ -43,6 +46,17 @@ function UsersList(props) {
                     <BanUserModal userId={user._id} username={user.username} />
                   )}
                 </td>
+                <td>
+                  {user.isBanned
+                    ? user.bannedDate.replace("T", " ").split(".")[0]
+                    : "-"}
+                </td>
+                <td>
+                  {user.isBanned
+                    ? user.banExpiresDate.replace("T", " ").split(".")[0]
+                    : "-"}
+                </td>
+                <td> {user.isBanned ? user.banReason : "-"}</td>
               </tr>
             );
           })}
