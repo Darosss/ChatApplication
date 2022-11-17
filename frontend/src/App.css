@@ -14,6 +14,15 @@ body {
   overflow: hidden;
 }
 
+.chat-message-time {
+  font-size: 1.3vmin;
+  color: yellow;
+}
+
+.chat-message-sender {
+  color: lightseagreen;
+}
+
 .chat-scrollable {
   width: 100%;
   height: 60vh;
