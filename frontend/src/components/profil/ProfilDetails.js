@@ -4,13 +4,13 @@ import EditProfile from "./EditProfile";
 function ProfilDetails({ user }) {
   return (
     <div className="container d-flex justify-content-center">
-      <table className="table table-sm table-dark w-50">
+      <table className="table table-sm table-dark w-100">
         <tbody>
           <tr>
-            <td></td>
-            <td>
+            <th>Your profile: {user.username}</th>
+            <th>
               <EditProfile user={user} />
-            </td>
+            </th>
           </tr>
           <tr>
             <td>Username</td>
