@@ -65,6 +65,9 @@ const userSchema = new mongoose.Schema({
   banExpiresDate: {
     type: Date,
   },
+  banReason: {
+    type: String,
+  },
 });
 userSchema.plugin(passportLocalMongoose);
 
