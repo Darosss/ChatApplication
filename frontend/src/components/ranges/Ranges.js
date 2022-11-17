@@ -20,6 +20,7 @@ function Ranges() {
   return (
     <div className="App">
       <header className="App-header">
+        <h1> Ranges list</h1>
         <div className="container d-flex justify-content-center">
           <table className="table table-sm table-dark w-100">
             <thead>
