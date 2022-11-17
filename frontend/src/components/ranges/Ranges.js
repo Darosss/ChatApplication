@@ -16,23 +16,20 @@ function Ranges() {
       setAvailableRanges(res.data.ranges);
     });
   }, []);
+
   return (
     <div className="App">
       <header className="App-header">
-        <div className="d-flex w-25">
-          <div className="w-100">Ranges</div>
-          <div className="w-100">
-            <EditCreateRangeModal sectionName="Create" />
-          </div>
-        </div>
         <div className="container d-flex justify-content-center">
-          <table className="table table-sm table-dark w-50">
+          <table className="table table-sm table-dark w-100">
             <thead>
               <tr>
                 <th> Ranges </th>
                 <th> Creator </th>
                 <th> Create date </th>
-                <th colSpan={2}></th>
+                <th colSpan={2}>
+                  <EditCreateRangeModal sectionName="Create" />
+                </th>
               </tr>
             </thead>
             <tbody>
