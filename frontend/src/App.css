@@ -36,7 +36,63 @@ body {
   background-color: gray;
 }
 
-/* Add a thumb */
 .chat-scrollable::-webkit-scrollbar-thumb {
   background: rgb(64, 63, 63);
+}
+/* MENU */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  font-family: "Lucida Console", "Courier New", monospace;
+  justify-content: space-between;
+  padding: 15px;
+}
+
+.nav-ul {
+  display: flex;
+  align-items: center;
+  font-size: 3vmax;
+  justify-content: center;
+  padding: 0;
+  list-style-type: none;
+}
+
+.nav-ul li .nav-li-link {
+  display: inline-block;
+  padding: 10px 20px;
+  color: black;
+  text-decoration: none;
+}
+
+.home-site-link {
+  font-size: 5vmax;
+  text-decoration: none;
+  color: black;
+}
+
+.nav-ul li .nav-li-link:hover,
+.home-site-link:hover {
+  color: darkgray;
+}
+
+/* HAMBURGER MENU */
+.hamburger {
+  display: none;
+}
+/* MOBILE */
+
+@media screen and (max-width: 767px) {
+  .nav-ul {
+    display: none;
+    width: 100%;
+  }
+
+  .nav-ul.show {
+    display: flex;
+  }
+
+  .hamburger {
+    display: flex;
+  }
 }
