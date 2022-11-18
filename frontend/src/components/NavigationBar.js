@@ -36,19 +36,15 @@ function NavigationBar({ auth }) {
         {!auth ? <NavigationLink url="/register" name="Register" /> : null}
         {auth ? <NavigationLink url="/rooms" name="Rooms" /> : null}
         {auth ? <NavigationLink url="/profil" name="Profil" /> : null}
-      </ul>
+        {auth && auth.administrator ? (
+          <NavigationLink url="/users" name="Users" />
+        ) : null}
+        {auth && auth.administrator ? (
+          <NavigationLink url="/ranges" name="Ranges" />
+        ) : null}
 
-      {/* <div className="m-2">
-        <ul className="navbar-nav mr-auto">
-          {auth && auth.administrator ? (
-            <NavigationLink url="/users" name="Users" />
-          ) : null}
-          {auth && auth.administrator ? (
-            <NavigationLink url="/ranges" name="Ranges" />
-          ) : null}
-          {auth ? <Logout /> : null}
-        </ul>
-      </div> */}
+        {auth ? <Logout /> : null}
+      </ul>
     </nav>
   );
 }

@@ -17,8 +17,8 @@ function Logout() {
       });
   };
   return (
-    <li className="nav-item">
-      <button onClick={logout} className="btn btn-danger w-100">
+    <li className="">
+      <button onClick={logout} className="nav-li-button btn btn-danger w-100">
         Logout
       </button>
     </li>
