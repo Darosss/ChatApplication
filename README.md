@@ -67,10 +67,17 @@ Chat apllication where you can
    ```
 3. This is in development so need to create `.env` file in `app` folder with variables as below
    ```
+   BACKEND_PORT=<port for localhost backend>
+   FRONTEND_URL=http://localhost:3000
    DATABASE_URL=<Mongodb database URL or URI>
    COOKIE_SECRET=<cookie secret>
    JWT_SECRET_KEY=<jwt secret>
    ```
+4. This is in development so need to create `.env` file in `frontend` folder with variable
+   ```
+   REACT_APP_API_URI=<example http://localhost:5000/api/v1 >
+   ```
+   **It must contain `/api/v1` after port, it's only route designed**
 
 <!-- USAGE EXAMPLES -->
 
@@ -82,10 +89,7 @@ Chat apllication where you can
 
 ## Roadmap
 
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
+- [ ] Add roadmap(roadmap in progress here)
 
 See the [open issues](https://github.com/Darosss/ChatApplication/issues) for a full list of proposed features (and known issues).
 
