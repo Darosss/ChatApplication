@@ -2,7 +2,7 @@ import "./App.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Routes, Route } from "react-router-dom";
-import NavigationLink from "./components/NavigationLink";
+import NavigationBar from "./components/NavigationBar";
 import Loading from "./components/Loading";
 import Home from "./components/Home";
 import Chats from "./components/chats/Chats";
@@ -10,7 +10,6 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Profil from "./components/profil/Profil";
 import Rooms from "./components/rooms/Rooms";
-import Logout from "./components/Logout";
 import Users from "./components/users/Users";
 import Ranges from "./components/ranges/Ranges";
 
@@ -30,30 +29,7 @@ function App() {
   }
   return (
     <div>
-      <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
-        <span className="navbar-brand m-2">Chat room</span>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav mr-auto">
-            <NavigationLink url="/" name="Home" />
-            {auth ? <NavigationLink url="/chats" name="Chats" /> : null}
-            {!auth ? <NavigationLink url="/login" name="Login" /> : null}
-            {!auth ? <NavigationLink url="/register" name="Register" /> : null}
-            {auth ? <NavigationLink url="/rooms" name="Rooms" /> : null}
-            {auth ? <NavigationLink url="/profil" name="Profil" /> : null}
-          </ul>
-        </div>
-        <div className="m-2">
-          <ul className="navbar-nav mr-auto">
-            {auth && auth.administrator ? (
-              <NavigationLink url="/users" name="Users" />
-            ) : null}
-            {auth && auth.administrator ? (
-              <NavigationLink url="/ranges" name="Ranges" />
-            ) : null}
-            {auth ? <Logout /> : null}
-          </ul>
-        </div>
-      </nav>
+      <NavigationBar auth={auth} />
 
       <Routes>
         <Route
