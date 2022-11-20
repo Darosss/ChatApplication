@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { HamburgerIcon } from "react-hamburger-icon";
 
-function HamburgerMenu(props) {
+function HamburgerMenu({ menu }) {
   const [open, setOpen] = useState(false);
 
   const toggleNavigation = () => {
-    props.menu.current.classList.toggle(
-      props.display ? props.display : "hamburger-menu-flex"
-    );
+    menu.current.classList.toggle("hamburger-show");
   };
 
   return (
