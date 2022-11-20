@@ -1,17 +1,25 @@
-body {
-  margin: 0;
-  overflow: hidden;
-}
-.App-header {
+.app-header {
   background-color: #282c34;
-  min-height: 100vh;
   display: flex;
+  height: 100vh;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   font-size: calc(4 + 2vmin);
   color: white;
-  overflow: hidden;
+}
+
+.app-navigation {
+  background-color: grey;
+}
+
+.app-content {
+  padding-left: 1%;
+  overflow-y: auto;
+}
+
+.app-content .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .chat-message-time {
@@ -25,8 +33,8 @@ body {
 
 .chat-scrollable {
   width: 100%;
-  height: 50vh;
-  max-height: 50vh;
+  height: 40vh;
+  max-height: 40vh;
   overflow: auto;
 }
 
@@ -39,6 +47,7 @@ body {
 .chat-scrollable::-webkit-scrollbar-thumb {
   background: rgb(64, 63, 63);
 }
+
 /* MENU */
 nav {
   display: flex;
@@ -81,28 +90,39 @@ nav {
 .hamburger {
   display: none;
 }
-/* MOBILE */
 
 @media screen and (max-width: 767px) {
-  .nav-ul {
-    display: none;
-    width: 100%;
-  }
-
   .hamburger {
     display: flex;
   }
 
-  .nav-chats {
-    display: none;
+  .hamburger.test {
+    margin: 200px;
   }
 
-  .hamburger-menu-flex {
+  ul.nav-ul {
+    display: none;
+    width: 100%;
+  }
+
+  ul.hamburger-show {
     display: flex;
     flex-wrap: wrap;
   }
 
-  .hamburger-menu-block {
+  div.nav-chats {
+    display: none;
+  }
+
+  div.nav-chats.hamburger-show {
     display: block;
+  }
+
+  table.chat-online-users {
+    display: none;
+  }
+
+  table.hamburger-show {
+    display: table;
   }
 }
