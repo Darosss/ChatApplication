@@ -38,6 +38,7 @@ function ChatRoom(props) {
   const [roomsTypingUsers, setRoomsTypingUsers] = useState([]);
 
   const chatList = useRef();
+  const usersOnlineTable = useRef();
 
   const messages = props.messages;
   const username = props.auth.username;
@@ -254,21 +255,25 @@ function ChatRoom(props) {
   };
 
   return (
-    <Tab.Container fluid id="left-tabs-chats" defaultActiveKey="home">
-      <Row className="w-100 m-2">
-        <HamburgerMenu menu={chatList} display="hamburger-menu-block" />
-        <Col sm={2} className="nav-chats" ref={chatList}>
-          <Nav variant="pills" fill>
+    <Tab.Container id="left-tabs-chats">
+      <HamburgerMenu menu={chatList} display="hamburger-menu-block" />
+      <Row className="w-100 mt-4">
+        <Col md={2} className="nav-chats" ref={chatList}>
+          <Nav variant="pills" justify>
             {roomsList.map((room) => {
               return (
-                <Nav.Item key={room._id} className="w-100">
+                <Nav.Item
+                  key={room._id}
+                  className="w-100 border border-primary rounded"
+                >
                   <Nav.Link eventKey={room._id}> {room.name} </Nav.Link>
                 </Nav.Item>
               );
             })}
           </Nav>
         </Col>
-        <Col sm={7}>
+
+        <Col md={7}>
           <Tab.Content>
             {roomsList.map((room) => {
               return (
@@ -279,8 +284,12 @@ function ChatRoom(props) {
             })}
           </Tab.Content>
         </Col>
-        <Col sm={3}>
-          <Table className="text-light">
+        <Col xs={{ order: "first" }} md={{ order: 3 }}>
+          <HamburgerMenu menu={usersOnlineTable} />
+          <Table
+            className="text-light chat-online-users"
+            ref={usersOnlineTable}
+          >
             <thead>
               <tr>
                 <th>Online users:</th>
