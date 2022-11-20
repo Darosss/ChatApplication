@@ -89,9 +89,14 @@ Chat apllication where you can
 
 ## Roadmap
 
-- [ ] Add roadmap(roadmap in progress here)
+- [x] Add chat rooms
+- [x] Add login / register system
+- [x] Add ban / unban system
+- [x] Add ranges system
+- [] Improve for mobiles
+- [] Add shop with privileges
 
-See the [open issues](https://github.com/Darosss/ChatApplication/issues) for a full list of proposed features (and known issues).
+  See the [open issues](https://github.com/Darosss/ChatApplication/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
