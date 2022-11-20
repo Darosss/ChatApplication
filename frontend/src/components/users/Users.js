@@ -15,11 +15,11 @@ function Users() {
     });
   }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1> Users list </h1>
-        <UsersList users={usersList} />
-      </header>
+    <div>
+      <div class="section-header">
+        <h1> Users list </h1>{" "}
+      </div>
+      <UsersList users={usersList} />
     </div>
   );
 }

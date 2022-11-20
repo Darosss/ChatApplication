@@ -16,11 +16,11 @@ function Profile({ auth }) {
   }, [auth]);
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div>
+      <div class="section-header">
         <h1> Profil </h1>
-        <ProfilDetails user={userDetails} />
-      </header>
+      </div>
+      <ProfilDetails user={userDetails} />
     </div>
   );
 }

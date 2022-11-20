@@ -19,10 +19,6 @@ function Chats(props) {
     });
   }, []);
 
-  return (
-    <div className="container-fluid bg-dark App-header">
-      <ChatRoom auth={auth} chatRooms={chatRooms} messages={messages} />
-    </div>
-  );
+  return <ChatRoom auth={auth} chatRooms={chatRooms} messages={messages} />;
 }
 export default Chats;

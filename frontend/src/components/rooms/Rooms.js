@@ -17,12 +17,11 @@ function Rooms() {
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div>
+      <div class="section-header">
         <h1> Your rooms </h1>
-
-        {<UserRoomsList rooms={rooms} />}
-      </header>
+      </div>
+      <UserRoomsList rooms={rooms} />
     </div>
   );
 }
