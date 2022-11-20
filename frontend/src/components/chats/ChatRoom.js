@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useRef } from "react";
 import ChatMessage from "./ChatMessage";
 import OnlineUsers from "./OnlineUsers";
 import Col from "react-bootstrap/Col";
@@ -7,6 +7,8 @@ import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
+
+import HamburgerMenu from "../HamburgerMenu";
 
 import {
   initiateSocketConnection,
@@ -34,6 +36,8 @@ function ChatRoom(props) {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [roomsOnlineUsers, setRoomsOnlineUsers] = useState([]);
   const [roomsTypingUsers, setRoomsTypingUsers] = useState([]);
+
+  const chatList = useRef();
 
   const messages = props.messages;
   const username = props.auth.username;
@@ -242,7 +246,7 @@ function ChatRoom(props) {
   const chatOnlineUsers = (roomId) => {
     let roomUsers = roomsOnlineUsers[roomId];
 
-    return roomUsers.map((user, index) => {
+    return roomUsers.map((user) => {
       return (
         <OnlineUsers key={user[0]} socketId={user[0]} username={user[1]} />
       );
@@ -250,10 +254,11 @@ function ChatRoom(props) {
   };
 
   return (
-    <Tab.Container id="left-tabs-chats">
-      <Row className="w-100">
-        <Col sm={2}>
-          <Nav variant="pills" className="flex-column">
+    <Tab.Container fluid id="left-tabs-chats" defaultActiveKey="home">
+      <Row className="w-100 m-2">
+        <HamburgerMenu menu={chatList} display="hamburger-menu-block" />
+        <Col sm={2} className="nav-chats" ref={chatList}>
+          <Nav variant="pills" fill>
             {roomsList.map((room) => {
               return (
                 <Nav.Item key={room._id} className="w-100">
