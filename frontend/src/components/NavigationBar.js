@@ -8,14 +8,14 @@ function NavigationBar({ auth }) {
   const navigation = useRef();
 
   return (
-    <nav className="bg-secondary">
+    <nav className="app-navigation">
       <Link className="home-site-link" to="/">
         Chat room
       </Link>
 
       <HamburgerMenu menu={navigation} />
 
-      <ul className="nav-ul" id="nav-ul" ref={navigation}>
+      <ul className="nav-ul" ref={navigation}>
         <NavigationLink url="/" name="Home" />
         {auth ? <NavigationLink url="/chats" name="Chats" /> : null}
         {!auth ? <NavigationLink url="/login" name="Login" /> : null}
