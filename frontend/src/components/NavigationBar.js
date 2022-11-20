@@ -1,17 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import NavigationLink from "./NavigationLink";
 import Logout from "./Logout";
-import { HamburgerIcon } from "react-hamburger-icon";
+import HamburgerMenu from "./HamburgerMenu";
 import { Link } from "react-router-dom";
 
 function NavigationBar({ auth }) {
-  const [open, setOpen] = useState(false);
-
   const navigation = useRef();
-
-  const toggleNavigation = () => {
-    navigation.current.classList.toggle("show");
-  };
 
   return (
     <nav className="bg-secondary">
@@ -19,15 +13,7 @@ function NavigationBar({ auth }) {
         Chat room
       </Link>
 
-      <HamburgerIcon
-        className="hamburger"
-        id="hamburger"
-        open={open}
-        onClick={() => {
-          setOpen(!open);
-          toggleNavigation();
-        }}
-      />
+      <HamburgerMenu menu={navigation} />
 
       <ul className="nav-ul" id="nav-ul" ref={navigation}>
         <NavigationLink url="/" name="Home" />
