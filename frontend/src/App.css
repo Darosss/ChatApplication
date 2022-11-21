@@ -48,6 +48,11 @@
   background: rgb(64, 63, 63);
 }
 
+div.chats-item {
+  width: 100%;
+  overflow: hidden;
+}
+
 /* MENU */
 nav {
   display: flex;
@@ -115,14 +120,38 @@ nav {
   }
 
   div.nav-chats.hamburger-show {
-    display: block;
+    display: flex;
+    width: 100%;
   }
 
-  table.chat-online-users {
+  div.chats-list {
+    font-size: 1.1vmax;
+    max-height: 7vmax;
+    overflow-y: scroll;
+    padding-right: 5%;
+  }
+
+  div.chats-item {
+    width: 25%;
+  }
+
+  div.chat-section {
+    width: 15%;
+  }
+
+  div.chat-section-right {
+    float: right;
+  }
+
+  div.chat-online-users {
     display: none;
   }
 
-  table.hamburger-show {
-    display: table;
+  div.chat-online-users.hamburger-show {
+    max-height: 15vmax;
+    padding-right: 5%;
+    width: 90%;
+    display: flex;
+    overflow-y: scroll;
   }
 }
