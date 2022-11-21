@@ -256,15 +256,22 @@ function ChatRoom(props) {
 
   return (
     <Tab.Container id="left-tabs-chats">
-      <HamburgerMenu menu={chatList} display="hamburger-menu-block" />
+      <div className="chat-section chat-section-right">
+        Online users:
+        <HamburgerMenu menu={usersOnlineTable} />
+      </div>
+      <div className="chat-section">
+        Room list:
+        <HamburgerMenu menu={chatList} />
+      </div>
       <Row className="w-100 mt-4">
-        <Col md={2} className="nav-chats" ref={chatList}>
-          <Nav variant="pills" justify>
+        <Col md={2}>
+          <Nav variant="pills nav-chats chats-list" ref={chatList}>
             {roomsList.map((room) => {
               return (
                 <Nav.Item
                   key={room._id}
-                  className="w-100 border border-primary rounded"
+                  className="border border-primary rounded chats-item"
                 >
                   <Nav.Link eventKey={room._id}> {room.name} </Nav.Link>
                 </Nav.Item>
@@ -272,7 +279,6 @@ function ChatRoom(props) {
             })}
           </Nav>
         </Col>
-
         <Col md={7}>
           <Tab.Content>
             {roomsList.map((room) => {
@@ -285,28 +291,21 @@ function ChatRoom(props) {
           </Tab.Content>
         </Col>
         <Col xs={{ order: "first" }} md={{ order: 3 }}>
-          <HamburgerMenu menu={usersOnlineTable} />
-          <Table
-            className="text-light chat-online-users"
-            ref={usersOnlineTable}
-          >
-            <thead>
-              <tr>
-                <th>Online users:</th>
-              </tr>
-            </thead>
-            <tbody>
-              {onlineUsers.length > 0
-                ? onlineUsers.map((user) => {
-                    return (
-                      <tr key={user[0]}>
-                        <td>{user[1]}</td>
-                      </tr>
-                    );
-                  })
-                : null}
-            </tbody>
-          </Table>
+          <div className="chat-online-users" ref={usersOnlineTable}>
+            <Table className="text-light">
+              <tbody>
+                {onlineUsers.length > 0
+                  ? onlineUsers.map((user) => {
+                      return (
+                        <tr key={user[0]}>
+                          <td>{user[1]}</td>
+                        </tr>
+                      );
+                    })
+                  : null}
+              </tbody>
+            </Table>
+          </div>
         </Col>
       </Row>
     </Tab.Container>
