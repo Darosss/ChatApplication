@@ -1,6 +1,8 @@
+import "./style.css";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ProfilDetails from "./ProfilDetails";
+
 function Profile({ auth }) {
   const [userDetails, setUserDetails] = useState([]);
 
@@ -17,7 +19,7 @@ function Profile({ auth }) {
 
   return (
     <div>
-      <div class="section-header">
+      <div className="section-header">
         <h1> Profil </h1>
       </div>
       <ProfilDetails user={userDetails} />

@@ -1,3 +1,4 @@
+import "./style.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import UsersList from "./UsersList";
@@ -16,7 +17,7 @@ function Users() {
   }, []);
   return (
     <div>
-      <div class="section-header">
+      <div className="section-header">
         <h1> Users list </h1>{" "}
       </div>
       <UsersList users={usersList} />

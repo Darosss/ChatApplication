@@ -1,3 +1,4 @@
+import "./style.css";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import UserRoomsList from "./UserRoomsList";
@@ -18,7 +19,7 @@ function Rooms() {
 
   return (
     <div>
-      <div class="section-header">
+      <div className="section-header">
         <h1> Your rooms </h1>
       </div>
       <UserRoomsList rooms={rooms} />
