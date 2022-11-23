@@ -25,7 +25,13 @@ function App() {
       });
   }, []);
   if (auth === null) {
-    return <Loading />;
+    return (
+      <div className="app-header">
+        <div className="app-content">
+          <Loading />
+        </div>
+      </div>
+    );
   }
   return (
     <div className="app-header">
