@@ -1,3 +1,4 @@
+import "./style.css";
 import React from "react";
 import axios from "axios";
 import EditUserModal from "../EditUserModal";
@@ -15,8 +16,8 @@ function UsersList(props) {
   };
 
   return (
-    <div className="container d-flex justify-content-center">
-      <table className="table table-sm table-dark w-100">
+    <div>
+      <table className="table table-sm table-dark users-list">
         <thead>
           <tr>
             <th colSpan={3}> Users </th>
@@ -37,7 +38,7 @@ function UsersList(props) {
                   {user.isBanned ? (
                     <button
                       id={user._id}
-                      className="btn btn-secondary w-100"
+                      className="btn btn-secondary w-100 modal-core-btn"
                       onClick={(e) => unbanUser(e.target.id)}
                     >
                       Unban

@@ -1,0 +1,19 @@
+table.users-list {
+  width: 100%;
+  overflow-x: auto;
+  table-layout: fixed;
+}
+
+table.users-list tr {
+  width: 25%;
+}
+
+table.users-list td {
+  width: 25%;
+  max-width: 25%;
+  overflow-x: auto;
+  word-wrap: normal;
+}
+table.users-list td:not(:first-child) {
+  border-left: 1px solid rgb(82, 80, 80);
+}

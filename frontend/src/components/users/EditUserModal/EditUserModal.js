@@ -128,7 +128,7 @@ function EditUserModal(props) {
           return (
             <div key={index}>
               <div className="d-flex bg-secondary m-1">
-                <span className="w-100 text-center">{room.name}</span>
+                <span className="edit-user-room-name">{room.name}</span>
                 <EditCreateRoomModal
                   sectionName="Edit"
                   roomId={room._id}
