@@ -39,9 +39,11 @@ function App() {
     });
   };
   return (
-    <div className="App">
-      <header className="App-header">
+    <div>
+      <div className="section-header">
         <h2> Register </h2>
+      </div>
+      <div className="login-form">
         <form onSubmit={register}>
           <div className="row mt-2">
             <div className="col">
@@ -159,14 +161,12 @@ function App() {
           </div>
 
           <div className="form-group">
-            <input
-              type="submit"
-              value="Register"
-              className="btn btn-primary w-100"
-            />
+            <button type="submit" className="btn btn-primary w-100">
+              Register
+            </button>
           </div>
         </form>
-      </header>
+      </div>
     </div>
   );
 }
