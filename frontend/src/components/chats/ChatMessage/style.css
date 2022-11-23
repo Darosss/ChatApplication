@@ -1,8 +1,23 @@
+.col-time-sender {
+  width: 25%;
+}
+
 .chat-message-time {
-  font-size: 1.3vmin;
+  font-size: calc(2px + 1.3vmin);
   color: yellow;
+  vertical-align: top;
 }
 
 .chat-message-sender {
   color: lightseagreen;
+  vertical-align: bottom;
+}
+
+@media screen and (max-width: 767px) {
+  .chat-message-time {
+    font-size: calc(4px + 1.3vmin);
+  }
+  .col-time-sender {
+    width: 33%;
+  }
 }
