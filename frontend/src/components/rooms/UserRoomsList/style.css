@@ -1,0 +1,19 @@
+table.user-rooms-list {
+  width: 100%;
+  overflow-x: auto;
+  table-layout: fixed;
+}
+
+table.user-rooms-list tr {
+  width: 25%;
+}
+
+table.user-rooms-list td {
+  width: 25%;
+  max-width: 25%;
+  overflow-x: auto;
+  word-wrap: normal;
+}
+table.user-rooms-list td:not(:first-child) {
+  border-left: 1px solid rgb(82, 80, 80);
+}
