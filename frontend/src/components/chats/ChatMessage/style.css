@@ -1,0 +1,8 @@
+.chat-message-time {
+  font-size: 1.3vmin;
+  color: yellow;
+}
+
+.chat-message-sender {
+  color: lightseagreen;
+}

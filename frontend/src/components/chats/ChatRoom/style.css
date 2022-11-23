@@ -1,0 +1,62 @@
+.chat-scrollable {
+  width: 100%;
+  height: 40vh;
+  max-height: 40vh;
+  overflow: auto;
+}
+
+.chat-scrollable::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+  background-color: gray;
+}
+
+.chat-scrollable::-webkit-scrollbar-thumb {
+  background: rgb(64, 63, 63);
+}
+
+div.chats-item {
+  width: 100%;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 767px) {
+  div.nav-chats {
+    display: none;
+  }
+
+  div.nav-chats.hamburger-show {
+    display: flex;
+    width: 100%;
+  }
+
+  div.chats-list {
+    font-size: 1.1vmax;
+    max-height: 7vmax;
+    overflow-y: scroll;
+    padding-right: 5%;
+  }
+
+  div.chats-item {
+    width: 25%;
+  }
+  div.chat-section {
+    width: 15%;
+  }
+
+  div.chat-section-right {
+    float: right;
+  }
+
+  div.chat-online-users {
+    display: none;
+  }
+
+  div.chat-online-users.hamburger-show {
+    max-height: 15vmax;
+    padding-right: 5%;
+    width: 90%;
+    display: flex;
+    overflow-y: scroll;
+  }
+}
