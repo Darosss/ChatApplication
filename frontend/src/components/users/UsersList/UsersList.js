@@ -41,7 +41,7 @@ function UsersList(props) {
                       className="btn btn-secondary w-100 modal-core-btn"
                       onClick={(e) => unbanUser(e.target.id)}
                     >
-                      Unban
+                      Unban user
                     </button>
                   ) : (
                     <BanUserModal userId={user._id} username={user.username} />
