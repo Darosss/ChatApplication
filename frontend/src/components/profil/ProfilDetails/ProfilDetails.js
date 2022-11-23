@@ -4,8 +4,8 @@ import React from "react";
 import EditProfile from "../EditProfile";
 function ProfilDetails({ user }) {
   return (
-    <div className="container d-flex justify-content-center">
-      <table className="table table-sm table-dark w-100">
+    <div>
+      <table className="table table-sm table-dark profil-details">
         <tbody>
           <tr>
             <th>Your profile: {user.username}</th>
