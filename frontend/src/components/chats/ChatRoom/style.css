@@ -15,9 +15,20 @@
   background: rgb(64, 63, 63);
 }
 
+div.chat-section-wide {
+  display: block;
+}
+
+div.chat-section {
+  display: none;
+}
+
 div.chats-item {
   width: 100%;
-  overflow: hidden;
+  max-height: calc(50px + 5vmin);
+  max-height: calc(50px + 5vmin);
+  overflow-y: auto;
+  overflow-wrap: break-word;
 }
 
 @media screen and (max-width: 767px) {
@@ -32,16 +43,26 @@ div.chats-item {
 
   div.chats-list {
     font-size: 1.1vmax;
-    max-height: 7vmax;
-    overflow-y: scroll;
+    max-height: calc(4px + 25vmin);
+    overflow-y: auto;
     padding-right: 5%;
+    border-bottom: 1px solid gray;
   }
 
   div.chats-item {
-    width: 25%;
+    width: 50%;
+    height: 50%;
+    overflow-wrap: normal;
+    overflow-y: hidden;
   }
+
+  div.chat-section-wide {
+    display: none;
+  }
+
   div.chat-section {
-    width: 15%;
+    display: block;
+    width: 10%;
   }
 
   div.chat-section-right {
@@ -58,5 +79,6 @@ div.chats-item {
     width: 90%;
     display: flex;
     overflow-y: scroll;
+    border-bottom: 1px solid gray;
   }
 }

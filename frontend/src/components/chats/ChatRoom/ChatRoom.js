@@ -267,6 +267,7 @@ function ChatRoom(props) {
       </div>
       <Row className="w-100 mt-4">
         <Col md={2}>
+          <div className="chat-section-wide">Room list</div>
           <Nav variant="pills nav-chats chats-list" ref={chatList}>
             {roomsList.map((room) => {
               return (
@@ -293,6 +294,7 @@ function ChatRoom(props) {
         </Col>
         <Col xs={{ order: "first" }} md={{ order: 3 }}>
           <div className="chat-online-users" ref={usersOnlineTable}>
+            <div className="chat-section-wide">Room list</div>
             <Table className="text-light">
               <tbody>
                 {onlineUsers.length > 0
