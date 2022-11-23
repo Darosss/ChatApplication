@@ -17,7 +17,11 @@ function ModalCore(props) {
   };
   return (
     <>
-      <Button variant={props.actionBtnVariant + " w-100"} onClick={handleShow}>
+      <Button
+        variant={props.actionBtnVariant}
+        className="modal-core-btn"
+        onClick={handleShow}
+      >
         {props.actionName}
       </Button>
 

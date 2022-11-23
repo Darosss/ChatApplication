@@ -1,0 +1,5 @@
+.modal-core-btn {
+  width: 100%;
+  font-size: calc(2px + 2vmin) !important;
+  height: 100%;
+}
