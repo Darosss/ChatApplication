@@ -1,0 +1,157 @@
+.app-header {
+  background-color: #282c34;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  font-size: calc(4 + 2vmin);
+  color: white;
+}
+
+.app-navigation {
+  background-color: grey;
+}
+
+.app-content {
+  padding-left: 1%;
+  overflow-y: auto;
+}
+
+.app-content .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-message-time {
+  font-size: 1.3vmin;
+  color: yellow;
+}
+
+.chat-message-sender {
+  color: lightseagreen;
+}
+
+.chat-scrollable {
+  width: 100%;
+  height: 40vh;
+  max-height: 40vh;
+  overflow: auto;
+}
+
+.chat-scrollable::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+  background-color: gray;
+}
+
+.chat-scrollable::-webkit-scrollbar-thumb {
+  background: rgb(64, 63, 63);
+}
+
+div.chats-item {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* MENU */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  font-family: "Lucida Console", "Courier New", monospace;
+  justify-content: space-between;
+  padding: 15px;
+}
+
+.nav-ul {
+  display: flex;
+  align-items: center;
+  font-size: 2vmax;
+  justify-content: center;
+  padding: 0;
+  list-style-type: none;
+}
+
+.nav-ul li .nav-li-link,
+.nav-ul li .nav-li-button {
+  display: inline-block;
+  padding: 10px 20px;
+  color: black;
+  text-decoration: none;
+}
+
+.home-site-link {
+  font-size: 5vmax;
+  text-decoration: none;
+  color: black;
+}
+
+.nav-ul li .nav-li-link:hover,
+.home-site-link:hover {
+  color: darkgray;
+}
+
+/* HAMBURGER MENU */
+.hamburger {
+  display: none;
+}
+
+@media screen and (max-width: 767px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .hamburger.test {
+    margin: 200px;
+  }
+
+  ul.nav-ul {
+    display: none;
+    width: 100%;
+  }
+
+  ul.hamburger-show {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  div.nav-chats {
+    display: none;
+  }
+
+  div.nav-chats.hamburger-show {
+    display: flex;
+    width: 100%;
+  }
+
+  div.chats-list {
+    font-size: 1.1vmax;
+    max-height: 7vmax;
+    overflow-y: scroll;
+    padding-right: 5%;
+  }
+
+  div.chats-item {
+    width: 25%;
+  }
+
+  div.chat-section {
+    width: 15%;
+  }
+
+  div.chat-section-right {
+    float: right;
+  }
+
+  div.chat-online-users {
+    display: none;
+  }
+
+  div.chat-online-users.hamburger-show {
+    max-height: 15vmax;
+    padding-right: 5%;
+    width: 90%;
+    display: flex;
+    overflow-y: scroll;
+  }
+}

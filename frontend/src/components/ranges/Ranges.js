@@ -1,3 +1,4 @@
+import "./style.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import EditCreateRangeModal from "./EditCreateRangeModal";
@@ -19,7 +20,7 @@ function Ranges() {
 
   return (
     <div>
-      <div class="section-header">
+      <div className="section-header">
         <h1> Ranges list</h1>
       </div>
       <div className="container d-flex justify-content-center">
