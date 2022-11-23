@@ -1,0 +1,19 @@
+table.ranges-list {
+  width: 100%;
+  overflow-x: auto;
+  table-layout: fixed;
+}
+
+table.ranges-list tr {
+  width: 25%;
+}
+
+table.ranges-list td {
+  width: 25%;
+  max-width: 25%;
+  overflow-x: auto;
+  word-wrap: normal;
+}
+table.ranges-list td:not(:first-child) {
+  border-left: 1px solid rgb(82, 80, 80);
+}

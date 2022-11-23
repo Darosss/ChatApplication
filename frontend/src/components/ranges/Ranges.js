@@ -23,8 +23,8 @@ function Ranges() {
       <div className="section-header">
         <h1> Ranges list</h1>
       </div>
-      <div className="container d-flex justify-content-center">
-        <table className="table table-sm table-dark w-100">
+      <div>
+        <table className="table table-sm table-dark ranges-list">
           <thead>
             <tr>
               <th> Ranges </th>
