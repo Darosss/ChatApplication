@@ -22,10 +22,11 @@ function Login() {
     });
   };
   return (
-    <div className="App">
-      <header className="App-header">
+    <div>
+      <div className="section-header">
         <h2>Log in to chat room</h2>
-
+      </div>
+      <div className="login-form">
         <form onSubmit={login}>
           <div className="form-group">
             <label>Username:</label>
@@ -45,12 +46,11 @@ function Login() {
           </div>
           <div className="form-group">
             <Button type="submit" className="btn btn-primary">
-              {" "}
-              Login{" "}
+              Login
             </Button>
           </div>
         </form>
-      </header>
+      </div>
     </div>
   );
 }
