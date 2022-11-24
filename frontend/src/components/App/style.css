@@ -1,0 +1,19 @@
+.app-header {
+  background-color: #282c34;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  font-size: calc(4px + 2vmin);
+  color: white;
+}
+
+.app-content {
+  padding-left: 1%;
+  overflow-y: auto;
+}
+
+.app-content .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,3 +1,4 @@
+import "./style.css";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import UserRoomsList from "./UserRoomsList";
@@ -17,12 +18,11 @@ function Rooms() {
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div>
+      <div className="section-header">
         <h1> Your rooms </h1>
-
-        {<UserRoomsList rooms={rooms} />}
-      </header>
+      </div>
+      <UserRoomsList rooms={rooms} />
     </div>
   );
 }

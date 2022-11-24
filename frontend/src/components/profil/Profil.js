@@ -1,6 +1,8 @@
+import "./style.css";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ProfilDetails from "./ProfilDetails";
+
 function Profile({ auth }) {
   const [userDetails, setUserDetails] = useState([]);
 
@@ -16,11 +18,11 @@ function Profile({ auth }) {
   }, [auth]);
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div>
+      <div className="section-header">
         <h1> Profil </h1>
-        <ProfilDetails user={userDetails} />
-      </header>
+      </div>
+      <ProfilDetails user={userDetails} />
     </div>
   );
 }

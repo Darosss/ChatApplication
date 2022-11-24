@@ -1,0 +1,14 @@
+div.login-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+div.login-form label {
+  text-align: center;
+}
+
+div.login-form button,
+div.login-form label {
+  margin-top: 2px;
+  width: 100%;
+}
