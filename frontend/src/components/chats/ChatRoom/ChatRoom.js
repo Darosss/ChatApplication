@@ -217,9 +217,10 @@ function ChatRoom(props) {
                   textareaOnKey(e);
                 }}
               ></textarea>
-
+            </td>
+            <td colSpan={2} className="row-btn-send">
               <Button
-                className="w-25 btn-secondary"
+                className="w-100 btn-secondary btn-lg p-4"
                 room={room._id}
                 onClick={sendMessage}
               >

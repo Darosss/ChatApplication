@@ -31,6 +31,10 @@ div.chats-item {
   overflow-wrap: break-word;
 }
 
+td.row-btn-send {
+  vertical-align: middle;
+}
+
 @media screen and (max-width: 767px) {
   div.nav-chats {
     display: none;
