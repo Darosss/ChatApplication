@@ -31,6 +31,7 @@ router.post(
           await newUser.save();
           res.status(201).send("Account created");
         } catch (err) {
+          console.log("Register error", err);
           res.status(400).send("Some fields can't be empty");
         }
       }

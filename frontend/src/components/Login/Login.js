@@ -18,7 +18,7 @@ function Login() {
       url: `${process.env.REACT_APP_API_URI}/login`,
     }).then((res) => {
       console.log(res);
-      window.location.reload(false);
+      // window.location.reload(false);
     });
   };
   return (
