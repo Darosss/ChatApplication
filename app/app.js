@@ -52,6 +52,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.json()); //For JSON requests
+app.use(express.text()); // this is for plan/text format
 app.use(express.urlencoded({ extended: true }));
 
 app.use(passport.initialize());
