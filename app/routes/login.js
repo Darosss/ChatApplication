@@ -14,7 +14,9 @@ router.post(
     console.log("Logged in as", req.user);
     res.cookie("token", req.session.jwt, {
       domain: process.env.FRONTEND_URL,
-      secure: process.env.NODE_ENV !== "development",
+      secure: "true",
+      httpOnly: true,
+      expires: new Date(Date.now() + 900000),
       httpOnly: true,
     });
     console.log(req.session);
