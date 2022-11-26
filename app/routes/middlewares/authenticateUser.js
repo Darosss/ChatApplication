@@ -17,7 +17,8 @@ module.exports = function (req, res, next) {
         };
         req.session.jwt = jwt.sign(
           userReturnObject,
-          process.env.JWT_SECRET_KEY
+          process.env.JWT_SECRET_KEY,
+          { expiresIn: 86400 }
         );
         next();
       }
