@@ -12,7 +12,10 @@ router.post(
   authenticateUser,
   (req, res, next) => {
     console.log("Logged in as", req.user);
-
+    res.cookie("token", req.session.jwt, {
+      secure: process.env.NODE_ENV !== "development",
+      httpOnly: true,
+    });
     res.status(200).send({ token: req.session.jwt, user: req.user });
   }
 );
