@@ -6,6 +6,7 @@ router.get("/", (req, res) => {
   console.log(req.headers, "headers");
   console.log(req.session, "kekew");
   passport.authenticate("jwt", { session: false }, (err, user) => {
+    console.log("jwt", user, "jwt err", err);
     if (err || !user) {
       res.send(false);
     } else {
