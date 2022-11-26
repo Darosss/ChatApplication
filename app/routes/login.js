@@ -16,6 +16,8 @@ router.post(
       secure: process.env.NODE_ENV !== "development",
       httpOnly: true,
     });
+    console.log(req.session);
+    console.log(res.getHeaders(), "headers");
     res.status(200).send({ token: req.session.jwt, user: req.user });
   }
 );
