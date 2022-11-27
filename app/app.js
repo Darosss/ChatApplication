@@ -40,7 +40,7 @@ const corsOptions = {
   credentials: true,
   optionSuccessStatus: 200,
   allowedHeaders:
-    "X-Requested-With, content-type, x-access-token, Origin, Content-Type, Accept",
+    "X-Requested-With, content-type, x-access-token, Origin, Content-Type, Accept, Set-Cookie, Cookie",
   methods: ["GET", "POST", "DELETE"],
 };
 
@@ -51,14 +51,14 @@ app.use(
   session({
     name: "session",
     secret: process.env.COOKIE_SECRET,
-    domain: ".onrender.com",
+    domain: "onrender.com",
     secure: true,
 
     sameSite: "none",
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
 
     cookie: {
-      domain: ".onrender.com",
+      domain: "onrender.com",
       secure: true,
       sameSite: "none",
     },
