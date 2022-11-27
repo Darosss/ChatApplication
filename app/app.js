@@ -38,14 +38,14 @@ app.use(
   session({
     name: "session",
     secret: process.env.COOKIE_SECRET,
-    domain: "onrender.com",
+    domain: ".onrender.com",
     secure: true,
 
     sameSite: "none",
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
 
     cookie: {
-      domain: "onrender.com",
+      domain: ".onrender.com",
       secure: true,
       sameSite: "none",
     },
