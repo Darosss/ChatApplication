@@ -10,7 +10,7 @@ router.get("/", (req, res) => {
     if (err || !user) {
       res.send(false);
     } else {
-      res.send({ user, token: req.session.jwt });
+      res.send(user);
     }
   })(req, res);
 });
