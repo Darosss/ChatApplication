@@ -33,6 +33,19 @@ const usersRouter = require("./routes/users");
 app.use(helmet());
 app.use(hpp());
 
+app.set("trust proxy", 1);
+
+const corsOptions = {
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+  optionSuccessStatus: 200,
+  allowedHeaders:
+    "X-Requested-With, content-type, x-access-token, Origin, Content-Type, Accept",
+  methods: ["GET", "POST", "DELETE"],
+};
+
+app.use(cors(corsOptions));
+
 // Cookie settings
 app.use(
   session({
@@ -51,16 +64,6 @@ app.use(
     },
   })
 );
-const corsOptions = {
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
-  optionSuccessStatus: 200,
-  allowedHeaders:
-    "X-Requested-With, content-type, x-access-token, Origin, Content-Type, Accept",
-  methods: ["GET", "POST", "DELETE"],
-};
-
-app.use(cors(corsOptions));
 
 app.use(express.json()); //For JSON requests
 app.use(express.text()); // this is for plan/text format
