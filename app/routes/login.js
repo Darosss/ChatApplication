@@ -13,8 +13,8 @@ router.post(
   (req, res, next) => {
     console.log("Logged in as", req.user);
     res.cookie("token", req.session.jwt, {
-      domain: ".onrender.com",
-      secure: "true",
+      domain: "onrender.com",
+      secure: true,
       sameSite: "none",
       httpOnly: true,
       expires: new Date(Date.now() + 900000),
