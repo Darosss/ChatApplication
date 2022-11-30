@@ -4,7 +4,10 @@ import { io } from "socket.io-client";
 let socket;
 
 export const initiateSocketConnection = () => {
-  socket = io(process.env.REACT_APP_SOCKET_ENDPOINT);
+  socket = io(process.env.REACT_APP_SOCKET_ENDPOINT, {
+    transports: ["websocket"],
+    withCredentials: true,
+  });
 };
 export const joinRoom = (room) => {
   if (socket && room) socket.emit("join channel", room);
