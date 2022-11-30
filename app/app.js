@@ -52,14 +52,8 @@ app.use(
     name: "session",
     secret: process.env.COOKIE_SECRET,
     secure: true,
-
     sameSite: "none",
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
-
-    cookie: {
-      secure: true,
-      sameSite: "none",
-    },
   })
 );
 
