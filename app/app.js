@@ -50,7 +50,7 @@ app.use(
   session({
     name: "session",
     secret: process.env.COOKIE_SECRET,
-    secure: !process.env.NODE_ENV ? true : false,
+    secure: process.env.NODE_ENV === "development" ? false : true,
     sameSite: process.env.NODE_ENV !== "development" ? "none" : "lax",
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
   })
