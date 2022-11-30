@@ -15,15 +15,16 @@ import Ranges from "../Ranges";
 
 function App() {
   const [auth, setAuth] = useState(null);
-  console.log("APP AUTH", auth);
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URI}/session`, {
         withCredentials: true,
       })
       .then((res) => {
-        console.log("APP AUTH THEN", auth);
         setAuth(res.data);
+      })
+      .catch((err) => {
+        console.log("Couldn't get answer from API", err);
       });
   }, []);
   if (auth === null) {
