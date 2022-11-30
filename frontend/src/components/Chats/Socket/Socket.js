@@ -8,6 +8,7 @@ export const initiateSocketConnection = () => {
     transports: ["websocket"],
     withCredentials: true,
   });
+  console.log("Connecting to socket");
 };
 export const joinRoom = (room) => {
   if (socket && room) socket.emit("join channel", room);
