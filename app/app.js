@@ -51,11 +51,10 @@ app.use(
     name: "session",
     secret: process.env.COOKIE_SECRET,
     secure: !process.env.NODE_ENV ? true : false,
-    sameSite: !process.env.NODE_ENV === "development" ? "none" : "lax",
+    sameSite: process.env.NODE_ENV !== "development" ? "none" : "lax",
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
   })
 );
-console.log("nodeenv", process.env.NODE_ENV);
 
 app.use(express.json()); //For JSON requests
 app.use(express.text()); // this is for plan/text format
