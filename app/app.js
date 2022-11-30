@@ -45,14 +45,13 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
 // Cookie settings
 app.use(
   session({
     name: "session",
     secret: process.env.COOKIE_SECRET,
-    secure: true,
-    sameSite: "none",
+    secure: !process.env.NODE_ENV ? true : false,
+    sameSite: !process.env.NODE_ENV ? "none" : "lax",
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
   })
 );
