@@ -20,7 +20,7 @@ function EditProfileModal(props) {
     setFirstname(props.user.firstname);
     setSurname(props.user.surname);
     setEmail(props.user.email);
-    setBirthday(props.user.birthday);
+    setBirthday(props.user.birthday.split("T")[0]);
     setCountry(props.user.country);
     setPhone(props.user.phoneNumber);
     setGender(props.user.gender);
@@ -80,8 +80,18 @@ function EditProfileModal(props) {
       <div>
         {createTwoInputGroup(
           "Old password / New password",
-          createProfileInput("oldPassword", setOldPassword, "", "password"),
-          createProfileInput("newPassword", setNewPassword, "", "password")
+          createProfileInput(
+            "oldPassword",
+            setOldPassword,
+            oldPassword,
+            "password"
+          ),
+          createProfileInput(
+            "newPassword",
+            setNewPassword,
+            newPassword,
+            "password"
+          )
         )}
         {createTwoInputGroup(
           "Firstname / Surname",
@@ -92,7 +102,7 @@ function EditProfileModal(props) {
         <label className="form-label">Email</label>
         {createProfileInput("email", setEmail, email)}
         <label className="form-label">Birthday</label>
-        {createProfileInput("birthday", setBirthday, birthday)}
+        {createProfileInput("birthday", setBirthday, birthday, "date")}
         <label className="form-label">Country</label>
         {createProfileInput("country", setCountry, country)}
         <label className="form-label">Gender</label>
