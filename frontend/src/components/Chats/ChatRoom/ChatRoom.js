@@ -77,12 +77,6 @@ function ChatRoom(props) {
       });
     };
 
-    userConnectedEmit(username);
-
-    roomsList.forEach((room) => {
-      joinRoom({ username: username, roomId: room._id });
-    });
-
     refreshOnlineUsers((err, data) => {
       setOnlineUsers(data);
     });
@@ -120,7 +114,20 @@ function ChatRoom(props) {
       }, typingTimeoutMs);
       forceUpdate();
     });
-  }, [roomsList, username]);
+  }, []);
+
+  useEffect(() => {
+    console.log("room List event");
+    roomsList.forEach((room) => {
+      joinRoom({ username: props.auth.username, roomId: room._id });
+    });
+  }, [roomsList, props]);
+
+  useEffect(() => {
+    console.log("user connected emit event");
+
+    userConnectedEmit(username);
+  }, [username]);
 
   const sendMessage = () => {
     let msg = {
