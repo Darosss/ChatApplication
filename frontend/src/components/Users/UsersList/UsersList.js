@@ -11,8 +11,9 @@ function UsersList(props) {
       withCredentials: true,
       url: `${process.env.REACT_APP_API_URI}/users/unban/` + e,
     };
-    axios(axiosConfig);
-    window.location.reload(false);
+    axios(axiosConfig).then(() => {
+      window.location.reload(false);
+    });
   };
 
   return (
