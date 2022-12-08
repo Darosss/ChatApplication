@@ -47,8 +47,9 @@ function EditProfileModal(props) {
     };
     axios(axiosEditProfile).then((res) => {
       setPostInfo(res.data.message);
+
+      window.location.reload(false);
     });
-    window.location.reload(false);
   };
 
   const createProfileInput = (name, onChangeFn, value = "", type = "text") => {

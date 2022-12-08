@@ -14,8 +14,9 @@ function DeleteRoomModal(props) {
     };
     axios(axiosCreateConfig).then((res) => {
       setPostInfo(res.data.message);
+
+      window.location.reload(false);
     });
-    window.location.reload(false);
   };
 
   return (

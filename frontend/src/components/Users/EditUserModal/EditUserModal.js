@@ -65,6 +65,8 @@ function EditUserModal(props) {
     };
     axios(axiosEditUser).then((res) => {
       setPostInfo(res.data.message);
+
+      window.location.reload(false);
     });
   };
 
