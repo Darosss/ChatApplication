@@ -20,7 +20,7 @@ function EditProfileModal(props) {
     setFirstname(props.user.firstname);
     setSurname(props.user.surname);
     setEmail(props.user.email);
-    setBirthday(props.user.birthday.split("T")[0]);
+    setBirthday(props.user.birthday ? props.user.birthday.split("T")[0] : "");
     setCountry(props.user.country);
     setPhone(props.user.phoneNumber);
     setGender(props.user.gender);
