@@ -12,7 +12,9 @@ router.post(
   authenticateUser,
   (req, res, next) => {
     console.log("Logged in as", req.user);
-    res.send(req.user);
+    console.log(req.session);
+    console.log(res.getHeaders(), "headers");
+    res.status(200).send({ token: req.session.jwt, user: req.user });
   }
 );
 

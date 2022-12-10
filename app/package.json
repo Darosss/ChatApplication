@@ -6,7 +6,7 @@
   "scripts": {
     "test": "cross-env NODE_ENV=test jest --testTimeout=5000",
     "start": "node server.js",
-    "devStart": "nodemon server.js"
+    "devStart": "cross-env NODE_ENV=development nodemon server.js"
   },
   "keywords": [],
   "author": "",

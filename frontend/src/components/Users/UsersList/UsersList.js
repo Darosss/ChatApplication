@@ -11,8 +11,17 @@ function UsersList(props) {
       withCredentials: true,
       url: `${process.env.REACT_APP_API_URI}/users/unban/` + e,
     };
-    axios(axiosConfig);
-    window.location.reload(false);
+    axios(axiosConfig)
+      .then((data) => {
+        console.log("data", data);
+
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 100);
+      })
+      .catch((err) => {
+        console.log("Couldn't unban user", err);
+      });
   };
 
   return (
@@ -38,6 +47,7 @@ function UsersList(props) {
                   {user.isBanned ? (
                     <button
                       id={user._id}
+                      type="button"
                       className="btn btn-secondary w-100 modal-core-btn"
                       onClick={(e) => unbanUser(e.target.id)}
                     >

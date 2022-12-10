@@ -4,9 +4,11 @@ import { io } from "socket.io-client";
 let socket;
 
 export const initiateSocketConnection = () => {
-  //   socket = io(process.env.REACT_APP_SOCKET_ENDPOINT);
-  socket = io("http://localhost:5000");
-  console.log(`Connecting socket...`);
+  socket = io(process.env.REACT_APP_SOCKET_ENDPOINT, {
+    transports: ["websocket"],
+    withCredentials: true,
+  });
+  console.log("Connecting to socket");
 };
 export const joinRoom = (room) => {
   if (socket && room) socket.emit("join channel", room);

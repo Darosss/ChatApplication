@@ -65,6 +65,8 @@ function EditUserModal(props) {
     };
     axios(axiosEditUser).then((res) => {
       setPostInfo(res.data.message);
+
+      window.location.reload(false);
     });
   };
 
@@ -147,7 +149,7 @@ function EditUserModal(props) {
       <div>
         {userDetailsInput("Username", username, setUsername)}
         {userDetailsInput("Firstname", firstname, setFirstname)}
-        {userDetailsInput("Surname", surname, setUsername)}
+        {userDetailsInput("Surname", surname, setSurname)}
         {userDetailsInput("Email", email, setEmail)}
         {userDetailsInput("Phone", phoneNumber, setPhoneNumber)}
         {userDetailsInput("Nick Color", nickColor, setNickColor)}

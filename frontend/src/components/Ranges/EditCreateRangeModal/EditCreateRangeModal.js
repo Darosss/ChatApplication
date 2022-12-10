@@ -34,8 +34,9 @@ function EditRangeModal(props) {
     };
     axios(axiosEditRange).then((res) => {
       setPostInfo(res.data.message);
+
+      window.location.reload(false);
     });
-    window.location.reload(false);
   };
 
   const modalBody = () => {

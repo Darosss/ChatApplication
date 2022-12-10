@@ -15,8 +15,9 @@ function DeleteRangeModal(props) {
 
     axios(axiosConfig).then((res) => {
       setPostInfo(res.data.message);
+
+      window.location.reload(false);
     });
-    window.location.reload(false);
   };
 
   const modalBody = () => {

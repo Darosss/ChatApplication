@@ -22,6 +22,9 @@ function App() {
       })
       .then((res) => {
         setAuth(res.data);
+      })
+      .catch((err) => {
+        console.log("Couldn't get answer from API", err);
       });
   }, []);
   if (auth === null) {

@@ -33,25 +33,31 @@ const usersRouter = require("./routes/users");
 app.use(helmet());
 app.use(hpp());
 
+app.set("trust proxy", 1);
+
+const corsOptions = {
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+  optionSuccessStatus: 200,
+  allowedHeaders:
+    "X-Requested-With, content-type, x-access-token, Origin, Content-Type, Accept, Set-Cookie, Cookie",
+  methods: ["GET", "POST", "DELETE"],
+};
+
+app.use(cors(corsOptions));
 // Cookie settings
 app.use(
   session({
     name: "session",
     secret: process.env.COOKIE_SECRET,
+    secure: process.env.NODE_ENV === "development" ? false : true,
+    sameSite: process.env.NODE_ENV !== "development" ? "none" : "lax",
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
   })
 );
-const corsOptions = {
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
-  optionSuccessStatus: 200,
-  allowedHeaders: "X-Requested-With,content-type",
-  methods: ["GET", "POST", "DELETE"],
-};
-
-app.use(cors(corsOptions));
 
 app.use(express.json()); //For JSON requests
+app.use(express.text()); // this is for plan/text format
 app.use(express.urlencoded({ extended: true }));
 
 app.use(passport.initialize());

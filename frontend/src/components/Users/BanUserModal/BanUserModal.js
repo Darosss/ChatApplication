@@ -22,6 +22,8 @@ function EditUserModal(props) {
 
     axios(axiosConfig).then((res) => {
       setPostInfo(res.data.message);
+
+      window.location.reload(false);
     });
   };
 

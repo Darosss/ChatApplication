@@ -52,6 +52,14 @@ function ChatRoom(props) {
   }, [props]);
 
   useEffect(() => {
+    initiateSocketConnection();
+
+    return () => {
+      disconnectSocket();
+    };
+  }, []);
+
+  useEffect(() => {
     let typingTimeout = undefined;
     const updateLocalMessages = (msgData) => {
       let roomId = msgData.roomId;
@@ -68,13 +76,6 @@ function ChatRoom(props) {
         return prevState;
       });
     };
-
-    initiateSocketConnection();
-    userConnectedEmit(username);
-
-    roomsList.forEach((room) => {
-      joinRoom({ username: username, roomId: room._id });
-    });
 
     refreshOnlineUsers((err, data) => {
       setOnlineUsers(data);
@@ -113,11 +114,20 @@ function ChatRoom(props) {
       }, typingTimeoutMs);
       forceUpdate();
     });
+  }, []);
 
-    return () => {
-      disconnectSocket();
-    };
-  }, [roomsList, username]);
+  useEffect(() => {
+    console.log("room List event");
+    roomsList.forEach((room) => {
+      joinRoom({ username: props.auth.username, roomId: room._id });
+    });
+  }, [roomsList, props]);
+
+  useEffect(() => {
+    console.log("user connected emit event");
+
+    userConnectedEmit(username);
+  }, [username]);
 
   const sendMessage = () => {
     let msg = {
