@@ -68,7 +68,7 @@ Chat apllication where you can
 3. This is in development so need to create `.env` file in `app` folder with variables as below
    ```
    BACKEND_PORT=<port for localhost backend>
-   FRONTEND_URL=http://localhost:3000
+   FRONTEND_URL=<example http://localhost:3000>
    DATABASE_URL=<Mongodb database URL or URI>
    COOKIE_SECRET=<cookie secret>
    JWT_SECRET_KEY=<jwt secret>
@@ -76,8 +76,9 @@ Chat apllication where you can
 4. This is in development so need to create `.env` file in `frontend` folder with variable
    ```
    REACT_APP_API_URI=<example http://localhost:5000/api/v1 >
+   REACT_APP_SOCKET_ENDPOINT=<example http://localhost:5000 >
    ```
-   **It must contain `/api/v1` after port, it's only route designed**
+   **_REACT_APP_API_URI_ must contain `/api/v1` after port, it's only route designed**
 
 <!-- USAGE EXAMPLES -->
 
@@ -93,7 +94,7 @@ Chat apllication where you can
 - [x] Add login / register system
 - [x] Add ban / unban system
 - [x] Add ranges system
-- [] Improve for mobiles
+- [x] Improve for mobiles
 - [] Add shop with privileges
 
   See the [open issues](https://github.com/Darosss/ChatApplication/issues) for a full list of proposed features (and known issues).
