@@ -1,7 +1,9 @@
-const express = require("express");
+import express, { Request, Response } from "express";
+import passport from "passport";
+
 const router = express.Router();
-const passport = require("passport");
-router.get("/", (req, res) => {
+
+router.get("/", (req: Request, res: Response) => {
   console.log("nodeenv", process.env.NODE_ENV);
   passport.authenticate("jwt", { session: false }, (err, user) => {
     if (err || !user) {
@@ -12,4 +14,4 @@ router.get("/", (req, res) => {
   })(req, res);
 });
 
-module.exports = router;
+export default router;

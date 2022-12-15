@@ -1,22 +1,23 @@
-const express = require("express");
-const router = express.Router();
-const User = require("../models/user");
-const isUsersProfile = require("./middlewares/isUsersProfile");
+import express, { Request, Response } from "express";
+import { User, IUser } from "../models/user";
+import isUsersProfile from "./middlewares/isUsersProfile";
 
-router.get("/:userId", async function (req, res) {
-  let userDB = await User.findById(req.params.userId, {
+const router = express.Router();
+
+router.get("/:userId", async function (req: Request, res: Response) {
+  const userDB = await User.findById(req.params.userId, {
     password: 0,
     __v: 0,
   }).populate("ranges");
   return res.send({ userDetails: userDB });
 });
 
-router.post("/:userId", isUsersProfile, async (req, res) => {
-  let user,
-    oldPassword = req.body.oldPassword,
+router.post("/:userId", isUsersProfile, async (req: Request, res: Response) => {
+  let user;
+  const oldPassword = req.body.oldPassword,
     newPassword = req.body.newPassword;
 
-  const filter = req.user.id;
+  const filter = req.params.userId;
   const update = {
     firstname: req.body.firstname,
     surname: req.body.surname,
@@ -30,8 +31,8 @@ router.post("/:userId", isUsersProfile, async (req, res) => {
 
   try {
     user = await User.findByIdAndUpdate(filter, update, { new: true });
-    if (req.body.oldPassword)
-      await changePassword(user, oldPassword, newPassword, update);
+    if (req.body.oldPassword && user)
+      await changePassword(user, oldPassword, newPassword);
 
     res.status(201).send({ message: "Succesfully edited profile" });
   } catch (e) {
@@ -39,8 +40,12 @@ router.post("/:userId", isUsersProfile, async (req, res) => {
   }
 });
 
-async function changePassword(user, oldPassword, newPassword) {
-  await user.comparePassword(oldPassword, async function (err, isMatch) {
+async function changePassword(
+  user: IUser,
+  oldPassword: string,
+  newPassword: string
+) {
+  user.comparePassword(oldPassword, async function (err, isMatch) {
     if (err) console.log(err);
     else if (isMatch) {
       user.password = newPassword;
@@ -51,4 +56,4 @@ async function changePassword(user, oldPassword, newPassword) {
     }
   });
 }
-module.exports = router;
+export default router;

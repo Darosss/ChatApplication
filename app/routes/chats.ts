@@ -1,51 +1,62 @@
-const express = require("express");
+import express, { Response } from "express";
+import { RequestUserAuth } from "../@types/types";
+
+import { ChatRoom } from "../models/chatRoom";
+import { Message, IMessage } from "../models/message";
+import { User } from "../models/user";
+
 const router = express.Router();
 
-const chatRoom = require("../models/chatRoom");
-const Message = require("../models/message");
-const User = require("../models/user");
+router.get("/", async function (req: RequestUserAuth, res: Response) {
+  const userId = req.user?.id;
 
-router.get("/", async function (req, res) {
-  const userId = req.user.id;
-  let roomsMsgArr = {},
-    chatRooms,
-    connectedUser;
   const limitMsgs = 300;
-  connectedUser = await User.findById(userId).exec();
-  const chatRoomFilter = {
-    $or: [
-      { createdBy: connectedUser.id },
-      //if room created by user
-      {
-        availableRanges: { $in: connectedUser.ranges },
-        //user has range that chatrom require
-      },
-      {
-        allowedUsers: { $eq: connectedUser.id },
-        //user is allowed in chatroom
-      },
-    ],
-    $and: [
-      {
-        bannedUsers: { $ne: connectedUser.id },
-        //user is not banned in chatroom
-      },
-    ],
-  };
-  chatRooms = await chatRoom.find(chatRoomFilter);
-  //gets messages depens what rooms user sees
-  for await (const chatRoom of chatRooms) {
-    roomsMsgArr[chatRoom._id] = await Message.find({
-      whereSent: chatRoom._id,
-    })
-      .sort({ createdAt: "desc" })
-      .populate("sender")
-      .populate("whereSent")
-      .limit(limitMsgs)
-      .exec();
-  }
 
-  res.send({ rooms: roomsMsgArr, userChatRooms: chatRooms });
+  // eslint-disable-next-line prefer-const
+  let roomsMsgArr: { [key: string]: IMessage[] } = {};
+  let chatRoomFilter;
+
+  await User.findById(userId).then((user) => {
+    if (!user) return;
+    //string[]>([]);
+    chatRoomFilter = {
+      $or: [
+        { createdBy: user.id },
+        //if room created by user
+        {
+          availableRanges: { $in: user.ranges },
+          //user has range that chatrom require
+        },
+        {
+          allowedUsers: { $eq: user.id },
+          //user is allowed in chatroom
+        },
+      ],
+      $and: [
+        {
+          bannedUsers: { $ne: user.id },
+          //user is not banned in chatroom
+        },
+      ],
+    };
+  });
+
+  await ChatRoom.find(chatRoomFilter).then(async (chatRooms) => {
+    for await (const selectedChatRoom of chatRooms) {
+      roomsMsgArr[selectedChatRoom._id as unknown as string] =
+        await Message.find({
+          whereSent: selectedChatRoom._id,
+        })
+          .sort({ createdAt: "desc" })
+          .populate("sender")
+          .populate("whereSent")
+          .limit(limitMsgs)
+          .exec();
+    }
+
+    res.send({ rooms: roomsMsgArr, userChatRooms: chatRooms });
+  });
+  //gets messages depens what rooms user sees
 });
 
-module.exports = router;
+export default router;

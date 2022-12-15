@@ -1,14 +1,15 @@
-const express = require("express");
-const router = express.Router();
-const user = require("../models/user");
-const range = require("../models/range");
-const chatRoom = require("../models/chatRoom");
-const isAdmin = require("./middlewares/isAdmin");
+import express, { Request, Response } from "express";
+import { User } from "../models/user";
+import { Range } from "../models/range";
+import { ChatRoom } from "../models/chatRoom";
+import isAdmin from "./middlewares/isAdmin";
 
-router.get("/", async (req, res) => {
+const router = express.Router();
+
+router.get("/", async (req: Request, res: Response) => {
   let users;
   try {
-    users = await user.find({}, { password: 0, __v: 0 });
+    users = await User.find({}, { password: 0, __v: 0 });
     res.send({ usersList: users });
   } catch {
     res.send({ message: "Can't get users" });
@@ -16,14 +17,14 @@ router.get("/", async (req, res) => {
 });
 
 //Get user by id
-router.get("/:userId", async (req, res) => {
-  const userEdit = await user.findById(req.params.userId, {
+router.get("/:userId", async (req: Request, res: Response) => {
+  const userEdit = await User.findById(req.params.userId, {
     password: 0,
     __v: 0,
     createdAt: 0,
   });
-  const ranges = await range.find({});
-  const chatRooms = await chatRoom.find({ createdBy: userEdit.id });
+  const ranges = await Range.find({});
+  const chatRooms = await ChatRoom.find({ createdBy: userEdit?.id });
   res.send({
     user: userEdit,
     ranges: ranges,
@@ -32,7 +33,7 @@ router.get("/:userId", async (req, res) => {
 });
 
 //Edit user by id route
-router.post("/edit/:userId", isAdmin, async (req, res) => {
+router.post("/edit/:userId", isAdmin, async (req: Request, res: Response) => {
   const body = req.body;
   const update = {
     username: body.username,
@@ -46,7 +47,7 @@ router.post("/edit/:userId", isAdmin, async (req, res) => {
     ranges: body.ranges,
   };
   try {
-    await user.findByIdAndUpdate(req.params.userId, update);
+    await User.findByIdAndUpdate(req.params.userId, update);
     res.send({ message: "User edited" });
   } catch (e) {
     res.send({ message: "Can't edit user" });
@@ -55,13 +56,13 @@ router.post("/edit/:userId", isAdmin, async (req, res) => {
 });
 
 //Ban user by id route
-router.post("/ban/:userId/", isAdmin, async (req, res) => {
-  let banTime = req.body.banTime || 5;
-  let banReason = req.body.banReason;
+router.post("/ban/:userId/", isAdmin, async (req: Request, res: Response) => {
+  const banTime = req.body.banTime || 5;
+  const banReason = req.body.banReason;
 
-  let bannedDate = new Date(),
+  const bannedDate = new Date(),
     banExpiresDate = new Date();
-  let banMinutes = banExpiresDate.getMinutes() + parseInt(banTime);
+  const banMinutes = banExpiresDate.getMinutes() + parseInt(banTime);
   banExpiresDate.setMinutes(banMinutes);
 
   const update = {
@@ -71,7 +72,7 @@ router.post("/ban/:userId/", isAdmin, async (req, res) => {
     banReason: banReason,
   };
   try {
-    await user.findByIdAndUpdate(req.params.userId, update);
+    await User.findByIdAndUpdate(req.params.userId, update);
     res.send({ message: "User banned" });
   } catch (e) {
     //Fe. add validation if admin want to ban admin or sth like that
@@ -80,16 +81,17 @@ router.post("/ban/:userId/", isAdmin, async (req, res) => {
 });
 
 //Unban user by id route
-router.post("/unban/:userId", isAdmin, async (req, res) => {
+router.post("/unban/:userId", isAdmin, async (req: Request, res: Response) => {
   const update = {
     isBanned: false,
   };
   try {
-    await user.findByIdAndUpdate(req.params.userId, update);
+    await User.findByIdAndUpdate(req.params.userId, update);
     res.send({ message: "User unbanned" });
   } catch (e) {
     res.send({ message: "User can't be unbanned" });
     console.log(e);
   }
 });
-module.exports = router;
+
+export default router;

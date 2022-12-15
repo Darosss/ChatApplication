@@ -1,8 +1,14 @@
-const router = require("express").Router();
+import express, { NextFunction, Request, Response } from "express";
+const router = express.Router();
 
-router.post("/", (req, res, next) => {
-  req.logOut();
-  req.session = null;
-  res.send({ message: "Logout succes" });
+router.post("/", (req: Request, res: Response, next: NextFunction) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    req.session = null;
+    res.send({ message: "Logout succes" });
+  });
 });
-module.exports = router;
+
+export default router;
