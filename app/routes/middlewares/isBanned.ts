@@ -1,14 +1,22 @@
-const User = require("../../models/user");
+import { NextFunction, Response } from "express";
+import { RequestUserAuth } from "../../@types/types";
 
-module.exports = async function (req, res, next) {
-  let userId = req.user.id;
-  let user = await User.findById(userId);
+import { User } from "../../models/user";
 
-  if (!user.isBanned) {
+export default async function (
+  req: RequestUserAuth,
+  res: Response,
+  next: NextFunction
+) {
+  const currUser = req.user;
+
+  const user = await User.findById(currUser?.id);
+
+  if (!user?.isBanned) {
     return next();
   } else {
     res
       .status(403)
       .send({ message: "You are banned", banDate: user.banExpiresDate });
   }
-};
+}

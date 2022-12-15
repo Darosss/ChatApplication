@@ -1,10 +1,18 @@
-const isAdmin = require("../partials/_isAdminUser");
-const chatRoom = require("../../models/chatRoom");
-module.exports = async function (req, res, next) {
-  let roomId = req.params.roomId;
-  let room = await chatRoom.findById(roomId);
-  let userId = req.user.id;
-  if (room.createdBy.toString() === userId || (await isAdmin(userId)))
-    return next();
-  else res.status(403).send({ message: "You are not owner of this room" });
-};
+import isAdmin from "../partials/_isAdminUser";
+import { ChatRoom } from "../../models/chatRoom";
+import { Response, NextFunction } from "express";
+import { RequestUserAuth } from "../../@types/types";
+
+export default async function (
+  req: RequestUserAuth,
+  res: Response,
+  next: NextFunction
+) {
+  const roomId = req.params.roomId;
+  const room = await ChatRoom.findById(roomId);
+  const userId = req.user?.id;
+  if (userId)
+    if (room?.createdBy.toString() === userId || (await isAdmin(userId)))
+      return next();
+    else res.status(403).send({ message: "You are not owner of this room" });
+}

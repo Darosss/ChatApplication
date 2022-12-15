@@ -1,24 +1,31 @@
-const User = require("../../models/user");
+import { IUser, User } from "../../models/user";
+import { Response, NextFunction } from "express";
+import { RequestUserAuth } from "../../@types/types";
 
-module.exports = async function (req, res, next) {
-  if (!req.user) return next();
+export default async function (
+  req: RequestUserAuth,
+  res: Response,
+  next: NextFunction
+) {
+  if (req.user === undefined) return next();
+  else {
+    const currUser = req.user?.id;
+    const loggedUser = (await User.findById(currUser)) as IUser;
+    if (checkBanDate(loggedUser.banExpiresDate)) await unban(loggedUser);
 
-  let userId = req.user.id;
-  let user = await User.findById(userId);
-
-  if (checkBanDate(user.banExpiresDate)) {
-    await unban(user);
+    return next();
   }
-  return next();
-};
+}
 
-var unban = async function (user) {
+const unban = async function (user: IUser) {
   user.isBanned = false;
   try {
     await user.save();
-  } catch {}
+  } catch (err) {
+    console.log("unban error", err);
+  }
 };
 
-var checkBanDate = function (banDate) {
-  if (banDate - new Date() <= 0) return true;
+const checkBanDate = function (banDate: Date) {
+  if (Number(banDate) - Number(new Date()) <= 0) return true;
 };
