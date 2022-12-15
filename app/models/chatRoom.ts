@@ -1,6 +1,15 @@
-const mongoose = require("mongoose");
+import { ArrayExpression, Model, model, Schema, Types } from "mongoose";
 
-const chatRoomSchema = new mongoose.Schema({
+export interface IChatRoom extends Document {
+  id: Types.ObjectId;
+  name: string;
+  availableRanges: ArrayExpression;
+  allowedUsers: ArrayExpression;
+  bannedUsers: ArrayExpression;
+  createdBy: Types.ObjectId;
+}
+
+const chatRoomSchema: Schema<IChatRoom> = new Schema({
   name: {
     type: String,
     required: true,
@@ -20,10 +29,10 @@ const chatRoomSchema = new mongoose.Schema({
     ref: "User",
   },
   createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     required: true,
     ref: "User",
   },
 });
 
-module.exports = mongoose.model("chatRoom", chatRoomSchema);
+export const ChatRoom: Model<IChatRoom> = model("chatRoom", chatRoomSchema);

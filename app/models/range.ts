@@ -1,5 +1,13 @@
-const mongoose = require("mongoose");
-const rangeSchema = new mongoose.Schema({
+import mongoose, { Model, model, Schema, Types } from "mongoose";
+
+export interface IRange extends Document {
+  id: string;
+  name: string;
+  createdAt: Date;
+  createdBy: Types.ObjectId;
+}
+
+const rangeSchema: Schema<IRange> = new Schema({
   name: {
     type: String,
     required: true,
@@ -17,4 +25,4 @@ const rangeSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Range", rangeSchema);
+export const Range: Model<IRange> = model("Range", rangeSchema);

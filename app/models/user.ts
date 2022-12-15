@@ -1,11 +1,43 @@
-const mongoose = require("mongoose");
-const passportLocalMongoose = require("passport-local-mongoose");
-const bcrypt = require("bcrypt");
+import {
+  Callback,
+  model,
+  Schema,
+  Model,
+  Document,
+  ArrayExpression,
+} from "mongoose";
+import bcrypt from "bcrypt";
+import passportLocalMongoose from "passport-local-mongoose";
 
-const userSchema = new mongoose.Schema({
+export interface IUser extends Document {
+  comparePassword(password: string, cb: Callback): boolean;
+  _id: string;
+  id: string;
+  //TODO: USER ID
+  username: string;
+  password: string;
+  firstname: string;
+  surname: string;
+  createdAt: Date;
+  birthday: Date;
+  ranges: ArrayExpression;
+  administrator: boolean;
+  moderator: boolean;
+  country: string;
+  gender: string;
+  nickColor: string;
+  email: string;
+  phoneNumber: string;
+  isBanned: boolean;
+  bannedDate: Date;
+  banExpiresDate: Date;
+  banReason: string;
+}
+
+const userSchema: Schema<IUser> = new Schema({
   username: {
     type: String,
-    required: true,
+    required: [true, "Can't be blank"],
     index: { unique: true },
   },
   password: {
@@ -71,25 +103,23 @@ const userSchema = new mongoose.Schema({
 });
 userSchema.plugin(passportLocalMongoose);
 
-userSchema.pre("save", function (next) {
-  const user = this;
-
-  if (!this.isModified("password")) next();
-
-  bcrypt.hash(user.password, 10, (err, hash) => {
-    if (err) return next(err, "??");
-    user.password = hash;
+userSchema.pre<IUser>("save", function (next) {
+  if (!this.isModified("password")) return next();
+  bcrypt.hash(this.password as string, 10, (err, hash) => {
+    if (err) return next(err);
+    this.password = hash;
     next();
   });
 });
 
-userSchema.methods = {
-  comparePassword: function (candidatePassword, cb) {
-    bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
-      if (err) return cb(err);
-      cb(null, isMatch);
-    });
-  },
+userSchema.methods.comparePassword = function (
+  candidatePassword: string,
+  cb: Callback
+) {
+  bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
+    if (err) return cb(err, "Not same password");
+    cb(null, isMatch);
+  });
 };
 
-module.exports = mongoose.model("User", userSchema);
+export const User: Model<IUser> = model("User", userSchema);

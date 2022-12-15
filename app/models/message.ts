@@ -1,12 +1,20 @@
-const mongoose = require("mongoose");
+import { ArrayExpression, Model, model, Schema, Types } from "mongoose";
 
-const messageSchema = new mongoose.Schema({
+export interface IMessage extends Document {
+  id: string;
+  message: string;
+  sender: ArrayExpression;
+  sentTime: Date;
+  whereSent: Types.ObjectId;
+}
+
+const messageSchema: Schema<IMessage> = new Schema({
   message: {
     type: String,
     required: true,
   },
   sender: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Types.ObjectId,
     required: true,
     ref: "User",
   },
@@ -16,10 +24,10 @@ const messageSchema = new mongoose.Schema({
     default: Date.now,
   },
   whereSent: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     required: true,
     ref: "chatRoom",
   },
 });
 
-module.exports = mongoose.model("Message", messageSchema);
+export const Message: Model<IMessage> = model("Message", messageSchema);
