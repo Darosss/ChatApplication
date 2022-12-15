@@ -1,6 +1,6 @@
-const user = require("../../models/user");
+import { User } from "../../models/user";
 
-module.exports = async function (userId) {
-  let loggedUser = await user.findById(userId);
-  if (loggedUser.administrator) return true;
-};
+export default async function (userId: string) {
+  const loggedUser = await User.findById(userId);
+  if (loggedUser?.administrator) return true;
+}
