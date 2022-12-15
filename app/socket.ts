@@ -1,9 +1,23 @@
-const Message = require("./models/message");
+import { Server } from "socket.io";
+import {
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData,
+} from "./@types/socket";
+import { Message } from "./models/message";
 
-module.exports = function (io) {
+export default function (
+  io: Server<
+    ClientToServerEvents,
+    ServerToClientEvents,
+    InterServerEvents,
+    SocketData
+  >
+) {
   console.log("--------------NEW CONNECTION--------------");
-  let onlineUsers = new Map();
-  let roomsUsers = new Map();
+  const onlineUsers = new Map();
+  const roomsUsers = new Map();
 
   io.on("connection", (socket) => {
     console.log(`User: joined the site ${socket.id}`);
@@ -16,10 +30,14 @@ module.exports = function (io) {
       //When disconnect remove from online later fn
 
       for (const roomId of roomsUsers.keys()) {
-        let roomUsers = roomsUsers.get(roomId);
+        const roomUsers = roomsUsers.get(roomId);
+
         if (roomUsers.has(socket.id)) {
           roomUsers.delete(socket.id);
-          let data = { roomId: roomId, roomUsers: Array.from(roomUsers) };
+          const data = {
+            roomId: roomId,
+            roomUsers: Array.from(roomUsers) as string[],
+          };
 
           io.to(roomId).emit("room_online_users", data);
         }
@@ -32,23 +50,23 @@ module.exports = function (io) {
       io.emit("refresh_online_users", Array.from(onlineUsers));
     });
 
-    socket.on("join channel", (data) => {
+    socket.on("join_channel", (data) => {
       console.log("Joining the room ", data);
       //data:  username , userId, roomId
       socket.join(data.roomId);
 
       data.roomUsers = addOnlineUserToRoom(
         data.roomId,
-        data.username,
+        data.username as string,
         socket.id
-      );
+      ) as string[];
       io.to(data.roomId).emit("room_online_users", data);
     });
 
     //On chat message
-    socket.on("chat message", async (data) => {
+    socket.on("chat_message", async (data) => {
       data.date = new Date();
-      io.to(data.roomId).emit("chat message", data);
+      io.to(data.roomId).emit("chat_message", data);
       if (
         await saveMessageToDB(data.userId, data.message, data.date, data.roomId)
       )
@@ -70,15 +88,24 @@ module.exports = function (io) {
     });
   });
 
-  function addOnlineUserToRoom(roomId, username, socketId) {
+  function addOnlineUserToRoom(
+    roomId: string,
+    username: string,
+    socketId: string
+  ) {
     if (!roomsUsers.has(roomId)) roomsUsers.set(roomId, new Map());
-    let userRoomMap = roomsUsers.get(roomId);
+    const userRoomMap = roomsUsers.get(roomId);
     userRoomMap.set(socketId, username);
 
     return Array.from(roomsUsers.get(roomId));
   }
 
-  async function saveMessageToDB(username, msg, date, room) {
+  async function saveMessageToDB(
+    username: string,
+    msg: string,
+    date: Date,
+    room: string
+  ) {
     const message = new Message({
       sender: username,
       message: msg,
@@ -93,4 +120,4 @@ module.exports = function (io) {
       return false;
     }
   }
-};
+}
