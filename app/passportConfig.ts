@@ -1,18 +1,22 @@
-const User = require("./models/user");
-const passport = require("passport");
+import { User, IUser } from "./models/user";
+import passport from "passport";
 
-const LocalStrategy = require("passport-local");
-const JwtStrategy = require("passport-jwt").Strategy,
-  ExtractJwt = require("passport-jwt").ExtractJwt;
+import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as JwtStrategy } from "passport-jwt";
+import { Error } from "mongoose";
+
+// const JwtStrategy = JwtStrategy.Strategy;
+// ExtractJwt = require("passport-jwt").ExtractJwt;
 
 const localStrategy = new LocalStrategy(function (username, password, done) {
-  User.findOne({ username: username }, function (err, user) {
+  User.findOne({ username: username }, function (err: Error, user: IUser) {
     if (err) return done(err);
     if (!user) return done(null, false);
-    user.comparePassword(password, function (err, isMatch) {
+
+    user.comparePassword(password, (err, isMatch: boolean) => {
       if (err) throw err;
       if (!isMatch) return done(null, false);
-      const userDetails = { id: user.id, username: user.username };
+      const userDetails = { id: user._id, username: user.username };
       return done(null, userDetails);
     });
   });
@@ -20,19 +24,20 @@ const localStrategy = new LocalStrategy(function (username, password, done) {
 
 const jwtStrategy = new JwtStrategy(
   {
-    jwtFromRequest: (req) => req.session.jwt,
+    jwtFromRequest: (req) => req.session?.jwt,
     secretOrKey: process.env.JWT_SECRET_KEY,
   },
   async (payload, done) => {
     // TODO: add additional jwt token verification
 
-    let user = await User.findOne(
+    const user = await User.findOne(
       { username: payload.username },
-      "_id username administrator isBanned"
+      "_id administrator isBanned"
     );
-    payload.id = user.id;
-    payload.administrator = user.administrator;
-    payload.isBanned = user.isBanned;
+
+    payload.id = user?._id;
+    payload.administrator = user?.administrator;
+    payload.isBanned = user?.isBanned;
 
     // console.log("test passportConf", payload);
     return done(null, payload);
@@ -40,15 +45,15 @@ const jwtStrategy = new JwtStrategy(
 );
 
 passport.serializeUser(function (user, done) {
-  done(null, user.id);
+  done(null, user);
 });
 
 passport.deserializeUser(function (id, done) {
-  User.findById(id, function (err, user) {
-    done(err, user);
+  User.findById(id, function (err: Error, user: IUser) {
+    return done(err, user);
   });
 });
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
-module.exports = passport;
+export default passport;
