@@ -1,33 +1,35 @@
-const dotenv = require("dotenv");
-const path = require("path");
+import dotenv from "dotenv";
+import path from "path";
 
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 
-const express = require("express");
+import express from "express";
+
 const app = express();
-const cors = require("cors");
 
-const session = require("cookie-session");
-const helmet = require("helmet");
-const hpp = require("hpp");
+import cors from "cors";
 
-const passport = require("./passportConfig");
+import session from "cookie-session";
+import helmet from "helmet";
+import hpp from "hpp";
+
+import passport from "./passportConfig";
 const jwtRequired = passport.authenticate("jwt", { session: false });
 
 //MIDDLEWARES//
-const userCheckBan = require("./routes/middlewares/userCheckBan");
-const isBanned = require("./routes/middlewares/isBanned");
+import userCheckBan from "./routes/middlewares/userCheckBan";
+import isBanned from "./routes/middlewares/isBanned";
 
 // ROUTES //
-const currSessionRouter = require("./routes/currSessionRouter");
-const chatsRouter = require("./routes/chats");
-const profilRouter = require("./routes/profil");
-const loginRouter = require("./routes/login");
-const registerRouter = require("./routes/register");
-const logoutRouter = require("./routes/logout");
-const roomsRouter = require("./routes/rooms");
-const rangesRouter = require("./routes/ranges");
-const usersRouter = require("./routes/users");
+import currSessionRouter from "./routes/currSessionRouter";
+import chatsRouter from "./routes/chats";
+import profilRouter from "./routes/profil";
+import loginRouter from "./routes/login";
+import registerRouter from "./routes/register";
+import logoutRouter from "./routes/logout";
+import roomsRouter from "./routes/rooms";
+import rangesRouter from "./routes/ranges";
+import usersRouter from "./routes/users";
 
 //Security configs
 app.use(helmet());
@@ -73,4 +75,4 @@ app.use("/api/v1/rooms", jwtRequired, isBanned, roomsRouter);
 app.use("/api/v1/ranges", jwtRequired, isBanned, rangesRouter);
 app.use("/api/v1/users", jwtRequired, isBanned, usersRouter);
 
-module.exports = app;
+export default app;
