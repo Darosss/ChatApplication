@@ -4,7 +4,8 @@ import {
   ServerToClientEvents,
   InterServerEvents,
   SocketData,
-} from "./@types/socket";
+} from "../libs/types/socket";
+
 import { Message } from "./models/message";
 
 export default function (
