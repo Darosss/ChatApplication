@@ -11,7 +11,7 @@ export const initiateSocketConnection = () => {
   console.log("Connecting to socket");
 };
 export const joinRoom = (room) => {
-  if (socket && room) socket.emit("join channel", room);
+  if (socket && room) socket.emit("join_channel", room);
 };
 
 export const disconnectSocket = () => {
@@ -22,7 +22,7 @@ export const disconnectSocket = () => {
 export const subscribeToChat = (cb) => {
   if (!socket) return true;
 
-  socket.on("chat message", (msg) => {
+  socket.on("chat_message", (msg) => {
     return cb(null, msg);
   });
 };
@@ -44,7 +44,7 @@ export const refreshOnlineUsers = (cb) => {
 };
 
 export const sendMessageSocket = (message) => {
-  if (socket) socket.emit("chat message", message);
+  if (socket) socket.emit("chat_message", message);
 };
 
 export const userConnectedEmit = (username) => {
