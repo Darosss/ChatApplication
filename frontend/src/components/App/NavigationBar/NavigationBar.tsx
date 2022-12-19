@@ -1,12 +1,13 @@
 import "./style.css";
-import React, { useRef } from "react";
+import { useRef } from "react";
 import NavigationLink from "./NavigationLink";
 import Logout from "../../Logout";
 import HamburgerMenu from "../../HamburgerMenu";
 import { Link } from "react-router-dom";
 
-function NavigationBar({ auth }) {
-  const navigation = useRef();
+function NavigationBar(props: { auth: IAuth }) {
+  const { auth } = props;
+  const navigation = useRef<HTMLUListElement>(null);
 
   return (
     <nav className="app-navigation">

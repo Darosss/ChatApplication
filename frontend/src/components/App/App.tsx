@@ -14,7 +14,7 @@ import Users from "../Users";
 import Ranges from "../Ranges";
 
 function App() {
-  const [auth, setAuth] = useState(null);
+  const [auth, setAuth] = useState<IAuth | null>(null);
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URI}/session`, {
