@@ -1,7 +1,8 @@
 import "./style.css";
-import React from "react";
 
-function Home({ auth }) {
+function Home(props: { auth: IAuth }) {
+  const { auth } = props;
+
   return (
     <div className="section-header">
       {auth ? (

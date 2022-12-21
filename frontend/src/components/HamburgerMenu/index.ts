@@ -1,3 +1,3 @@
-import HamburgerMenu from "./HamburgerMenu.js";
+import HamburgerMenu from "./HamburgerMenu";
 
 export default HamburgerMenu;

@@ -1,8 +1,9 @@
 import "./style.css";
-import React, { useState } from "react";
+import { useState } from "react";
 import { HamburgerIcon } from "react-hamburger-icon";
 
-function HamburgerMenu({ menu }) {
+function HamburgerMenu(props: { menu: any }) {
+  const { menu } = props;
   const [open, setOpen] = useState(false);
 
   const toggleNavigation = () => {
