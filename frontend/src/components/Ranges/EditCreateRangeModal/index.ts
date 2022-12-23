@@ -1,3 +1,3 @@
-import EditCreateRangeModal from "./EditCreateRangeModal.js";
+import EditCreateRangeModal from "./EditCreateRangeModal";
 
 export default EditCreateRangeModal;

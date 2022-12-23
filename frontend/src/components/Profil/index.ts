@@ -1,3 +1,3 @@
-import Profil from "./Profil.js";
+import Profil from "./Profil";
 
 export default Profil;

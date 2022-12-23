@@ -1,3 +1,3 @@
-import EditCreateRoomModal from "./EditCreateRoomModal.js";
+import EditCreateRoomModal from "./EditCreateRoomModal";
 
 export default EditCreateRoomModal;

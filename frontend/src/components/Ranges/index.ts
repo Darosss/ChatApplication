@@ -1,3 +1,3 @@
-import Ranges from "./Ranges.js";
+import Ranges from "./Ranges";
 
 export default Ranges;

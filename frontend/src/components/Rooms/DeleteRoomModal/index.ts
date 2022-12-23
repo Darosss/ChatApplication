@@ -1,3 +1,3 @@
-import DeleteRoomModal from "./DeleteRoomModal.js";
+import DeleteRoomModal from "./DeleteRoomModal";
 
 export default DeleteRoomModal;

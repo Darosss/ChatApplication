@@ -1,3 +1,3 @@
-import DeleteRangeModal from "./DeleteRangeModal.js";
+import DeleteRangeModal from "./DeleteRangeModal";
 
 export default DeleteRangeModal;

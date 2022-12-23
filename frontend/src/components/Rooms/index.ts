@@ -1,3 +1,3 @@
-import Rooms from "./Rooms.js";
+import Rooms from "./Rooms";
 
 export default Rooms;
