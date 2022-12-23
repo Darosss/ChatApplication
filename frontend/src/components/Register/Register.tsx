@@ -15,7 +15,8 @@ function App() {
   const [nickColor, setNickColor] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const register = (e) => {
+
+  const register = (e: React.FormEvent) => {
     e.preventDefault();
     axios({
       method: "POST",
@@ -38,6 +39,7 @@ function App() {
       navigate("/login");
     });
   };
+
   return (
     <div>
       <div className="section-header">
