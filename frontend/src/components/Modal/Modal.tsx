@@ -4,7 +4,13 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Alert from "react-bootstrap/Alert";
 
-function ModalCore(props) {
+function ModalCore(props: {
+  onClickFn: () => void;
+  actionBtnVariant: string;
+  actionName: string;
+  body: any; //TODO: change later
+  postInfo: string;
+}) {
   const [show, setShow] = useState(false);
 
   const [showAlert, setShowAlert] = useState(false);
