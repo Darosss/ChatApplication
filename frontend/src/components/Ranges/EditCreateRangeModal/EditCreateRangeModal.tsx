@@ -1,25 +1,30 @@
 import "./style.css";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import ModalCore from "../../Modal";
 
-function EditRangeModal(props) {
+function EditRangeModal(props: {
+  isEdit?: boolean;
+  rangeId?: string;
+  sectionName?: string;
+}) {
+  const { isEdit = false, rangeId = undefined, sectionName = "" } = props;
   const [rangeName, setRangeName] = useState("");
   const [postInfo, setPostInfo] = useState("");
 
   useEffect(() => {
-    if (!props.isEdit) return;
+    if (!isEdit || !rangeId) return;
 
     const axiosConfigRanges = {
       method: "get",
       withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/ranges/` + props.rangeId,
+      url: `${process.env.REACT_APP_API_URI}/ranges/` + rangeId,
     };
 
     axios(axiosConfigRanges).then((res) => {
       setRangeName(res.data.range.name);
     });
-  }, [props]);
+  }, [isEdit, rangeId]);
 
   const createOrEditRange = () => {
     const axiosEditRange = {
@@ -30,12 +35,12 @@ function EditRangeModal(props) {
       withCredentials: true,
       url:
         `${process.env.REACT_APP_API_URI}/ranges/` +
-        (props.rangeId ? "edit/" + props.rangeId : "create"),
+        (rangeId ? "edit/" + rangeId : "create"),
     };
     axios(axiosEditRange).then((res) => {
       setPostInfo(res.data.message);
 
-      window.location.reload(false);
+      window.location.reload();
     });
   };
 
@@ -58,7 +63,7 @@ function EditRangeModal(props) {
 
   return (
     <ModalCore
-      actionName={props.sectionName}
+      actionName={sectionName}
       body={modalBody()}
       onClickFn={createOrEditRange}
       actionBtnVariant="primary"

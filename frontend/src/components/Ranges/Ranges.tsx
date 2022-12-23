@@ -1,13 +1,14 @@
 import "./style.css";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import EditCreateRangeModal from "./EditCreateRangeModal";
 import DeleteRangeModal from "./DeleteRangeModal";
 
 function Ranges() {
-  const [avilableRanges, setAvailableRanges] = useState([]);
+  const [avilableRanges, setAvailableRanges] = useState<IRangeRes[]>();
 
   useEffect(() => {
+    console.log("test");
     const axiosConfig = {
       method: "get",
       withCredentials: true,
@@ -18,6 +19,7 @@ function Ranges() {
     });
   }, []);
 
+  console.log("test31", avilableRanges);
   return (
     <div>
       <div className="section-header">
@@ -36,17 +38,17 @@ function Ranges() {
             </tr>
           </thead>
           <tbody>
-            {avilableRanges.map((range, index) => {
+            {avilableRanges?.map((range, index) => {
               return (
                 <tr key={index}>
                   <td>{range.name}</td>
                   <td>{range.createdBy.username}</td>
-                  <td>{range.createdAt.split("T")[0]}</td>
+                  <td>{range.createdAt.toString().split("T")[0]}</td>
                   <td>
                     <EditCreateRangeModal
                       sectionName="Edit"
                       rangeId={range._id}
-                      isEdit="true"
+                      isEdit={true}
                     />
                   </td>
                   <td>
