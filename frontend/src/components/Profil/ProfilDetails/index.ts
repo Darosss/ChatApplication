@@ -1,3 +1,3 @@
-import ProfilDetails from "./ProfilDetails.js";
+import ProfilDetails from "./ProfilDetails";
 
 export default ProfilDetails;

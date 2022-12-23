@@ -1,3 +1,3 @@
-import EditProfileModal from "./EditProfileModal.js";
+import EditProfileModal from "./EditProfileModal";
 
 export default EditProfileModal;
