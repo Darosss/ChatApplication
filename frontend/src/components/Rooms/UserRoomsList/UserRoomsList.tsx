@@ -1,9 +1,10 @@
 import "./style.css";
-import React from "react";
 import EditCreateRoomModal from "../EditCreateRoomModal";
 import DeleteRoomModal from "../DeleteRoomModal";
 
-function UserRoomsList(props) {
+function UserRoomsList(props: { rooms: IChatRoomRes[] }) {
+  const { rooms } = props;
+  console.log("test");
   return (
     <div>
       <table className="table table-sm table-dark user-rooms-list">
@@ -16,19 +17,15 @@ function UserRoomsList(props) {
           </tr>
         </thead>
         <tbody>
-          {props.rooms.map((room, index) => {
+          {rooms.map((room, index) => {
             return (
               <tr key={index}>
                 <td> {room.name}</td>
                 <td>
-                  <EditCreateRoomModal
-                    sectionName="Edit"
-                    roomId={room._id}
-                    isEdit="true"
-                  />
+                  <EditCreateRoomModal sectionName="Edit" roomId={room._id} />
                 </td>
                 <td>
-                  <DeleteRoomModal roomName={room.name} roomId={room._id} />
+                  <DeleteRoomModal roomId={room._id} />
                 </td>
               </tr>
             );

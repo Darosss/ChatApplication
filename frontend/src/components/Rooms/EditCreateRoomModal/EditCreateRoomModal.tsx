@@ -1,38 +1,45 @@
 import "./style.css";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import ModalCore from "../../Modal";
 
-function EditCreateRoomModal(props) {
-  const [usersList, setUsersList] = useState([]);
-  const [availableRanges, setAvailableRanges] = useState([]);
+function EditCreateRoomModal(props: {
+  roomId?: string;
+  sectionName: string;
+  isEdit?: boolean;
+}) {
+  const { roomId = undefined, sectionName = "" } = props;
+
+  const [usersList, setUsersList] = useState<IUserRes[]>();
+  const [availableRanges, setAvailableRanges] = useState<IRangeRes[]>();
 
   const [roomName, setRoomName] = useState("");
-  const [roomRanges, setRoomRanges] = useState([]);
-  const [roomAllowedUsers, setRoomAllowedUsers] = useState([]);
-  const [roomBannedUsers, setRoomBannedUsers] = useState([]);
+  const [roomRanges, setRoomRanges] = useState<IRangeRes[]>();
+  const [roomAllowedUsers, setRoomAllowedUsers] = useState<IUserRes[]>();
+  const [roomBannedUsers, setRoomBannedUsers] = useState<IUserRes[]>();
 
   const [postInfo, setPostInfo] = useState("");
 
   useEffect(() => {
+    if (!roomId) return;
     const axiosConfigRoom = {
       method: "get",
       withCredentials: true,
       url:
         `${process.env.REACT_APP_API_URI}/rooms/` +
-        (props.roomId ? props.roomId : "create"),
+        (roomId ? roomId : "create"),
     };
     axios(axiosConfigRoom).then((res) => {
       setUsersList(res.data.usersList);
       setAvailableRanges(res.data.availableRanges);
-      if (!props.roomId) return; //if roomId = undefined is not editing so return
+      if (!roomId) return; //if roomId = undefined is not editing so return
 
       setRoomName(res.data.chatRoom.name);
       setRoomRanges(res.data.chatRoom.availableRanges);
       setRoomAllowedUsers(res.data.chatRoom.allowedUsers);
       setRoomBannedUsers(res.data.chatRoom.bannedUsers);
     });
-  }, [props]);
+  }, [roomId]);
 
   const createOrEdit = () => {
     const axiosCreateConfig = {
@@ -46,16 +53,21 @@ function EditCreateRoomModal(props) {
       withCredentials: true,
       url:
         `${process.env.REACT_APP_API_URI}/rooms/` +
-        (props.roomId ? props.roomId : "create"),
+        (roomId ? roomId : "create"),
     };
     axios(axiosCreateConfig).then((res) => {
       setPostInfo(res.data.message);
 
-      window.location.reload(false);
+      window.location.reload();
     });
   };
 
-  const createSelect = (label, setState, funcOptions, selectValue) => {
+  const createSelect = (
+    label: string,
+    setState: any,
+    funcOptions: any, // TODO: add JSX element as function
+    selectValue: any // TODO: add state type
+  ) => {
     return (
       <div>
         <label className="form-label">{label}</label>
@@ -76,7 +88,8 @@ function EditCreateRoomModal(props) {
   };
 
   const createSelectRangesOptions = () => {
-    return availableRanges.map((range, index) => {
+    return availableRanges?.map((range, index) => {
+      console.log("testranga", range, range.id, range._id);
       return (
         <option key={index} value={range._id}>
           {range.name}
@@ -86,7 +99,7 @@ function EditCreateRoomModal(props) {
   };
 
   const createSelectUsersListOptions = () => {
-    return usersList.map((user, index) => {
+    return usersList?.map((user, index) => {
       return (
         <option key={index} value={user._id}>
           {user.username}
@@ -94,7 +107,10 @@ function EditCreateRoomModal(props) {
       );
     });
   };
-  const handleMultipleSelect = (options, setState) => {
+  const handleMultipleSelect = (
+    options: any,
+    setState: (arg: any) => void /* TODO: add type for state */
+  ) => {
     const selectedOptions = [...options].map((option) => option.value);
     setState(selectedOptions);
   };
@@ -143,7 +159,7 @@ function EditCreateRoomModal(props) {
 
   return (
     <ModalCore
-      actionName={props.sectionName}
+      actionName={sectionName}
       body={modalBody()}
       onClickFn={createOrEdit}
       actionBtnVariant="primary"

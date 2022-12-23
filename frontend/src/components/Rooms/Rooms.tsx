@@ -1,10 +1,10 @@
 import "./style.css";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import UserRoomsList from "./UserRoomsList";
 
 function Rooms() {
-  const [rooms, setRooms] = useState([]);
+  const [rooms, setRooms] = useState<IChatRoomRes[]>();
 
   useEffect(() => {
     const axiosConfigRooms = {
@@ -22,7 +22,7 @@ function Rooms() {
       <div className="section-header">
         <h1> Your rooms </h1>
       </div>
-      <UserRoomsList rooms={rooms} />
+      {rooms ? <UserRoomsList rooms={rooms} /> : null}
     </div>
   );
 }

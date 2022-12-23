@@ -1,3 +1,3 @@
-import UserRoomsList from "./UserRoomsList.js";
+import UserRoomsList from "./UserRoomsList";
 
 export default UserRoomsList;
