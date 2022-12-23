@@ -4,8 +4,8 @@ import axios from "axios";
 import EditUserModal from "../EditUserModal";
 import BanUserModal from "../BanUserModal";
 
-function UsersList(props) {
-  const unbanUser = (e) => {
+function UsersList(props: { users: IUserRes[] }) {
+  const unbanUser = (e: string) => {
     const axiosConfig = {
       method: "post",
       withCredentials: true,
@@ -16,7 +16,7 @@ function UsersList(props) {
         console.log("data", data);
 
         setTimeout(() => {
-          window.location.reload(false);
+          window.location.reload();
         }, 100);
       })
       .catch((err) => {
@@ -41,7 +41,7 @@ function UsersList(props) {
               <tr key={index}>
                 <td> {user.username}</td>
                 <td>
-                  <EditUserModal userId={user._id} username={user.username} />
+                  <EditUserModal userId={user._id} />
                 </td>
                 <td>
                   {user.isBanned ? (
@@ -49,22 +49,30 @@ function UsersList(props) {
                       id={user._id}
                       type="button"
                       className="btn btn-secondary w-100 modal-core-btn"
-                      onClick={(e) => unbanUser(e.target.id)}
+                      onClick={(e) =>
+                        unbanUser((e.target as HTMLButtonElement).id)
+                      }
                     >
                       Unban user
                     </button>
                   ) : (
-                    <BanUserModal userId={user._id} username={user.username} />
+                    <BanUserModal userId={user._id} />
                   )}
                 </td>
                 <td>
-                  {user.isBanned
-                    ? user.bannedDate.replace("T", " ").split(".")[0]
+                  {user?.isBanned
+                    ? user.bannedDate
+                        ?.toString()
+                        .replace("T", " ")
+                        .split(".")[0]
                     : "-"}
                 </td>
                 <td>
                   {user.isBanned
-                    ? user.banExpiresDate.replace("T", " ").split(".")[0]
+                    ? user.banExpiresDate
+                        ?.toString()
+                        .replace("T", " ")
+                        .split(".")[0]
                     : "-"}
                 </td>
                 <td> {user.isBanned ? user.banReason : "-"}</td>

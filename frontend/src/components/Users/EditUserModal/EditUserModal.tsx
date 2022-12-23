@@ -1,12 +1,14 @@
 import "./style.css";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ModalCore from "../../Modal";
 import axios from "axios";
 import EditCreateRoomModal from "../../Rooms/EditCreateRoomModal";
 
-function EditUserModal(props) {
+function EditUserModal(props: { userId: string }) {
+  const { userId } = props;
+
   const [username, setUsername] = useState("");
-  const [userRanges, setUserRanges] = useState([]);
+  const [userRanges, setUserRanges] = useState<string[]>([]);
   const [firstname, setFirstname] = useState("");
   const [surname, setSurname] = useState("");
   const [country, setCountry] = useState("");
@@ -15,9 +17,9 @@ function EditUserModal(props) {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
-  const [userChatRooms, setUserChatRooms] = useState([]);
+  const [userChatRooms, setUserChatRooms] = useState<IChatRoomRes[]>();
 
-  const [ranges, setRanges] = useState([]);
+  const [ranges, setRanges] = useState<IRangeRes[]>();
 
   const [postInfo, setPostInfo] = useState("");
 
@@ -25,7 +27,7 @@ function EditUserModal(props) {
     const axiosConfig = {
       method: "get",
       withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/users/` + props.userId,
+      url: `${process.env.REACT_APP_API_URI}/users/` + userId,
     };
 
     axios(axiosConfig).then((res) => {
@@ -44,7 +46,7 @@ function EditUserModal(props) {
 
       setUserChatRooms(res.data.chatRooms);
     });
-  }, [props]);
+  }, [userId]);
 
   const editUser = () => {
     const axiosEditUser = {
@@ -61,16 +63,16 @@ function EditUserModal(props) {
         ranges: userRanges,
       },
       withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/users/edit/` + props.userId,
+      url: `${process.env.REACT_APP_API_URI}/users/edit/` + userId,
     };
     axios(axiosEditUser).then((res) => {
       setPostInfo(res.data.message);
 
-      window.location.reload(false);
+      window.location.reload();
     });
   };
 
-  const createSelect = (label) => {
+  const createSelect = (label: string) => {
     return (
       <div>
         <label className="form-label">{label}</label>
@@ -89,7 +91,7 @@ function EditUserModal(props) {
   };
 
   const createSelectRangesOptions = () => {
-    return ranges.map((range, index) => {
+    return ranges?.map((range, index) => {
       return (
         <option key={index} value={range._id}>
           {range.name}
@@ -98,12 +100,18 @@ function EditUserModal(props) {
     });
   };
 
-  const handleMultipleSelectRanges = (options) => {
+  const handleMultipleSelectRanges = (
+    options: HTMLCollectionOf<HTMLOptionElement>
+  ) => {
     const selectedOptions = [...options].map((option) => option.value);
     setUserRanges(selectedOptions);
   };
 
-  const userDetailsInput = (label, value, setStateFn) => {
+  const userDetailsInput = (
+    label: string,
+    value: string,
+    setStateFn: React.Dispatch<React.SetStateAction<string>>
+  ) => {
     return (
       <div>
         <label className="form-label ">{label}</label>
@@ -111,31 +119,22 @@ function EditUserModal(props) {
           type="text"
           className="form-control"
           value={value || ""}
-          onChange={(e) => setUserDetailsOnChange(e.target.value, setStateFn)}
+          onChange={(e) => setStateFn(e.target.value)}
         />
       </div>
     );
   };
 
-  const setUserDetailsOnChange = (e, setStateFn) => {
-    setStateFn(e);
-  };
-
   const userChatRoomsList = () => {
-    if (!userChatRooms.length) return;
     return (
       <>
         <p className="text-center display-6"> User chat rooms </p>
-        {userChatRooms.map((room, index) => {
+        {userChatRooms?.map((room, index) => {
           return (
             <div key={index}>
               <div className="d-flex bg-secondary m-1">
                 <span className="edit-user-room-name">{room.name}</span>
-                <EditCreateRoomModal
-                  sectionName="Edit"
-                  roomId={room._id}
-                  isEdit="true"
-                />
+                <EditCreateRoomModal sectionName="Edit" roomId={room._id} />
               </div>
             </div>
           );

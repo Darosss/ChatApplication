@@ -1,9 +1,10 @@
 import "./style.css";
-import React, { useState } from "react";
+import { useState } from "react";
 import ModalCore from "../../Modal";
 import axios from "axios";
 
-function EditUserModal(props) {
+function EditUserModal(props: { userId: string }) {
+  const { userId } = props;
   const [banTime, setBanTime] = useState("");
   const [banReason, setBanReason] = useState("");
 
@@ -17,13 +18,13 @@ function EditUserModal(props) {
         banReason: banReason,
       },
       withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/users/ban/` + props.userId,
+      url: `${process.env.REACT_APP_API_URI}/users/ban/` + userId,
     };
 
     axios(axiosConfig).then((res) => {
       setPostInfo(res.data.message);
 
-      window.location.reload(false);
+      window.location.reload();
     });
   };
 
