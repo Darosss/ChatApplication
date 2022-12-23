@@ -1,10 +1,8 @@
 import "./style.css";
-import React from "react";
 import axios from "axios";
 
 function Logout() {
-  const logout = (e) => {
-    e.preventDefault();
+  const logout = () => {
     axios({
       method: "POST",
       withCredentials: true,
@@ -12,7 +10,7 @@ function Logout() {
     })
       .then((res) => {
         console.log(res, "res");
-        window.location.reload(false);
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err, "err");

@@ -1,5 +1,4 @@
 import "./style.css";
-import React from "react";
 
 function Loading() {
   return (

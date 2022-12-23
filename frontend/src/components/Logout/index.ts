@@ -1,3 +1,3 @@
-import Logout from "./Logout.js";
+import Logout from "./Logout";
 
 export default Logout;

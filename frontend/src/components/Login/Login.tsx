@@ -3,10 +3,11 @@ import "./style.css";
 import React, { useState } from "react";
 import axios from "axios";
 import { Button } from "react-bootstrap";
+
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const login = (e) => {
+  const login = (e: React.FormEvent) => {
     e.preventDefault();
     axios({
       method: "POST",
@@ -16,8 +17,8 @@ function Login() {
       },
       withCredentials: true,
       url: `${process.env.REACT_APP_API_URI}/login`,
-    }).then((res) => {
-      window.location.reload(false);
+    }).then(() => {
+      window.location.reload();
     });
   };
   return (
