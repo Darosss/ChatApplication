@@ -1,10 +1,11 @@
 import "./style.css";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import ProfilDetails from "./ProfilDetails";
 
-function Profile({ auth }) {
-  const [userDetails, setUserDetails] = useState([]);
+function Profile(props: { auth: IAuth }) {
+  const { auth } = props;
+  const [userDetails, setUserDetails] = useState<IUserRes>();
 
   useEffect(() => {
     const axiosConfig = {
@@ -22,7 +23,7 @@ function Profile({ auth }) {
       <div className="section-header">
         <h1> Profil </h1>
       </div>
-      <ProfilDetails user={userDetails} />
+      {userDetails ? <ProfilDetails user={userDetails} /> : null}
     </div>
   );
 }

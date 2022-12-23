@@ -1,8 +1,8 @@
 import "./style.css";
-import React from "react";
 
 import EditProfile from "../EditProfile";
-function ProfilDetails({ user }) {
+function ProfilDetails(props: { user: IUserRes }) {
+  const { user } = props;
   return (
     <div>
       <table className="table table-sm table-dark profil-details">
@@ -31,13 +31,15 @@ function ProfilDetails({ user }) {
           </tr>
           <tr>
             <td>Birthday</td>
-            <td>{user.birthday ? user.birthday.split("T")[0] : null}</td>
+            <td>
+              {user.birthday ? user.birthday.toString().split("T")[0] : null}
+            </td>
           </tr>
           <tr>
             <td>Created at</td>
             <td>
               {user.createdAt
-                ? user.createdAt.replace("T", " ").replace("Z", "")
+                ? user.createdAt.toString().replace("T", " ").replace("Z", "")
                 : null}
             </td>
           </tr>
@@ -60,13 +62,13 @@ function ProfilDetails({ user }) {
           {user.isBanned ? (
             <tr>
               <td>Banned date</td>
-              <td>{user.bannedDate}</td>
+              <td>{user.bannedDate?.toString()}</td>
             </tr>
           ) : null}
           {user.isBanned ? (
             <tr>
               <td>Banned expires</td>
-              <td>{user.banExpiresDate}</td>
+              <td>{user.banExpiresDate?.toString()}</td>
             </tr>
           ) : null}
         </tbody>

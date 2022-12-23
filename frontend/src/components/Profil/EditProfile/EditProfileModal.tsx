@@ -1,9 +1,10 @@
 import "./style.css";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import ModalCore from "../../Modal";
 
-function EditProfileModal(props) {
+function EditProfileModal(props: { user: IUserRes }) {
+  const { user } = props;
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -17,15 +18,15 @@ function EditProfileModal(props) {
   const [postInfo, setPostInfo] = useState("");
 
   useEffect(() => {
-    setFirstname(props.user.firstname);
-    setSurname(props.user.surname);
-    setEmail(props.user.email);
-    setBirthday(props.user.birthday ? props.user.birthday.split("T")[0] : "");
-    setCountry(props.user.country);
-    setPhone(props.user.phoneNumber);
-    setGender(props.user.gender);
-    setNickColor(props.user.nickColor);
-  }, [props]);
+    setFirstname(user.firstname as string);
+    setSurname(user.surname as string);
+    setEmail(user.email as string);
+    setBirthday(user.birthday ? user.birthday?.toString().split("T")[0] : "");
+    setCountry(user.country as string);
+    setPhone(user.phoneNumber as string);
+    setGender(user.gender as string);
+    setNickColor(user.nickColor as string);
+  }, [user]);
 
   const editProfile = () => {
     const axiosEditProfile = {
@@ -43,16 +44,21 @@ function EditProfileModal(props) {
         nickColor: nickColor,
       },
       withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/profil/` + props.user._id,
+      url: `${process.env.REACT_APP_API_URI}/profil/` + props.user.id,
     };
     axios(axiosEditProfile).then((res) => {
       setPostInfo(res.data.message);
 
-      window.location.reload(false);
+      window.location.reload();
     });
   };
 
-  const createProfileInput = (name, onChangeFn, value = "", type = "text") => {
+  const createProfileInput = (
+    name: string,
+    onChangeFn: (value: any) => void,
+    value = "",
+    type = "text"
+  ) => {
     return (
       <input
         name={name}
@@ -63,7 +69,11 @@ function EditProfileModal(props) {
       />
     );
   };
-  const createTwoInputGroup = (labelName, firstInput, secondInput) => {
+  const createTwoInputGroup = (
+    labelName: string,
+    firstInput: JSX.Element,
+    secondInput: JSX.Element
+  ) => {
     return (
       <>
         <label className="form-label">{labelName}</label>
