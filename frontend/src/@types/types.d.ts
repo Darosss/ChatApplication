@@ -1,23 +1,20 @@
 interface IAuth {
-  id?: string;
+  id: string;
   username: string;
   administrator?: boolean;
   isBanned?: boolean;
 }
-
 interface IChatRoomRes {
-  [_id: string]: string;
-  id: string;
+  _id: string;
   name: string;
-  availableRanges: string[]; //TODO change to IRangeRes[]
-  allowedUsers: string[]; //TODO Change to IUserRes[]
-  bannedUsers: string[]; // TODO Change to IUserRes[]
-  createdBy: string; // TODO Change to IUserRes
+  availableRanges: string[];
+  allowedUsers: string[];
+  bannedUsers: string[];
+  createdBy: string;
 }
 
 interface IUserRes {
-  [_id: string]: string;
-  id: string;
+  _id: string;
   username?: string;
   firstname?: string;
   surname?: string;
@@ -36,8 +33,8 @@ interface IUserRes {
 }
 
 interface IMessagesRes {
+  _id: string;
   roomId: string;
-  id: string;
   whereSent: IChatRoomRes;
   message: string;
   sentTime: Date;
@@ -45,8 +42,7 @@ interface IMessagesRes {
 }
 
 interface IRangeRes {
-  [_id: string]: string;
-  id: string;
+  _id: string;
   name: string;
   createdAt: Date;
   createdBy: IUserRes;
