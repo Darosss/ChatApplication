@@ -35,7 +35,7 @@ interface IUserTyping {
 interface IMessageSocket {
   roomId: string;
   userId: string;
-  username: string;
   message: string;
+  sender?: string;
   date?: Date;
 }
