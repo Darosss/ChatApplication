@@ -1,4 +1,4 @@
-import mongoose, { Model, model, Schema, Types } from "mongoose";
+import mongoose, { Model, model, Schema } from "mongoose";
 
 export interface IRange {
   _id: string;
