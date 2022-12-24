@@ -8,7 +8,6 @@ function Ranges() {
   const [avilableRanges, setAvailableRanges] = useState<IRangeRes[]>();
 
   useEffect(() => {
-    console.log("test");
     const axiosConfig = {
       method: "get",
       withCredentials: true,
@@ -19,7 +18,6 @@ function Ranges() {
     });
   }, []);
 
-  console.log("test31", avilableRanges);
   return (
     <div>
       <div className="section-header">

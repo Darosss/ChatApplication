@@ -4,7 +4,7 @@ import DeleteRoomModal from "../DeleteRoomModal";
 
 function UserRoomsList(props: { rooms: IChatRoomRes[] }) {
   const { rooms } = props;
-  console.log("test");
+
   return (
     <div>
       <table className="table table-sm table-dark user-rooms-list">
