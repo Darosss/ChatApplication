@@ -9,16 +9,13 @@ const router = express.Router();
 
 router.get("/", async function (req: RequestUserAuth, res: Response) {
   const userId = req.user?.id;
-
   const limitMsgs = 300;
 
-  // eslint-disable-next-line prefer-const
-  let roomsMsgArr: { [key: string]: IMessage[] } = {};
+  const roomMsgSet = new Map<string, IMessage[]>();
   let chatRoomFilter;
 
   await User.findById(userId).then((user) => {
     if (!user) return;
-    //string[]>([]);
     chatRoomFilter = {
       $or: [
         { createdBy: user.id },
@@ -43,20 +40,20 @@ router.get("/", async function (req: RequestUserAuth, res: Response) {
 
   await ChatRoom.find(chatRoomFilter).then(async (chatRooms) => {
     for await (const selectedChatRoom of chatRooms) {
-      roomsMsgArr[selectedChatRoom._id as unknown as string] =
-        await Message.find({
-          whereSent: selectedChatRoom._id,
-        })
-          .sort({ createdAt: "desc" })
-          .populate("sender")
-          .populate("whereSent")
-          .limit(limitMsgs)
-          .exec();
-    }
+      const roomMsgs = await Message.find({
+        whereSent: selectedChatRoom._id,
+      })
+        .sort({ createdAt: "desc" })
+        .populate("sender", { id: 1, username: 1 })
+        .populate("whereSent", { id: 1, name: 1 })
+        .limit(limitMsgs)
+        .select({ __v: 0 })
+        .exec();
 
-    res.send({ rooms: roomsMsgArr, userChatRooms: chatRooms });
+      roomMsgSet.set(selectedChatRoom._id.toString(), roomMsgs);
+    }
+    res.send({ rooms: Array.from(roomMsgSet), userChatRooms: chatRooms });
   });
-  //gets messages depens what rooms user sees
 });
 
 export default router;
