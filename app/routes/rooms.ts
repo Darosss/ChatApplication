@@ -9,12 +9,10 @@ const router = express.Router();
 
 router.get("/", async (req: RequestUserAuth, res: Response) => {
   const userId = req.user?.id;
-  let usersChatRooms: Array<string>;
+  let usersChatRooms: string[];
 
   try {
-    usersChatRooms = await ChatRoom.find({ createdBy: userId })
-      .populate("createdBy", "_id username")
-      .populate("availableRanges", "_id name");
+    usersChatRooms = await ChatRoom.find({ createdBy: userId });
 
     res.send({ usersRooms: usersChatRooms });
   } catch (error) {
@@ -52,6 +50,7 @@ router.post("/create", async (req: RequestUserAuth, res: Response) => {
 //Get chatroom by id
 router.get("/:roomId", async (req: Request, res: Response) => {
   const ranges = await Range.find({}, "_id name");
+
   const users = await User.find({}, "_id username"); //TODO this add to method model user
   const chatRoomEdit = await ChatRoom.findById(req.params.roomId);
   res.send({
