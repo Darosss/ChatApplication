@@ -1,7 +1,6 @@
 import "./style.css";
-import React from "react";
 
-function OnlineUsers(props) {
+function OnlineUsers(props: { socketId: string; username: string }) {
   return (
     <tr>
       <td id={props.socketId} className="w-25">

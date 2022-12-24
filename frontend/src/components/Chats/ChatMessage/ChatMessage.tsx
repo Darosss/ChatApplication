@@ -1,12 +1,15 @@
 import "./style.css";
-import React from "react";
 
-function ChatMessage(props) {
+function ChatMessage(props: {
+  message: string;
+  sentTime: Date;
+  sender: string;
+}) {
   return (
     <tr>
       <td className="col-time-sender">
         <span className="chat-message-time">
-          {props.sentTime.replace("T", " ").split(".")[0]}
+          {props.sentTime.toString().replace("T", " ").split(".")[0]}
         </span>
         <span className="chat-message-sender"> {props.sender}</span>
       </td>

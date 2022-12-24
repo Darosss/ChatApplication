@@ -1,16 +1,23 @@
 import "./style.css";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
+import {
+  ClientToServerEvents,
+  IMessageSocket,
+  IRoomOnlineUsers,
+  IUserTyping,
+  ServerToClientEvents,
+} from "../../../../../libs/types/socket";
 
-let socket;
+let socket: Socket<ServerToClientEvents, ClientToServerEvents>;
 
 export const initiateSocketConnection = () => {
-  socket = io(process.env.REACT_APP_SOCKET_ENDPOINT, {
+  socket = io(process.env.REACT_APP_SOCKET_ENDPOINT as string, {
     transports: ["websocket"],
     withCredentials: true,
   });
   console.log("Connecting to socket");
 };
-export const joinRoom = (room) => {
+export const joinRoom = (room: IRoomOnlineUsers) => {
   if (socket && room) socket.emit("join_channel", room);
 };
 
@@ -19,7 +26,9 @@ export const disconnectSocket = () => {
   if (socket) socket.disconnect();
 };
 
-export const subscribeToChat = (cb) => {
+export const subscribeToChat = (
+  cb: (err: any, msg: IMessageSocket) => void
+) => {
   if (!socket) return true;
 
   socket.on("chat_message", (msg) => {
@@ -27,7 +36,9 @@ export const subscribeToChat = (cb) => {
   });
 };
 
-export const roomOnlineUsers = (cb) => {
+export const roomOnlineUsers = (
+  cb: (err: any, users: IRoomOnlineUsers) => void
+) => {
   if (!socket) return true;
 
   socket.on("room_online_users", (users) => {
@@ -35,7 +46,9 @@ export const roomOnlineUsers = (cb) => {
   });
 };
 
-export const refreshOnlineUsers = (cb) => {
+export const refreshOnlineUsers = (
+  cb: (err: any, users: [string, string][]) => void
+) => {
   if (!socket) return true;
 
   socket.on("refresh_online_users", (users) => {
@@ -43,15 +56,15 @@ export const refreshOnlineUsers = (cb) => {
   });
 };
 
-export const sendMessageSocket = (message) => {
+export const sendMessageSocket = (message: IMessageSocket) => {
   if (socket) socket.emit("chat_message", message);
 };
 
-export const userConnectedEmit = (username) => {
+export const userConnectedEmit = (username: string) => {
   socket.emit("user_connected", username);
 };
 
-export const onUserTyping = (cb) => {
+export const onUserTyping = (cb: (err: any, data: IUserTyping) => void) => {
   if (!socket) return true;
 
   socket.on("user_typing", (data) => {
@@ -59,6 +72,6 @@ export const onUserTyping = (cb) => {
   });
 };
 
-export const userTypingEmit = (username, roomId) => {
+export const userTypingEmit = (username: string, roomId: string) => {
   socket.emit("user_typing", { username, roomId });
 };
