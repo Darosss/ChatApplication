@@ -102,13 +102,13 @@ export default function (
   }
 
   async function saveMessageToDB(
-    username: string,
+    userId: string,
     msg: string,
     date: Date,
     room: string
   ) {
     const message = new Message({
-      sender: username,
+      sender: userId,
       message: msg,
       sentTime: date,
       whereSent: room,
