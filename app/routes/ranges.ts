@@ -7,10 +7,9 @@ const router = express.Router();
 router.get("/", async (req: Request, res: Response) => {
   let ranges;
   try {
-    ranges = await Range.find({}, { __v: 0 }).populate(
-      "createdBy",
-      "_id username"
-    );
+    ranges = await Range.find({})
+      .select({ __v: 0 })
+      .populate("createdBy", "id username");
   } catch (error) {
     console.log("Error get ranges", error);
   }
