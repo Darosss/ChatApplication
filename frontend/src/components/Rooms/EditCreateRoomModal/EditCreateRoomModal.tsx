@@ -21,6 +21,7 @@ function EditCreateRoomModal(props: {
   const [postInfo, setPostInfo] = useState("");
 
   useEffect(() => {
+    if (!roomId) return;
     const axiosConfigRoom = {
       method: "get",
       withCredentials: true,
@@ -88,6 +89,7 @@ function EditCreateRoomModal(props: {
 
   const createSelectRangesOptions = () => {
     return availableRanges?.map((range, index) => {
+      console.log("testranga", range, range.id, range._id);
       return (
         <option key={index} value={range._id}>
           {range.name}
