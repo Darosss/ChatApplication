@@ -12,8 +12,6 @@ import passportLocalMongoose from "passport-local-mongoose";
 export interface IUser extends Document {
   comparePassword(password: string, cb: Callback): boolean;
   _id: string;
-  id: string;
-  //TODO: USER ID
   username: string;
   password: string;
   firstname: string;
