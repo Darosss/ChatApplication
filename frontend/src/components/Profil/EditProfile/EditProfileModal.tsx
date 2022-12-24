@@ -44,7 +44,7 @@ function EditProfileModal(props: { user: IUserRes }) {
         nickColor: nickColor,
       },
       withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/profil/` + props.user.id,
+      url: `${process.env.REACT_APP_API_URI}/profil/` + props.user._id,
     };
     axios(axiosEditProfile).then((res) => {
       setPostInfo(res.data.message);
