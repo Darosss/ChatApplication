@@ -5,9 +5,6 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy } from "passport-jwt";
 import { Error } from "mongoose";
 
-// const JwtStrategy = JwtStrategy.Strategy;
-// ExtractJwt = require("passport-jwt").ExtractJwt;
-
 const localStrategy = new LocalStrategy(function (username, password, done) {
   User.findOne({ username: username }, function (err: Error, user: IUser) {
     if (err) return done(err);
@@ -28,8 +25,6 @@ const jwtStrategy = new JwtStrategy(
     secretOrKey: process.env.JWT_SECRET_KEY,
   },
   async (payload, done) => {
-    // TODO: add additional jwt token verification
-
     const user = await User.findOne(
       { username: payload.username },
       "_id administrator isBanned"
@@ -39,7 +34,6 @@ const jwtStrategy = new JwtStrategy(
     payload.administrator = user?.administrator;
     payload.isBanned = user?.isBanned;
 
-    // console.log("test passportConf", payload);
     return done(null, payload);
   }
 );
