@@ -1,3 +1,3 @@
-import ChatMessage from "./ChatMessage.js";
+import ChatMessage from "./ChatMessage";
 
 export default ChatMessage;

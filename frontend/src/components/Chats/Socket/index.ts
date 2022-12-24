@@ -9,7 +9,7 @@ import {
   roomOnlineUsers,
   onUserTyping,
   userTypingEmit,
-} from "./Socket.js";
+} from "./Socket";
 
 export {
   initiateSocketConnection,

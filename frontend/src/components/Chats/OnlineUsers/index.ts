@@ -1,3 +1,3 @@
-import OnlineUsers from "./OnlineUsers.js";
+import OnlineUsers from "./OnlineUsers";
 
 export default OnlineUsers;
