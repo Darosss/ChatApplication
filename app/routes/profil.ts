@@ -26,7 +26,7 @@ router.post("/:userId", isUsersProfile, async (req: Request, res: Response) => {
     gender: req.body.gender,
     nickColor: req.body.nickColor,
     email: req.body.email,
-    phoneNumber: req.body.phoneNumber, //TODO: i changed here need to change in front
+    phoneNumber: req.body.phoneNumber,
   };
 
   try {
@@ -52,7 +52,6 @@ async function changePassword(
       await user.save();
     } else {
       console.log("Cant change not same passwords");
-      //Todo later do as middleware to res.send(message: old password != same  )
     }
   });
 }
