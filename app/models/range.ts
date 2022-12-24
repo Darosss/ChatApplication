@@ -1,10 +1,10 @@
 import mongoose, { Model, model, Schema, Types } from "mongoose";
 
-export interface IRange extends Document {
-  id: string;
+export interface IRange {
+  _id: string;
   name: string;
   createdAt: Date;
-  createdBy: Types.ObjectId;
+  createdBy: mongoose.Schema.Types.ObjectId;
 }
 
 const rangeSchema: Schema<IRange> = new Schema({

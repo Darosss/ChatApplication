@@ -1,7 +1,7 @@
 import { ArrayExpression, Model, model, Schema, Types } from "mongoose";
 
-export interface IChatRoom extends Document {
-  id: Types.ObjectId;
+export interface IChatRoom {
+  _id: Types.ObjectId;
   name: string;
   availableRanges: ArrayExpression;
   allowedUsers: ArrayExpression;

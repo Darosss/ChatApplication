@@ -1,7 +1,7 @@
 import { ArrayExpression, Model, model, Schema, Types } from "mongoose";
 
-export interface IMessage extends Document {
-  id: string;
+export interface IMessage {
+  _id: string;
   message: string;
   sender: ArrayExpression;
   sentTime: Date;
