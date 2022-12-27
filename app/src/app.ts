@@ -13,7 +13,7 @@ import session from "cookie-session";
 import helmet from "helmet";
 import hpp from "hpp";
 
-import passport from "./passportConfig";
+import passport from "@/config/passport.strategy";
 const jwtRequired = passport.authenticate("jwt", { session: false });
 
 //MIDDLEWARES//
@@ -36,6 +36,7 @@ app.use(helmet());
 app.use(hpp());
 
 app.set("trust proxy", 1);
+app.set("json spaces", 2);
 
 const corsOptions = {
   origin: process.env.FRONTEND_URL,
