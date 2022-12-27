@@ -21,15 +21,15 @@ import userCheckBan from "@/middlewares/userCheckBan";
 import isBanned from "@/middlewares/isBanned";
 
 // ROUTES //
-import currSessionRouter from "./routes/currSessionRouter";
-import chatsRouter from "./routes/chats";
-import profilRouter from "./routes/profil";
-import loginRouter from "./routes/login";
-import registerRouter from "./routes/register";
-import logoutRouter from "./routes/logout";
-import roomsRouter from "./routes/rooms";
-import rangesRouter from "./routes/ranges";
-import usersRouter from "./routes/users";
+import currSessionRouter from "./routes/session.router";
+import chatsRouter from "./routes/chats.router";
+import profilRouter from "./routes/profil.router";
+import loginRouter from "./routes/login.router";
+import registerRouter from "./routes/register.router";
+import logoutRouter from "./routes/logout.router";
+import roomsRouter from "./routes/rooms.router";
+import rangesRouter from "./routes/ranges.router";
+import usersRouter from "./routes/users.router";
 
 //Security configs
 app.use(helmet());
