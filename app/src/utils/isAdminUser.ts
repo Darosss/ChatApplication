@@ -1,4 +1,4 @@
-import { User } from "../../models/user";
+import { User } from "@/models/user";
 
 export default async function (userId: string) {
   const loggedUser = await User.findById(userId);
