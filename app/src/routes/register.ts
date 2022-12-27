@@ -1,9 +1,8 @@
 import { Router } from "express";
 import { register } from "../controllers/register.controller";
-import isLoggedIn from "@/middlewares/isLoggedIn";
 
 const router = Router();
 
-router.post("/", isLoggedIn, register);
+router.post("/", register);
 
 export default router;
