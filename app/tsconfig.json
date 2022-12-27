@@ -33,6 +33,7 @@
       "@/middlewares/*": ["middlewares/*"],
       "@/utils/*": ["utils/*"],
       "@/models/*": ["models/*"],
+      "@/config/*": ["config/*"],
       "@/libs.global/*": ["../../libs/*"]
     } /* Specify a set of entries that re-map imports to additional lookup locations. */,
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
