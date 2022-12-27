@@ -62,6 +62,7 @@
     "@/middlewares": "dist/middlewares",
     "@/utils": "dist/utils",
     "@/models": "dist/models",
+    "@/config": "dist/config",
     "@/libs.global": "../libs"
   }
 }
