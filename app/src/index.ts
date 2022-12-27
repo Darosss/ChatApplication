@@ -1,8 +1,10 @@
+import "module-alias/register";
 import app from "./app";
 import http from "http";
 import mongoose, { ConnectOptions } from "mongoose";
 import { Server } from "socket.io";
 import socket from "./socket";
+
 const httpServer = new http.Server(app);
 
 const socketIO = new Server(httpServer, {
