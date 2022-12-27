@@ -1,7 +1,7 @@
-import isAdmin from "../partials/_isAdminUser";
-import { ChatRoom } from "../../models/chatRoom";
+import isAdmin from "@/utils/isAdminUser";
+import { ChatRoom } from "@/models/chatRoom";
 import { Response, NextFunction } from "express";
-import { RequestUserAuth } from "../../@types/types";
+import { RequestUserAuth } from "@types";
 
 export default async function (
   req: RequestUserAuth,

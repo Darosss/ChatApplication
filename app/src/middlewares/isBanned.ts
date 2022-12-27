@@ -1,7 +1,7 @@
 import { NextFunction, Response } from "express";
-import { RequestUserAuth } from "../../@types/types";
+import { RequestUserAuth } from "@types";
 
-import { User } from "../../models/user";
+import { User } from "@/models/user";
 
 export default async function (
   req: RequestUserAuth,

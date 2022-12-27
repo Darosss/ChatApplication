@@ -1,5 +1,5 @@
 import { Response, NextFunction } from "express";
-import { RequestUserAuth } from "../../@types/types";
+import { RequestUserAuth } from "@types";
 
 export default async function (
   req: RequestUserAuth,

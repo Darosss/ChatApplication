@@ -1,6 +1,6 @@
-import { IUser, User } from "../../models/user";
 import { Response, NextFunction } from "express";
-import { RequestUserAuth } from "../../@types/types";
+import { IUser, User } from "@/models/user";
+import { RequestUserAuth } from "@types";
 
 export default async function (
   req: RequestUserAuth,
