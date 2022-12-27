@@ -17,8 +17,8 @@ import passport from "./passportConfig";
 const jwtRequired = passport.authenticate("jwt", { session: false });
 
 //MIDDLEWARES//
-import userCheckBan from "./routes/middlewares/userCheckBan";
-import isBanned from "./routes/middlewares/isBanned";
+import userCheckBan from "@/middlewares/userCheckBan";
+import isBanned from "@/middlewares/isBanned";
 
 // ROUTES //
 import currSessionRouter from "./routes/currSessionRouter";
