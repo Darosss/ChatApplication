@@ -1,12 +1,12 @@
-import { Server } from "socket.io";
 import {
   ClientToServerEvents,
   ServerToClientEvents,
   InterServerEvents,
   SocketData,
-} from "../libs/types/socket";
+} from "@/libs.global/types/socket";
+import { Server } from "socket.io";
 
-import { Message } from "./models/message";
+import { Message } from "@/models/message";
 
 export default function (
   io: Server<
