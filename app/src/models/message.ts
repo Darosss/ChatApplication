@@ -1,20 +1,13 @@
-import { ArrayExpression, Model, model, Schema, Types } from "mongoose";
+import { Model, model, Schema } from "mongoose";
+import { IMessageDocument } from "@types";
 
-export interface IMessage {
-  _id: string;
-  message: string;
-  sender: ArrayExpression;
-  sentTime: Date;
-  whereSent: Types.ObjectId;
-}
-
-const messageSchema: Schema<IMessage> = new Schema({
+const messageSchema: Schema<IMessageDocument> = new Schema({
   message: {
     type: String,
     required: true,
   },
   sender: {
-    type: Types.ObjectId,
+    type: Schema.Types.ObjectId,
     required: true,
     ref: "User",
   },
@@ -30,4 +23,4 @@ const messageSchema: Schema<IMessage> = new Schema({
   },
 });
 
-export const Message: Model<IMessage> = model("Message", messageSchema);
+export const Message: Model<IMessageDocument> = model("Message", messageSchema);

@@ -1,33 +1,30 @@
-import { ArrayExpression, Model, model, Schema, Types } from "mongoose";
+import { Model, model, Schema } from "mongoose";
+import { IChatRoomDocument } from "@types";
 
-export interface IChatRoom {
-  _id: Types.ObjectId;
-  name: string;
-  availableRanges: ArrayExpression;
-  allowedUsers: ArrayExpression;
-  bannedUsers: ArrayExpression;
-  createdBy: Types.ObjectId;
-}
-
-const chatRoomSchema: Schema<IChatRoom> = new Schema({
+const chatRoomSchema: Schema<IChatRoomDocument> = new Schema({
   name: {
     type: String,
     required: true,
     index: { unique: true },
   },
-  availableRanges: {
-    type: Array,
-    required: true,
-    ref: "Range",
-  },
-  allowedUsers: {
-    type: Array,
-    ref: "User",
-  },
-  bannedUsers: {
-    type: Array,
-    ref: "User",
-  },
+  availableRanges: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Range",
+    },
+  ],
+  allowedUsers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+  bannedUsers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
   createdBy: {
     type: Schema.Types.ObjectId,
     required: true,
@@ -35,4 +32,7 @@ const chatRoomSchema: Schema<IChatRoom> = new Schema({
   },
 });
 
-export const ChatRoom: Model<IChatRoom> = model("chatRoom", chatRoomSchema);
+export const ChatRoom: Model<IChatRoomDocument> = model(
+  "chatRoom",
+  chatRoomSchema
+);

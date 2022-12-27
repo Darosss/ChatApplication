@@ -1,13 +1,7 @@
-import mongoose, { Model, model, Schema } from "mongoose";
+import { Model, model, Schema } from "mongoose";
+import { IRangeDocument } from "@types";
 
-export interface IRange {
-  _id: string;
-  name: string;
-  createdAt: Date;
-  createdBy: mongoose.Schema.Types.ObjectId;
-}
-
-const rangeSchema: Schema<IRange> = new Schema({
+const rangeSchema: Schema<IRangeDocument> = new Schema({
   name: {
     type: String,
     required: true,
@@ -19,10 +13,10 @@ const rangeSchema: Schema<IRange> = new Schema({
     default: Date.now,
   },
   createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     required: true,
     ref: "User",
   },
 });
 
-export const Range: Model<IRange> = model("Range", rangeSchema);
+export const Range: Model<IRangeDocument> = model("Range", rangeSchema);

@@ -1,38 +1,10 @@
-import {
-  Callback,
-  model,
-  Schema,
-  Model,
-  Document,
-  ArrayExpression,
-} from "mongoose";
+import { Callback, model, Schema, Model } from "mongoose";
 import bcrypt from "bcrypt";
 import passportLocalMongoose from "passport-local-mongoose";
 
-export interface IUser extends Document {
-  comparePassword(password: string, cb: Callback): boolean;
-  _id: string;
-  username: string;
-  password: string;
-  firstname: string;
-  surname: string;
-  createdAt: Date;
-  birthday: Date;
-  ranges: ArrayExpression;
-  administrator: boolean;
-  moderator: boolean;
-  country: string;
-  gender: string;
-  nickColor: string;
-  email: string;
-  phoneNumber: string;
-  isBanned: boolean;
-  bannedDate: Date;
-  banExpiresDate: Date;
-  banReason: string;
-}
+import { IUserDocument } from "@types";
 
-const userSchema: Schema<IUser> = new Schema({
+const userSchema: Schema<IUserDocument> = new Schema({
   username: {
     type: String,
     required: [true, "Can't be blank"],
@@ -57,10 +29,12 @@ const userSchema: Schema<IUser> = new Schema({
     type: Date,
     required: true,
   },
-  ranges: {
-    type: Array,
-    ref: "Range",
-  },
+  ranges: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Range",
+    },
+  ],
   administrator: {
     type: Boolean,
     required: true,
@@ -101,7 +75,7 @@ const userSchema: Schema<IUser> = new Schema({
 });
 userSchema.plugin(passportLocalMongoose);
 
-userSchema.pre<IUser>("save", function (next) {
+userSchema.pre<IUserDocument>("save", function (next) {
   if (!this.isModified("password")) return next();
   bcrypt.hash(this.password as string, 10, (err, hash) => {
     if (err) return next(err);
@@ -120,4 +94,4 @@ userSchema.methods.comparePassword = function (
   });
 };
 
-export const User: Model<IUser> = model("User", userSchema);
+export const User: Model<IUserDocument> = model("User", userSchema);
