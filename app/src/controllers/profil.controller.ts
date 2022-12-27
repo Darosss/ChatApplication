@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { User, IUser } from "@/models/user";
+import { User } from "@/models/user";
+import { IUserDocument } from "@types";
 
 export const getUserProfile = async (req: Request, res: Response) => {
   const userDB = await User.findById(req.params.userId, {
@@ -38,17 +39,20 @@ export const editUserProfile = async (req: Request, res: Response) => {
 };
 
 async function changePassword(
-  user: IUser,
+  user: IUserDocument,
   oldPassword: string,
   newPassword: string
 ) {
-  user.comparePassword(oldPassword, async function (err, isMatch) {
-    if (err) console.log(err);
-    else if (isMatch) {
-      user.password = newPassword;
-      await user.save();
-    } else {
-      console.log("Cant change not same passwords");
+  user.comparePassword(
+    oldPassword,
+    async function (err: Error, isMatch: boolean) {
+      if (err) console.log(err);
+      else if (isMatch) {
+        user.password = newPassword;
+        await user.save();
+      } else {
+        console.log("Cant change not same passwords");
+      }
     }
-  });
+  );
 }

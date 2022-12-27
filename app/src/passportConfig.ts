@@ -1,16 +1,17 @@
-import { User, IUser } from "@/models/user";
+import { User } from "@/models/user";
 import passport from "passport";
 
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy } from "passport-jwt";
 import { Error } from "mongoose";
+import { IUser } from "@types";
 
 const localStrategy = new LocalStrategy(function (username, password, done) {
   User.findOne({ username: username }, function (err: Error, user: IUser) {
     if (err) return done(err);
     if (!user) return done(null, false);
 
-    user.comparePassword(password, (err, isMatch: boolean) => {
+    user.comparePassword(password, (err: Error, isMatch: boolean) => {
       if (err) throw err;
       if (!isMatch) return done(null, false);
       const userDetails = { id: user._id, username: user.username };

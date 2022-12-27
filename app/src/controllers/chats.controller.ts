@@ -1,16 +1,16 @@
 import { Response } from "express";
-import { RequestUserAuth } from "@types";
-import { ChatRoom, IChatRoom } from "@/models/chatRoom";
-import { Message, IMessage } from "@/models/message";
-import { IRange } from "@/models/range";
+import { IChatRoom, IMessage, RequestUserAuth } from "@types";
+import { ChatRoom } from "@/models/chatRoom";
+import { Message } from "@/models/message";
 import { User } from "@/models/user";
+import { Types } from "mongoose";
 
 interface IUserChatsFilter {
   $or: [
     { createdBy: string },
     //if room created by user
     {
-      availableRanges: { $in: IRange[] };
+      availableRanges: { $in: Types.ObjectId[] };
       //user has range that chatrom require
     },
     {
