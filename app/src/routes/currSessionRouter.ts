@@ -1,16 +1,9 @@
-import express, { Request, Response } from "express";
-import passport from "passport";
+import { Router } from "express";
 
-const router = express.Router();
+import { getSession } from "../controllers/session.controller";
 
-router.get("/", (req: Request, res: Response) => {
-  passport.authenticate("jwt", { session: false }, (err, user) => {
-    if (err || !user) {
-      res.send(false);
-    } else {
-      res.send(user);
-    }
-  })(req, res);
-});
+const router = Router();
+
+router.get("/", getSession);
 
 export default router;

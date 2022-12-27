@@ -1,19 +1,10 @@
-import express, { NextFunction, Request, Response } from "express";
-import authenticateUser from "./middlewares/authenticateUser";
+import { Router } from "express";
+import { login } from "../controllers/login.controller";
+import authenticateUser from "@/middlewares/authenticateUser";
+import isLoggedIn from "@/middlewares/isLoggedIn";
 
-const router = express.Router();
+const router = Router();
 
-router.post(
-  "/",
-
-  (req: Request, res: Response, next: NextFunction) => {
-    if (req.user) res.send("You are already logged in");
-    else return next();
-  },
-  authenticateUser,
-  (req: Request, res: Response) => {
-    res.status(200).send({ token: req.session?.jwt, user: req.user });
-  }
-);
+router.post("/", isLoggedIn, authenticateUser, login);
 
 export default router;
