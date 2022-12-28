@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { User } from "@/models/user";
-import { Range } from "@/models/range";
 import { ChatRoom } from "@/models/chatRoom";
 
 export const getListOfUsers = async (req: Request, res: Response) => {
@@ -18,14 +17,16 @@ export const getUserById = async (req: Request, res: Response) => {
     password: 0,
     __v: 0,
     createdAt: 0,
-  });
-  const ranges = await Range.find({});
-  const chatRooms = await ChatRoom.find({ createdBy: userEdit?.id });
+  }).populate("ranges", "id name");
   res.send({
     user: userEdit,
-    ranges: ranges,
-    chatRooms: chatRooms,
   });
+};
+
+export const getUsersRoomsById = async (req: Request, res: Response) => {
+  const chatRooms = await ChatRoom.find({ createdBy: req.params.userId });
+
+  res.send({ chatRooms: chatRooms });
 };
 
 export const editUserById = async (req: Request, res: Response) => {
