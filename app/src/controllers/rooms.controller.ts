@@ -67,13 +67,6 @@ export const editRoomById = async (req: Request, res: Response) => {
   }
 };
 
-//this will be deleted in next MAJOR change
-export const deleteRoomInfo = async (req: Request, res: Response) => {
-  await ChatRoom.findById(req.params.roomId).then((room) => {
-    res.send({ chatRoomDelete: room });
-  });
-};
-
 export const deleteRoomById = async (req: Request, res: Response) => {
   const room = await ChatRoom.findById(req.params.roomId);
   try {
