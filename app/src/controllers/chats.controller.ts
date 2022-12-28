@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { IChatRoom, IMessage, RequestUserAuth } from "@types";
+import { RequestUserAuth } from "@types";
 import { ChatRoom } from "@/models/chatRoom";
 import { Message } from "@/models/message";
 import { User } from "@/models/user";
@@ -60,45 +60,35 @@ const findUserAndMakeChatFilter = async (userId: string) => {
   }
 };
 
-const makeSetOfRoomsMessages = async (
-  chatRoomsList: IChatRoom[],
-  limitMessages: number
-) => {
-  const roomsMessages = new Map<string, IMessage[]>();
-  for await (const currentChatRoom of chatRoomsList) {
-    const roomMsgs = await Message.find({
-      whereSent: currentChatRoom._id,
-    })
-      .sort({ createdAt: "desc" })
-      .populate("sender", { id: 1, username: 1 })
-      .populate("whereSent", { id: 1, name: 1 })
-      .limit(limitMessages)
-      .select({ __v: 0 })
-      .exec();
-
-    roomsMessages.set(currentChatRoom._id.toString(), roomMsgs);
-  }
-
-  return roomsMessages;
-};
-
 // @description         Get user's chat rooms
 // @route               GET /api/v1/chats
-
-const chatsList = async (req: RequestUserAuth, res: Response) => {
+export const chatsList = async (req: RequestUserAuth, res: Response) => {
   const userId = req.user?.id as string;
-  const limitMsgs = 300;
 
   const chatRoomFilter = await findUserAndMakeChatFilter(userId);
   if (!chatRoomFilter) {
     res.status(404).send({ message: "Couldnt find user roms" });
   } else {
-    const chatRooms = await ChatRoom.find(chatRoomFilter);
+    const chatRooms = await ChatRoom.find(chatRoomFilter).select("id name");
 
-    const roomMsgSet = await makeSetOfRoomsMessages(chatRooms, limitMsgs);
-
-    res.send({ rooms: Array.from(roomMsgSet), userChatRooms: chatRooms });
+    res.send({ userChatRooms: chatRooms });
   }
 };
 
-export { chatsList };
+// @description         Get room messages by room id
+// @route               GET /api/v1/chats/:roomId
+export const getRoomsMessagesById = async (
+  req: RequestUserAuth,
+  res: Response
+) => {
+  const roomMsgs = await Message.find({
+    whereSent: req.params.roomId,
+  }).select({ __v: 0, whereSent: 0 });
+
+  res.send({
+    chatRoom: {
+      id: req.params.roomId,
+      messages: Array.from(roomMsgs),
+    },
+  });
+};
