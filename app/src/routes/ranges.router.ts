@@ -12,16 +12,12 @@ const router = Router();
 
 router.get("/", getListOfRanges);
 
-//Create new range
-router.post("/create", isAdmin, createNewRange);
+router.get("/:id/", getRangeById);
 
-//Get range by id
-router.get("/:id/", isAdmin, getRangeById);
+router.post("/admin/create", isAdmin, createNewRange);
 
-//Edit range by id route
-router.post("/edit/:id/", isAdmin, editRangeById);
+router.post("/admin/edit/:id/", isAdmin, editRangeById);
 
-//Remove range route
-router.delete("/delete/:id/", isAdmin, deleteRangeById);
+router.delete("/admin/delete/:id/", isAdmin, deleteRangeById);
 
 export default router;
