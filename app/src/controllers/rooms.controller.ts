@@ -17,13 +17,6 @@ export const getListOfRooms = async (req: RequestUserAuth, res: Response) => {
   }
 };
 
-//this will be deleted in next MAJOR change
-export const createRoomsInfo = async (_req: Request, res: Response) => {
-  const ranges = await Range.find({});
-  const users = await User.find({}, "_id username");
-  res.status(200).send({ availableRanges: ranges, usersList: users });
-};
-
 export const createNewRoom = async (req: RequestUserAuth, res: Response) => {
   const createdBy = req.user;
   const name = req.body.roomName;
