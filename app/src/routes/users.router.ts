@@ -6,22 +6,21 @@ import {
   editUserById,
   banUserById,
   unbanUserById,
+  getUsersRoomsById,
 } from "../controllers/users.controller";
 
 const router = Router();
 
 router.get("/", getListOfUsers);
 
-//Get user by id
 router.get("/:userId", getUserById);
 
-//Edit user by id route
-router.post("/edit/:userId", isAdmin, editUserById);
+router.get("/rooms/:userId", getUsersRoomsById);
 
-//Ban user by id route
-router.post("/ban/:userId/", isAdmin, banUserById);
+router.post("/admin/edit/:userId", isAdmin, editUserById);
 
-//Unban user by id route
-router.post("/unban/:userId", isAdmin, unbanUserById);
+router.post("/admin/ban/:userId/", isAdmin, banUserById);
+
+router.post("/admin/unban/:userId", isAdmin, unbanUserById);
 
 export default router;
