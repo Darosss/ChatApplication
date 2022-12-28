@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import { ChatRoom } from "@/models/chatRoom";
-import { User } from "@/models/user";
-import { Range } from "@/models/range";
 import { RequestUserAuth } from "@types";
 
 export const getListOfRooms = async (req: RequestUserAuth, res: Response) => {
@@ -38,14 +36,15 @@ export const createNewRoom = async (req: RequestUserAuth, res: Response) => {
 };
 
 export const getRoomById = async (req: Request, res: Response) => {
-  const ranges = await Range.find({}, "_id name");
+  const chatRoomEdit = await ChatRoom.findById(req.params.roomId)
+    .populate("availableRanges", "id name")
+    .populate("allowedUsers", "id username")
+    .populate("bannedUsers", "id username")
+    .populate("createdBy", "id username")
+    .select({ __v: 0 });
 
-  const users = await User.find({}, "_id username");
-  const chatRoomEdit = await ChatRoom.findById(req.params.roomId);
   res.send({
     chatRoom: chatRoomEdit,
-    availableRanges: ranges,
-    usersList: users,
   });
 };
 
