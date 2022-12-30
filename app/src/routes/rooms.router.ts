@@ -9,6 +9,7 @@ import {
   editRoomById,
   deleteRoomById,
 } from "../controllers/rooms.controller";
+import isValidMongooseId from "@/middlewares/isValidMongooseId";
 
 router.get("/", getListOfRooms);
 
@@ -16,14 +17,17 @@ router.get("/", getListOfRooms);
 router.post("/create", createNewRoom);
 
 //Get chatroom by id
-router.get("/:roomId", getRoomById);
+router.get("/:_id", isValidMongooseId, getRoomById);
 
 //Edit chatroom by id route
-router.post("/:roomId", chatRoomValidation, editRoomById);
-
-router.get("/delete/:roomId", chatRoomValidation);
+router.post("/:_id", isValidMongooseId, chatRoomValidation, editRoomById);
 
 // Remove chatroom route
-router.delete("/delete/:roomId", chatRoomValidation, deleteRoomById);
+router.delete(
+  "/delete/:_id",
+  isValidMongooseId,
+  chatRoomValidation,
+  deleteRoomById
+);
 
 export default router;
