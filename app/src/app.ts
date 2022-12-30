@@ -22,7 +22,6 @@ import isBanned from "@/middlewares/isBanned";
 
 // ROUTES //
 import currSessionRouter from "./routes/session.router";
-import chatsRouter from "./routes/chats.router";
 import profilRouter from "./routes/profil.router";
 import loginRouter from "./routes/login.router";
 import registerRouter from "./routes/register.router";
@@ -66,7 +65,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/api/v1/chats", jwtRequired, isBanned, chatsRouter);
 app.use("/api/v1/session", userCheckBan, currSessionRouter);
 app.use("/api/v1/login", loginRouter);
 app.use("/api/v1/register", registerRouter);

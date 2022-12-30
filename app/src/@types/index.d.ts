@@ -61,3 +61,24 @@ interface IUser {
 }
 
 type IUserDocument = IUser & Document;
+
+interface IUserRoomsFilter {
+  $or: [
+    { createdBy: string },
+    //if room created by user
+    {
+      availableRanges: { $in: Types.ObjectId[] };
+      //user has range that chatrom require
+    },
+    {
+      allowedUsers: { $eq: string[] };
+      //user is allowed in chatroom
+    }
+  ];
+  $and: [
+    {
+      bannedUsers: { $ne: string[] };
+      //user is not banned in chatroom
+    }
+  ];
+}
