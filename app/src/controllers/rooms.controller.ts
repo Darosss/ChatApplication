@@ -26,7 +26,7 @@ export const createNewRoom = async (req: RequestUserAuth, res: Response) => {
     bannedUsers: req.body.bannedUsers,
     createdBy: createdBy?.id,
   });
-
+  console.log(req.body);
   try {
     await room.save();
     res.status(201).send({ message: "Room created succesfully!" });
@@ -36,7 +36,9 @@ export const createNewRoom = async (req: RequestUserAuth, res: Response) => {
 };
 
 export const getRoomById = async (req: Request, res: Response) => {
-  const chatRoomEdit = await ChatRoom.findById(req.params.roomId)
+  const { _id } = req.params;
+
+  const chatRoomEdit = await ChatRoom.findById(_id)
     .populate("availableRanges", "id name")
     .populate("allowedUsers", "id username")
     .populate("bannedUsers", "id username")
@@ -49,7 +51,7 @@ export const getRoomById = async (req: Request, res: Response) => {
 };
 
 export const editRoomById = async (req: Request, res: Response) => {
-  const roomIdParam = req.params.roomId;
+  const { _id } = req.params;
   const update = {
     name: req.body.roomName,
     availableRanges: req.body.availableRanges,
@@ -57,7 +59,7 @@ export const editRoomById = async (req: Request, res: Response) => {
     bannedUsers: req.body.bannedUsers,
   };
   try {
-    await ChatRoom.findByIdAndUpdate(roomIdParam, update).then(() => {
+    await ChatRoom.findByIdAndUpdate(_id, update).then(() => {
       res.send({ message: "Successfully edited room" });
     });
   } catch (err) {
@@ -67,7 +69,9 @@ export const editRoomById = async (req: Request, res: Response) => {
 };
 
 export const deleteRoomById = async (req: Request, res: Response) => {
-  const room = await ChatRoom.findById(req.params.roomId);
+  const { _id } = req.params;
+
+  const room = await ChatRoom.findById(_id);
   try {
     await room?.remove();
     res.status(201).send({ message: "Succesfully removed room" });
