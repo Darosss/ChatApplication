@@ -15,20 +15,11 @@ import isValidMongooseId from "@/middlewares/isValidMongooseId";
 
 router.get("/", getListOfRooms);
 
-//Get chatroom by id
-router.get("/:_id", isValidMongooseId, getRoomById);
-
 //Get list of user's rooms
 router.get("/users-rooms", getListOfUsersRooms);
 
-//Get messages of room by id
-router.get("/:_id", isValidMongooseId, getRoomsMessagesById);
-
 //Create new chatroom
 router.post("/create", createNewRoom);
-
-//Edit chatroom by id route
-router.post("/:_id", isValidMongooseId, chatRoomValidation, editRoomById);
 
 // Remove chatroom route
 router.delete(
@@ -37,5 +28,15 @@ router.delete(
   chatRoomValidation,
   deleteRoomById
 );
+
+//Get chatroom by id
+router.get("/:_id", isValidMongooseId, getRoomById);
+
+//Get messages of room by id
+//TODO: add middleware to checks if user can acces or isAdmin
+router.get("/:_id/messages", isValidMongooseId, getRoomsMessagesById);
+
+//Edit chatroom by id route
+router.post("/:_id", isValidMongooseId, chatRoomValidation, editRoomById);
 
 export default router;
