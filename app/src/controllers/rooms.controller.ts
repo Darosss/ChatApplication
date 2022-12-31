@@ -28,7 +28,6 @@ export const createNewRoom = async (req: RequestUserAuth, res: Response) => {
     bannedUsers: req.body.bannedUsers,
     createdBy: createdBy?.id,
   });
-  console.log(req.body);
   try {
     await room.save();
     res.status(201).send({ message: "Room created succesfully!" });
@@ -54,16 +53,18 @@ export const getRoomById = async (req: Request, res: Response) => {
 
 export const editRoomById = async (req: Request, res: Response) => {
   const { _id } = req.params;
+  const { roomName, availableRanges, allowedUsers, bannedUsers } = req.body;
   const update = {
-    name: req.body.roomName,
-    availableRanges: req.body.availableRanges,
-    allowedUsers: req.body.allowedUsers,
-    bannedUsers: req.body.bannedUsers,
+    name: roomName,
+    availableRanges: availableRanges,
+    allowedUsers: allowedUsers,
+    bannedUsers: bannedUsers,
   };
+
   try {
-    await ChatRoom.findByIdAndUpdate(_id, update).then(() => {
-      res.send({ message: "Successfully edited room" });
-    });
+    await ChatRoom.findByIdAndUpdate(_id, update);
+
+    res.send({ message: "Successfully edited room" });
   } catch (err) {
     res.send({ message: "Can't edit room" });
     console.log(err);
@@ -133,13 +134,15 @@ export const getListOfUsersRooms = async (
   //empty
 };
 export const getRoomsMessagesById = async (req: Request, res: Response) => {
+  const { _id } = req.params;
+
   const roomMsgs = await Message.find({
-    whereSent: req.params.roomId,
+    whereSent: _id,
   }).select({ __v: 0, whereSent: 0 });
 
   res.send({
     chatRoom: {
-      id: req.params.roomId,
+      id: _id,
       messages: Array.from(roomMsgs),
     },
   });
