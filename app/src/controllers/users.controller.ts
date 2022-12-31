@@ -13,23 +13,28 @@ export const getListOfUsers = async (req: Request, res: Response) => {
 };
 
 export const getUserById = async (req: Request, res: Response) => {
-  const userEdit = await User.findById(req.params.userId, {
+  const { _id } = req.params;
+
+  const selectedUser = await User.findById(_id, {
     password: 0,
     __v: 0,
-    createdAt: 0,
   }).populate("ranges", "id name");
   res.send({
-    user: userEdit,
+    user: selectedUser,
   });
 };
 
 export const getUsersRoomsById = async (req: Request, res: Response) => {
-  const chatRooms = await ChatRoom.find({ createdBy: req.params.userId });
+  const { _id } = req.params;
+
+  const chatRooms = await ChatRoom.find({ createdBy: _id });
 
   res.send({ chatRooms: chatRooms });
 };
 
 export const editUserById = async (req: Request, res: Response) => {
+  const { _id } = req.params;
+
   const body = req.body;
   const update = {
     username: body.username,
@@ -43,7 +48,7 @@ export const editUserById = async (req: Request, res: Response) => {
     ranges: body.ranges,
   };
   try {
-    await User.findByIdAndUpdate(req.params.userId, update);
+    await User.findByIdAndUpdate(_id, update);
     res.send({ message: "User edited" });
   } catch (e) {
     res.send({ message: "Can't edit user" });
@@ -52,6 +57,8 @@ export const editUserById = async (req: Request, res: Response) => {
 };
 
 export const banUserById = async (req: Request, res: Response) => {
+  const { _id } = req.params;
+
   const banTime = req.body.banTime || 5;
   const banReason = req.body.banReason;
 
@@ -67,20 +74,21 @@ export const banUserById = async (req: Request, res: Response) => {
     banReason: banReason,
   };
   try {
-    await User.findByIdAndUpdate(req.params.userId, update);
+    await User.findByIdAndUpdate(_id, update);
     res.send({ message: "User banned" });
   } catch (e) {
-    //Fe. add validation if admin want to ban admin or sth like that
     res.send({ message: "User can't be banned" });
   }
 };
 
 export const unbanUserById = async (req: Request, res: Response) => {
+  const { _id } = req.params;
+
   const update = {
     isBanned: false,
   };
   try {
-    await User.findByIdAndUpdate(req.params.userId, update);
+    await User.findByIdAndUpdate(_id, update);
     res.send({ message: "User unbanned" });
   } catch (e) {
     res.send({ message: "User can't be unbanned" });
