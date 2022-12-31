@@ -1,21 +1,25 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { User } from "@/models/user";
-import { IUserDocument } from "@types";
+import { IUserDocument, RequestUserAuth } from "@types";
 
-export const getUserProfile = async (req: Request, res: Response) => {
-  const userDB = await User.findById(req.params.userId, {
+export const getUserProfile = async (req: RequestUserAuth, res: Response) => {
+  const userId = req.user?.id;
+
+  const userDB = await User.findById(userId, {
     password: 0,
     __v: 0,
-  }).populate("ranges");
+  }).populate("ranges", { __v: 0 });
+
   return res.send({ userDetails: userDB });
 };
 
-export const editUserProfile = async (req: Request, res: Response) => {
+export const editUserProfile = async (req: RequestUserAuth, res: Response) => {
+  const userId = req.user?.id;
+
   let user;
   const oldPassword = req.body.oldPassword,
     newPassword = req.body.newPassword;
 
-  const filter = req.params.userId;
   const update = {
     firstname: req.body.firstname,
     surname: req.body.surname,
@@ -28,12 +32,13 @@ export const editUserProfile = async (req: Request, res: Response) => {
   };
 
   try {
-    user = await User.findByIdAndUpdate(filter, update, { new: true });
+    user = await User.findByIdAndUpdate(userId, update, { new: true });
     if (req.body.oldPassword && user)
       await changePassword(user, oldPassword, newPassword);
 
     res.status(201).send({ message: "Succesfully edited profile" });
   } catch (e) {
+    console.log(e);
     res.status(400).send({ message: "Can't edit profile" });
   }
 };
