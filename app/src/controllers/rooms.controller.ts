@@ -3,6 +3,7 @@ import { ChatRoom } from "@/models/chatRoom";
 import { IUserRoomsFilter, RequestUserAuth } from "@types";
 import { User } from "@/models/user";
 import { Message } from "@/models/message";
+import makeUserChatFilter from "@/utils/makeUserChatFilter";
 
 export const getListOfRooms = async (req: RequestUserAuth, res: Response) => {
   const userId = req.user?.id;
@@ -83,47 +84,13 @@ export const deleteRoomById = async (req: Request, res: Response) => {
   }
 };
 
-const findUserAndMakeChatFilter = async (userId: string) => {
-  let userChatsFilter: IUserRoomsFilter;
-  try {
-    const currentUser = await User.findById(userId);
-    if (!currentUser) return null;
-
-    userChatsFilter = {
-      $or: [
-        { createdBy: currentUser.id },
-        //if room created by user
-        {
-          availableRanges: { $in: currentUser.ranges },
-          //user has range that chatrom require
-        },
-        {
-          allowedUsers: { $eq: currentUser.id },
-          //user is allowed in chatroom
-        },
-      ],
-      $and: [
-        {
-          bannedUsers: { $ne: currentUser.id },
-          //user is not banned in chatroom
-        },
-      ],
-    };
-
-    return userChatsFilter;
-  } catch (err) {
-    console.log(err);
-    return null;
-  }
-};
-
 export const getListOfUsersRooms = async (
   req: RequestUserAuth,
   res: Response
 ) => {
   const userId = req.user?.id as string;
 
-  const chatRoomFilter = await findUserAndMakeChatFilter(userId);
+  const chatRoomFilter = await makeUserChatFilter(userId);
   if (!chatRoomFilter) {
     res.status(404).send({ message: "Couldnt find user roms" });
   } else {
