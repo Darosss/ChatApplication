@@ -37,6 +37,6 @@ router.get("/:_id", isValidMongooseId, getRoomById);
 router.get("/:_id/messages", isValidMongooseId, getRoomsMessagesById);
 
 //Edit chatroom by id route
-router.post("/:_id", isValidMongooseId, chatRoomValidation, editRoomById);
+router.post("/edit/:_id", isValidMongooseId, chatRoomValidation, editRoomById);
 
 export default router;
