@@ -1,24 +1,32 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ChatRoom } from "@/models/chatRoom";
-import { IUserRoomsFilter, RequestUserAuth } from "@types";
-import { User } from "@/models/user";
+import { IChatRoom, IMongooseError, RequestUserAuth } from "@types";
 import { Message } from "@/models/message";
 import makeUserChatFilter from "@/utils/makeUserChatFilter";
+import errorHandlerMiddleware from "@/middlewares/errorHandler.middleware";
 
 export const getListOfRooms = async (req: RequestUserAuth, res: Response) => {
   const userId = req.user?.id;
-  let usersChatRooms: string[];
+  let usersChatRooms: IChatRoom[];
 
   try {
-    usersChatRooms = await ChatRoom.find({ createdBy: userId });
+    usersChatRooms = await ChatRoom.find({ createdBy: userId })
+      .select({
+        __v: 0,
+      })
+      .exec();
 
     res.send({ usersRooms: usersChatRooms });
   } catch (error) {
-    console.log(error);
+    res.send({ message: "Couldn't get list of rooms, try again later" });
   }
 };
 
-export const createNewRoom = async (req: RequestUserAuth, res: Response) => {
+export const createNewRoom = async (
+  req: RequestUserAuth,
+  res: Response,
+  next: NextFunction
+) => {
   const createdBy = req.user;
   const name = req.body.roomName;
   const ranges = req.body.availableRanges;
@@ -33,7 +41,9 @@ export const createNewRoom = async (req: RequestUserAuth, res: Response) => {
     await room.save();
     res.status(201).send({ message: "Room created succesfully!" });
   } catch (error) {
-    res.status(400).send({ message: "Cannot create room!" });
+    return next(
+      errorHandlerMiddleware(error as IMongooseError, req, res, next)
+    );
   }
 };
 
@@ -52,9 +62,15 @@ export const getRoomById = async (req: Request, res: Response) => {
   });
 };
 
-export const editRoomById = async (req: Request, res: Response) => {
+export const editRoomById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { _id } = req.params;
   const { roomName, availableRanges, allowedUsers, bannedUsers } = req.body;
+  const optionsUpdate = { runValidators: true };
+
   const update = {
     name: roomName,
     availableRanges: availableRanges,
@@ -63,12 +79,12 @@ export const editRoomById = async (req: Request, res: Response) => {
   };
 
   try {
-    await ChatRoom.findByIdAndUpdate(_id, update);
-
+    await ChatRoom.findByIdAndUpdate(_id, update, optionsUpdate);
     res.send({ message: "Successfully edited room" });
-  } catch (err) {
-    res.send({ message: "Can't edit room" });
-    console.log(err);
+  } catch (error) {
+    return next(
+      errorHandlerMiddleware(error as IMongooseError, req, res, next)
+    );
   }
 };
 
@@ -80,7 +96,7 @@ export const deleteRoomById = async (req: Request, res: Response) => {
     await room?.remove();
     res.status(201).send({ message: "Succesfully removed room" });
   } catch {
-    res.status(403).send({ message: "Can't remove room" });
+    res.status(403).send({ message: "Couldnt't remove room, try again later" });
   }
 };
 
@@ -98,8 +114,8 @@ export const getListOfUsersRooms = async (
 
     res.send({ userChatRooms: chatRooms });
   }
-  //empty
 };
+
 export const getRoomsMessagesById = async (req: Request, res: Response) => {
   const { _id } = req.params;
 
