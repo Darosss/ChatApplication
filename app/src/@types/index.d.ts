@@ -7,6 +7,15 @@ interface RequestUserAuth extends Request {
   };
 }
 
+interface IMongooseError extends Error {
+  name: string;
+  message: string;
+  stack?: string;
+  code?: number | string;
+  keyValue: { [any: string]: string };
+  errors: { [any: string]: { [any: string] } };
+  index: number;
+}
 interface IChatRoom {
   _id: Types.ObjectId;
   name: string;
