@@ -39,3 +39,23 @@ export function birthdayValidation(date: string) {
 
   if (errorMessages.length > 0) throw Error(errorMessages.join(", "));
 }
+
+export function phoneNumberValidation(phone: string) {
+  const errorMessages: string[] = [];
+
+  if (!validator.isMobilePhone(phone)) {
+    errorMessages.push(`Phone is not a correct phone number`);
+  }
+
+  if (errorMessages.length > 0) throw Error(errorMessages.join(", "));
+}
+
+export function emailValidation(email: string) {
+  const errorMessages: string[] = [];
+
+  if (!validator.isEmail(email)) {
+    errorMessages.push(`Email is not a correct e-mail`);
+  }
+
+  if (errorMessages.length > 0) throw Error(errorMessages.join(", "));
+}
