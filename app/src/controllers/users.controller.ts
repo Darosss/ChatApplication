@@ -1,6 +1,8 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { User } from "@/models/user";
 import { ChatRoom } from "@/models/chatRoom";
+import errorHandlerMiddleware from "@/middlewares/errorHandler.middleware";
+import { IMongooseError } from "@types";
 
 export const getListOfUsers = async (req: Request, res: Response) => {
   let users;
@@ -32,29 +34,45 @@ export const getUsersRoomsById = async (req: Request, res: Response) => {
   res.send({ chatRooms: chatRooms });
 };
 
-export const editUserById = async (req: Request, res: Response) => {
+export const editUserById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { _id } = req.params;
 
-  const body = req.body;
+  const {
+    username,
+    firstname,
+    surname,
+    country,
+    gender,
+    nickColor,
+    email,
+    phoneNumber,
+    ranges,
+  } = req.body;
+
   const optionsUpdate = { runValidators: true };
   const update = {
-    username: body.username,
-    firstname: body.firstname,
-    surname: body.surname,
-    country: body.country,
-    gender: body.gender,
-    nickColor: body.nickColor,
-    email: body.email,
-    phoneNumber: body.phoneNumber,
-    ranges: body.ranges,
+    username: username,
+    firstname: firstname,
+    surname: surname,
+    country: country,
+    gender: gender,
+    nickColor: nickColor,
+    email: email,
+    phoneNumber: phoneNumber,
+    ranges: ranges,
   };
 
   try {
     await User.findByIdAndUpdate(_id, update, optionsUpdate);
     res.send({ message: "User edited" });
-  } catch (e) {
-    res.send({ message: "Can't edit user" });
-    console.log(e);
+  } catch (error) {
+    return next(
+      errorHandlerMiddleware(error as IMongooseError, req, res, next)
+    );
   }
 };
 
@@ -94,6 +112,5 @@ export const unbanUserById = async (req: Request, res: Response) => {
     res.send({ message: "User unbanned" });
   } catch (e) {
     res.send({ message: "User can't be unbanned" });
-    console.log(e);
   }
 };
