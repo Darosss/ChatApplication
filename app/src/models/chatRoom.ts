@@ -1,11 +1,13 @@
 import { Model, model, Schema } from "mongoose";
 import { IChatRoomDocument } from "@types";
+import { nameValidation } from "../validators/roomModelValidator";
 
 const chatRoomSchema: Schema<IChatRoomDocument> = new Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, "Name is required"],
     index: { unique: true },
+    validate: nameValidation,
   },
   availableRanges: [
     {
@@ -27,7 +29,7 @@ const chatRoomSchema: Schema<IChatRoomDocument> = new Schema({
   ],
   createdBy: {
     type: Schema.Types.ObjectId,
-    required: true,
+    required: [true, "createdBy is required"],
     ref: "User",
   },
 });
