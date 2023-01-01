@@ -5,7 +5,9 @@ import passportLocalMongoose from "passport-local-mongoose";
 import { IUserDocument } from "@types";
 import {
   birthdayValidation,
+  emailValidation,
   passwordValidation,
+  phoneNumberValidation,
   usernameValidation,
 } from "../validators/userModel.validator";
 
@@ -64,9 +66,11 @@ const userSchema: Schema<IUserDocument> = new Schema({
   },
   email: {
     type: String,
+    validate: emailValidation,
   },
   phoneNumber: {
     type: String,
+    validate: phoneNumberValidation,
   },
   isBanned: {
     type: Boolean,
