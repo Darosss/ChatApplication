@@ -36,6 +36,7 @@ export const editUserById = async (req: Request, res: Response) => {
   const { _id } = req.params;
 
   const body = req.body;
+  const optionsUpdate = { runValidators: true };
   const update = {
     username: body.username,
     firstname: body.firstname,
@@ -47,8 +48,9 @@ export const editUserById = async (req: Request, res: Response) => {
     phoneNumber: body.phoneNumber,
     ranges: body.ranges,
   };
+
   try {
-    await User.findByIdAndUpdate(_id, update);
+    await User.findByIdAndUpdate(_id, update, optionsUpdate);
     res.send({ message: "User edited" });
   } catch (e) {
     res.send({ message: "Can't edit user" });
