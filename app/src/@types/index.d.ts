@@ -15,6 +15,7 @@ interface IMongooseError extends Error {
   keyValue: { [any: string]: string };
   errors: { [any: string]: { [any: string] } };
   index: number;
+  path?: string;
 }
 interface IChatRoom {
   _id: Types.ObjectId;
