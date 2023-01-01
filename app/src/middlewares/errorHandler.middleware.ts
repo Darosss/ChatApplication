@@ -40,5 +40,5 @@ function validationErrorHandler(error: IMongooseError, res: Response) {
 }
 
 function castErrorHandler(error: IMongooseError, res: Response) {
-  res.status(400).send({ message: `${error.message}` });
+  res.status(400).send({ message: `${error.message}`, fields: error.path });
 }
