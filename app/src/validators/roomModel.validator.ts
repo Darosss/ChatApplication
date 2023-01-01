@@ -1,7 +1,7 @@
 import validator from "validator";
 
 export function nameValidation(name: string) {
-  const errorMessages = [];
+  const errorMessages: string[] = [];
   const maxLength = 24,
     minLength = 3;
 
