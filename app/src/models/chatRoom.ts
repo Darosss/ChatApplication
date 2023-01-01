@@ -1,6 +1,6 @@
 import { Model, model, Schema } from "mongoose";
 import { IChatRoomDocument } from "@types";
-import { nameValidation } from "../validators/roomModelValidator";
+import { nameValidation } from "../validators/roomModel.validator";
 
 const chatRoomSchema: Schema<IChatRoomDocument> = new Schema({
   name: {
