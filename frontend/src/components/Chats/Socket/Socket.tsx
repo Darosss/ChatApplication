@@ -26,9 +26,7 @@ export const disconnectSocket = () => {
   if (socket) socket.disconnect();
 };
 
-export const subscribeToChat = (
-  cb: (err: any, msg: IMessageSocket) => void
-) => {
+export const subscribeToChat = (cb: (err: any, msg: IMessageSocket) => void) => {
   if (!socket) return true;
 
   socket.on("chat_message", (msg) => {
@@ -36,9 +34,7 @@ export const subscribeToChat = (
   });
 };
 
-export const roomOnlineUsers = (
-  cb: (err: any, users: IRoomOnlineUsers) => void
-) => {
+export const roomOnlineUsers = (cb: (err: any, users: IRoomOnlineUsers) => void) => {
   if (!socket) return true;
 
   socket.on("room_online_users", (users) => {
@@ -46,9 +42,7 @@ export const roomOnlineUsers = (
   });
 };
 
-export const refreshOnlineUsers = (
-  cb: (err: any, users: [string, string][]) => void
-) => {
+export const refreshOnlineUsers = (cb: (err: any, users: [string, string][]) => void) => {
   if (!socket) return true;
 
   socket.on("refresh_online_users", (users) => {

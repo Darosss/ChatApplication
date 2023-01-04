@@ -1,5 +1,5 @@
 import "./style.css";
-import { useState, useEffect, useReducer, useRef, KeyboardEvent } from "react";
+import React, { useState, useEffect, useReducer, useRef, KeyboardEvent } from "react";
 import ChatMessage from "../ChatMessage";
 import OnlineUsers from "../OnlineUsers";
 import Col from "react-bootstrap/Col";
@@ -24,18 +24,11 @@ import {
   userTypingEmit,
 } from "../Socket";
 
-import {
-  IMessageSocket,
-  IRoomOnlineUsers,
-} from "../../../../../libs/types/socket"; //Types from socket - change later to globals? Dunno
+import { IMessageSocket, IRoomOnlineUsers } from "../../../../../libs/types/socket"; //Types from socket - change later to globals? Dunno
 
 type Timer = ReturnType<typeof setTimeout>;
 
-function ChatRoom(props: {
-  auth: IAuth;
-  chatRooms: IChatRoomRes[];
-  messages: Map<string, IMessagesRes[]>;
-}) {
+function ChatRoom(props: { auth: IAuth; chatRooms: IChatRoomRes[]; messages: Map<string, IMessagesRes[]> }) {
   const { auth, chatRooms, messages } = props;
   const username = auth.username;
   const userId = auth.id;
@@ -44,19 +37,13 @@ function ChatRoom(props: {
   const [msgToSend, setMsgToSend] = useState<string>("");
   const [roomIdToSend, setRoomIdToSend] = useState<string>("");
 
-  const [localMessages, setLocalMessages] = useState(
-    new Map<string, IMessageSocket[]>()
-  );
+  const [localMessages, setLocalMessages] = useState(new Map<string, IMessageSocket[]>());
 
   const [roomsList, setRoomsList] = useState<IChatRoomRes[]>();
 
   const [onlineUsers, setOnlineUsers] = useState<[string, string][]>([]);
-  const [roomsOnlineUsers, setRoomsOnlineUsers] = useState<
-    Map<string, string[]>
-  >(new Map<string, string[]>());
-  const [roomsTypingUsers, setRoomsTypingUsers] = useState<Map<string, string>>(
-    new Map<string, string>()
-  );
+  const [roomsOnlineUsers, setRoomsOnlineUsers] = useState<Map<string, string[]>>(new Map<string, string[]>());
+  const [roomsTypingUsers, setRoomsTypingUsers] = useState<Map<string, string>>(new Map<string, string>());
 
   const chatList = useRef<HTMLDivElement>(null);
   const usersOnlineTable = useRef<HTMLDivElement>(null);
@@ -78,7 +65,7 @@ function ChatRoom(props: {
   useEffect(() => {
     let typingTimeout: Timer;
     const updateLocalMessages = (msgData: IMessageSocket) => {
-      let roomId = msgData.roomId;
+      const roomId = msgData.roomId;
       setLocalMessages((prevState) => {
         if (!prevState.has(roomId)) {
           prevState.set(roomId, [msgData]);
@@ -151,7 +138,7 @@ function ChatRoom(props: {
   }, [username]);
 
   const sendMessage = () => {
-    let msg = {
+    const msg = {
       roomId: roomIdToSend,
       userId: userId,
       message: msgToSend,
@@ -177,9 +164,7 @@ function ChatRoom(props: {
   };
 
   const scrollToBottom = (sectionId: string) => {
-    const chatMessages = document.querySelector(
-      "#" + sectionId
-    ) as HTMLInputElement;
+    const chatMessages = document.querySelector("#" + sectionId) as HTMLInputElement;
     chatMessages.scrollTop = chatMessages.scrollHeight;
   };
 
@@ -206,9 +191,7 @@ function ChatRoom(props: {
                               message={msg.message}
                               sentTime={msg.date as Date}
                               sender={msg.sender as string}
-                              key={
-                                ((msg.sender as string) + msg.date) as string
-                              }
+                              key={((msg.sender as string) + msg.date) as string}
                             />
                           );
                         })
@@ -225,21 +208,13 @@ function ChatRoom(props: {
                       <th>Online users:</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {roomsOnlineUsers?.has(room._id)
-                      ? chatOnlineUsers(room._id)
-                      : null}
-                  </tbody>
+                  <tbody>{roomsOnlineUsers?.has(room._id) ? chatOnlineUsers(room._id) : null}</tbody>
                 </Table>
               </div>
             </td>
           </tr>
           <tr>
-            <td>
-              {roomsTypingUsers?.get(room._id)
-                ? roomsTypingUsers.get(room._id) + " is typing"
-                : null}
-            </td>
+            <td>{roomsTypingUsers?.get(room._id) ? roomsTypingUsers.get(room._id) + " is typing" : null}</td>
           </tr>
           <tr>
             <td className="d-inline-flex w-100">
@@ -282,12 +257,10 @@ function ChatRoom(props: {
   };
 
   const chatOnlineUsers = (roomId: string) => {
-    let roomUsers = roomsOnlineUsers?.get(roomId);
+    const roomUsers = roomsOnlineUsers?.get(roomId);
 
     return roomUsers?.map((user) => {
-      return (
-        <OnlineUsers key={user[0]} socketId={user[0]} username={user[1]} />
-      );
+      return <OnlineUsers key={user[0]} socketId={user[0]} username={user[1]} />;
     });
   };
 
@@ -307,10 +280,7 @@ function ChatRoom(props: {
           <Nav variant="pills nav-chats chats-list" ref={chatList}>
             {roomsList?.map((room) => {
               return (
-                <Nav.Item
-                  key={room._id}
-                  className="border border-primary rounded chats-item"
-                >
+                <Nav.Item key={room._id} className="border border-primary rounded chats-item">
                   <Nav.Link eventKey={room._id}> {room.name} </Nav.Link>
                 </Nav.Item>
               );

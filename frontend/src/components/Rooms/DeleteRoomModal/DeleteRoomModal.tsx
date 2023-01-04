@@ -1,5 +1,5 @@
 import "./style.css";
-import { useState } from "react";
+import React, { useState } from "react";
 import ModalCore from "../../Modal";
 import axios from "axios";
 
@@ -21,13 +21,7 @@ function DeleteRoomModal(props: { roomId: string }) {
   };
 
   return (
-    <ModalCore
-      actionName="Delete room"
-      body=""
-      onClickFn={deleteRoom}
-      actionBtnVariant="danger"
-      postInfo={postInfo}
-    />
+    <ModalCore actionName="Delete room" body="" onClickFn={deleteRoom} actionBtnVariant="danger" postInfo={postInfo} />
   );
 }
 

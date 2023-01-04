@@ -1,5 +1,5 @@
 import "./style.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ModalCore from "../../Modal";
 import axios from "axios";
 import EditCreateRoomModal from "../../Rooms/EditCreateRoomModal";
@@ -100,27 +100,16 @@ function EditUserModal(props: { userId: string }) {
     });
   };
 
-  const handleMultipleSelectRanges = (
-    options: HTMLCollectionOf<HTMLOptionElement>
-  ) => {
+  const handleMultipleSelectRanges = (options: HTMLCollectionOf<HTMLOptionElement>) => {
     const selectedOptions = [...options].map((option) => option.value);
     setUserRanges(selectedOptions);
   };
 
-  const userDetailsInput = (
-    label: string,
-    value: string,
-    setStateFn: React.Dispatch<React.SetStateAction<string>>
-  ) => {
+  const userDetailsInput = (label: string, value: string, setStateFn: React.Dispatch<React.SetStateAction<string>>) => {
     return (
       <div>
         <label className="form-label ">{label}</label>
-        <input
-          type="text"
-          className="form-control"
-          value={value || ""}
-          onChange={(e) => setStateFn(e.target.value)}
-        />
+        <input type="text" className="form-control" value={value || ""} onChange={(e) => setStateFn(e.target.value)} />
       </div>
     );
   };

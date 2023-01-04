@@ -1,5 +1,5 @@
 import "./style.css";
-import { useState } from "react";
+import React, { useState } from "react";
 import { HamburgerIcon } from "react-hamburger-icon";
 
 function HamburgerMenu(props: { menu: any }) {

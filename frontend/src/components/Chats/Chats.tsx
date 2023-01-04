@@ -1,13 +1,11 @@
 import "./style.css";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ChatRoom from "./ChatRoom";
 
 function Chats(props: { auth: IAuth }) {
   const [chatRooms, setChatRooms] = useState<IChatRoomRes[]>([]);
-  const [messages, setMessages] = useState<Map<string, IMessagesRes[]>>(
-    new Map<string, IMessagesRes[]>()
-  );
+  const [messages, setMessages] = useState<Map<string, IMessagesRes[]>>(new Map<string, IMessagesRes[]>());
 
   const { auth } = props;
 

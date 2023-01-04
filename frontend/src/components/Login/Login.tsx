@@ -30,19 +30,11 @@ function Login() {
         <form onSubmit={login}>
           <div className="form-group">
             <label>Username:</label>
-            <input
-              type="text"
-              className="form-control"
-              onChange={(e) => setUsername(e.target.value)}
-            />
+            <input type="text" className="form-control" onChange={(e) => setUsername(e.target.value)} />
           </div>
           <div className="form-group">
             <label>Password: </label>
-            <input
-              type="password"
-              className="form-control"
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <input type="password" className="form-control" onChange={(e) => setPassword(e.target.value)} />
           </div>
           <div className="form-group">
             <Button type="submit" className="btn btn-primary">

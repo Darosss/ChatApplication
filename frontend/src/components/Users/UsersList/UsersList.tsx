@@ -49,9 +49,7 @@ function UsersList(props: { users: IUserRes[] }) {
                       id={user._id}
                       type="button"
                       className="btn btn-secondary w-100 modal-core-btn"
-                      onClick={(e) =>
-                        unbanUser((e.target as HTMLButtonElement).id)
-                      }
+                      onClick={(e) => unbanUser((e.target as HTMLButtonElement).id)}
                     >
                       Unban user
                     </button>
@@ -59,22 +57,8 @@ function UsersList(props: { users: IUserRes[] }) {
                     <BanUserModal userId={user._id} />
                   )}
                 </td>
-                <td>
-                  {user?.isBanned
-                    ? user.bannedDate
-                        ?.toString()
-                        .replace("T", " ")
-                        .split(".")[0]
-                    : "-"}
-                </td>
-                <td>
-                  {user.isBanned
-                    ? user.banExpiresDate
-                        ?.toString()
-                        .replace("T", " ")
-                        .split(".")[0]
-                    : "-"}
-                </td>
+                <td>{user?.isBanned ? user.bannedDate?.toString().replace("T", " ").split(".")[0] : "-"}</td>
+                <td>{user.isBanned ? user.banExpiresDate?.toString().replace("T", " ").split(".")[0] : "-"}</td>
                 <td> {user.isBanned ? user.banReason : "-"}</td>
               </tr>
             );

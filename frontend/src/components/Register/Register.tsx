@@ -120,11 +120,7 @@ function App() {
           <div className="row mt-2">
             <div className="col ">
               <label> Country </label>
-              <select
-                className="form-control"
-                id="country"
-                onChange={(e) => setCountry(e.target.value)}
-              >
+              <select className="form-control" id="country" onChange={(e) => setCountry(e.target.value)}>
                 <option></option>
                 <option>Poland</option>
                 <option>Germany</option>
@@ -135,11 +131,7 @@ function App() {
             </div>
             <div className="col ">
               <label> Gender </label>
-              <select
-                className="form-control"
-                id="gender"
-                onChange={(e) => setGender(e.target.value)}
-              >
+              <select className="form-control" id="gender" onChange={(e) => setGender(e.target.value)}>
                 <option>Male</option>
                 <option>Female</option>
                 <option>N/A</option>
@@ -148,11 +140,7 @@ function App() {
             <div className="col ">
               <label> Nick color </label>
 
-              <select
-                className="form-control"
-                id="nickColor"
-                onChange={(e) => setNickColor(e.target.value)}
-              >
+              <select className="form-control" id="nickColor" onChange={(e) => setNickColor(e.target.value)}>
                 <option className="bg-danger">Red</option>
                 <option className="bg-light">White</option>
                 <option className="bg-dark">Black</option>

@@ -1,3 +1,4 @@
+import React from "react";
 import "./style.css";
 
 function Home(props: { auth: IAuth }) {
@@ -6,7 +7,7 @@ function Home(props: { auth: IAuth }) {
   return (
     <div className="section-header">
       {auth ? (
-        <h1>Welcome back, {auth.username}. How's goin? </h1>
+        <h1>Welcome back, {auth.username}. How&apos;s goin? </h1>
       ) : (
         <h1>Hello, log in or register to chat with others. :)</h1>
       )}

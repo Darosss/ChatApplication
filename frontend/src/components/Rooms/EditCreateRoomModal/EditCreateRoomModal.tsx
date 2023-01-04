@@ -1,13 +1,9 @@
 import "./style.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ModalCore from "../../Modal";
 
-function EditCreateRoomModal(props: {
-  roomId?: string;
-  sectionName: string;
-  isEdit?: boolean;
-}) {
+function EditCreateRoomModal(props: { roomId?: string; sectionName: string; isEdit?: boolean }) {
   const { roomId = undefined, sectionName = "" } = props;
 
   const [usersList, setUsersList] = useState<IUserRes[]>();
@@ -24,9 +20,7 @@ function EditCreateRoomModal(props: {
     const axiosConfigRoom = {
       method: "get",
       withCredentials: true,
-      url:
-        `${process.env.REACT_APP_API_URI}/rooms/` +
-        (roomId ? roomId : "create"),
+      url: `${process.env.REACT_APP_API_URI}/rooms/` + (roomId ? roomId : "create"),
     };
     axios(axiosConfigRoom).then((res) => {
       setUsersList(res.data.usersList);
@@ -50,9 +44,7 @@ function EditCreateRoomModal(props: {
         bannedUsers: roomBannedUsers,
       },
       withCredentials: true,
-      url:
-        `${process.env.REACT_APP_API_URI}/rooms/` +
-        (roomId ? roomId : "create"),
+      url: `${process.env.REACT_APP_API_URI}/rooms/` + (roomId ? roomId : "create"),
     };
     axios(axiosCreateConfig).then((res) => {
       setPostInfo(res.data.message);
@@ -65,7 +57,7 @@ function EditCreateRoomModal(props: {
     label: string,
     setState: any,
     funcOptions: any, // TODO: add JSX element as function
-    selectValue: any // TODO: add state type
+    selectValue: any, // TODO: add state type
   ) => {
     return (
       <div>
@@ -76,9 +68,7 @@ function EditCreateRoomModal(props: {
           multiple
           value={selectValue}
           aria-label={"multiple select " + label}
-          onChange={(e) =>
-            handleMultipleSelect(e.target.selectedOptions, setState)
-          }
+          onChange={(e) => handleMultipleSelect(e.target.selectedOptions, setState)}
         >
           {funcOptions()}
         </select>
@@ -105,10 +95,7 @@ function EditCreateRoomModal(props: {
       );
     });
   };
-  const handleMultipleSelect = (
-    options: any,
-    setState: (arg: any) => void /* TODO: add type for state */
-  ) => {
+  const handleMultipleSelect = (options: any, setState: (arg: any) => void /* TODO: add type for state */) => {
     const selectedOptions = [...options].map((option) => option.value);
     setState(selectedOptions);
   };
@@ -133,24 +120,9 @@ function EditCreateRoomModal(props: {
       <div>
         {createNameRoomInput()}
 
-        {createSelect(
-          "Available ranges",
-          setRoomRanges,
-          createSelectRangesOptions,
-          roomRanges
-        )}
-        {createSelect(
-          "Allow users",
-          setRoomAllowedUsers,
-          createSelectUsersListOptions,
-          roomAllowedUsers
-        )}
-        {createSelect(
-          "Ban users",
-          setRoomBannedUsers,
-          createSelectUsersListOptions,
-          roomBannedUsers
-        )}
+        {createSelect("Available ranges", setRoomRanges, createSelectRangesOptions, roomRanges)}
+        {createSelect("Allow users", setRoomAllowedUsers, createSelectUsersListOptions, roomAllowedUsers)}
+        {createSelect("Ban users", setRoomBannedUsers, createSelectUsersListOptions, roomBannedUsers)}
       </div>
     );
   };

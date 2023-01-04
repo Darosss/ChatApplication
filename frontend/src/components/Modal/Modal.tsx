@@ -23,11 +23,7 @@ function ModalCore(props: {
   };
   return (
     <>
-      <Button
-        variant={props.actionBtnVariant}
-        className="modal-core-btn"
-        onClick={handleShow}
-      >
+      <Button variant={props.actionBtnVariant} className="modal-core-btn" onClick={handleShow}>
         {props.actionName}
       </Button>
 
@@ -39,10 +35,7 @@ function ModalCore(props: {
         <Modal.Footer className="bg-dark">
           <Alert show={showAlert} variant={props.actionBtnVariant + " w-50"}>
             {props.postInfo}
-            <Button
-              onClick={() => setShowAlert(false)}
-              variant={"outline-" + props.actionBtnVariant + " m-1"}
-            >
+            <Button onClick={() => setShowAlert(false)} variant={"outline-" + props.actionBtnVariant + " m-1"}>
               Ok
             </Button>
           </Alert>

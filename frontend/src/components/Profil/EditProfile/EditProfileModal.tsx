@@ -1,5 +1,5 @@
 import "./style.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ModalCore from "../../Modal";
 
@@ -53,12 +53,7 @@ function EditProfileModal(props: { user: IUserRes }) {
     });
   };
 
-  const createProfileInput = (
-    name: string,
-    onChangeFn: (value: any) => void,
-    value = "",
-    type = "text"
-  ) => {
+  const createProfileInput = (name: string, onChangeFn: (value: any) => void, value = "", type = "text") => {
     return (
       <input
         name={name}
@@ -69,11 +64,7 @@ function EditProfileModal(props: { user: IUserRes }) {
       />
     );
   };
-  const createTwoInputGroup = (
-    labelName: string,
-    firstInput: JSX.Element,
-    secondInput: JSX.Element
-  ) => {
+  const createTwoInputGroup = (labelName: string, firstInput: JSX.Element, secondInput: JSX.Element) => {
     return (
       <>
         <label className="form-label">{labelName}</label>
@@ -90,23 +81,13 @@ function EditProfileModal(props: { user: IUserRes }) {
       <div>
         {createTwoInputGroup(
           "Old password / New password",
-          createProfileInput(
-            "oldPassword",
-            setOldPassword,
-            oldPassword,
-            "password"
-          ),
-          createProfileInput(
-            "newPassword",
-            setNewPassword,
-            newPassword,
-            "password"
-          )
+          createProfileInput("oldPassword", setOldPassword, oldPassword, "password"),
+          createProfileInput("newPassword", setNewPassword, newPassword, "password"),
         )}
         {createTwoInputGroup(
           "Firstname / Surname",
           createProfileInput("firstname", setFirstname, firstname),
-          createProfileInput("surname", setSurname, surname)
+          createProfileInput("surname", setSurname, surname),
         )}
 
         <label className="form-label">Email</label>

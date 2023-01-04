@@ -1,13 +1,9 @@
 import "./style.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ModalCore from "../../Modal";
 
-function EditRangeModal(props: {
-  isEdit?: boolean;
-  rangeId?: string;
-  sectionName?: string;
-}) {
+function EditRangeModal(props: { isEdit?: boolean; rangeId?: string; sectionName?: string }) {
   const { isEdit = false, rangeId = undefined, sectionName = "" } = props;
   const [rangeName, setRangeName] = useState("");
   const [postInfo, setPostInfo] = useState("");
@@ -33,9 +29,7 @@ function EditRangeModal(props: {
         name: rangeName,
       },
       withCredentials: true,
-      url:
-        `${process.env.REACT_APP_API_URI}/ranges/` +
-        (rangeId ? "edit/" + rangeId : "create"),
+      url: `${process.env.REACT_APP_API_URI}/ranges/` + (rangeId ? "edit/" + rangeId : "create"),
     };
     axios(axiosEditRange).then((res) => {
       setPostInfo(res.data.message);

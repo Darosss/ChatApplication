@@ -42,57 +42,23 @@ function App() {
 
       <div className="app-content">
         <Routes>
-          <Route
-            path="/login"
-            element={auth ? <Home auth={auth} /> : <Login />}
-          />
+          <Route path="/login" element={auth ? <Home auth={auth} /> : <Login />} />
           <Route path="/" element={<Home auth={auth} />} />
-          <Route
-            path="/chats"
-            element={
-              !auth.isBanned ? <Chats auth={auth} /> : <Profil auth={auth} />
-            }
-          />
-          <Route
-            path="/register"
-            element={!auth ? <Register /> : <Home auth={auth} />}
-          />
-          <Route
-            path="/profil"
-            element={auth ? <Profil auth={auth} /> : <Login />}
-          />
+          <Route path="/chats" element={!auth.isBanned ? <Chats auth={auth} /> : <Profil auth={auth} />} />
+          <Route path="/register" element={!auth ? <Register /> : <Home auth={auth} />} />
+          <Route path="/profil" element={auth ? <Profil auth={auth} /> : <Login />} />
           <Route
             path="/rooms"
-            element={
-              auth && !auth.isBanned ? (
-                <Rooms />
-              ) : auth.isBanned ? (
-                <Profil auth={auth} />
-              ) : (
-                <Login />
-              )
-            }
+            element={auth && !auth.isBanned ? <Rooms /> : auth.isBanned ? <Profil auth={auth} /> : <Login />}
           />
 
           <Route
             path="/users"
-            element={
-              auth && auth.administrator && !auth.isBanned ? (
-                <Users />
-              ) : (
-                <Home auth={auth} />
-              )
-            }
+            element={auth && auth.administrator && !auth.isBanned ? <Users /> : <Home auth={auth} />}
           />
           <Route
             path="/ranges"
-            element={
-              auth && auth.administrator && !auth.isBanned ? (
-                <Ranges />
-              ) : (
-                <Home auth={auth} />
-              )
-            }
+            element={auth && auth.administrator && !auth.isBanned ? <Ranges /> : <Home auth={auth} />}
           />
         </Routes>
       </div>

@@ -1,5 +1,5 @@
 import "./style.css";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import EditCreateRangeModal from "./EditCreateRangeModal";
 import DeleteRangeModal from "./DeleteRangeModal";
@@ -43,17 +43,10 @@ function Ranges() {
                   <td>{range.createdBy.username}</td>
                   <td>{range.createdAt.toString().split("T")[0]}</td>
                   <td>
-                    <EditCreateRangeModal
-                      sectionName="Edit"
-                      rangeId={range._id}
-                      isEdit={true}
-                    />
+                    <EditCreateRangeModal sectionName="Edit" rangeId={range._id} isEdit={true} />
                   </td>
                   <td>
-                    <DeleteRangeModal
-                      rangeName={range.name}
-                      rangeId={range._id}
-                    />
+                    <DeleteRangeModal rangeName={range.name} rangeId={range._id} />
                   </td>
                 </tr>
               );
