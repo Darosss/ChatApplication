@@ -1,24 +1,21 @@
 import "./style.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ModalCore from "../../Modal";
-import axios from "axios";
+import useAcciosHook from "../../../hooks/useAcciosHook";
 
 function DeleteRoomModal(props: { roomId: string }) {
   const { roomId } = props;
   const [postInfo, setPostInfo] = useState("");
 
-  const deleteRoom = () => {
-    const axiosCreateConfig = {
-      method: "delete",
-      withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/rooms/delete/` + roomId,
-    };
-    axios(axiosCreateConfig).then((res) => {
-      setPostInfo(res.data.message);
+  const { response, sendData: deleteRoom } = useAcciosHook({
+    url: `rooms/delete/${roomId}`,
+    method: "delete",
+    withCredentials: true,
+  });
 
-      window.location.reload();
-    });
-  };
+  useEffect(() => {
+    setPostInfo(response?.data.message);
+  }, [response]);
 
   return (
     <ModalCore actionName="Delete room" body="" onClickFn={deleteRoom} actionBtnVariant="danger" postInfo={postInfo} />

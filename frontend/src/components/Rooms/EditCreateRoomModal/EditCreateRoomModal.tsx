@@ -1,56 +1,54 @@
 import "./style.css";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import ModalCore from "../../Modal";
+import useAcciosHook from "../../../hooks/useAcciosHook";
 
-function EditCreateRoomModal(props: { roomId?: string; sectionName: string; isEdit?: boolean }) {
-  const { roomId = undefined, sectionName = "" } = props;
-
-  const [usersList, setUsersList] = useState<IUserRes[]>();
-  const [availableRanges, setAvailableRanges] = useState<IRangeRes[]>();
+function EditCreateRoomModal(props: {
+  room?: IChatRoomRes;
+  ranges?: IRangeRes[];
+  users?: IUserRes[];
+  sectionName: string;
+  isEdit?: boolean;
+}) {
+  const { room = undefined, sectionName = "", ranges, users } = props;
 
   const [roomName, setRoomName] = useState("");
-  const [roomRanges, setRoomRanges] = useState<IRangeRes[]>();
-  const [roomAllowedUsers, setRoomAllowedUsers] = useState<IUserRes[]>();
-  const [roomBannedUsers, setRoomBannedUsers] = useState<IUserRes[]>();
+  const [roomRanges, setRoomRanges] = useState<string[]>();
+  const [roomAllowedUsers, setRoomAllowedUsers] = useState<string[]>();
+  const [roomBannedUsers, setRoomBannedUsers] = useState<string[]>();
+
+  const { response, error, sendData } = useAcciosHook({
+    url: "rooms" + (room ? `/edit/${room._id}` : "/create"),
+    method: "post",
+    withCredentials: true,
+    data: {
+      roomName: roomName,
+      availableRanges: roomRanges,
+      allowedUsers: roomAllowedUsers,
+      bannedUsers: roomBannedUsers,
+    },
+  });
 
   const [postInfo, setPostInfo] = useState("");
 
   useEffect(() => {
-    const axiosConfigRoom = {
-      method: "get",
-      withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/rooms/` + (roomId ? roomId : "create"),
-    };
-    axios(axiosConfigRoom).then((res) => {
-      setUsersList(res.data.usersList);
-      setAvailableRanges(res.data.availableRanges);
-      if (!roomId) return; //if roomId = undefined is not editing so return
+    setPostInfo(response?.data.message);
+  }, [response]);
 
-      setRoomName(res.data.chatRoom.name);
-      setRoomRanges(res.data.chatRoom.availableRanges);
-      setRoomAllowedUsers(res.data.chatRoom.allowedUsers);
-      setRoomBannedUsers(res.data.chatRoom.bannedUsers);
-    });
-  }, [roomId]);
+  useEffect(() => {
+    if (error) setPostInfo(error.message);
+  }, [error]);
+
+  useEffect(() => {
+    if (!room) return; //if roomId = undefined is not editing so return
+    setRoomName(room.name);
+    setRoomRanges(room.availableRanges);
+    setRoomAllowedUsers(room.allowedUsers);
+    setRoomBannedUsers(room.bannedUsers);
+  }, [room]);
 
   const createOrEdit = () => {
-    const axiosCreateConfig = {
-      method: "post",
-      data: {
-        roomName: roomName,
-        availableRanges: roomRanges,
-        allowedUsers: roomAllowedUsers,
-        bannedUsers: roomBannedUsers,
-      },
-      withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/rooms/` + (roomId ? roomId : "create"),
-    };
-    axios(axiosCreateConfig).then((res) => {
-      setPostInfo(res.data.message);
-
-      window.location.reload();
-    });
+    sendData();
   };
 
   const createSelect = (
@@ -77,7 +75,7 @@ function EditCreateRoomModal(props: { roomId?: string; sectionName: string; isEd
   };
 
   const createSelectRangesOptions = () => {
-    return availableRanges?.map((range, index) => {
+    return ranges?.map((range, index) => {
       return (
         <option key={index} value={range._id}>
           {range.name}
@@ -87,7 +85,7 @@ function EditCreateRoomModal(props: { roomId?: string; sectionName: string; isEd
   };
 
   const createSelectUsersListOptions = () => {
-    return usersList?.map((user, index) => {
+    return users?.map((user, index) => {
       return (
         <option key={index} value={user._id}>
           {user.username}

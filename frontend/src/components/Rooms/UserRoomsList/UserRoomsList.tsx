@@ -3,8 +3,8 @@ import "./style.css";
 import EditCreateRoomModal from "../EditCreateRoomModal";
 import DeleteRoomModal from "../DeleteRoomModal";
 
-function UserRoomsList(props: { rooms: IChatRoomRes[] }) {
-  const { rooms } = props;
+function UserRoomsList(props: { rooms: IChatRoomRes[]; ranges: IRangeRes[]; users: IUserRes[] }) {
+  const { rooms, ranges, users } = props;
 
   return (
     <div>
@@ -13,7 +13,7 @@ function UserRoomsList(props: { rooms: IChatRoomRes[] }) {
           <tr>
             <th> Rooms </th>
             <th colSpan={2}>
-              <EditCreateRoomModal sectionName="Create" />
+              <EditCreateRoomModal sectionName="Create" ranges={ranges} users={users} />
             </th>
           </tr>
         </thead>
@@ -23,7 +23,7 @@ function UserRoomsList(props: { rooms: IChatRoomRes[] }) {
               <tr key={index}>
                 <td> {room.name}</td>
                 <td>
-                  <EditCreateRoomModal sectionName="Edit" roomId={room._id} />
+                  <EditCreateRoomModal sectionName="Edit" room={room} ranges={ranges} users={users} />
                 </td>
                 <td>
                   <DeleteRoomModal roomId={room._id} />
