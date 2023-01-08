@@ -1,11 +1,11 @@
 import "./style.css";
 import React, { useEffect, useState } from "react";
 import ModalCore from "../../Modal";
-import axios from "axios";
 import EditCreateRoomModal from "../../Rooms/EditCreateRoomModal";
+import useAcciosHook from "../../../hooks/useAcciosHook";
 
-function EditUserModal(props: { userId: string }) {
-  const { userId } = props;
+function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRangeRes[] }) {
+  const { user, ranges, users } = props;
 
   const [username, setUsername] = useState("");
   const [userRanges, setUserRanges] = useState<string[]>([]);
@@ -19,58 +19,63 @@ function EditUserModal(props: { userId: string }) {
 
   const [userChatRooms, setUserChatRooms] = useState<IChatRoomRes[]>();
 
-  const [ranges, setRanges] = useState<IRangeRes[]>();
-
   const [postInfo, setPostInfo] = useState("");
 
   useEffect(() => {
-    const axiosConfig = {
-      method: "get",
-      withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/users/` + userId,
-    };
+    if (!user) return; //if roomId = undefined is not editing so return
+    setUsername(user.username);
+    setFirstname(user.firstname as string);
+    setSurname(user.surname as string);
+    setUserRanges(user.ranges as string[]);
+    setCountry(user.country as string);
+    setGender(user.gender as string);
+    setPhoneNumber(user.phoneNumber as string);
+    setNickColor(user.nickColor as string);
+    setEmail(user.email as string);
 
-    axios(axiosConfig).then((res) => {
-      const userDetails = res.data.user;
-      setUsername(userDetails.username);
-      setFirstname(userDetails.firstname);
-      setSurname(userDetails.surname);
-      setUserRanges(userDetails.ranges);
-      setCountry(userDetails.country);
-      setGender(userDetails.gender);
-      setPhoneNumber(userDetails.phoneNumber);
-      setNickColor(userDetails.nickColor);
-      setEmail(userDetails.email);
+    // setRanges(res.data.ranges);
 
-      setRanges(res.data.ranges);
+    // setUserChatRooms(res.data.chatRooms);
+  }, [user]);
 
-      setUserChatRooms(res.data.chatRooms);
-    });
-  }, [userId]);
+  const {
+    response: userEditResponse,
+    error: userEditError,
+    sendData: userEdit,
+  } = useAcciosHook({
+    url: `users/admin/edit/${user._id}`,
+    method: "post",
+    withCredentials: true,
+    data: {
+      username: username,
+      firstname: firstname,
+      surname: surname,
+      country: country,
+      gender: gender,
+      nickColor: nickColor,
+      email: email,
+      phoneNumber: phoneNumber,
+      ranges: userRanges,
+    },
+  });
 
-  const editUser = () => {
-    const axiosEditUser = {
-      method: "post",
-      data: {
-        username: username,
-        firstname: firstname,
-        surname: surname,
-        country: country,
-        gender: gender,
-        nickColor: nickColor,
-        email: email,
-        phoneNumber: phoneNumber,
-        ranges: userRanges,
-      },
-      withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/users/edit/` + userId,
-    };
-    axios(axiosEditUser).then((res) => {
-      setPostInfo(res.data.message);
+  const { response: usersRoomResponse } = useAcciosHook({
+    url: `users/rooms/${user._id}`,
+    method: "get",
+    withCredentials: true,
+  });
 
-      window.location.reload();
-    });
-  };
+  useEffect(() => {
+    setUserChatRooms(usersRoomResponse?.data.chatRooms);
+  }, [usersRoomResponse]);
+
+  useEffect(() => {
+    setPostInfo(userEditResponse?.data.message);
+  }, [userEditResponse]);
+
+  useEffect(() => {
+    if (userEditError) setPostInfo(userEditError?.message);
+  }, [userEditError]);
 
   const createSelect = (label: string) => {
     return (
@@ -123,7 +128,7 @@ function EditUserModal(props: { userId: string }) {
             <div key={index}>
               <div className="d-flex bg-secondary m-1">
                 <span className="edit-user-room-name">{room.name}</span>
-                <EditCreateRoomModal sectionName="Edit" roomId={room._id} />
+                <EditCreateRoomModal sectionName="Edit" room={room} ranges={ranges} users={users} />
               </div>
             </div>
           );
@@ -153,7 +158,7 @@ function EditUserModal(props: { userId: string }) {
     <ModalCore
       actionName="Edit user"
       body={modalBody()}
-      onClickFn={editUser}
+      onClickFn={userEdit}
       actionBtnVariant="primary"
       postInfo={postInfo}
     />

@@ -3,9 +3,17 @@ import React from "react";
 import EditUserModal from "../EditUserModal";
 import BanUserModal from "../BanUserModal";
 import UnbanUserModal from "../UnbanUserModal";
+import useAcciosHook from "../../../hooks/useAcciosHook";
 
 function UsersList(props: { users: IUserRes[] }) {
   const { users } = props;
+  const { response: rangesRes, loading: loadingRanges } = useAcciosHook({
+    url: `/ranges`,
+    method: "get",
+    withCredentials: true,
+  });
+
+  const ranges = rangesRes?.data.ranges as IRangeRes[];
 
   return (
     <div>
@@ -24,7 +32,7 @@ function UsersList(props: { users: IUserRes[] }) {
               <tr key={index}>
                 <td> {user.username}</td>
                 <td>
-                  <EditUserModal userId={user._id} />
+                  <EditUserModal user={user} ranges={ranges} users={users} />
                 </td>
                 <td>
                   {user.isBanned ? (
