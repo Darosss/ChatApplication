@@ -1,36 +1,45 @@
 import "./style.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ModalCore from "../../Modal";
-import axios from "axios";
+import useAcciosHook from "../../../hooks/useAcciosHook";
 
-function EditUserModal(props: { userId: string }) {
-  const { userId } = props;
+function EditUserModal(props: { userId: string; username: string }) {
+  const { userId, username } = props;
   const [banTime, setBanTime] = useState("");
   const [banReason, setBanReason] = useState("");
 
   const [postInfo, setPostInfo] = useState("");
 
-  const banUser = () => {
-    const axiosConfig = {
-      method: "post",
-      data: {
-        banTime: banTime,
-        banReason: banReason,
-      },
-      withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/users/ban/` + userId,
-    };
+  const {
+    response: banResponse,
+    error: banError,
+    sendData: banUser,
+  } = useAcciosHook({
+    url: `/users/admin/ban/${userId}`,
+    method: "post",
+    withCredentials: true,
+    data: {
+      banTime: banTime,
+      banReason: banReason,
+    },
+  });
 
-    axios(axiosConfig).then((res) => {
-      setPostInfo(res.data.message);
+  useEffect(() => {
+    if (banResponse) setPostInfo(banResponse?.data.message);
+  }, [banResponse]);
 
-      window.location.reload();
-    });
-  };
+  useEffect(() => {
+    if (banError) setPostInfo(banError.message);
+  }, [banError]);
 
   const modalBody = () => {
     return (
       <div>
+        <div>
+          <label>
+            Ban user: <b>{username}</b>
+          </label>
+        </div>
         <label className="form-label ">Ban time(minutes) (empty = 5min)</label>
         <input
           type="number"
