@@ -12,3 +12,14 @@ div.register-form label {
   margin-top: 2px;
   width: 100%;
 }
+
+.post-info {
+  width: 55vw;
+}
+
+@media screen and (max-width: 767px) {
+  .post-info {
+    width: 100%;
+    color: red;
+  }
+}
