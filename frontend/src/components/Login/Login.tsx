@@ -1,26 +1,34 @@
 import "./style.css";
-import "./style.css";
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
+import useAcciosHook from "../../hooks/useAcciosHook";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const [postInfo, setPostInfo] = useState("");
+
+  const { response: loginResponse, sendData: sendLoginData } = useAcciosHook({
+    url: `/login`,
+    method: "post",
+    withCredentials: true,
+    data: {
+      username: username,
+      password: password,
+    },
+  });
+
   const login = (e: React.FormEvent) => {
     e.preventDefault();
-    axios({
-      method: "POST",
-      data: {
-        username: username,
-        password: password,
-      },
-      withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/login`,
-    }).then(() => {
-      window.location.reload();
-    });
+    sendLoginData();
   };
+
+  useEffect(() => {
+    console.log(loginResponse?.data);
+    if (loginResponse) setPostInfo(loginResponse?.data.message);
+  }, [loginResponse]);
+
   return (
     <div>
       <div className="section-header">
@@ -40,6 +48,9 @@ function Login() {
             <Button type="submit" className="btn btn-primary">
               Login
             </Button>
+          </div>
+          <div className="form-group">
+            <label> {postInfo}</label>
           </div>
         </form>
       </div>
