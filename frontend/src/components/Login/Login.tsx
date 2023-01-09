@@ -25,7 +25,6 @@ function Login() {
   };
 
   useEffect(() => {
-    console.log(loginResponse?.data);
     if (loginResponse) setPostInfo(loginResponse?.data.message);
   }, [loginResponse]);
 
@@ -49,7 +48,7 @@ function Login() {
               Login
             </Button>
           </div>
-          <div className="form-group">
+          <div className="form-group post-info">
             <label> {postInfo}</label>
           </div>
         </form>
