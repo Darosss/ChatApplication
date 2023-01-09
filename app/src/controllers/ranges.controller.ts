@@ -1,6 +1,7 @@
-import { Request, Response } from "express";
-import { RequestUserAuth } from "@types";
+import { NextFunction, Request, Response } from "express";
+import { IMongooseError, RequestUserAuth } from "@types";
 import { Range } from "@/models/range";
+import errorHandlerMiddleware from "@/middlewares/errorHandler.middleware";
 
 export const getListOfRanges = async (req: Request, res: Response) => {
   let ranges;
@@ -14,7 +15,11 @@ export const getListOfRanges = async (req: Request, res: Response) => {
   }
 };
 
-export const createNewRange = async (req: RequestUserAuth, res: Response) => {
+export const createNewRange = async (
+  req: RequestUserAuth,
+  res: Response,
+  next: NextFunction
+) => {
   const creatorId = req.user?.id;
   const name = req.body.name;
   const newRange = new Range({
@@ -26,7 +31,9 @@ export const createNewRange = async (req: RequestUserAuth, res: Response) => {
 
     res.status(201).send({ message: "Created new range" });
   } catch (error) {
-    res.status(400).send({ message: "Cannot create new range" });
+    return next(
+      errorHandlerMiddleware(error as IMongooseError, req, res, next)
+    );
   }
 };
 
@@ -37,7 +44,11 @@ export const getRangeById = async (req: Request, res: Response) => {
   res.status(200).send({ range: rangeEdit });
 };
 
-export const editRangeById = async (req: Request, res: Response) => {
+export const editRangeById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { _id } = req.params;
 
   const update = {
@@ -47,9 +58,10 @@ export const editRangeById = async (req: Request, res: Response) => {
     await Range.findByIdAndUpdate(_id, update);
 
     res.send({ message: "Successfully updated range" });
-  } catch (e) {
-    res.send({ message: "Can't update range" });
-    console.log(e);
+  } catch (error) {
+    return next(
+      errorHandlerMiddleware(error as IMongooseError, req, res, next)
+    );
   }
 };
 
