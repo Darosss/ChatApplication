@@ -20,7 +20,6 @@ export function usernameValidation(name: string) {
 
 export function passwordValidation(password: string) {
   const errorMessages: string[] = [];
-  console.log(password);
   if (!validator.isStrongPassword(password)) {
     errorMessages.push(
       `Password must me strong(min. 1 lower, 1 upper, 1 number, 1 symbol)`
