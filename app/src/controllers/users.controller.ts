@@ -8,7 +8,7 @@ export const getListOfUsers = async (req: Request, res: Response) => {
   let users;
   try {
     users = await User.find({}, { password: 0, __v: 0 });
-    res.send({ usersList: users });
+    res.send({ users: users });
   } catch {
     res.send({ message: "Can't get users" });
   }
