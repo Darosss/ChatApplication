@@ -16,17 +16,17 @@ import useAcciosHook from "../../hooks/useAcciosHook";
 function App() {
   const [auth, setAuth] = useState<IAuth | null>(null);
 
-  const { response: authResponse, loading: authLoading } = useAcciosHook({
+  const { response: authResponse } = useAcciosHook({
     url: `/session`,
     method: "get",
     withCredentials: true,
   });
 
   useEffect(() => {
-    if (authResponse) setAuth(authResponse?.data);
+    if (authResponse !== null) setAuth(authResponse?.data);
   }, [authResponse]);
 
-  if (authLoading || auth === null) {
+  if (auth === undefined || auth === null) {
     return (
       <div className="app-header">
         <div className="app-content">
