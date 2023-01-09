@@ -1,7 +1,6 @@
 import "./style.css";
 import React, { useEffect, useState } from "react";
 import ModalCore from "../../Modal";
-import axios from "axios";
 import useAcciosHook from "../../../hooks/useAcciosHook";
 
 function DeleteRangeModal(props: { rangeId: string; rangeName: string }) {
