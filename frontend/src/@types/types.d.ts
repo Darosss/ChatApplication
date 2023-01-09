@@ -29,7 +29,7 @@ interface IUserRes {
   bannedDate?: Date;
   banExpiresDate?: Date;
   banReason?: string;
-  ranges: IRangeRes[];
+  ranges: IRangeRes[] | string[];
 }
 
 interface IMessagesRes {
