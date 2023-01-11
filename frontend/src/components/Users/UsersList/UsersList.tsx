@@ -7,7 +7,7 @@ import useAcciosHook from "../../../hooks/useAcciosHook";
 
 function UsersList(props: { users: IUserRes[] }) {
   const { users } = props;
-  const { response: rangesRes, loading: loadingRanges } = useAcciosHook({
+  const { response: rangesRes } = useAcciosHook({
     url: `/ranges`,
     method: "get",
     withCredentials: true,
