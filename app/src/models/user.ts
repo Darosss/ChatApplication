@@ -3,16 +3,25 @@ import bcrypt from "bcrypt";
 import passportLocalMongoose from "passport-local-mongoose";
 
 import { IUserDocument } from "@types";
+import {
+  birthdayValidation,
+  emailValidation,
+  passwordValidation,
+  phoneNumberValidation,
+  usernameValidation,
+} from "../validators/userModel.validator";
 
 const userSchema: Schema<IUserDocument> = new Schema({
   username: {
     type: String,
-    required: [true, "Can't be blank"],
+    required: [true, "Username is required"],
     index: { unique: true },
+    validate: usernameValidation,
   },
   password: {
     type: String,
-    require: true,
+    require: [true, "Password is required"],
+    validate: passwordValidation,
   },
   firstname: {
     type: String,
@@ -27,7 +36,8 @@ const userSchema: Schema<IUserDocument> = new Schema({
   },
   birthday: {
     type: Date,
-    required: true,
+    required: [true, "Birthday date is required"],
+    validate: birthdayValidation,
   },
   ranges: [
     {
@@ -56,12 +66,15 @@ const userSchema: Schema<IUserDocument> = new Schema({
   },
   email: {
     type: String,
+    validate: emailValidation,
   },
   phoneNumber: {
     type: String,
+    validate: phoneNumberValidation,
   },
   isBanned: {
     type: Boolean,
+    default: false,
   },
   bannedDate: {
     type: Date,

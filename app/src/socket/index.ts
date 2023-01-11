@@ -23,13 +23,8 @@ export default function (
   io.on("connection", (socket) => {
     console.log(`User: joined the site ${socket.id}`);
 
-    socket.onAny((event, ...args) => {
-      if (event !== "join channel") console.log("On any: Event:", event, args);
-    });
-
+    //When disconnect remove user from Map onlineUsers/roomsUsers
     socket.on("disconnect", () => {
-      //When disconnect remove from online later fn
-
       for (const roomId of roomsUsers.keys()) {
         const roomUsers = roomsUsers.get(roomId);
 
@@ -46,13 +41,16 @@ export default function (
 
       //remove from online users
       if (onlineUsers.has(socket.id)) onlineUsers.delete(socket.id);
-      //FIXME
 
       io.emit("refresh_online_users", Array.from(onlineUsers));
     });
 
+    /**
+     * @param {string} roomId - id of joining room
+     * @param {string[]} roomUsers - online users in room
+     * @param {string} username - user username of joining room
+     */
     socket.on("join_channel", (data) => {
-      console.log("Joining the room ", data);
       //data:  username , userId, roomId
       socket.join(data.roomId);
 
@@ -64,7 +62,13 @@ export default function (
       io.to(data.roomId).emit("room_online_users", data);
     });
 
-    //On chat message
+    /**
+     * @param {string} roomId - id of room that message is assigned to
+     * @param {string} userId - sender ID
+     * @param {string} message - message context
+     * @param {string} sender - sender message
+     * @param {Date} date - date of message
+     */
     socket.on("chat_message", async (data) => {
       data.date = new Date();
       io.to(data.roomId).emit("chat_message", data);
@@ -78,12 +82,18 @@ export default function (
       }
     });
 
-    //When user emits it, it add user to onlineUsers map then emit refresh_onlinie_users
-    socket.on("user_connected", (data) => {
-      onlineUsers.set(socket.id, data);
+    /**
+     * @param {string} username - username of connected user
+     */
+    socket.on("user_connected", (username) => {
+      onlineUsers.set(socket.id, username);
       io.emit("refresh_online_users", Array.from(onlineUsers));
     });
 
+    /**
+     * @param {string} username - username of user typing
+     * @param {string} roomId - room Id where user is typing
+     */
     socket.on("user_typing", (data) => {
       socket.to(data.roomId).emit("user_typing", data);
     });
@@ -117,7 +127,7 @@ export default function (
       await message.save();
       return true;
     } catch (error) {
-      console.log(error, "Message couldn't be saved");
+      console.log(error, "Message couldn't be saved. Try again later.");
       return false;
     }
   }

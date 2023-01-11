@@ -6,22 +6,23 @@ import {
   editUserById,
   banUserById,
   unbanUserById,
+  getUsersRoomsById,
 } from "../controllers/users.controller";
+import isValidMongooseId from "@/middlewares/isValidMongooseId";
 
 const router = Router();
 
 router.get("/", getListOfUsers);
 
-//Get user by id
-router.get("/:userId", getUserById);
+router.get("/:_id", isValidMongooseId, getUserById);
 
-//Edit user by id route
-router.post("/edit/:userId", isAdmin, editUserById);
+router.get("/rooms/:_id", isValidMongooseId, getUsersRoomsById);
 
-//Ban user by id route
-router.post("/ban/:userId/", isAdmin, banUserById);
+router.post("/admin/edit/:_id", isValidMongooseId, isAdmin, editUserById);
 
-//Unban user by id route
-router.post("/unban/:userId", isAdmin, unbanUserById);
+//TODO: add middleware to check if want to ban amdin
+router.post("/admin/ban/:_id", isValidMongooseId, isAdmin, banUserById);
+
+router.post("/admin/unban/:_id", isValidMongooseId, isAdmin, unbanUserById);
 
 export default router;

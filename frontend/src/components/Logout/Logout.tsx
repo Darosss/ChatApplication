@@ -1,23 +1,19 @@
+import React from "react";
 import "./style.css";
-import axios from "axios";
+import useAcciosHook from "../../hooks/useAcciosHook";
 
 function Logout() {
-  const logout = () => {
-    axios({
-      method: "POST",
+  const { sendData: logout } = useAcciosHook(
+    {
+      url: `/logout`,
+      method: "post",
       withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/logout`,
-    })
-      .then((res) => {
-        console.log(res, "res");
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err, "err");
-      });
-  };
+    },
+    true,
+  );
+
   return (
-    <li className="">
+    <li>
       <button onClick={logout} className="nav-li-button btn btn-danger w-100">
         Logout
       </button>

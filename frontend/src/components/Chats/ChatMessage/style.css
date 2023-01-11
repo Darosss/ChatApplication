@@ -17,6 +17,7 @@
   .chat-message-time {
     font-size: calc(4px + 1.3vmin);
   }
+
   .col-time-sender {
     width: 33%;
   }

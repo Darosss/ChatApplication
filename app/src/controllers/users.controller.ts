@@ -1,56 +1,84 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { User } from "@/models/user";
-import { Range } from "@/models/range";
 import { ChatRoom } from "@/models/chatRoom";
+import errorHandlerMiddleware from "@/middlewares/errorHandler.middleware";
+import { IMongooseError } from "@types";
 
 export const getListOfUsers = async (req: Request, res: Response) => {
   let users;
   try {
     users = await User.find({}, { password: 0, __v: 0 });
-    res.send({ usersList: users });
+    res.send({ users: users });
   } catch {
     res.send({ message: "Can't get users" });
   }
 };
 
 export const getUserById = async (req: Request, res: Response) => {
-  const userEdit = await User.findById(req.params.userId, {
+  const { _id } = req.params;
+
+  const selectedUser = await User.findById(_id, {
     password: 0,
     __v: 0,
-    createdAt: 0,
-  });
-  const ranges = await Range.find({});
-  const chatRooms = await ChatRoom.find({ createdBy: userEdit?.id });
+  }).populate("ranges", "id name");
   res.send({
-    user: userEdit,
-    ranges: ranges,
-    chatRooms: chatRooms,
+    user: selectedUser,
   });
 };
 
-export const editUserById = async (req: Request, res: Response) => {
-  const body = req.body;
+export const getUsersRoomsById = async (req: Request, res: Response) => {
+  const { _id } = req.params;
+
+  const chatRooms = await ChatRoom.find({ createdBy: _id });
+
+  res.send({ chatRooms: chatRooms });
+};
+
+export const editUserById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { _id } = req.params;
+
+  const {
+    username,
+    firstname,
+    surname,
+    country,
+    gender,
+    nickColor,
+    email,
+    phoneNumber,
+    ranges,
+  } = req.body;
+
+  const optionsUpdate = { runValidators: true };
   const update = {
-    username: body.username,
-    firstname: body.firstname,
-    surname: body.surname,
-    country: body.country,
-    gender: body.gender,
-    nickColor: body.nickColor,
-    email: body.email,
-    phoneNumber: body.phoneNumber,
-    ranges: body.ranges,
+    username: username,
+    firstname: firstname,
+    surname: surname,
+    country: country,
+    gender: gender,
+    nickColor: nickColor,
+    email: email,
+    phoneNumber: phoneNumber,
+    ranges: ranges,
   };
+
   try {
-    await User.findByIdAndUpdate(req.params.userId, update);
+    await User.findByIdAndUpdate(_id, update, optionsUpdate);
     res.send({ message: "User edited" });
-  } catch (e) {
-    res.send({ message: "Can't edit user" });
-    console.log(e);
+  } catch (error) {
+    return next(
+      errorHandlerMiddleware(error as IMongooseError, req, res, next)
+    );
   }
 };
 
 export const banUserById = async (req: Request, res: Response) => {
+  const { _id } = req.params;
+
   const banTime = req.body.banTime || 5;
   const banReason = req.body.banReason;
 
@@ -66,23 +94,23 @@ export const banUserById = async (req: Request, res: Response) => {
     banReason: banReason,
   };
   try {
-    await User.findByIdAndUpdate(req.params.userId, update);
+    await User.findByIdAndUpdate(_id, update);
     res.send({ message: "User banned" });
   } catch (e) {
-    //Fe. add validation if admin want to ban admin or sth like that
     res.send({ message: "User can't be banned" });
   }
 };
 
 export const unbanUserById = async (req: Request, res: Response) => {
+  const { _id } = req.params;
+
   const update = {
     isBanned: false,
   };
   try {
-    await User.findByIdAndUpdate(req.params.userId, update);
+    await User.findByIdAndUpdate(_id, update);
     res.send({ message: "User unbanned" });
   } catch (e) {
     res.send({ message: "User can't be unbanned" });
-    console.log(e);
   }
 };

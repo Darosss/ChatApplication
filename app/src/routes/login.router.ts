@@ -5,6 +5,6 @@ import isLoggedIn from "@/middlewares/isLoggedIn";
 
 const router = Router();
 
-router.post("/", authenticateUser, isLoggedIn, login);
+router.post("/", isLoggedIn, authenticateUser, login);
 
 export default router;

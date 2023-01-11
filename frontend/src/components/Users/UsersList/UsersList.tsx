@@ -1,28 +1,19 @@
 import "./style.css";
 import React from "react";
-import axios from "axios";
 import EditUserModal from "../EditUserModal";
 import BanUserModal from "../BanUserModal";
+import UnbanUserModal from "../UnbanUserModal";
+import useAcciosHook from "../../../hooks/useAcciosHook";
 
 function UsersList(props: { users: IUserRes[] }) {
-  const unbanUser = (e: string) => {
-    const axiosConfig = {
-      method: "post",
-      withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/users/unban/` + e,
-    };
-    axios(axiosConfig)
-      .then((data) => {
-        console.log("data", data);
+  const { users } = props;
+  const { response: rangesRes, loading: loadingRanges } = useAcciosHook({
+    url: `/ranges`,
+    method: "get",
+    withCredentials: true,
+  });
 
-        setTimeout(() => {
-          window.location.reload();
-        }, 100);
-      })
-      .catch((err) => {
-        console.log("Couldn't unban user", err);
-      });
-  };
+  const ranges = rangesRes?.data.ranges as IRangeRes[];
 
   return (
     <div>
@@ -36,45 +27,22 @@ function UsersList(props: { users: IUserRes[] }) {
           </tr>
         </thead>
         <tbody>
-          {props.users.map((user, index) => {
+          {users?.map((user, index) => {
             return (
               <tr key={index}>
                 <td> {user.username}</td>
                 <td>
-                  <EditUserModal userId={user._id} />
+                  <EditUserModal user={user} ranges={ranges} users={users} />
                 </td>
                 <td>
                   {user.isBanned ? (
-                    <button
-                      id={user._id}
-                      type="button"
-                      className="btn btn-secondary w-100 modal-core-btn"
-                      onClick={(e) =>
-                        unbanUser((e.target as HTMLButtonElement).id)
-                      }
-                    >
-                      Unban user
-                    </button>
+                    <UnbanUserModal userId={user._id} username={user.username} />
                   ) : (
-                    <BanUserModal userId={user._id} />
+                    <BanUserModal userId={user._id} username={user.username} />
                   )}
                 </td>
-                <td>
-                  {user?.isBanned
-                    ? user.bannedDate
-                        ?.toString()
-                        .replace("T", " ")
-                        .split(".")[0]
-                    : "-"}
-                </td>
-                <td>
-                  {user.isBanned
-                    ? user.banExpiresDate
-                        ?.toString()
-                        .replace("T", " ")
-                        .split(".")[0]
-                    : "-"}
-                </td>
+                <td>{user?.isBanned ? user.bannedDate?.toString().replace("T", " ").split(".")[0] : "-"}</td>
+                <td>{user.isBanned ? user.banExpiresDate?.toString().replace("T", " ").split(".")[0] : "-"}</td>
                 <td> {user.isBanned ? user.banReason : "-"}</td>
               </tr>
             );

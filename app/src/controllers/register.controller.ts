@@ -1,7 +1,9 @@
 import { User } from "@/models/user";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import { IMongooseError } from "@types";
+import errorHandlerMiddleware from "@/middlewares/errorHandler.middleware";
 
-export const register = (req: Request, res: Response) => {
+export const register = (req: Request, res: Response, next: NextFunction) => {
   const userData: {
     username: string;
     password: string;
@@ -36,12 +38,10 @@ export const register = (req: Request, res: Response) => {
         try {
           await newUser.save();
           res.status(201).send("Account created");
-        } catch (err) {
-          console.log("reg,body", req.body);
-          console.log("Register error", err);
-          res
-            .status(400)
-            .send({ message: "Some fields can't be empty", body: req.body });
+        } catch (error) {
+          return next(
+            errorHandlerMiddleware(error as IMongooseError, req, res, next)
+          );
         }
       }
     }

@@ -1,3 +1,4 @@
+import React from "react";
 import "./style.css";
 
 import EditProfile from "../EditProfile";
@@ -31,17 +32,11 @@ function ProfilDetails(props: { user: IUserRes }) {
           </tr>
           <tr>
             <td>Birthday</td>
-            <td>
-              {user.birthday ? user.birthday.toString().split("T")[0] : null}
-            </td>
+            <td>{user.birthday ? user.birthday.toString().split("T")[0] : null}</td>
           </tr>
           <tr>
             <td>Created at</td>
-            <td>
-              {user.createdAt
-                ? user.createdAt.toString().replace("T", " ").replace("Z", "")
-                : null}
-            </td>
+            <td>{user.createdAt ? user.createdAt.toString().replace("T", " ").replace("Z", "") : null}</td>
           </tr>
           <tr>
             <td>Country</td>

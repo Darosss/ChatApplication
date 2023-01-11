@@ -15,11 +15,11 @@ interface IChatRoomRes {
 
 interface IUserRes {
   _id: string;
-  username?: string;
+  username: string;
   firstname?: string;
   surname?: string;
   email?: string;
-  birthday?: Date;
+  birthday: Date;
   createdAt: Date;
   country?: string;
   gender?: string;
@@ -29,7 +29,7 @@ interface IUserRes {
   bannedDate?: Date;
   banExpiresDate?: Date;
   banReason?: string;
-  ranges: IRangeRes[];
+  ranges: IRangeRes[] | string[];
 }
 
 interface IMessagesRes {

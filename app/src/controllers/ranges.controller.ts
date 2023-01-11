@@ -1,6 +1,7 @@
-import { Request, Response } from "express";
-import { RequestUserAuth } from "@types";
+import { NextFunction, Request, Response } from "express";
+import { IMongooseError, RequestUserAuth } from "@types";
 import { Range } from "@/models/range";
+import errorHandlerMiddleware from "@/middlewares/errorHandler.middleware";
 
 export const getListOfRanges = async (req: Request, res: Response) => {
   let ranges;
@@ -8,13 +9,17 @@ export const getListOfRanges = async (req: Request, res: Response) => {
     ranges = await Range.find({})
       .select({ __v: 0 })
       .populate("createdBy", "id username");
+    res.send({ ranges: ranges });
   } catch (error) {
-    console.log("Error get ranges", error);
+    res.send({ message: "Couldn't GET ranges" });
   }
-  res.send({ ranges: ranges });
 };
 
-export const createNewRange = async (req: RequestUserAuth, res: Response) => {
+export const createNewRange = async (
+  req: RequestUserAuth,
+  res: Response,
+  next: NextFunction
+) => {
   const creatorId = req.user?.id;
   const name = req.body.name;
   const newRange = new Range({
@@ -23,40 +28,49 @@ export const createNewRange = async (req: RequestUserAuth, res: Response) => {
   });
   try {
     await newRange.save();
-    // console.log("Created new range");
+
     res.status(201).send({ message: "Created new range" });
   } catch (error) {
-    res.status(400).send({ message: "Cannot create new range" });
-    // console.log("Cannot create range", error);
+    return next(
+      errorHandlerMiddleware(error as IMongooseError, req, res, next)
+    );
   }
 };
 
 export const getRangeById = async (req: Request, res: Response) => {
-  const rangeEdit = await Range.findById(req.params.id, { __v: 0 });
-  res.status(200).send({ range: rangeEdit });
+  const { _id } = req.params;
 
-  //TODO try catch
+  const rangeEdit = await Range.findById(_id, { __v: 0 });
+  res.status(200).send({ range: rangeEdit });
 };
 
-export const editRangeById = async (req: Request, res: Response) => {
+export const editRangeById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { _id } = req.params;
+
   const update = {
     name: req.body.name,
   };
   try {
-    await Range.findByIdAndUpdate(req.params.id, update);
+    await Range.findByIdAndUpdate(_id, update);
 
     res.send({ message: "Successfully updated range" });
-  } catch (e) {
-    res.send({ message: "Can't update range" });
-    console.log(e);
+  } catch (error) {
+    return next(
+      errorHandlerMiddleware(error as IMongooseError, req, res, next)
+    );
   }
 };
 
 export const deleteRangeById = async (req: Request, res: Response) => {
+  const { _id } = req.params;
+  const rangeToDelete = await Range.findById(_id);
+
   try {
-    await Range.findById(req.params.id).then(async (range) => {
-      await range?.remove();
-    });
+    rangeToDelete?.remove();
     res.send({ message: "Successfully deleted range" });
   } catch {
     res.send({ message: "Can't delete range" });

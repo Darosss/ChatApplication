@@ -1,28 +1,41 @@
 import "./style.css";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import UserRoomsList from "./UserRoomsList";
+import useAcciosHook from "../../hooks/useAcciosHook";
 
 function Rooms() {
-  const [rooms, setRooms] = useState<IChatRoomRes[]>();
+  const { response: roomsRes, loading: loadingRooms } = useAcciosHook({
+    url: `/rooms`,
+    method: "get",
+    withCredentials: true,
+  });
+  const { response: rangesRes, loading: loadingRanges } = useAcciosHook({
+    url: `/ranges`,
+    method: "get",
+    withCredentials: true,
+  });
+  const { response: usersRes, loading: loadingUsers } = useAcciosHook({
+    url: `/users`,
+    method: "get",
+    withCredentials: true,
+  });
 
-  useEffect(() => {
-    const axiosConfigRooms = {
-      method: "get",
-      withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/rooms`,
-    };
-    axios(axiosConfigRooms).then((res) => {
-      setRooms(res.data.usersRooms);
-    });
-  }, []);
+  const rooms = roomsRes?.data.usersRooms as IChatRoomRes[];
+  const ranges = rangesRes?.data.ranges as IRangeRes[];
+  const users = usersRes?.data.users as IUserRes[];
 
   return (
     <div>
       <div className="section-header">
         <h1> Your rooms </h1>
       </div>
-      {rooms ? <UserRoomsList rooms={rooms} /> : null}
+      {!loadingRanges || !loadingRooms || !loadingUsers ? (
+        <UserRoomsList rooms={rooms} ranges={ranges} users={users} />
+      ) : (
+        <div className="section-header">
+          <h1> Fetching data... </h1>
+        </div>
+      )}
     </div>
   );
 }

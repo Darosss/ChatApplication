@@ -1,15 +1,13 @@
 import { Router } from "express";
-import isUsersProfile from "@/middlewares/isUsersProfile";
-
-const router = Router();
-
 import {
   editUserProfile,
   getUserProfile,
 } from "../controllers/profil.controller";
 
-router.get("/:userId", getUserProfile);
+const router = Router();
 
-router.post("/:userId", isUsersProfile, editUserProfile);
+router.get("/", getUserProfile);
+
+router.post("/edit", editUserProfile);
 
 export default router;

@@ -1,47 +1,41 @@
 import "./style.css";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import ModalCore from "../../Modal";
+import useAcciosHook from "../../../hooks/useAcciosHook";
 
-function EditRangeModal(props: {
-  isEdit?: boolean;
-  rangeId?: string;
-  sectionName?: string;
-}) {
-  const { isEdit = false, rangeId = undefined, sectionName = "" } = props;
+function EditRangeModal(props: { range?: IRangeRes; sectionName?: string }) {
+  const { range = undefined, sectionName = "" } = props;
+
   const [rangeName, setRangeName] = useState("");
   const [postInfo, setPostInfo] = useState("");
 
-  useEffect(() => {
-    if (!isEdit || !rangeId) return;
-
-    const axiosConfigRanges = {
-      method: "get",
-      withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/ranges/` + rangeId,
-    };
-
-    axios(axiosConfigRanges).then((res) => {
-      setRangeName(res.data.range.name);
-    });
-  }, [isEdit, rangeId]);
-
-  const createOrEditRange = () => {
-    const axiosEditRange = {
+  const { response, error, sendData } = useAcciosHook(
+    {
+      url: "ranges/admin" + (range ? `/edit/${range._id}` : "/create"),
       method: "post",
+      withCredentials: true,
       data: {
         name: rangeName,
       },
-      withCredentials: true,
-      url:
-        `${process.env.REACT_APP_API_URI}/ranges/` +
-        (rangeId ? "edit/" + rangeId : "create"),
-    };
-    axios(axiosEditRange).then((res) => {
-      setPostInfo(res.data.message);
+    },
+    true,
+  );
 
-      window.location.reload();
-    });
+  useEffect(() => {
+    setPostInfo(response?.data.message);
+  }, [response]);
+
+  useEffect(() => {
+    if (error) setPostInfo(error.message);
+  }, [error]);
+
+  useEffect(() => {
+    if (!range) return;
+    setRangeName(range.name);
+  }, [range]);
+
+  const createOrEditRange = () => {
+    sendData();
   };
 
   const modalBody = () => {
@@ -56,7 +50,6 @@ function EditRangeModal(props: {
             onChange={(e) => setRangeName(e.target.value)}
           />
         </div>
-        <p className="text-danger font-weight-bold"> {postInfo} </p>
       </div>
     );
   };

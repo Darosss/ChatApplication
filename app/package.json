@@ -32,7 +32,8 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^7.1.2",
     "socket.io": "^4.5.2",
-    "socket.io-client": "^4.5.3"
+    "socket.io-client": "^4.5.3",
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -43,6 +44,7 @@
     "@types/passport": "^1.0.11",
     "@types/passport-jwt": "^3.0.7",
     "@types/passport-local": "^1.0.34",
+    "@types/validator": "^13.7.10",
     "@typescript-eslint/eslint-plugin": "^5.46.0",
     "@typescript-eslint/parser": "^5.46.0",
     "cross-env": "^7.0.3",

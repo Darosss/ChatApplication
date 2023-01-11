@@ -7,21 +7,23 @@ import {
   getListOfRanges,
   getRangeById,
 } from "../controllers/ranges.controller";
+import isValidMongooseId from "@/middlewares/isValidMongooseId";
 
 const router = Router();
 
 router.get("/", getListOfRanges);
 
-//Create new range
-router.post("/create", isAdmin, createNewRange);
+router.get("/:_id/", isValidMongooseId, getRangeById);
 
-//Get range by id
-router.get("/:id/", isAdmin, getRangeById);
+router.post("/admin/create", isAdmin, createNewRange);
 
-//Edit range by id route
-router.post("/edit/:id/", isAdmin, editRangeById);
+router.post("/admin/edit/:_id/", isValidMongooseId, isAdmin, editRangeById);
 
-//Remove range route
-router.delete("/delete/:id/", isAdmin, deleteRangeById);
+router.delete(
+  "/admin/delete/:_id/",
+  isValidMongooseId,
+  isAdmin,
+  deleteRangeById
+);
 
 export default router;
