@@ -9,15 +9,18 @@ function Login() {
 
   const [postInfo, setPostInfo] = useState("");
 
-  const { response: loginResponse, sendData: sendLoginData } = useAcciosHook({
-    url: `/login`,
-    method: "post",
-    withCredentials: true,
-    data: {
-      username: username,
-      password: password,
+  const { response: loginResponse, sendData: sendLoginData } = useAcciosHook(
+    {
+      url: `/login`,
+      method: "post",
+      withCredentials: true,
+      data: {
+        username: username,
+        password: password,
+      },
     },
-  });
+    true,
+  );
 
   const login = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,6 +29,7 @@ function Login() {
 
   useEffect(() => {
     if (loginResponse) setPostInfo(loginResponse?.data.message);
+    console.log("test", loginResponse);
   }, [loginResponse]);
 
   return (

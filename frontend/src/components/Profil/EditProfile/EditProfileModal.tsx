@@ -17,23 +17,26 @@ function EditProfileModal(props: { user: IUserRes }) {
   const [nickColor, setNickColor] = useState("");
   const [postInfo, setPostInfo] = useState("");
 
-  const { response, error, sendData } = useAcciosHook({
-    url: `/profil/edit`,
-    method: "post",
-    withCredentials: true,
-    data: {
-      oldPassword: oldPassword,
-      newPassword: newPassword,
-      firstname: firstname,
-      surname: surname,
-      email: email,
-      birthday: birthday,
-      country: country,
-      phoneNumber: phone,
-      gender: gender,
-      nickColor: nickColor,
+  const { response, error, sendData } = useAcciosHook(
+    {
+      url: `/profil/edit`,
+      method: "post",
+      withCredentials: true,
+      data: {
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+        firstname: firstname,
+        surname: surname,
+        email: email,
+        birthday: birthday,
+        country: country,
+        phoneNumber: phone,
+        gender: gender,
+        nickColor: nickColor,
+      },
     },
-  });
+    true,
+  );
   useEffect(() => {
     setPostInfo(response?.data.message);
   }, [response]);

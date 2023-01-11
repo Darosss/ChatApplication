@@ -9,14 +9,17 @@ function EditRangeModal(props: { range?: IRangeRes; sectionName?: string }) {
   const [rangeName, setRangeName] = useState("");
   const [postInfo, setPostInfo] = useState("");
 
-  const { response, error, sendData } = useAcciosHook({
-    url: "ranges/admin" + (range ? `/edit/${range._id}` : "/create"),
-    method: "post",
-    withCredentials: true,
-    data: {
-      name: rangeName,
+  const { response, error, sendData } = useAcciosHook(
+    {
+      url: "ranges/admin" + (range ? `/edit/${range._id}` : "/create"),
+      method: "post",
+      withCredentials: true,
+      data: {
+        name: rangeName,
+      },
     },
-  });
+    true,
+  );
 
   useEffect(() => {
     setPostInfo(response?.data.message);

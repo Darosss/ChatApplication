@@ -17,17 +17,20 @@ function EditCreateRoomModal(props: {
   const [roomAllowedUsers, setRoomAllowedUsers] = useState<string[]>();
   const [roomBannedUsers, setRoomBannedUsers] = useState<string[]>();
 
-  const { response, error, sendData } = useAcciosHook({
-    url: "rooms" + (room ? `/edit/${room._id}` : "/create"),
-    method: "post",
-    withCredentials: true,
-    data: {
-      roomName: roomName,
-      availableRanges: roomRanges,
-      allowedUsers: roomAllowedUsers,
-      bannedUsers: roomBannedUsers,
+  const { response, error, sendData } = useAcciosHook(
+    {
+      url: "rooms" + (room ? `/edit/${room._id}` : "/create"),
+      method: "post",
+      withCredentials: true,
+      data: {
+        roomName: roomName,
+        availableRanges: roomRanges,
+        allowedUsers: roomAllowedUsers,
+        bannedUsers: roomBannedUsers,
+      },
     },
-  });
+    true,
+  );
 
   const [postInfo, setPostInfo] = useState("");
 

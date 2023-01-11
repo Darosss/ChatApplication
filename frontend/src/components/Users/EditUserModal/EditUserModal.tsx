@@ -42,22 +42,25 @@ function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRang
     response: userEditResponse,
     error: userEditError,
     sendData: userEdit,
-  } = useAcciosHook({
-    url: `users/admin/edit/${user._id}`,
-    method: "post",
-    withCredentials: true,
-    data: {
-      username: username,
-      firstname: firstname,
-      surname: surname,
-      country: country,
-      gender: gender,
-      nickColor: nickColor,
-      email: email,
-      phoneNumber: phoneNumber,
-      ranges: userRanges,
+  } = useAcciosHook(
+    {
+      url: `users/admin/edit/${user._id}`,
+      method: "post",
+      withCredentials: true,
+      data: {
+        username: username,
+        firstname: firstname,
+        surname: surname,
+        country: country,
+        gender: gender,
+        nickColor: nickColor,
+        email: email,
+        phoneNumber: phoneNumber,
+        ranges: userRanges,
+      },
     },
-  });
+    true,
+  );
 
   const { response: usersRoomResponse } = useAcciosHook({
     url: `users/rooms/${user._id}`,

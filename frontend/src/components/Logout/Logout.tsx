@@ -3,11 +3,14 @@ import "./style.css";
 import useAcciosHook from "../../hooks/useAcciosHook";
 
 function Logout() {
-  const { sendData: logout } = useAcciosHook({
-    url: `/logout`,
-    method: "post",
-    withCredentials: true,
-  });
+  const { sendData: logout } = useAcciosHook(
+    {
+      url: `/logout`,
+      method: "post",
+      withCredentials: true,
+    },
+    true,
+  );
 
   return (
     <li>
