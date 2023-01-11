@@ -1,29 +1,23 @@
 import "./style.css";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import ProfilDetails from "./ProfilDetails";
+import useAcciosHook from "../../hooks/useAcciosHook";
 
-function Profile(props: { auth: IAuth }) {
-  const { auth } = props;
+function Profile() {
   const [userDetails, setUserDetails] = useState<IUserRes>();
 
+  const { response, error, loading } = useAcciosHook({ url: `/profil`, method: "get", withCredentials: true });
+
   useEffect(() => {
-    const axiosConfig = {
-      method: "get",
-      withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/profil/` + auth.id,
-    };
-    axios(axiosConfig).then((res) => {
-      setUserDetails(res.data.userDetails);
-    });
-  }, [auth]);
+    setUserDetails(response?.data.userDetails);
+  }, [response]);
 
   return (
     <div>
       <div className="section-header">
         <h1> Profil </h1>
       </div>
-      {userDetails ? <ProfilDetails user={userDetails} /> : null}
+      {userDetails && !loading && !error ? <ProfilDetails user={userDetails} /> : "Fetching data..."}
     </div>
   );
 }

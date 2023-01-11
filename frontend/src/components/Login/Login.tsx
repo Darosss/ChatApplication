@@ -1,26 +1,33 @@
 import "./style.css";
-import "./style.css";
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
+import useAcciosHook from "../../hooks/useAcciosHook";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const [postInfo, setPostInfo] = useState("");
+
+  const { response: loginResponse, sendData: sendLoginData } = useAcciosHook({
+    url: `/login`,
+    method: "post",
+    withCredentials: true,
+    data: {
+      username: username,
+      password: password,
+    },
+  });
+
   const login = (e: React.FormEvent) => {
     e.preventDefault();
-    axios({
-      method: "POST",
-      data: {
-        username: username,
-        password: password,
-      },
-      withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/login`,
-    }).then(() => {
-      window.location.reload();
-    });
+    sendLoginData();
   };
+
+  useEffect(() => {
+    if (loginResponse) setPostInfo(loginResponse?.data.message);
+  }, [loginResponse]);
+
   return (
     <div>
       <div className="section-header">
@@ -30,24 +37,19 @@ function Login() {
         <form onSubmit={login}>
           <div className="form-group">
             <label>Username:</label>
-            <input
-              type="text"
-              className="form-control"
-              onChange={(e) => setUsername(e.target.value)}
-            />
+            <input type="text" className="form-control" onChange={(e) => setUsername(e.target.value)} />
           </div>
           <div className="form-group">
             <label>Password: </label>
-            <input
-              type="password"
-              className="form-control"
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <input type="password" className="form-control" onChange={(e) => setPassword(e.target.value)} />
           </div>
           <div className="form-group">
             <Button type="submit" className="btn btn-primary">
               Login
             </Button>
+          </div>
+          <div className="form-group post-info">
+            <label> {postInfo}</label>
           </div>
         </form>
       </div>

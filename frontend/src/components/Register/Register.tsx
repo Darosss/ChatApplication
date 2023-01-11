@@ -1,10 +1,8 @@
 import "./style.css";
-import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import useAcciosHook from "../../hooks/useAcciosHook";
 
 function App() {
-  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -16,28 +14,41 @@ function App() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
 
+  const [postInfo, setPostInfo] = useState("");
+
+  const {
+    response: registerResponse,
+    error: registerError,
+    sendData: sendRegisterData,
+  } = useAcciosHook({
+    url: `/register`,
+    method: "post",
+    withCredentials: true,
+    data: {
+      username: username,
+      password: password,
+      firstname: firstname,
+      surname: surname,
+      birthday: birthday,
+      country: country,
+      gender: gender,
+      nickColor: nickColor,
+      email: email,
+      phone: phone,
+    },
+  });
+  console.log("sd", registerError);
+  useEffect(() => {
+    if (registerResponse) setPostInfo(registerResponse?.data.message);
+  }, [registerResponse]);
+
+  useEffect(() => {
+    if (registerError) setPostInfo(registerError?.message);
+  }, [registerError]);
+
   const register = (e: React.FormEvent) => {
     e.preventDefault();
-    axios({
-      method: "POST",
-      data: {
-        username: username,
-        password: password,
-        firstname: firstname,
-        surname: surname,
-        birthday: birthday,
-        country: country,
-        gender: gender,
-        nickColor: nickColor,
-        email: email,
-        phone: phone,
-      },
-      withCredentials: true,
-      url: `${process.env.REACT_APP_API_URI}/register`,
-    }).then((res) => {
-      console.log(res);
-      navigate("/login");
-    });
+    sendRegisterData();
   };
 
   return (
@@ -45,7 +56,7 @@ function App() {
       <div className="section-header">
         <h2> Register </h2>
       </div>
-      <div className="login-form">
+      <div className="register-form">
         <form onSubmit={register}>
           <div className="row mt-2">
             <div className="col">
@@ -76,7 +87,6 @@ function App() {
               />
             </div>
           </div>
-
           <div className="row mt-2">
             <div className="col ">
               <label> Firstname </label>
@@ -120,11 +130,7 @@ function App() {
           <div className="row mt-2">
             <div className="col ">
               <label> Country </label>
-              <select
-                className="form-control"
-                id="country"
-                onChange={(e) => setCountry(e.target.value)}
-              >
+              <select className="form-control" id="country" onChange={(e) => setCountry(e.target.value)}>
                 <option></option>
                 <option>Poland</option>
                 <option>Germany</option>
@@ -135,11 +141,7 @@ function App() {
             </div>
             <div className="col ">
               <label> Gender </label>
-              <select
-                className="form-control"
-                id="gender"
-                onChange={(e) => setGender(e.target.value)}
-              >
+              <select className="form-control" id="gender" onChange={(e) => setGender(e.target.value)}>
                 <option>Male</option>
                 <option>Female</option>
                 <option>N/A</option>
@@ -148,11 +150,7 @@ function App() {
             <div className="col ">
               <label> Nick color </label>
 
-              <select
-                className="form-control"
-                id="nickColor"
-                onChange={(e) => setNickColor(e.target.value)}
-              >
+              <select className="form-control" id="nickColor" onChange={(e) => setNickColor(e.target.value)}>
                 <option className="bg-danger">Red</option>
                 <option className="bg-light">White</option>
                 <option className="bg-dark">Black</option>
@@ -161,11 +159,14 @@ function App() {
               </select>
             </div>
           </div>
-
           <div className="form-group">
             <button type="submit" className="btn btn-primary w-100">
               Register
             </button>
+            <div className="row mt-2"></div>
+            <div className="form-group post-info">
+              <label> {postInfo}</label>
+            </div>
           </div>
         </form>
       </div>

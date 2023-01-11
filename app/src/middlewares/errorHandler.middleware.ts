@@ -20,7 +20,11 @@ export default function errorHandlerMiddleware(
   } else if (error.name === "CastError") {
     castErrorHandler(error, res);
   } else {
-    res.status(500).send({ message: "An unknown error occured!" });
+    if (error?.message) {
+      res.status(400).send({ message: "Passwords do not match!" });
+    } else {
+      res.status(500).send({ message: "An unknown error occured!" });
+    }
   }
 }
 

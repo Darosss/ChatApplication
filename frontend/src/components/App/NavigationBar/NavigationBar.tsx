@@ -1,5 +1,5 @@
 import "./style.css";
-import { useRef } from "react";
+import React, { useRef } from "react";
 import NavigationLink from "./NavigationLink";
 import Logout from "../../Logout";
 import HamburgerMenu from "../../HamburgerMenu";
@@ -24,12 +24,8 @@ function NavigationBar(props: { auth: IAuth }) {
         {!auth ? <NavigationLink url="/register" name="Register" /> : null}
         {auth ? <NavigationLink url="/rooms" name="Rooms" /> : null}
         {auth ? <NavigationLink url="/profil" name="Profil" /> : null}
-        {auth && auth.administrator ? (
-          <NavigationLink url="/users" name="Users" />
-        ) : null}
-        {auth && auth.administrator ? (
-          <NavigationLink url="/ranges" name="Ranges" />
-        ) : null}
+        {auth && auth.administrator ? <NavigationLink url="/users" name="Users" /> : null}
+        {auth && auth.administrator ? <NavigationLink url="/ranges" name="Ranges" /> : null}
 
         {auth ? <Logout /> : null}
       </ul>

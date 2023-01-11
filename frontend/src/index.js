@@ -13,7 +13,7 @@ const root = createRoot(rootElement);
 root.render(
   <Router>
     <App />
-  </Router>
+  </Router>,
 );
 serviceWorkerRegistration.register();
 
