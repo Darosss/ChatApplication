@@ -8,7 +8,7 @@ interface IErrorResponseData {
   fields: string[];
 }
 
-function useAcciosHook(axiosParams: AxiosRequestConfig) {
+function useAcciosHook(axiosParams: AxiosRequestConfig, refreshAfterRespond = false) {
   const [response, setResponse] = useState<AxiosResponse>();
   const [error, setError] = useState<IErrorResponseData>();
   const [loading, setLoading] = useState(axiosParams.method === "GET" || axiosParams.method === "get");
@@ -17,6 +17,14 @@ function useAcciosHook(axiosParams: AxiosRequestConfig) {
     axios(params)
       .then((res) => {
         setResponse(res);
+
+        // if refreshAfterRespond refresh site
+        if (refreshAfterRespond) {
+          // add small delay
+          setTimeout(() => {
+            window.location.reload();
+          }, 100);
+        }
       })
       .catch((error) => {
         setError(error.response.data);
