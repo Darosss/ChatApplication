@@ -121,7 +121,9 @@ export const getRoomsMessagesById = async (req: Request, res: Response) => {
 
   const roomMsgs = await Message.find({
     whereSent: _id,
-  }).select({ __v: 0, whereSent: 0 });
+  })
+    .populate("sender", { id: 1, username: 1 })
+    .select({ __v: 0, whereSent: 0 });
 
   res.send({
     chatRoom: {
