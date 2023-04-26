@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 
-axios.defaults.baseURL = process.env.REACT_APP_API_URI;
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 
 interface IErrorResponseData {
   message: string;
