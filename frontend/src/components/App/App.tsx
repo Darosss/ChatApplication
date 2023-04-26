@@ -15,7 +15,6 @@ import useAcciosHook from "../../hooks/useAcciosHook";
 
 function App() {
   const [auth, setAuth] = useState<IAuth | null>(null);
-
   const { response: authResponse } = useAcciosHook({
     url: `/session`,
     method: "get",

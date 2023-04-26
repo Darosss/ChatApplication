@@ -11,7 +11,7 @@ import {
 let socket: Socket<ServerToClientEvents, ClientToServerEvents>;
 
 export const initiateSocketConnection = () => {
-  socket = io(process.env.REACT_APP_SOCKET_ENDPOINT as string, {
+  socket = io(import.meta.env.VITE_SOCKET_ENDPOINT, {
     transports: ["websocket"],
     withCredentials: true,
   });
