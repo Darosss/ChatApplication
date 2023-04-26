@@ -1,6 +1,5 @@
 import "./style.css";
 import React, { useState } from "react";
-import { HamburgerIcon } from "react-hamburger-icon";
 
 function HamburgerMenu(props: { menu: any }) {
   const { menu } = props;
@@ -11,14 +10,15 @@ function HamburgerMenu(props: { menu: any }) {
   };
 
   return (
-    <HamburgerIcon
-      className="hamburger m-1 mb-2"
-      open={open}
+    <button
+      className="hamburger m-1 mb-2 bg-dark text-light"
       onClick={() => {
         setOpen(!open);
         toggleNavigation();
       }}
-    />
+    >
+      {open ? "X" : "\u2630"}
+    </button>
   );
 }
 
