@@ -1,7 +1,7 @@
 import "./style.css";
 import React, { useEffect, useState } from "react";
-import ModalCore from "../../Modal";
-import useAcciosHook from "../../../hooks/useAcciosHook";
+import ModalCore from "@components/Modal";
+import useAcciosHook from "@hooks/useAcciosHook";
 
 function EditUserModal(props: { userId: string; username: string }) {
   const { userId, username } = props;

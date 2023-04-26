@@ -3,7 +3,7 @@ import React from "react";
 import EditUserModal from "../EditUserModal";
 import BanUserModal from "../BanUserModal";
 import UnbanUserModal from "../UnbanUserModal";
-import useAcciosHook from "../../../hooks/useAcciosHook";
+import useAcciosHook from "@hooks/useAcciosHook";
 
 function UsersList(props: { users: IUserRes[] }) {
   const { users } = props;

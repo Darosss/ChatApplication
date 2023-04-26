@@ -2,7 +2,7 @@ import "./style.css";
 import React from "react";
 import EditCreateRangeModal from "./EditCreateRangeModal";
 import DeleteRangeModal from "./DeleteRangeModal";
-import useAcciosHook from "../../hooks/useAcciosHook";
+import useAcciosHook from "@hooks/useAcciosHook";
 
 function Ranges() {
   const { response: rangesRes, loading: loadingRanges } = useAcciosHook({

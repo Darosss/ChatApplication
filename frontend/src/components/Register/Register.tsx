@@ -1,6 +1,6 @@
 import "./style.css";
 import React, { useEffect, useState } from "react";
-import useAcciosHook from "../../hooks/useAcciosHook";
+import useAcciosHook from "@hooks/useAcciosHook";
 
 function App() {
   const [username, setUsername] = useState("");

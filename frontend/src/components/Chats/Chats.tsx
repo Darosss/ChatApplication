@@ -1,7 +1,7 @@
 import "./style.css";
 import React, { useState, useRef, useEffect, useReducer } from "react";
 import ChatRoom from "./ChatRoom";
-import useAcciosHook from "../../hooks/useAcciosHook";
+import useAcciosHook from "@hooks/useAcciosHook";
 import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
@@ -16,9 +16,9 @@ import {
   onUserTyping,
   subscribeToChat,
 } from "./Socket";
-import { IMessageSocket } from "../../../../libs/types/socket";
-import { scrollToBottom } from "../../utils/scrollToBottom.util";
-import HamburgerMenu from "../HamburgerMenu";
+import { IMessageSocket } from "@libs/types/socket";
+import { scrollToBottom } from "@utils/scrollToBottom.util";
+import HamburgerMenu from "@components/HamburgerMenu";
 
 type Timer = ReturnType<typeof setTimeout>;
 

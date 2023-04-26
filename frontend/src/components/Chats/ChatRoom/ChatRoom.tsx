@@ -3,7 +3,7 @@ import React, { useEffect, useState, KeyboardEvent } from "react";
 
 import { joinRoom, sendMessageSocket, userTypingEmit } from "../Socket";
 
-import { IMessageSocket, IRoomOnlineUsers } from "../../../../../libs/types/socket"; //Types from socket - change later to globals? Dunno
+import { IMessageSocket, IRoomOnlineUsers } from "@libs/types/socket";
 import ChatMessages from "../ChatMessages";
 import ChatOnlineUsers from "../ChatOnlineUsers";
 import { Button, Tab, Table } from "react-bootstrap";

@@ -1,6 +1,6 @@
 import React from "react";
 import "./style.css";
-import useAcciosHook from "../../hooks/useAcciosHook";
+import useAcciosHook from "@hooks/useAcciosHook";
 
 function Logout() {
   const { sendData: logout } = useAcciosHook(

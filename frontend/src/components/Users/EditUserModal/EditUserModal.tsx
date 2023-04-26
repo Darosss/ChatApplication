@@ -1,8 +1,8 @@
 import "./style.css";
 import React, { useEffect, useState } from "react";
-import ModalCore from "../../Modal";
-import EditCreateRoomModal from "../../Rooms/EditCreateRoomModal";
-import useAcciosHook from "../../../hooks/useAcciosHook";
+import ModalCore from "@components/Modal";
+import EditCreateRoomModal from "@components/Rooms/EditCreateRoomModal";
+import useAcciosHook from "@hooks/useAcciosHook";
 
 function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRangeRes[] }) {
   const { user, ranges, users } = props;

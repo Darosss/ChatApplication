@@ -1,7 +1,7 @@
 import "./style.css";
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-import useAcciosHook from "../../hooks/useAcciosHook";
+import useAcciosHook from "@hooks/useAcciosHook";
 
 function Login() {
   const [username, setUsername] = useState("");

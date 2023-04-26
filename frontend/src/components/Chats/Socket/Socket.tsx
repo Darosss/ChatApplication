@@ -6,7 +6,7 @@ import {
   IRoomOnlineUsers,
   IUserTyping,
   ServerToClientEvents,
-} from "../../../../../libs/types/socket";
+} from "@libs/types/socket";
 
 let socket: Socket<ServerToClientEvents, ClientToServerEvents>;
 

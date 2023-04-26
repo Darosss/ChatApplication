@@ -2,7 +2,7 @@ import "./style.css";
 import React from "react";
 
 import UsersList from "./UsersList";
-import useAcciosHook from "../../hooks/useAcciosHook";
+import useAcciosHook from "@hooks/useAcciosHook";
 
 function Users() {
   const { response: usersRes, loading: loadingUsers } = useAcciosHook({

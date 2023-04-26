@@ -11,7 +11,7 @@ import Profil from "../Profil";
 import Rooms from "../Rooms";
 import Users from "../Users";
 import Ranges from "../Ranges";
-import useAcciosHook from "../../hooks/useAcciosHook";
+import useAcciosHook from "@hooks/useAcciosHook";
 
 function App() {
   const [auth, setAuth] = useState<IAuth | null>(null);

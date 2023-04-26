@@ -1,7 +1,7 @@
 import "./style.css";
 import React from "react";
 import UserRoomsList from "./UserRoomsList";
-import useAcciosHook from "../../hooks/useAcciosHook";
+import useAcciosHook from "@hooks/useAcciosHook";
 
 function Rooms() {
   const { response: roomsRes, loading: loadingRooms } = useAcciosHook({

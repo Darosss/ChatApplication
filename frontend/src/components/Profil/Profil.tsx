@@ -1,7 +1,7 @@
 import "./style.css";
 import React, { useEffect, useState } from "react";
 import ProfilDetails from "./ProfilDetails";
-import useAcciosHook from "../../hooks/useAcciosHook";
+import useAcciosHook from "@hooks/useAcciosHook";
 
 function Profile() {
   const [userDetails, setUserDetails] = useState<IUserRes>();

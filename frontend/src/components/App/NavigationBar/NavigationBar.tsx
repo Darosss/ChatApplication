@@ -1,8 +1,8 @@
 import "./style.css";
 import React, { useRef } from "react";
 import NavigationLink from "./NavigationLink";
-import Logout from "../../Logout";
-import HamburgerMenu from "../../HamburgerMenu";
+import Logout from "@components/Logout";
+import HamburgerMenu from "@components/HamburgerMenu";
 import { Link } from "react-router-dom";
 
 function NavigationBar(props: { auth: IAuth }) {
