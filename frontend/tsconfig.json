@@ -16,7 +16,15 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "baseUrl": ".",
+    "paths": {
+      "@*": ["src/*"],
+      "@libs/*": ["../libs/*"],
+      "@components/*": ["src/components/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@utils/*": ["src/utils/*"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"],
