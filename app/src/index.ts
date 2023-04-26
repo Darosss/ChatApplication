@@ -1,9 +1,14 @@
 import "module-alias/register";
+import * as dotenv from "dotenv";
+import path from "path";
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
+
 import app from "./app";
 import http from "http";
 import mongoose, { ConnectOptions } from "mongoose";
 import { Server } from "socket.io";
 import socket from "./socket";
+
 import validateEnv from "@/utils/validateEnv";
 
 validateEnv();
