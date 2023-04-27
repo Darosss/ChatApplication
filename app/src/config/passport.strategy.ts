@@ -5,6 +5,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy } from "passport-jwt";
 import { Error } from "mongoose";
 import { IUser } from "@types";
+import { jwtSecretKey } from "./envVariables";
 
 const localStrategy = new LocalStrategy(function (username, password, done) {
   User.findOne({ username: username }, function (err: Error, user: IUser) {
@@ -23,7 +24,7 @@ const localStrategy = new LocalStrategy(function (username, password, done) {
 const jwtStrategy = new JwtStrategy(
   {
     jwtFromRequest: (req) => req.session?.jwt,
-    secretOrKey: process.env.JWT_SECRET_KEY,
+    secretOrKey: jwtSecretKey,
   },
   async (payload, done) => {
     const user = await User.findOne(

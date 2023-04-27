@@ -1,6 +1,7 @@
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
+import { jwtSecretKey } from "@/config/envVariables";
 
 export default function (req: Request, res: Response, next: NextFunction) {
   passport.authenticate("local", (err, user) => {
@@ -14,20 +15,15 @@ export default function (req: Request, res: Response, next: NextFunction) {
 
     req.logIn(user, (error) => {
       if (error) throw error;
-      if (!process.env.JWT_SECRET_KEY) {
-        throw new Error("JWT_KEY must be defined");
-      }
 
       if (user) {
         const userReturnObject = {
           username: user.username,
         };
         req.session = {};
-        req.session.jwt = jwt.sign(
-          userReturnObject,
-          process.env.JWT_SECRET_KEY,
-          { expiresIn: 86400 }
-        );
+        req.session.jwt = jwt.sign(userReturnObject, jwtSecretKey, {
+          expiresIn: 86400,
+        });
         next();
       }
     });

@@ -28,6 +28,7 @@ import logoutRouter from "./routes/logout.router";
 import roomsRouter from "./routes/rooms.router";
 import rangesRouter from "./routes/ranges.router";
 import usersRouter from "./routes/users.router";
+import { cookieSecret, frontendUrl, nodeEnv } from "./config/envVariables";
 
 //Security configs
 app.use(helmet());
@@ -37,7 +38,7 @@ app.set("trust proxy", 1);
 app.set("json spaces", 2);
 
 const corsOptions = {
-  origin: process.env.FRONTEND_URL,
+  origin: frontendUrl,
   credentials: true,
   optionSuccessStatus: 200,
   allowedHeaders:
@@ -50,9 +51,9 @@ app.use(cors(corsOptions));
 app.use(
   session({
     name: "session",
-    secret: process.env.COOKIE_SECRET,
-    secure: process.env.NODE_ENV === "development" ? false : true,
-    sameSite: process.env.NODE_ENV !== "development" ? "none" : "lax",
+    secret: cookieSecret,
+    secure: nodeEnv === "development" ? false : true,
+    sameSite: nodeEnv !== "development" ? "none" : "lax",
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
   })
 );
