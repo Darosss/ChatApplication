@@ -1,8 +1,7 @@
 import dotenv from "dotenv";
-import path from "path";
+import { envFilePath } from "./config/globalPaths";
 
-dotenv.config({ path: path.resolve(__dirname, ".env") });
-
+dotenv.config({ path: envFilePath });
 import express from "express";
 
 const app = express();
