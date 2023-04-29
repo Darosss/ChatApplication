@@ -21,7 +21,7 @@ class ChatRoomsController {
 
     try {
       const usersChatRooms = await this.chatRoomService.getRoomsList(
-        { id: userId },
+        { createdBy: userId },
         { __v: 0 }
       );
       return res.status(200).send({ usersRooms: usersChatRooms });
