@@ -113,7 +113,7 @@ class UserService {
     if (!user) return false;
 
     try {
-      if (await user.comparePassword2(oldPassword)) {
+      if (await user.comparePassword(oldPassword)) {
         user.password = newPassword;
         await user.save();
 
