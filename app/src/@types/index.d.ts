@@ -3,7 +3,7 @@ import { Document, Types } from "mongoose";
 
 interface RequestUserAuth extends Request {
   user?: {
-    id?: string;
+    id?: string | null;
   };
 }
 
@@ -17,13 +17,14 @@ interface IMongooseError extends Error {
   index: number;
   path?: string;
 }
+
 interface IChatRoom {
-  _id: Types.ObjectId;
+  _id: string;
   name: string;
-  availableRanges: Types.ObjectId[];
-  allowedUsers: Types.ObjectId[];
-  bannedUsers: Types.ObjectId[];
-  createdBy: Types.ObjectId;
+  availableRanges: string[] | IRange;
+  allowedUsers: string[] | UserWithoutPassword[];
+  bannedUsers: string[] | UserWithoutPassword[];
+  createdBy: string | UserWithoutPassword;
 }
 
 type IChatRoomDocument = IChatRoom & Document;
@@ -31,9 +32,9 @@ type IChatRoomDocument = IChatRoom & Document;
 interface IMessage {
   _id: string;
   message: string;
-  sender: Types.ObjectId;
+  sender: string | IUser;
   sentTime: Date;
-  whereSent: Types.ObjectId;
+  whereSent: string | IChatRoom;
 }
 
 type IMessageDocument = IMessage & Document;
@@ -42,13 +43,12 @@ interface IRange {
   _id: string;
   name: string;
   createdAt: Date;
-  createdBy: Types.ObjectId;
+  createdBy: string | IUser;
 }
 
 type IRangeDocument = IRange & Document;
 
 interface IUser {
-  comparePassword(password: string, cb: Callback): boolean;
   _id: string;
   username: string;
   password: string;
@@ -56,7 +56,7 @@ interface IUser {
   surname: string;
   createdAt: Date;
   birthday: Date;
-  ranges: Types.ObjectId[];
+  ranges: string[] | IRange[];
   administrator: boolean;
   moderator: boolean;
   country: string;
@@ -70,24 +70,30 @@ interface IUser {
   banReason: string;
 }
 
-type IUserDocument = IUser & Document;
+interface UserMethods {
+  comparePassword(password: string): Promise<boolean>;
+}
+
+type UserWithoutPassword = Omit<IUser, "password">;
+
+type IUserDocument = IUser & UserMethods & Document;
 
 interface IUserRoomsFilter {
   $or: [
     { createdBy: string },
     //if room created by user
     {
-      availableRanges: { $in: Types.ObjectId[] };
+      availableRanges: { $in: string[] | IRange[] };
       //user has range that chatrom require
     },
     {
-      allowedUsers: { $eq: string[] };
+      allowedUsers: { $eq: string[] | IUser[] };
       //user is allowed in chatroom
     }
   ];
   $and: [
     {
-      bannedUsers: { $ne: string[] };
+      bannedUsers: { $ne: string[] | IUser[] };
       //user is not banned in chatroom
     }
   ];
