@@ -1,9 +1,7 @@
-import { IUser, IUserDocument } from "@types";
+import { IUser, IUserDocument, UserWithoutPassword } from "@types";
 import { User } from "@/models/user";
 import { handleAppError } from "@/utils/ErrorHandler";
 import { FilterQuery, Model, PopulateOptions, ProjectionType } from "mongoose";
-
-type UserWithoutPassword = Omit<IUser, "password">;
 
 type UserCreateData = Omit<
   IUser,
