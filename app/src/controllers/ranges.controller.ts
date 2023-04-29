@@ -1,78 +1,83 @@
 import { NextFunction, Request, Response } from "express";
-import { IMongooseError, RequestUserAuth } from "@types";
-import { Range } from "@/models/range";
-import errorHandlerMiddleware from "@/middlewares/errorHandler.middleware";
+import { RequestUserAuth } from "@types";
+import { rangeService, RangeService } from "@/services/rangeService";
+import { AppError } from "@/utils/ErrorHandler";
 
-export const getListOfRanges = async (req: Request, res: Response) => {
-  let ranges;
-  try {
-    ranges = await Range.find({})
-      .select({ __v: 0 })
-      .populate("createdBy", "id username");
-    res.send({ ranges: ranges });
-  } catch (error) {
-    res.send({ message: "Couldn't GET ranges" });
-  }
-};
+class RangesController {
+  constructor(private readonly rangeService: RangeService) {}
 
-export const createNewRange = async (
-  req: RequestUserAuth,
-  res: Response,
-  next: NextFunction
-) => {
-  const creatorId = req.user?.id;
-  const name = req.body.name;
-  const newRange = new Range({
-    name: name,
-    createdBy: creatorId,
-  });
-  try {
-    await newRange.save();
+  getListOfRanges = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const ranges = await this.rangeService.getRangesList(
+        {},
+        { __v: 0 },
+        { path: "createdBy", select: "id username" }
+      );
 
-    res.status(201).send({ message: "Created new range" });
-  } catch (error) {
-    return next(
-      errorHandlerMiddleware(error as IMongooseError, req, res, next)
-    );
-  }
-};
-
-export const getRangeById = async (req: Request, res: Response) => {
-  const { _id } = req.params;
-
-  const rangeEdit = await Range.findById(_id, { __v: 0 });
-  res.status(200).send({ range: rangeEdit });
-};
-
-export const editRangeById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { _id } = req.params;
-
-  const update = {
-    name: req.body.name,
+      return res.status(200).send({ ranges: ranges });
+    } catch (err) {
+      return next(err);
+    }
   };
-  try {
-    await Range.findByIdAndUpdate(_id, update);
 
-    res.send({ message: "Successfully updated range" });
-  } catch (error) {
-    return next(
-      errorHandlerMiddleware(error as IMongooseError, req, res, next)
-    );
-  }
-};
+  createNewRange = async (
+    req: RequestUserAuth,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const creatorId = req.user?.id;
 
-export const deleteRangeById = async (req: Request, res: Response) => {
-  const { _id } = req.params;
-  const rangeToDelete = await Range.findById(_id);
+    try {
+      if (!creatorId) throw new AppError(500, "Something went wrong");
 
-  try {
-    rangeToDelete?.remove();
-    res.send({ message: "Successfully deleted range" });
-  } catch {
-    res.send({ message: "Can't delete range" });
-  }
-};
+      await this.rangeService.createNewRange({
+        name: req.body.name,
+        createdBy: creatorId,
+      });
+
+      return res.status(201).send({ message: "Created new range" });
+    } catch (err) {
+      return next(err);
+    }
+  };
+
+  getRangeById = async (req: Request, res: Response, next: NextFunction) => {
+    const { _id } = req.params;
+    try {
+      const range = await this.rangeService.getRangeById(_id, { __v: 0 });
+
+      return res.status(200).send({ range: range });
+    } catch (err) {
+      return next(err);
+    }
+  };
+
+  editRangeById = async (req: Request, res: Response, next: NextFunction) => {
+    const { _id } = req.params;
+
+    try {
+      const editedRange = await this.rangeService.upadeRangeById(_id, {
+        name: req.body.name,
+      });
+
+      return res
+        .status(200)
+        .send({ message: "Successfully edited range", range: editedRange });
+    } catch (err) {
+      return next(err);
+    }
+  };
+
+  deleteRangeById = async (req: Request, res: Response, next: NextFunction) => {
+    const { _id } = req.params;
+
+    try {
+      this.rangeService.removeRangeById(_id);
+      return res.status(200).send({ message: "Successfully deleted range" });
+    } catch (err) {
+      return next(err);
+    }
+  };
+}
+
+export const rangesController = new RangesController(rangeService);
