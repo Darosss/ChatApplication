@@ -4,14 +4,14 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy } from "passport-jwt";
 import { Error } from "mongoose";
-import { IUser, IUserDocument } from "@types";
+import { UserModel, UserDocument } from "@types";
 import { jwtSecretKey } from "./envVariables";
 
 const localStrategy = new LocalStrategy(function (username, password, done) {
   try {
     User.findOne(
       { username: username },
-      async function (err: Error, user: IUserDocument) {
+      async function (err: Error, user: UserDocument) {
         if (err) return done(err);
         if (!user) return done(null, false);
 
@@ -51,7 +51,7 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (id, done) {
-  User.findById(id, function (err: Error, user: IUser) {
+  User.findById(id, function (err: Error, user: UserModel) {
     return done(err, user);
   });
 });

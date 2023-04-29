@@ -1,16 +1,16 @@
-import { IRange, IRangeDocument } from "@types";
+import { RangeModel, RangeDocument } from "@types";
 import { Range } from "@/models/range";
 import { handleAppError } from "@/utils/ErrorHandler";
 import { FilterQuery, Model, PopulateOptions, ProjectionType } from "mongoose";
 
-type RangeCreateData = Omit<IRange, "_id" | "createdAt">;
+type RangeCreateData = Omit<RangeModel, "_id" | "createdAt">;
 class RangeService {
-  constructor(private readonly rangeModel: Model<IRangeDocument>) {}
+  constructor(private readonly rangeModel: Model<RangeDocument>) {}
   getRangesList = async (
-    filter: FilterQuery<IRangeDocument> = {},
-    projection: ProjectionType<IRangeDocument> = {},
+    filter: FilterQuery<RangeDocument> = {},
+    projection: ProjectionType<RangeDocument> = {},
     populate?: PopulateOptions
-  ): Promise<IRange[]> => {
+  ): Promise<RangeModel[]> => {
     try {
       const ranges = await this.rangeModel
         .find(filter, projection)
@@ -26,9 +26,9 @@ class RangeService {
 
   getRangeById = async (
     id: string,
-    projection: ProjectionType<IRangeDocument> = {},
+    projection: ProjectionType<RangeDocument> = {},
     populate?: PopulateOptions
-  ): Promise<IRange | null> => {
+  ): Promise<RangeModel | null> => {
     try {
       const range = await this.rangeModel.findById(id, projection);
       if (populate) await range?.populate(populate);
@@ -43,8 +43,8 @@ class RangeService {
 
   upadeRangeById = async (
     id: string,
-    updateData: Partial<IRange>
-  ): Promise<IRange | null> => {
+    updateData: Partial<RangeModel>
+  ): Promise<RangeModel | null> => {
     try {
       const range = await this.rangeModel.findByIdAndUpdate(id, updateData, {
         runValidators: true,

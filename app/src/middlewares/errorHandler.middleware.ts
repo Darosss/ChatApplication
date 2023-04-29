@@ -1,8 +1,8 @@
-import { IMongooseError, RequestUserAuth } from "@types";
+import { MongooseError, RequestUserAuth } from "@types";
 import { NextFunction, Response } from "express";
 
 export default function errorHandlerMiddleware(
-  error: IMongooseError,
+  error: MongooseError,
   req: RequestUserAuth,
   res: Response,
   // As documentation says - 4 arguments are needed for error handler to work
@@ -29,7 +29,7 @@ export default function errorHandlerMiddleware(
   }
 }
 
-function duplicateErrorHandler(error: IMongooseError, res: Response) {
+function duplicateErrorHandler(error: MongooseError, res: Response) {
   const fields = Object.keys(error.keyValue);
   res.status(409).send({
     message: `An entered ${fields} already exist`,
@@ -37,13 +37,13 @@ function duplicateErrorHandler(error: IMongooseError, res: Response) {
   });
 }
 
-function validationErrorHandler(error: IMongooseError, res: Response) {
+function validationErrorHandler(error: MongooseError, res: Response) {
   const errors = Object.values(error.errors).map((err) => err.message);
   const fields = Object.values(error.errors).map((err) => err.path);
 
   res.status(400).send({ message: `${errors?.join(", ")}`, fields: fields });
 }
 
-function castErrorHandler(error: IMongooseError, res: Response) {
+function castErrorHandler(error: MongooseError, res: Response) {
   res.status(400).send({ message: `${error.message}`, fields: error.path });
 }

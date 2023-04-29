@@ -1,19 +1,19 @@
-import { IMessage, IMessageDocument } from "@types";
+import { MessageModel, MessageDocument } from "@types";
 import { Message } from "@/models/message";
 import { handleAppError } from "@/utils/ErrorHandler";
 import { FilterQuery, Model, PopulateOptions, ProjectionType } from "mongoose";
 
-type MessageCreateData = Omit<IMessage, "_id">;
+type MessageCreateData = Omit<MessageModel, "_id">;
 
 class MessageService {
-  constructor(private readonly messageModel: Model<IMessageDocument>) {
+  constructor(private readonly messageModel: Model<MessageDocument>) {
     this.messageModel = messageModel;
   }
   getMessagesList = async (
-    filter: FilterQuery<IMessageDocument> = {},
-    projection: ProjectionType<IMessageDocument> = {},
+    filter: FilterQuery<MessageDocument> = {},
+    projection: ProjectionType<MessageDocument> = {},
     populate?: PopulateOptions
-  ): Promise<IMessage[]> => {
+  ): Promise<MessageModel[]> => {
     try {
       const messages = await this.messageModel
         .find(filter, projection)
@@ -29,9 +29,9 @@ class MessageService {
 
   getMessageById = async (
     id: string,
-    projection: ProjectionType<IMessageDocument> = {},
+    projection: ProjectionType<MessageDocument> = {},
     populate?: PopulateOptions
-  ): Promise<IMessage | null> => {
+  ): Promise<MessageModel | null> => {
     try {
       const message = await this.messageModel.findById(id, projection);
       if (populate) await message?.populate(populate);
@@ -46,8 +46,8 @@ class MessageService {
 
   updateMessageById = async (
     id: string,
-    updateData: Partial<IMessageDocument>
-  ): Promise<IMessage | null> => {
+    updateData: Partial<MessageDocument>
+  ): Promise<MessageModel | null> => {
     try {
       const message = await this.messageModel.findByIdAndUpdate(id, updateData);
 

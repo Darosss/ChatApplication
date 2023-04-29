@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { Document, Types } from "mongoose";
+import { Document } from "mongoose";
 
 interface RequestUserAuth extends Request {
   user?: {
@@ -7,7 +7,7 @@ interface RequestUserAuth extends Request {
   };
 }
 
-interface IMongooseError extends Error {
+interface MongooseError extends Error {
   name: string;
   message: string;
   stack?: string;
@@ -18,37 +18,37 @@ interface IMongooseError extends Error {
   path?: string;
 }
 
-interface IChatRoom {
+interface ChatRoomModel {
   _id: string;
   name: string;
-  availableRanges: string[] | IRange;
+  availableRanges: string[] | RangeModel;
   allowedUsers: string[] | UserWithoutPassword[];
   bannedUsers: string[] | UserWithoutPassword[];
   createdBy: string | UserWithoutPassword;
 }
 
-type IChatRoomDocument = IChatRoom & Document;
+type ChatRoomDocument = ChatRoomModel & Document;
 
-interface IMessage {
+interface MessageModel {
   _id: string;
   message: string;
-  sender: string | IUser;
+  sender: string | UserModel;
   sentTime: Date;
-  whereSent: string | IChatRoom;
+  whereSent: string | ChatRoomModel;
 }
 
-type IMessageDocument = IMessage & Document;
+type MessageDocument = MessageModel & Document;
 
-interface IRange {
+interface RangeModel {
   _id: string;
   name: string;
   createdAt: Date;
-  createdBy: string | IUser;
+  createdBy: string | UserModel;
 }
 
-type IRangeDocument = IRange & Document;
+type RangeDocument = RangeModel & Document;
 
-interface IUser {
+interface UserModel {
   _id: string;
   username: string;
   password: string;
@@ -56,7 +56,7 @@ interface IUser {
   surname: string;
   createdAt: Date;
   birthday: Date;
-  ranges: string[] | IRange[];
+  ranges: string[] | RangeModel[];
   administrator: boolean;
   moderator: boolean;
   country: string;
@@ -74,26 +74,26 @@ interface UserMethods {
   comparePassword(password: string): Promise<boolean>;
 }
 
-type UserWithoutPassword = Omit<IUser, "password">;
+type UserWithoutPassword = Omit<UserModel, "password">;
 
-type IUserDocument = IUser & UserMethods & Document;
+type UserDocument = UserModel & UserMethods & Document;
 
-interface IUserRoomsFilter {
+interface UserRoomsFilter {
   $or: [
     { createdBy: string },
     //if room created by user
     {
-      availableRanges: { $in: string[] | IRange[] };
+      availableRanges: { $in: string[] | RangeModel[] };
       //user has range that chatrom require
     },
     {
-      allowedUsers: { $eq: string[] | IUser[] };
+      allowedUsers: { $eq: string[] | UserModel[] };
       //user is allowed in chatroom
     }
   ];
   $and: [
     {
-      bannedUsers: { $ne: string[] | IUser[] };
+      bannedUsers: { $ne: string[] | UserModel[] };
       //user is not banned in chatroom
     }
   ];

@@ -1,10 +1,10 @@
-import { IUser, IUserDocument, UserWithoutPassword } from "@types";
+import { UserModel, UserDocument, UserWithoutPassword } from "@types";
 import { User } from "@/models/user";
 import { handleAppError } from "@/utils/ErrorHandler";
 import { FilterQuery, Model, PopulateOptions, ProjectionType } from "mongoose";
 
 type UserCreateData = Omit<
-  IUser,
+  UserModel,
   | "comparePassword"
   | "comparePassword2"
   | "createdAt"
@@ -20,14 +20,14 @@ type UserCreateData = Omit<
 >;
 
 class UserService {
-  constructor(private readonly userModel: Model<IUserDocument>) {
+  constructor(private readonly userModel: Model<UserDocument>) {
     this.userModel = userModel;
   }
   getUsersList = async (
     filter: FilterQuery<UserWithoutPassword> = {},
-    projection: ProjectionType<IUserDocument> = {},
+    projection: ProjectionType<UserDocument> = {},
     populate?: PopulateOptions
-  ): Promise<IUser[]> => {
+  ): Promise<UserModel[]> => {
     try {
       const users = await this.userModel
         .find(filter, Object.assign(projection, { password: 0 }))
@@ -45,7 +45,7 @@ class UserService {
     id: string,
     projection: ProjectionType<UserWithoutPassword> = {},
     populate?: PopulateOptions
-  ): Promise<IUser | null> => {
+  ): Promise<UserModel | null> => {
     try {
       const user = await this.userModel.findById(
         id,
@@ -64,7 +64,7 @@ class UserService {
   updateUserById = async (
     id: string,
     updateData: Partial<UserWithoutPassword>
-  ): Promise<IUser | null> => {
+  ): Promise<UserModel | null> => {
     try {
       const user = await this.userModel.findByIdAndUpdate(id, updateData, {
         runValidators: true,

@@ -1,15 +1,15 @@
-import { IChatRoom, IChatRoomDocument } from "@types";
+import { ChatRoomModel, ChatRoomDocument } from "@types";
 import { ChatRoom } from "@/models/chatRoom";
 import { handleAppError } from "@/utils/ErrorHandler";
 import { FilterQuery, Model, PopulateOptions, ProjectionType } from "mongoose";
 
-type ChatRoomCreateData = Omit<IChatRoom, "_id">;
+type ChatRoomCreateData = Omit<ChatRoomModel, "_id">;
 class ChatRoomService {
-  constructor(private readonly chatRoomModel: Model<IChatRoomDocument>) {}
+  constructor(private readonly chatRoomModel: Model<ChatRoomDocument>) {}
   getRoomsList = async (
-    filter: FilterQuery<IChatRoomDocument> = {},
-    projection: ProjectionType<IChatRoomDocument> = {}
-  ): Promise<IChatRoom[]> => {
+    filter: FilterQuery<ChatRoomDocument> = {},
+    projection: ProjectionType<ChatRoomDocument> = {}
+  ): Promise<ChatRoomModel[]> => {
     try {
       const chatRooms = await this.chatRoomModel.find(filter, projection);
       return chatRooms;
@@ -22,9 +22,9 @@ class ChatRoomService {
 
   getRoomById = async (
     id: string,
-    projection: ProjectionType<IChatRoomDocument> = {},
+    projection: ProjectionType<ChatRoomDocument> = {},
     populate?: PopulateOptions[]
-  ): Promise<IChatRoom | null> => {
+  ): Promise<ChatRoomModel | null> => {
     try {
       const chatRoom = await this.chatRoomModel.findById(id, projection);
       if (populate) await chatRoom?.populate({ ...populate });
@@ -39,8 +39,8 @@ class ChatRoomService {
 
   upadeRoomById = async (
     id: string,
-    updateData: Partial<IChatRoom>
-  ): Promise<IChatRoom | null> => {
+    updateData: Partial<ChatRoomModel>
+  ): Promise<ChatRoomModel | null> => {
     try {
       const chatRoom = await this.chatRoomModel.findByIdAndUpdate(
         id,
