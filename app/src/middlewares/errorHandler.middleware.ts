@@ -20,8 +20,9 @@ export default function errorHandlerMiddleware(
   } else if (error.name === "CastError") {
     castErrorHandler(error, res);
   } else {
-    if (error?.message) {
-      res.status(400).send({ message: "Passwords do not match!" });
+    if (error.message) {
+      console.log(error);
+      res.status(400).send({ message: error.message });
     } else {
       res.status(500).send({ message: "An unknown error occured!" });
     }
