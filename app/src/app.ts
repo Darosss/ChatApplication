@@ -13,20 +13,10 @@ import helmet from "helmet";
 import hpp from "hpp";
 
 import passport from "@/config/passport.strategy";
-const jwtRequired = passport.authenticate("jwt", { session: false });
 
-//MIDDLEWARES//
-import userCheckBan from "@/middlewares/userCheckBan";
-import isBanned from "@/middlewares/isBanned";
-
-// ROUTES //
-import profilRouter from "./routes/profil.router";
-import authRouter from "./routes/auth.router";
-import roomsRouter from "./routes/rooms.router";
-import rangesRouter from "./routes/ranges.router";
-import usersRouter from "./routes/users.router";
 import { cookieSecret, frontendUrl, nodeEnv } from "./config/envVariables";
 import errorHandlerMiddleware from "./middlewares/errorHandler.middleware";
+import { initRoutes } from "./routes";
 
 //Security configs
 app.use(helmet());
@@ -60,14 +50,10 @@ app.use(express.json()); //For JSON requests
 app.use(express.text()); // this is for plan/text format
 app.use(express.urlencoded({ extended: true }));
 
+initRoutes(app);
+
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use("/api/v1", userCheckBan, authRouter);
-app.use("/api/v1/profil", jwtRequired, userCheckBan, profilRouter);
-app.use("/api/v1/rooms", jwtRequired, isBanned, roomsRouter);
-app.use("/api/v1/ranges", jwtRequired, isBanned, rangesRouter);
-app.use("/api/v1/users", jwtRequired, isBanned, usersRouter);
 
 app.use(errorHandlerMiddleware);
 export default app;
