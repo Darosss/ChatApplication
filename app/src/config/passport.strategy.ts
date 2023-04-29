@@ -4,21 +4,27 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy } from "passport-jwt";
 import { Error } from "mongoose";
-import { IUser } from "@types";
+import { IUser, IUserDocument } from "@types";
 import { jwtSecretKey } from "./envVariables";
 
 const localStrategy = new LocalStrategy(function (username, password, done) {
-  User.findOne({ username: username }, function (err: Error, user: IUser) {
-    if (err) return done(err);
-    if (!user) return done(null, false);
+  try {
+    User.findOne(
+      { username: username },
+      async function (err: Error, user: IUserDocument) {
+        if (err) return done(err);
+        if (!user) return done(null, false);
 
-    user.comparePassword(password, (err: Error, isMatch: boolean) => {
-      if (err) throw err;
-      if (!isMatch) return done(null, false);
-      const userDetails = { id: user._id, username: user.username };
-      return done(null, userDetails);
-    });
-  });
+        const samePassword = await user.comparePassword(password);
+        if (!samePassword) return done(null, false);
+        const userDetails = { id: user._id, username: user.username };
+        return done(null, userDetails);
+      }
+    );
+  } catch (err) {
+    console.error(`Error occured while tyring to authenticate user`, err);
+    throw err;
+  }
 });
 
 const jwtStrategy = new JwtStrategy(
