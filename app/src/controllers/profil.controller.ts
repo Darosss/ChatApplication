@@ -1,75 +1,67 @@
 import { NextFunction, Response } from "express";
-import { User } from "@/models/user";
-import { IMongooseError, IUserDocument, RequestUserAuth } from "@types";
-import errorHandlerMiddleware from "@/middlewares/errorHandler.middleware";
-import bcrypt from "bcrypt";
-import { Error } from "mongoose";
+import { RequestUserAuth } from "@types";
 
-export const getUserProfile = async (req: RequestUserAuth, res: Response) => {
-  const userId = req.user?.id;
+import { UserService, userService } from "@/services/userService";
+import { AppError } from "@/utils/ErrorHandler";
 
-  const userDB = await User.findById(userId, {
-    password: 0,
-    __v: 0,
-  }).populate("ranges", { __v: 0 });
+class ProfilController {
+  constructor(private readonly userService: UserService) {}
 
-  return res.send({ userDetails: userDB });
-};
+  getUserProfile = async (
+    req: RequestUserAuth,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const userId = req.user?.id || "";
 
-export const editUserProfile = async (
-  req: RequestUserAuth,
-  res: Response,
-  next: NextFunction
-) => {
-  const userId = req.user?.id;
-
-  const {
-    oldPassword,
-    newPassword,
-    firstname,
-    surname,
-    birthday,
-    country,
-    gender,
-    nickColor,
-    email,
-    phoneNumber,
-  } = req.body;
-
-  User.findById(userId, async function (err: Error, user: IUserDocument) {
-    user.firstname = firstname;
-    user.surname = surname;
-    user.birthday = birthday;
-    user.country = country;
-    user.gender = gender;
-    user.nickColor = nickColor;
-    user.email = email;
-    user.phoneNumber = phoneNumber;
-
-    //password validation, for now it's here
-    //TODO move this to other file / function
-    if (await bcrypt.compare(oldPassword, user.password)) {
-      user.password = newPassword;
-    } else if (oldPassword || newPassword) {
-      return next(
-        errorHandlerMiddleware(
-          new Error("Password do not match") as IMongooseError,
-          req,
-          res,
-          next
-        )
+    try {
+      const loggedUser = await this.userService.getUserById(
+        userId,
+        { __v: 0 },
+        { path: "ranges", select: "__v:0" }
       );
-    }
 
-    user
-      .save()
-      .then(() => {
-        res.status(201).send({ message: "Succesfully edited profile" });
-      })
-      .catch((error) => {
-        return next(
-          errorHandlerMiddleware(error as IMongooseError, req, res, next)
-        );
+      return res.status(200).send({ userDetails: loggedUser });
+    } catch (err) {
+      return next(err);
+    }
+  };
+
+  editUserProfile = async (
+    req: RequestUserAuth,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const userId = req.user?.id;
+
+    if (!userId) throw new AppError(500, "Something went wrong");
+
+    try {
+      await this.userService.updateUserById(userId, {
+        firstname: req.body.firstname,
+        surname: req.body.surname,
+        birthday: req.body.birthday,
+        country: req.body.country,
+        gender: req.body.gender,
+        nickColor: req.body.nickColor,
+        email: req.body.email,
+        phoneNumber: req.body.phoneNumber,
       });
-  });
-};
+      const changedPassword = await this.userService.updateUserPassword(
+        userId,
+        req.body.oldPassword,
+        req.body.newPassword
+      );
+
+      if (changedPassword) {
+        return res
+          .status(200)
+          .send({ message: "Profile updated successfully" });
+      }
+    } catch (err) {
+      return next(err);
+    }
+  };
+}
+
+export const profilController = new ProfilController(userService);
