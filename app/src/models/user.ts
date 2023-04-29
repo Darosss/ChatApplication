@@ -90,6 +90,7 @@ userSchema.plugin(passportLocalMongoose);
 
 userSchema.pre<IUserDocument>("save", function (next) {
   if (!this.isModified("password")) return next();
+
   bcrypt.hash(this.password as string, 10, (err, hash) => {
     if (err) return next(err);
     this.password = hash;
@@ -97,14 +98,11 @@ userSchema.pre<IUserDocument>("save", function (next) {
   });
 });
 
-userSchema.methods.comparePassword = function (
-  candidatePassword: string,
-  cb: Callback
-) {
-  bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
-    if (err) return cb(err, "Not same password");
-    cb(null, isMatch);
-  });
+userSchema.methods.comparePassword = async function (
+  password: string
+): Promise<boolean> {
+  const result = await bcrypt.compare(password, this.password);
+  return result;
 };
 
 export const User: Model<IUserDocument> = model("User", userSchema);
