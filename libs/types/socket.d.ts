@@ -37,5 +37,5 @@ interface IMessageSocket {
   userId: string;
   message: string;
   sender?: string;
-  date?: Date;
+  date: Date;
 }
