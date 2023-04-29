@@ -65,6 +65,7 @@
     "@/middlewares": "dist/middlewares",
     "@/utils": "dist/utils",
     "@/models": "dist/models",
+    "@/services": "dist/services",
     "@/config": "dist/config",
     "@/libs.global": "../libs"
   }
