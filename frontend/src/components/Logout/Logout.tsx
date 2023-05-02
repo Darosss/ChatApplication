@@ -12,9 +12,12 @@ function Logout() {
     true,
   );
 
+  const handleOnClickLogout = () => {
+    logout();
+  };
   return (
     <li>
-      <button onClick={logout} className="nav-li-button btn btn-danger w-100">
+      <button onClick={handleOnClickLogout} className="nav-li-button btn btn-danger w-100">
         Logout
       </button>
     </li>
