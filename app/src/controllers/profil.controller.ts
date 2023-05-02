@@ -47,17 +47,19 @@ class ProfilController {
         email: req.body.email,
         phoneNumber: req.body.phoneNumber,
       });
-      const changedPassword = await this.userService.updateUserPassword(
-        userId,
-        req.body.oldPassword,
-        req.body.newPassword
-      );
 
-      if (changedPassword) {
-        return res
-          .status(200)
-          .send({ message: "Profile updated successfully" });
+      if (req.body.oldPassword || req.body.newPassword) {
+        const passwordUpdated = await this.userService.updateUserPassword(
+          userId,
+          req.body.oldPassword,
+          req.body.newPassword
+        );
+
+        if (!passwordUpdated) {
+          throw new AppError(400, "Passwords do not match");
+        }
       }
+      return res.status(200).send({ message: "Profile updated successfully" });
     } catch (err) {
       return next(err);
     }
