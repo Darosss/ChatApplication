@@ -44,4 +44,5 @@ const socketIO = new Server(httpServer, {
 });
 socket(socketIO);
 
-export default app;
+export default httpServer;
+export { app, socketIO };
