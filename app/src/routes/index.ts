@@ -6,8 +6,7 @@ import rangesRouter from "./ranges.router";
 import usersRouter from "./users.router";
 import userCheckBan from "@/middlewares/userCheckBan";
 import isBanned from "@/middlewares/isBanned";
-import passport from "passport";
-const jwtRequired = passport.authenticate("jwt", { session: false });
+import { jwtRequired } from "@/middlewares/jwtRequired";
 
 export const initRoutes = (app: Express) => {
   app.use("/api/v1", userCheckBan, authRouter);
