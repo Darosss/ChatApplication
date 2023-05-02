@@ -34,8 +34,13 @@ function useAcciosHook(axiosParams: AxiosRequestConfig, refreshAfterRespond = fa
       });
   }
 
-  function sendData() {
-    fetchData(axiosParams);
+  function sendData<T = unknown>(dataToSend?: T) {
+    let params = axiosParams;
+    if (dataToSend) {
+      params = { ...params, data: dataToSend };
+    }
+
+    fetchData(params);
   }
 
   useEffect(() => {
