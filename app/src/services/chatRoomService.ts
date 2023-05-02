@@ -3,7 +3,7 @@ import { ChatRoom } from "@/models/chatRoom";
 import { handleAppError } from "@/utils/ErrorHandler";
 import { FilterQuery, Model, PopulateOptions, ProjectionType } from "mongoose";
 
-type ChatRoomCreateData = Omit<ChatRoomModel, "_id">;
+export type ChatRoomCreateData = Omit<ChatRoomModel, "_id">;
 class ChatRoomService {
   constructor(private readonly chatRoomModel: Model<ChatRoomDocument>) {}
   getRoomsList = async (
