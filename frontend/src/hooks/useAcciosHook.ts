@@ -27,7 +27,7 @@ function useAcciosHook(axiosParams: AxiosRequestConfig, refreshAfterRespond = fa
         }
       })
       .catch((error) => {
-        setError(error.response.data);
+        setError(error.response?.data || { message: "Something went wrong" });
       })
       .finally(() => {
         setLoading(false);
