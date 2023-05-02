@@ -41,7 +41,7 @@ class ChatRoomsController {
     try {
       console.log(req.body);
       const room = await this.chatRoomService.createNewRoom({
-        name: req.body.roomName,
+        name: req.body.name,
         availableRanges: req.body.availableRanges,
         allowedUsers: req.body.allowedUsers,
         bannedUsers: req.body.bannedUsers,
@@ -100,7 +100,7 @@ class ChatRoomsController {
 
     try {
       await this.chatRoomService.removeRoomById(_id);
-      res.status(201).send({ message: "Succesfully removed room" });
+      res.status(200).send({ message: "Succesfully removed room" });
     } catch (err) {
       return next(err);
     }
