@@ -1,6 +1,7 @@
 import "./style.css";
 import React, { useEffect, useState } from "react";
 import useAcciosHook from "@hooks/useAcciosHook";
+import { Link } from "react-router-dom";
 
 function App() {
   const [username, setUsername] = useState("");
@@ -37,7 +38,6 @@ function App() {
       phone: phone,
     },
   });
-  console.log("sd", registerError);
   useEffect(() => {
     if (registerResponse) setPostInfo(registerResponse?.data.message);
   }, [registerResponse]);
@@ -83,6 +83,7 @@ function App() {
                 type="password"
                 className="form-control"
                 placeholder="Password"
+                autoComplete="on"
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
@@ -163,6 +164,9 @@ function App() {
             <button type="submit" className="btn btn-primary w-100">
               Register
             </button>
+            <div>
+              Already have an account? <Link to="/login">login</Link> instead
+            </div>
             <div className="row mt-2"></div>
             <div className="form-group post-info">
               <label> {postInfo}</label>
