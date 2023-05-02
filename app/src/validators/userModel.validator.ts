@@ -6,10 +6,6 @@ export function usernameValidation(name: string) {
   const maxLength = 24,
     minLength = 3;
 
-  if (!validator.isAlphanumeric(name)) {
-    errorMessages.push("Username name may only have letters and numbers");
-  }
-
   if (!validator.isLength(name, { min: minLength, max: maxLength }))
     errorMessages.push(
       `Username name must be between ${minLength} and ${maxLength} length`
@@ -51,7 +47,6 @@ export function phoneNumberValidation(phone: string) {
 
 export function emailValidation(email: string) {
   const errorMessages: string[] = [];
-
   if (!validator.isEmail(email)) {
     errorMessages.push(`Email is not a correct e-mail`);
   }
