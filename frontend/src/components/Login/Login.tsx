@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import useAcciosHook from "@hooks/useAcciosHook";
 import { Link } from "react-router-dom";
+import PostInfo from "@components/postInfo";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -69,11 +70,9 @@ function Login() {
               No account? <Link to="/register">register</Link>
             </div>
           </div>
-          <div className="form-group post-info">
-            <label> {postInfo}</label>
-          </div>
         </form>
       </div>
+      <PostInfo info={postInfo} />
     </div>
   );
 }

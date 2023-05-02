@@ -2,6 +2,7 @@ import "./style.css";
 import React, { useEffect, useState } from "react";
 import useAcciosHook from "@hooks/useAcciosHook";
 import { Link } from "react-router-dom";
+import PostInfo from "@components/postInfo";
 
 function App() {
   const [username, setUsername] = useState("");
@@ -167,12 +168,9 @@ function App() {
             <div>
               Already have an account? <Link to="/login">login</Link> instead
             </div>
-            <div className="row mt-2"></div>
-            <div className="form-group post-info">
-              <label> {postInfo}</label>
-            </div>
           </div>
         </form>
+        <PostInfo info={postInfo} />
       </div>
     </div>
   );
