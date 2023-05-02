@@ -81,19 +81,14 @@ class UserService {
   createNewUser = async (
     username: string,
     createData: UserCreateData
-  ): Promise<string | undefined | null> => {
+  ): Promise<boolean | null> => {
     try {
-      this.userModel.findOne(
-        { username: username },
-        async (err: Error, doc: Array<object>) => {
-          if (err) throw err;
-          if (doc) return "User already exist with same username";
-          if (!doc) {
-            await this.userModel.create(createData);
-            return "Account created successfully";
-          }
-        }
-      );
+      const user = await this.userModel.findOne({ username: username });
+      if (user) return false;
+
+      await this.userModel.create(createData);
+
+      return true;
     } catch (err) {
       console.error(err);
       handleAppError(err);
