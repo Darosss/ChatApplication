@@ -2,6 +2,7 @@ import "./style.css";
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import useAcciosHook from "@hooks/useAcciosHook";
+import { Link } from "react-router-dom";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -9,7 +10,11 @@ function Login() {
 
   const [postInfo, setPostInfo] = useState("");
 
-  const { response: loginResponse, sendData: sendLoginData } = useAcciosHook(
+  const {
+    response: loginResponse,
+    error: loginError,
+    sendData: sendLoginData,
+  } = useAcciosHook(
     {
       url: `/login`,
       method: "post",
@@ -28,9 +33,13 @@ function Login() {
   };
 
   useEffect(() => {
-    if (loginResponse) setPostInfo(loginResponse?.data.message);
-    console.log("test", loginResponse);
+    if (loginResponse) setPostInfo(loginResponse?.data?.message);
   }, [loginResponse]);
+
+  useEffect(() => {
+    if (loginError) setPostInfo(loginError.message);
+    console.log(loginError, "kaka");
+  }, [loginError]);
 
   return (
     <div>
@@ -45,12 +54,20 @@ function Login() {
           </div>
           <div className="form-group">
             <label>Password: </label>
-            <input type="password" className="form-control" onChange={(e) => setPassword(e.target.value)} />
+            <input
+              type="password"
+              className="form-control"
+              autoComplete="on"
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
           <div className="form-group">
             <Button type="submit" className="btn btn-primary">
               Login
             </Button>
+            <div>
+              No account? <Link to="/register">register</Link>
+            </div>
           </div>
           <div className="form-group post-info">
             <label> {postInfo}</label>
