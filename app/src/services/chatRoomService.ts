@@ -3,7 +3,7 @@ import { ChatRoom } from "@/models/chatRoom";
 import { handleAppError } from "@/utils/ErrorHandler";
 import { FilterQuery, Model, PopulateOptions, ProjectionType } from "mongoose";
 
-export type ChatRoomCreateData = Omit<ChatRoomModel, "_id">;
+type ChatRoomCreateData = Omit<ChatRoomModel, "_id">;
 class ChatRoomService {
   constructor(private readonly chatRoomModel: Model<ChatRoomDocument>) {}
   getRoomsList = async (
@@ -82,4 +82,4 @@ class ChatRoomService {
 }
 
 export const chatRoomService = new ChatRoomService(ChatRoom);
-export type { ChatRoomService };
+export type { ChatRoomService, ChatRoomCreateData };
