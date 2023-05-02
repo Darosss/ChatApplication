@@ -15,7 +15,7 @@ import useAcciosHook from "@hooks/useAcciosHook";
 
 function App() {
   const [auth, setAuth] = useState<IAuth | null>(null);
-  const { response: authResponse } = useAcciosHook({
+  const { response: authResponse, loading: authLoading } = useAcciosHook({
     url: `/session`,
     method: "get",
     withCredentials: true,
@@ -25,11 +25,25 @@ function App() {
     if (authResponse !== null) setAuth(authResponse?.data);
   }, [authResponse]);
 
-  if (auth === undefined || auth === null) {
+  if (authLoading) {
     return (
       <div className="app-header">
         <div className="app-content">
           <Loading />
+        </div>
+      </div>
+    );
+  }
+
+  if (auth === undefined || auth === null) {
+    return (
+      <div className="app-header">
+        <div className="app-content">
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="*" element={<Login />} />
+          </Routes>
         </div>
       </div>
     );
