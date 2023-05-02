@@ -11,7 +11,7 @@ router.get("/:_id/", isValidMongooseId, rangesController.getRangeById);
 
 router.post("/admin/create", isAdmin, rangesController.createNewRange);
 
-router.post(
+router.patch(
   "/admin/edit/:_id/",
   isValidMongooseId,
   isAdmin,

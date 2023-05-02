@@ -5,6 +5,6 @@ const router = Router();
 
 router.get("/", profilController.getUserProfile);
 
-router.post("/edit", profilController.editUserProfile);
+router.patch("/edit", profilController.editUserProfile);
 
 export default router;

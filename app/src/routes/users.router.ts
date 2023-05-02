@@ -11,22 +11,21 @@ router.get("/:_id", isValidMongooseId, usersController.getUserById);
 
 router.get("/rooms/:_id", isValidMongooseId, usersController.getUsersRoomsById);
 
-router.post(
+router.patch(
   "/admin/edit/:_id",
   isValidMongooseId,
   isAdmin,
   usersController.editUserById
 );
 
-//TODO: add middleware to check if want to ban amdin
-router.post(
+router.patch(
   "/admin/ban/:_id",
   isValidMongooseId,
   isAdmin,
   usersController.banUserById
 );
 
-router.post(
+router.patch(
   "/admin/unban/:_id",
   isValidMongooseId,
   isAdmin,

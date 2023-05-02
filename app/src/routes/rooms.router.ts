@@ -33,7 +33,7 @@ router.get(
 );
 
 //Edit chatroom by id route
-router.post(
+router.patch(
   "/edit/:_id",
   isValidMongooseId,
   chatRoomValidation,
