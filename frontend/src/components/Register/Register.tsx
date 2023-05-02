@@ -3,19 +3,40 @@ import React, { useEffect, useState } from "react";
 import useAcciosHook from "@hooks/useAcciosHook";
 import { Link } from "react-router-dom";
 import PostInfo from "@components/postInfo";
+import { Button, Col, Form, Row } from "react-bootstrap";
+import { Formik } from "formik";
+import { object, string, date, number } from "yup";
+
+interface RegisterFields {
+  username: string;
+  password: string;
+  firstname: string;
+  surname: string;
+  birthday: string;
+  country: string;
+  gender: string;
+  nickColor: string;
+  email: string;
+  phone: string;
+}
+
+const registerSchema = object<RegisterFields>().shape({
+  username: string().required("Required!"),
+  password: string()
+    .required("Required!")
+    .min(8, "Password is too short - should be 8 chars minimum.")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{4,}$/,
+      "Password must contain at least: 1 upper case, 1 lower case, 1 symbol, 1 number.",
+    ),
+  email: string().required("Required!"),
+  birthday: date()
+    .default(() => new Date())
+    .required("Required!"),
+  phone: number().required("Required!"),
+});
 
 function App() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [firstname, setFirstname] = useState("");
-  const [surname, setSurname] = useState("");
-  const [birthday, setBirthday] = useState("");
-  const [country, setCountry] = useState("");
-  const [gender, setGender] = useState("");
-  const [nickColor, setNickColor] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-
   const [postInfo, setPostInfo] = useState("");
 
   const {
@@ -26,19 +47,8 @@ function App() {
     url: `/register`,
     method: "post",
     withCredentials: true,
-    data: {
-      username: username,
-      password: password,
-      firstname: firstname,
-      surname: surname,
-      birthday: birthday,
-      country: country,
-      gender: gender,
-      nickColor: nickColor,
-      email: email,
-      phone: phone,
-    },
   });
+
   useEffect(() => {
     if (registerResponse) setPostInfo(registerResponse?.data.message);
   }, [registerResponse]);
@@ -47,131 +57,187 @@ function App() {
     if (registerError) setPostInfo(registerError?.message);
   }, [registerError]);
 
-  const register = (e: React.FormEvent) => {
-    e.preventDefault();
-    sendRegisterData();
-  };
-
   return (
     <div>
       <div className="section-header">
         <h2> Register </h2>
       </div>
-      <div className="register-form">
-        <form onSubmit={register}>
-          <div className="row mt-2">
-            <div className="col">
-              <label> Username </label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Username"
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-            <div className="col">
-              <label> E-mail </label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="E-mail"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="col ">
-              <label> Password </label>
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Password"
-                autoComplete="on"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="row mt-2">
-            <div className="col ">
-              <label> Firstname </label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Firstname"
-                onChange={(e) => setFirstname(e.target.value)}
-              />
-            </div>
-            <div className="col ">
-              <label> Surname </label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Surname"
-                onChange={(e) => setSurname(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="row mt-2">
-            <div className="col ">
-              <label> Birthday </label>
-              <input
-                type="date"
-                className="form-control"
-                placeholder="Birthday"
-                onChange={(e) => setBirthday(e.target.value)}
-              />
-            </div>
-            <div className="col ">
-              <label> Phone </label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Phone"
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="row mt-2">
-            <div className="col ">
-              <label> Country </label>
-              <select className="form-control" id="country" onChange={(e) => setCountry(e.target.value)}>
-                <option></option>
-                <option>Poland</option>
-                <option>Germany</option>
-                <option>French</option>
-                <option>USA</option>
-                <option>Spain</option>
-              </select>
-            </div>
-            <div className="col ">
-              <label> Gender </label>
-              <select className="form-control" id="gender" onChange={(e) => setGender(e.target.value)}>
-                <option>Male</option>
-                <option>Female</option>
-                <option>N/A</option>
-              </select>
-            </div>
-            <div className="col ">
-              <label> Nick color </label>
+      <div className="register-form w-100">
+        <Formik
+          validationSchema={registerSchema}
+          initialValues={{
+            username: "",
+            password: "",
+            firstname: "",
+            surname: "",
+            birthday: new Date().toISOString().slice(0, 10),
+            country: "",
+            gender: "",
+            nickColor: "",
+            email: "",
+            phone: "",
+          }}
+          onSubmit={(values, actions) => {
+            sendRegisterData<RegisterFields>(values);
+            actions.setSubmitting(false);
+          }}
+        >
+          {({ handleSubmit, handleChange, values, touched, errors }) => (
+            <Form onSubmit={handleSubmit} className="w-75" noValidate>
+              <Form.Group as={Row} className="mt-5">
+                <Form.Group as={Col} className="position-relative" controlId="validation-username">
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    value={values.username}
+                    onChange={handleChange}
+                    isValid={touched.username && !errors.username}
+                    isInvalid={!!errors.username}
+                  />
+                  <Form.Control.Feedback tooltip>Looks good!</Form.Control.Feedback>
+                  <Form.Control.Feedback tooltip type="invalid">
+                    {errors.username}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col} className="position-relative" controlId="validation-email">
+                  <Form.Label>E-mail</Form.Label>
+                  <Form.Control
+                    type="email"
+                    name="email"
+                    placeholder="E-mail"
+                    value={values.email}
+                    onChange={handleChange}
+                    isValid={touched.email && !errors.email}
+                    isInvalid={!!errors.email}
+                  />
+                  <Form.Control.Feedback tooltip>Looks good!</Form.Control.Feedback>
+                  <Form.Control.Feedback tooltip type="invalid">
+                    {errors.email}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col} className="position-relative" controlId="validation-password">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    name="password"
+                    autoComplete="on"
+                    placeholder="Password"
+                    value={values.password}
+                    aria-describedby="passwordHelpBlock"
+                    onChange={handleChange}
+                    isValid={touched.password && !errors.password}
+                    isInvalid={!!errors.password}
+                  />
+                  <Form.Control.Feedback tooltip>Looks good!</Form.Control.Feedback>
+                  <Form.Control.Feedback tooltip type="invalid">
+                    {errors.password}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Form.Group>
+              <Form.Group as={Row} className="mt-5">
+                <Form.Group as={Col}>
+                  <Form.Label>First name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="firstname"
+                    placeholder="First name"
+                    value={values.firstname}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+                <Form.Group as={Col}>
+                  <Form.Label>Surname</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="surname"
+                    placeholder="Surname"
+                    value={values.surname}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+              </Form.Group>
+              <Form.Group as={Row} className="mt-5">
+                <Form.Group as={Col} className="position-relative" controlId="validation-birthday">
+                  <Form.Label>Birthday</Form.Label>
+                  <Form.Control
+                    type="date"
+                    name="birthday"
+                    placeholder="Birthday"
+                    value={values.birthday.toString()}
+                    onChange={handleChange}
+                    isValid={touched.birthday && !errors.birthday}
+                    isInvalid={!!errors.birthday}
+                  />
+                  <Form.Control.Feedback tooltip>Looks good!</Form.Control.Feedback>
+                  <Form.Control.Feedback tooltip type="invalid">
+                    {!errors.birthday ? null : String(errors.birthday || "")}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col} className="position-relative" controlId="validation-phone">
+                  <Form.Label>Phone</Form.Label>
+                  <Form.Control
+                    type="number"
+                    name="phone"
+                    placeholder="Phone"
+                    value={values.phone}
+                    onChange={handleChange}
+                    isValid={touched.phone && !errors.phone}
+                    isInvalid={!!errors.phone}
+                  />
+                  <Form.Control.Feedback tooltip>Looks good!</Form.Control.Feedback>
+                  <Form.Control.Feedback tooltip type="invalid">
+                    {errors.phone}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Form.Group>
+              <Form.Group as={Row} className="mt-5">
+                <Form.Group as={Col}>
+                  <Form.Label>Country</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="country"
+                    placeholder="Country"
+                    value={values.country}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+                <Form.Group as={Col}>
+                  <Form.Label>Gender</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="gender"
+                    placeholder="Gender"
+                    value={values.gender}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+                <Form.Group as={Col}>
+                  <Form.Label>Nick color</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="nickColor"
+                    placeholder="Nick color"
+                    value={values.nickColor}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+              </Form.Group>
 
-              <select className="form-control" id="nickColor" onChange={(e) => setNickColor(e.target.value)}>
-                <option className="bg-danger">Red</option>
-                <option className="bg-light">White</option>
-                <option className="bg-dark">Black</option>
-                <option className="bg-success">Green</option>
-                <option className="bg-primary">Blue</option>
-              </select>
-            </div>
-          </div>
-          <div className="form-group">
-            <button type="submit" className="btn btn-primary w-100">
-              Register
-            </button>
-            <div>
-              Already have an account? <Link to="/login">login</Link> instead
-            </div>
-          </div>
-        </form>
-        <PostInfo info={postInfo} />
+              <Form.Group as={Col} className="m-5">
+                <Button type="submit" className="btn btn-primary w-100">
+                  Register
+                </Button>
+                <div>
+                  Already have an account? <Link to="/login">login</Link> instead
+                </div>
+              </Form.Group>
+            </Form>
+          )}
+        </Formik>
       </div>
+      <PostInfo info={postInfo} />
     </div>
   );
 }
