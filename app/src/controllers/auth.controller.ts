@@ -39,11 +39,19 @@ class AuthController {
     };
 
     try {
-      const message = await this.userService.createNewUser(
+      const created = await this.userService.createNewUser(
         userData.username,
         userData
       );
-      return res.status(201).send(message);
+      if (created) {
+        return res
+          .status(201)
+          .send({ message: "Account created successfully" });
+      }
+
+      return res
+        .status(400)
+        .send({ message: "Account with that username already exist" });
     } catch (err) {
       return next(err);
     }
@@ -52,7 +60,7 @@ class AuthController {
   getSession = (req: Request, res: Response) => {
     passport.authenticate("jwt", { session: false }, (err, user) => {
       if (err || !user) {
-        return res.status(200).send(false);
+        return res.status(401).send(false);
       } else {
         return res.status(200).send(user);
       }
