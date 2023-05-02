@@ -27,7 +27,7 @@ class ChatRoomService {
   ): Promise<ChatRoomModel | null> => {
     try {
       const chatRoom = await this.chatRoomModel.findById(id, projection);
-      if (populate) await chatRoom?.populate({ ...populate });
+      if (populate) await chatRoom?.populate(populate);
 
       return chatRoom;
     } catch (error) {
