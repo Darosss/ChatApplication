@@ -5,27 +5,24 @@ import { envFilePath } from "./config/globalPaths";
 dotenv.config({ path: envFilePath });
 
 import app from "./app";
-import http from "http";
-import { Server } from "socket.io";
-import socket from "./socket";
 
 import validateEnv from "@/utils/validateEnv";
 import { backendPort, databaseUrl } from "./config/envVariables";
 import { initDatabase } from "./config/database";
-import { corsOptions } from "./config/corsOptions";
 
 validateEnv();
 
-const httpServer = new http.Server(app);
+async function startServer() {
+  try {
+    await initDatabase(databaseUrl);
 
-const socketIO = new Server(httpServer, {
-  cors: corsOptions,
-});
+    const port = Number(backendPort) || 5000;
+    app.listen(port, () => {
+      console.log(`application is running on: ${port}`);
+    });
+  } catch (err) {
+    console.error(`Error starting server: ${err}`);
+  }
+}
 
-socket(socketIO);
-
-initDatabase(databaseUrl).then(() => {
-  httpServer.listen(backendPort, () => {
-    console.log(`application is running at:`, httpServer.address());
-  });
-});
+startServer();
