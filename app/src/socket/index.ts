@@ -17,8 +17,8 @@ export default function (
   >
 ) {
   console.log("--------------NEW CONNECTION--------------");
-  const onlineUsers = new Map();
-  const roomsUsers = new Map();
+  const onlineUsers = new Map<string, string>();
+  const roomsUsers = new Map<string, Map<string, string>>();
 
   io.on("connection", (socket) => {
     console.log(`User: joined the site ${socket.id}`);
@@ -28,11 +28,11 @@ export default function (
       for (const roomId of roomsUsers.keys()) {
         const roomUsers = roomsUsers.get(roomId);
 
-        if (roomUsers.has(socket.id)) {
+        if (roomUsers?.has(socket.id)) {
           roomUsers.delete(socket.id);
           const data = {
             roomId: roomId,
-            roomUsers: Array.from(roomUsers) as string[],
+            roomUsers: Array.from(roomUsers) as [string, string][],
           };
 
           io.to(roomId).emit("room_online_users", data);
@@ -53,7 +53,8 @@ export default function (
         data.roomId,
         data.username as string,
         socket.id
-      ) as string[];
+      );
+
       io.to(data.roomId).emit("room_online_users", data);
     });
 
@@ -87,11 +88,15 @@ export default function (
     roomId: string,
     username: string,
     socketId: string
-  ) {
-    if (!roomsUsers.has(roomId)) roomsUsers.set(roomId, new Map());
+  ): [string, string][] {
+    if (!roomsUsers.has(roomId))
+      roomsUsers.set(roomId, new Map<string, string>());
     const userRoomMap = roomsUsers.get(roomId);
-    userRoomMap.set(socketId, username);
+    userRoomMap?.set(socketId, username);
 
-    return Array.from(roomsUsers.get(roomId));
+    if (userRoomMap) {
+      return Array.from(userRoomMap);
+    }
+    return [["", ""]];
   }
 }
