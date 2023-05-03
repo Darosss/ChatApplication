@@ -6,7 +6,6 @@ import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
-import Table from "react-bootstrap/Table";
 import {
   initiateSocketConnection,
   disconnectSocket,
@@ -19,6 +18,7 @@ import {
 import { IMessageSocket } from "@libs/types/socket";
 import { scrollToBottom } from "@utils/scrollToBottom.util";
 import HamburgerMenu from "@components/HamburgerMenu";
+import ChatOnlineUsers from "./ChatOnlineUsers";
 
 type Timer = ReturnType<typeof setTimeout>;
 
@@ -28,8 +28,8 @@ function Chats(props: { auth: IAuth }) {
   const { auth } = props;
   const { username } = auth;
 
-  const [onlineUsers, setOnlineUsers] = useState<[string, string][]>([]);
-  const [roomsOnlineUsers, setRoomsOnlineUsers] = useState<Map<string, string[]>>(new Map<string, string[]>());
+  const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
+  const [roomsOnlineUsers, setRoomsOnlineUsers] = useState(new Map<string, Map<string, string>>());
   const [roomsTypingUsers, setRoomsTypingUsers] = useState<Map<string, string>>(new Map<string, string>());
   const [localMessages, setLocalMessages] = useState<Map<string, IMessageSocket[]>>(
     new Map<string, IMessageSocket[]>(),
@@ -62,7 +62,7 @@ function Chats(props: { auth: IAuth }) {
       if (err) console.log(err, "err");
 
       setRoomsOnlineUsers((prevState) => {
-        prevState.set(data.roomId, data.roomUsers);
+        prevState.set(data.roomId, new Map(data.roomUsers));
         return prevState;
       });
       forceUpdate();
@@ -137,13 +137,14 @@ function Chats(props: { auth: IAuth }) {
         <Col md={7}>
           <Tab.Content>
             {chatRooms?.map((room) => {
+              const roomIdUsers = roomsOnlineUsers.get(room._id)?.values() || [""];
               return (
                 <ChatRoom
                   key={room._id}
                   room={room}
                   auth={auth}
                   localMessages={localMessages.get(room._id)!}
-                  roomOnlineUsers={roomsOnlineUsers.get(room._id)}
+                  roomOnlineUsers={[...roomIdUsers]}
                   roomTypingUsers={roomsTypingUsers.get(room._id)}
                 />
               );
@@ -152,20 +153,7 @@ function Chats(props: { auth: IAuth }) {
         </Col>
         <Col xs={{ order: "first" }} md={{ order: 3 }}>
           <div className="chat-online-users" ref={usersOnlineTable}>
-            <div className="chat-section-wide">Room list</div>
-            <Table className="text-light">
-              <tbody>
-                {onlineUsers.length > 0
-                  ? onlineUsers.map((user) => {
-                      return (
-                        <tr key={user[0]}>
-                          <td>{user[1]}</td>
-                        </tr>
-                      );
-                    })
-                  : null}
-              </tbody>
-            </Table>
+            <ChatOnlineUsers onlineUsers={onlineUsers} />
           </div>
         </Col>
       </Row>
