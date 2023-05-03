@@ -38,7 +38,6 @@ function Login() {
 
   useEffect(() => {
     if (loginError) setPostInfo(loginError.message);
-    console.log(loginError, "kaka");
   }, [loginError]);
 
   return (
