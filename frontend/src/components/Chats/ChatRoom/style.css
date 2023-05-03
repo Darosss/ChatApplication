@@ -8,3 +8,7 @@
 td.row-btn-send {
   vertical-align: middle;
 }
+
+.online-users-button {
+  font-size: 1.5vmin !important;
+}

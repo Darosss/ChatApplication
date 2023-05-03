@@ -6,7 +6,7 @@ import { joinRoom, sendMessageSocket, userTypingEmit } from "../Socket";
 import { IMessageSocket, IRoomOnlineUsers } from "@libs/types/socket";
 import ChatMessages from "../ChatMessages";
 import ChatOnlineUsers from "../ChatOnlineUsers";
-import { Button, Tab, Table } from "react-bootstrap";
+import { Button, Tab } from "react-bootstrap";
 
 function ChatRoom(props: {
   room: IChatRoomRes;
@@ -19,6 +19,8 @@ function ChatRoom(props: {
   const { username, id: userId } = auth;
 
   const [msgToSend, setMsgToSend] = useState("");
+
+  const [showOnlineUsers, setShowOnlineUsers] = useState<boolean>(false);
 
   useEffect(() => {
     joinRoom({
@@ -53,52 +55,48 @@ function ChatRoom(props: {
 
   return (
     <Tab.Pane key={room._id} eventKey={room._id} className="w-100">
-      <Table striped bordered variant="dark">
-        <thead>
-          <tr>
-            <th colSpan={3}>{room.name} </th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* component ChatMessage in loop of messages of room id + local messages */}
-          <tr>
-            <td colSpan={2}>
-              <div className="chat-scrollable" id={"scrollable-" + room._id}>
-                <ChatMessages roomId={room._id} localMessages={localMessages} />
-              </div>
-            </td>
-            <td colSpan={2} className="w-25">
-              <div className="chat-scrollable">
+      <div>
+        <div className="d-flex flex-fill justify-content-center bg-dark border-bottom mb-2 position-relative">
+          <div className="d-flex">
+            <span className="text-info">{room.name}</span>
+          </div>
+          <div className="flex-shrink-1 align-self-center position-absolute top-0 end-0">
+            <Button
+              className="btn btn-dark btn-outline-secondary rounded-circle w-100 btn-sm py-0 online-users-button"
+              onClick={() => setShowOnlineUsers(!showOnlineUsers)}
+            >
+              &#128516;
+            </Button>
+          </div>
+        </div>
+
+        <div className="d-flex flex-column">
+          <div className="d-flex flex-row">
+            <div className="chat-scrollable" id={"scrollable-" + room._id}>
+              <ChatMessages roomId={room._id} localMessages={localMessages} />
+            </div>
+            {showOnlineUsers ? (
+              <div className="chat-scrollable w-50">
                 <ChatOnlineUsers onlineUsers={roomOnlineUsers} />
               </div>
-            </td>
-          </tr>
-          <tr>
-            <td>{roomTypingUsers ? `${roomTypingUsers} is typing` : null}</td>
-          </tr>
-          <tr>
-            <td className="d-inline-flex w-100">
-              <textarea
-                className="form-control w-100 m-1 bg-dark text-light"
-                rows={3}
-                onChange={(e) => setMsgToSend(e.target.value)}
-                onKeyDown={(e) => {
-                  textareaOnKey(e);
-                }}
-              ></textarea>
-            </td>
-            <td colSpan={2} className="row-btn-send">
-              <Button
-                className="w-100 btn-secondary btn-lg p-4"
-                // room={room._id }
-                onClick={sendMessage}
-              >
-                Send
-              </Button>
-            </td>
-          </tr>
-        </tbody>
-      </Table>
+            ) : null}
+          </div>
+          <div>
+            {roomTypingUsers ? `${roomTypingUsers} is typing...` : null}
+            <textarea
+              className="form-control w-100 m-1 bg-dark text-light"
+              rows={3}
+              onChange={(e) => setMsgToSend(e.target.value)}
+              onKeyDown={(e) => {
+                textareaOnKey(e);
+              }}
+            />
+            <Button className="w-100 btn-secondary btn-lg p-4" onClick={sendMessage}>
+              Send
+            </Button>
+          </div>
+        </div>
+      </div>
     </Tab.Pane>
   );
 }
