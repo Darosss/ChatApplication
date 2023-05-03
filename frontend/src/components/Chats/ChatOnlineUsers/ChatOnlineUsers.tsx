@@ -1,27 +1,24 @@
 import React from "react";
-import { Table } from "react-bootstrap";
 import "./style.css";
 
-function ChatOnlineUsers(props: { onlineUsers: string[] | undefined }) {
+function ChatOnlineUsers(props: { onlineUsers: string[] }) {
   const { onlineUsers } = props;
 
   return (
-    <Table className="text-light">
-      <thead>
-        <tr>
-          <th>Online users:</th>
-        </tr>
-      </thead>
-      <tbody>
-        {onlineUsers?.map((user) => {
-          return (
-            <tr key={user[0]}>
-              <td> {user[1]} </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </Table>
+    <div>
+      <div className="d-flex justify-content-center bg-dark">Online users:</div>
+      <div className="d-flex flex-column">
+        <div>
+          {onlineUsers.map((user, index) => {
+            return (
+              <div key={index} className="border-bottom p-2">
+                {user}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 }
 
