@@ -34,6 +34,7 @@ function ChatRoom(props: {
       userId: userId,
       message: msgToSend,
       sender: username,
+      date: new Date(),
     };
     sendMessageSocket(msg);
   };
