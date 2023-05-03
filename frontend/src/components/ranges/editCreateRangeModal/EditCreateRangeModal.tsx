@@ -1,6 +1,6 @@
 import "./style.css";
 import React, { useEffect, useState } from "react";
-import ModalCore from "@components/Modal";
+import ModalCore from "@components/modal";
 import useAcciosHook from "@hooks/useAcciosHook";
 
 function EditRangeModal(props: { range?: IRangeRes; sectionName?: string }) {

@@ -1,7 +1,7 @@
 import "./style.css";
 import React from "react";
-import EditCreateRangeModal from "./EditCreateRangeModal";
-import DeleteRangeModal from "./DeleteRangeModal";
+import EditCreateRangeModal from "./editCreateRangeModal";
+import DeleteRangeModal from "./deleteRangeModal";
 import useAcciosHook from "@hooks/useAcciosHook";
 
 function Ranges() {

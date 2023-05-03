@@ -1,6 +1,6 @@
 import "./style.css";
 import React, { useState, useRef, useEffect, useReducer } from "react";
-import ChatRoom from "./ChatRoom";
+import ChatRoom from "./chatRoom";
 import useAcciosHook from "@hooks/useAcciosHook";
 import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
@@ -14,10 +14,10 @@ import {
   roomOnlineUsers,
   onUserTyping,
   subscribeToChat,
-} from "./Socket";
+} from "./socket";
 import { IMessageSocket } from "@libs/types/socket";
 import { scrollToBottom } from "@utils/scrollToBottom.util";
-import ChatOnlineUsers from "./ChatOnlineUsers";
+import ChatOnlineUsers from "./chatOnlineUsers";
 import InfoSidebar from "@components/infoSidebar";
 
 type Timer = ReturnType<typeof setTimeout>;

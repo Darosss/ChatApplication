@@ -1,11 +1,11 @@
 import "./style.css";
 import React, { useEffect, useState, KeyboardEvent } from "react";
 
-import { joinRoom, sendMessageSocket, userTypingEmit } from "../Socket";
+import { joinRoom, sendMessageSocket, userTypingEmit } from "../socket";
 
 import { IMessageSocket, IRoomOnlineUsers } from "@libs/types/socket";
-import ChatMessages from "../ChatMessages";
-import ChatOnlineUsers from "../ChatOnlineUsers";
+import ChatMessages from "../chatMessages";
+import ChatOnlineUsers from "../chatOnlineUsers";
 import { Button, Tab } from "react-bootstrap";
 
 function ChatRoom(props: {

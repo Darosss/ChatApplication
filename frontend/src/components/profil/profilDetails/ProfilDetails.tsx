@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
 
-import EditProfile from "../EditProfile";
+import EditProfile from "../editProfile";
 function ProfilDetails(props: { user: IUserRes }) {
   const { user } = props;
   return (

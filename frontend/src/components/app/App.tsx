@@ -1,17 +1,17 @@
 import "./style.css";
 import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import NavigationBar from "./NavigationBar";
-import Loading from "../Loading";
-import Home from "../Home";
-import Chats from "../Chats";
-import Login from "../Login/";
-import Register from "../Register";
-import Profil from "../Profil";
-import Rooms from "../Rooms";
-import Users from "../Users";
-import Ranges from "../Ranges";
+import Loading from "../loading";
+import Home from "../home";
+import Chats from "../chats";
+import Login from "../login/";
+import Register from "../register";
+import Profil from "../profil";
+import Rooms from "../rooms";
+import Users from "../users";
+import Ranges from "../ranges";
 import useAcciosHook from "@hooks/useAcciosHook";
+import NavigationBar from "./navigationBar";
 
 function App() {
   const [auth, setAuth] = useState<IAuth | null>(null);

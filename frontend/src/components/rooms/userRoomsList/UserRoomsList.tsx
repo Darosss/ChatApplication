@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
-import EditCreateRoomModal from "../EditCreateRoomModal";
-import DeleteRoomModal from "../DeleteRoomModal";
+import EditCreateRoomModal from "../editCreateRoomModal";
+import DeleteRoomModal from "../deleteRoomModal";
 
 function UserRoomsList(props: { rooms: IChatRoomRes[]; ranges: IRangeRes[]; users: IUserRes[] }) {
   const { rooms, ranges, users } = props;
