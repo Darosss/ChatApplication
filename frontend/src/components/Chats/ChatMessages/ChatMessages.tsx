@@ -18,10 +18,10 @@ function ChatMessages(props: { roomId: string; localMessages: IMessageSocket[] }
   if (loading) return null;
 
   const mapMessagesDB = () => {
-    return roomMessagesDB.map((message) => {
+    return roomMessagesDB.map((message, index) => {
       return (
         <ChatMessage
-          key={`${message.sender}-${message.sentTime as unknown as string}`}
+          key={index}
           message={message.message}
           sentTime={message.sentTime}
           sender={message.sender.username}
@@ -31,15 +31,8 @@ function ChatMessages(props: { roomId: string; localMessages: IMessageSocket[] }
   };
 
   const mapMessagesLocal = () => {
-    return localMessages?.map((message) => {
-      return (
-        <ChatMessage
-          key={`${message.sender}-${message.date as unknown as string}`}
-          message={message.message}
-          sentTime={message.date!}
-          sender={message.sender!}
-        />
-      );
+    return localMessages?.map((message, index) => {
+      return <ChatMessage key={index} message={message.message} sentTime={message.date!} sender={message.sender!} />;
     });
   };
 
