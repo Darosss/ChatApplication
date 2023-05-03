@@ -1,4 +1,3 @@
-import "./style.css";
 import React from "react";
 import UserRoomsList from "./userRoomsList";
 import useAcciosHook from "@hooks/useAcciosHook";

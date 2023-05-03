@@ -1,4 +1,3 @@
-import "./style.css";
 import React, { useEffect, useState } from "react";
 import ProfilDetails from "./profilDetails";
 import useAcciosHook from "@hooks/useAcciosHook";

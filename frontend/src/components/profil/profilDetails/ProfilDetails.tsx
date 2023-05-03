@@ -1,5 +1,4 @@
 import React from "react";
-import "./style.css";
 
 import EditProfile from "../editProfile";
 function ProfilDetails(props: { user: IUserRes }) {

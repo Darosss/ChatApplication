@@ -1,4 +1,3 @@
-import "./style.css";
 import React, { useRef } from "react";
 import NavigationLink from "./NavigationLink";
 import Logout from "@components/logout";

@@ -1,7 +1,6 @@
-import "./style.css";
 import React from "react";
 
-import UsersList from "./UsersList";
+import UsersList from "./usersList";
 import useAcciosHook from "@hooks/useAcciosHook";
 
 function Users() {

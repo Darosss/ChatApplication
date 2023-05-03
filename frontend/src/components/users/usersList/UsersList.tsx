@@ -1,8 +1,7 @@
-import "./style.css";
 import React from "react";
-import EditUserModal from "../EditUserModal";
-import BanUserModal from "../BanUserModal";
-import UnbanUserModal from "../UnbanUserModal";
+import EditUserModal from "../editUserModal";
+import BanUserModal from "../banUserModal";
+import UnbanUserModal from "../unbanUserModal";
 import useAcciosHook from "@hooks/useAcciosHook";
 
 function UsersList(props: { users: IUserRes[] }) {

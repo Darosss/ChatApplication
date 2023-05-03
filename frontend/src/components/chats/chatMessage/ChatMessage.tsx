@@ -1,5 +1,4 @@
 import React from "react";
-import "./style.css";
 
 function ChatMessage(props: { message: string; sentTime: Date; sender: string }) {
   return (

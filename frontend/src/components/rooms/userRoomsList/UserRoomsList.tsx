@@ -1,5 +1,4 @@
 import React from "react";
-import "./style.css";
 import EditCreateRoomModal from "../editCreateRoomModal";
 import DeleteRoomModal from "../deleteRoomModal";
 

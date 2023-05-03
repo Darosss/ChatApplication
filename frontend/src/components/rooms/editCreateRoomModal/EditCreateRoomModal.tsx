@@ -1,4 +1,3 @@
-import "./style.css";
 import React, { useState, useEffect } from "react";
 import ModalCore from "@components/modal";
 import useAcciosHook from "@hooks/useAcciosHook";

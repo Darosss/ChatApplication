@@ -1,4 +1,3 @@
-import "./style.css";
 import React, { useEffect, useState } from "react";
 import useAcciosHook from "@hooks/useAcciosHook";
 import { Link } from "react-router-dom";

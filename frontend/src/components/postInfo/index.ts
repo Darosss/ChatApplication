@@ -1,3 +1,5 @@
-import PostInfo from "./PostInfo";
 import "./style.css";
+
+import PostInfo from "./PostInfo";
+
 export default PostInfo;

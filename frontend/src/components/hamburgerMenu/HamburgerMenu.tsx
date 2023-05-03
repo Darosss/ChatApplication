@@ -1,4 +1,3 @@
-import "./style.css";
 import React, { useState } from "react";
 
 function HamburgerMenu(props: { menu: any }) {

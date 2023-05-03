@@ -1,4 +1,3 @@
-import "./style.css";
 import React, { useState, useRef, useEffect, useReducer } from "react";
 import ChatRoom from "./chatRoom";
 import useAcciosHook from "@hooks/useAcciosHook";

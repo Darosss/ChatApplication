@@ -1,4 +1,3 @@
-import "./style.css";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form } from "react-bootstrap";
 import useAcciosHook from "@hooks/useAcciosHook";

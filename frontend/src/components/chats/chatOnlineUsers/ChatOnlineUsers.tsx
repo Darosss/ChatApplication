@@ -1,5 +1,4 @@
 import React from "react";
-import "./style.css";
 
 function ChatOnlineUsers(props: { onlineUsers: string[] }) {
   const { onlineUsers } = props;

@@ -1,7 +1,6 @@
-import "./style.css";
 import React, { useEffect, useState } from "react";
-import ModalCore from "@components/Modal";
-import EditCreateRoomModal from "@components/Rooms/EditCreateRoomModal";
+import ModalCore from "@components/modal";
+import EditCreateRoomModal from "@components/Rooms/editCreateRoomModal";
 import useAcciosHook from "@hooks/useAcciosHook";
 
 function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRangeRes[] }) {

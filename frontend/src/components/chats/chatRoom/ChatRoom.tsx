@@ -1,4 +1,3 @@
-import "./style.css";
 import React, { useEffect, useState, KeyboardEvent } from "react";
 
 import { joinRoom, sendMessageSocket, userTypingEmit } from "../socket";
