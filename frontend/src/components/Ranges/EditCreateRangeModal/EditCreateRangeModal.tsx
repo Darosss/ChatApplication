@@ -12,7 +12,7 @@ function EditRangeModal(props: { range?: IRangeRes; sectionName?: string }) {
   const { response, error, sendData } = useAcciosHook(
     {
       url: "ranges/admin" + (range ? `/edit/${range._id}` : "/create"),
-      method: "post",
+      method: "patch",
       withCredentials: true,
       data: {
         name: rangeName,

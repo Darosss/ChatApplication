@@ -20,7 +20,7 @@ function EditCreateRoomModal(props: {
   const { response, error, sendData } = useAcciosHook(
     {
       url: "rooms" + (room ? `/edit/${room._id}` : "/create"),
-      method: "post",
+      method: "patch",
       withCredentials: true,
       data: {
         roomName: roomName,

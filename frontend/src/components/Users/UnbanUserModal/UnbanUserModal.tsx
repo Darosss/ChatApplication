@@ -12,7 +12,7 @@ function UnbanUserModal(props: { userId: string; username: string }) {
     response: unbanResponse,
     error: unbanError,
     sendData: unbanUser,
-  } = useAcciosHook({ url: `/users/admin/unban/${userId}`, method: "post", withCredentials: true });
+  } = useAcciosHook({ url: `/users/admin/unban/${userId}`, method: "patch", withCredentials: true });
 
   useEffect(() => {
     if (unbanResponse) setPostInfo(unbanResponse?.data.message);

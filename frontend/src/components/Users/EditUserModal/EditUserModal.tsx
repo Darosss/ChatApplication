@@ -45,7 +45,7 @@ function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRang
   } = useAcciosHook(
     {
       url: `users/admin/edit/${user._id}`,
-      method: "post",
+      method: "patch",
       withCredentials: true,
       data: {
         username: username,

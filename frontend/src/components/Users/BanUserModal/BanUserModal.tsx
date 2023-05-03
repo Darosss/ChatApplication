@@ -16,7 +16,7 @@ function EditUserModal(props: { userId: string; username: string }) {
     sendData: banUser,
   } = useAcciosHook({
     url: `/users/admin/ban/${userId}`,
-    method: "post",
+    method: "patch",
     withCredentials: true,
     data: {
       banTime: banTime,

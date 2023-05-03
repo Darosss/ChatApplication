@@ -20,7 +20,7 @@ function EditProfileModal(props: { user: IUserRes }) {
   const { response, error, sendData } = useAcciosHook(
     {
       url: `/profil/edit`,
-      method: "post",
+      method: "patch",
       withCredentials: true,
       data: {
         oldPassword: oldPassword,
@@ -57,28 +57,6 @@ function EditProfileModal(props: { user: IUserRes }) {
 
   const editProfile = () => {
     sendData();
-    // const axiosEditProfile = {
-    //   method: "post",
-    //   data: {
-    //     oldPassword: oldPassword,
-    //     newPassword: newPassword,
-    //     firstname: firstname,
-    //     surname: surname,
-    //     email: email,
-    //     birthday: birthday,
-    //     country: country,
-    //     phoneNumber: phone,
-    //     gender: gender,
-    //     nickColor: nickColor,
-    //   },
-    //   withCredentials: true,
-    //   url: `${process.env.REACT_APP_API_URI}/profil/` + props.user._id,
-    // };
-    // axios(axiosEditProfile).then((res) => {
-    //   setPostInfo(res.data.message);
-
-    //   window.location.reload();
-    // });
   };
 
   const createProfileInput = (name: string, onChangeFn: (value: any) => void, value = "", type = "text") => {
