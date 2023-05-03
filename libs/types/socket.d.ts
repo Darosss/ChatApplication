@@ -23,7 +23,7 @@ export interface SocketData {
 
 interface IRoomOnlineUsers {
   roomId: string;
-  roomUsers: string[];
+  roomUsers: [string, string][];
   username?: string;
 }
 
