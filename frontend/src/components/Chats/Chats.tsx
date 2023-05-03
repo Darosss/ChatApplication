@@ -17,8 +17,8 @@ import {
 } from "./Socket";
 import { IMessageSocket } from "@libs/types/socket";
 import { scrollToBottom } from "@utils/scrollToBottom.util";
-import HamburgerMenu from "@components/HamburgerMenu";
 import ChatOnlineUsers from "./ChatOnlineUsers";
+import InfoSidebar from "@components/infoSidebar";
 
 type Timer = ReturnType<typeof setTimeout>;
 
@@ -113,26 +113,22 @@ function Chats(props: { auth: IAuth }) {
 
   return (
     <Tab.Container id="left-tabs-chats">
-      <div className="chat-section chat-section-right">
-        Online users:
-        <HamburgerMenu menu={usersOnlineTable} />
-      </div>
-      <div className="chat-section">
-        Room list:
-        <HamburgerMenu menu={chatList} />
-      </div>
       <Row className="w-100 mt-4">
         <Col md={2}>
-          <div className="chat-section-wide bg-dark">Room list: </div>
-          <Nav variant="pills nav-chats chats-list" ref={chatList}>
-            {chatRooms?.map((room) => {
-              return (
-                <Nav.Item key={room._id} className="border border-primary bg-dark rounded mt-1 chats-item">
-                  <Nav.Link eventKey={room._id}> {room.name} </Nav.Link>
-                </Nav.Item>
-              );
-            })}
-          </Nav>
+          <InfoSidebar title="Available rooms" placement="bottom" btnText="Rooms" backdrop={true}>
+            <div className="d-flex flex-column w-100">
+              <div className="d-flex chat-section-wide bg-dark justify-content-center">Room list: </div>
+              <Nav variant="pills nav-chats chats-list" ref={chatList}>
+                {chatRooms?.map((room) => {
+                  return (
+                    <Nav.Item key={room._id} className="border border-primary bg-dark rounded mt-1 chats-item">
+                      <Nav.Link eventKey={room._id}> {room.name} </Nav.Link>
+                    </Nav.Item>
+                  );
+                })}
+              </Nav>
+            </div>
+          </InfoSidebar>
         </Col>
         <Col md={7}>
           <Tab.Content>
@@ -151,9 +147,11 @@ function Chats(props: { auth: IAuth }) {
             })}
           </Tab.Content>
         </Col>
-        <Col xs={{ order: "first" }} md={{ order: 3 }}>
+        <Col xs={{ order: "first" }} md={{ order: "3" }}>
           <div className="chat-online-users" ref={usersOnlineTable}>
-            <ChatOnlineUsers onlineUsers={onlineUsers} />
+            <InfoSidebar title="Online users" placement="end" btnText="Users">
+              <ChatOnlineUsers onlineUsers={onlineUsers} />
+            </InfoSidebar>
           </div>
         </Col>
       </Row>
