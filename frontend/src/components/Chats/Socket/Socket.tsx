@@ -42,11 +42,11 @@ export const roomOnlineUsers = (cb: (err: any, users: IRoomOnlineUsers) => void)
   });
 };
 
-export const refreshOnlineUsers = (cb: (err: any, users: [string, string][]) => void) => {
+export const refreshOnlineUsers = (cb: (err: any, users: string[]) => void) => {
   if (!socket) return true;
 
   socket.on("refresh_online_users", (users) => {
-    return cb(null, users);
+    return cb(null, [...new Map(users).values()]);
   });
 };
 
