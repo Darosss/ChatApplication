@@ -5,16 +5,6 @@
   overflow: auto;
 }
 
-.chat-scrollable::-webkit-scrollbar {
-  width: 5px;
-  height: 8px;
-  background-color: gray;
-}
-
-.chat-scrollable::-webkit-scrollbar-thumb {
-  background: rgb(64, 63, 63);
-}
-
 td.row-btn-send {
   vertical-align: middle;
 }
