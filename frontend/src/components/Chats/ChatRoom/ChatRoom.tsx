@@ -75,9 +75,9 @@ function ChatRoom(props: {
             <div className="chat-scrollable" id={"scrollable-" + room._id}>
               <ChatMessages roomId={room._id} localMessages={localMessages} />
             </div>
-            {showOnlineUsers ? (
+            {showOnlineUsers && roomOnlineUsers ? (
               <div className="chat-scrollable w-50">
-                <ChatOnlineUsers onlineUsers={roomOnlineUsers} />
+                <ChatOnlineUsers onlineUsers={[...roomOnlineUsers.values()]} />
               </div>
             ) : null}
           </div>
