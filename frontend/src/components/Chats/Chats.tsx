@@ -123,11 +123,11 @@ function Chats(props: { auth: IAuth }) {
       </div>
       <Row className="w-100 mt-4">
         <Col md={2}>
-          <div className="chat-section-wide">Room list</div>
+          <div className="chat-section-wide bg-dark">Room list: </div>
           <Nav variant="pills nav-chats chats-list" ref={chatList}>
             {chatRooms?.map((room) => {
               return (
-                <Nav.Item key={room._id} className="border border-primary rounded chats-item">
+                <Nav.Item key={room._id} className="border border-primary bg-dark rounded mt-1 chats-item">
                   <Nav.Link eventKey={room._id}> {room.name} </Nav.Link>
                 </Nav.Item>
               );
