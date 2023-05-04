@@ -24,7 +24,7 @@ class ChatRoomsController {
         { createdBy: userId },
         { __v: 0 }
       );
-      return res.status(200).send({ usersRooms: usersChatRooms });
+      return res.status(200).send({ rooms: usersChatRooms });
     } catch (err) {
       return next(err);
     }
@@ -122,7 +122,7 @@ class ChatRoomsController {
         { id: 1, name: 1 }
       );
 
-      return res.status(200).send({ userChatRooms: chatRooms });
+      return res.status(200).send({ rooms: chatRooms });
     } catch (err) {
       return next(err);
     }
