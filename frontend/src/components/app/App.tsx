@@ -9,19 +9,17 @@ import Profil from "../profil";
 import Rooms from "../rooms";
 import Users from "../users";
 import Ranges from "../ranges";
-import useAcciosHook from "@hooks/useAcciosHook";
 import NavigationBar from "./navigationBar";
+import { useGetSession } from "@hooks/authApi";
+import { AuthContext } from "@contexts/authContext";
+import { SendDataContext } from "@contexts/SendDataContext";
 
 function App() {
   const [auth, setAuth] = useState<IAuth | null>(null);
-  const { response: authResponse, loading: authLoading } = useAcciosHook({
-    url: `/session`,
-    method: "get",
-    withCredentials: true,
-  });
+  const { authResponse, authLoading, getSession } = useGetSession();
 
   useEffect(() => {
-    if (authResponse !== null) setAuth(authResponse?.data);
+    if (authResponse) setAuth(authResponse?.data);
   }, [authResponse]);
 
   if (authLoading) {
@@ -38,39 +36,40 @@ function App() {
     return (
       <div className="app-header">
         <div className="app-content">
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="*" element={<Login />} />
-          </Routes>
+          <SendDataContext.Provider value={{ sendData: getSession }}>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="*" element={<Login />} />
+            </Routes>
+          </SendDataContext.Provider>
         </div>
       </div>
     );
   }
   return (
-    <div className="app-header">
-      <NavigationBar auth={auth} />
+    <AuthContext.Provider value={{ auth, setAuth }}>
+      <div className="app-header">
+        <NavigationBar auth={auth} />
 
-      <div className="app-content">
-        <Routes>
-          <Route path="/login" element={auth ? <Home auth={auth} /> : <Login />} />
-          <Route path="/" element={<Home auth={auth} />} />
-          <Route path="/chats" element={!auth.isBanned ? <Chats auth={auth} /> : <Profil />} />
-          <Route path="/register" element={!auth ? <Register /> : <Home auth={auth} />} />
-          <Route path="/profil" element={auth ? <Profil /> : <Login />} />
-          <Route path="/rooms" element={auth && !auth.isBanned ? <Rooms /> : auth.isBanned ? <Profil /> : <Login />} />
+        <div className="app-content">
+          <Routes>
+            <Route path="/login" element={auth ? <Home /> : <Login />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/chats" element={!auth.isBanned ? <Chats /> : <Profil />} />
+            <Route path="/register" element={!auth ? <Register /> : <Home />} />
+            <Route path="/profil" element={auth ? <Profil /> : <Login />} />
+            <Route
+              path="/rooms"
+              element={auth && !auth.isBanned ? <Rooms /> : auth.isBanned ? <Profil /> : <Login />}
+            />
 
-          <Route
-            path="/users"
-            element={auth && auth.administrator && !auth.isBanned ? <Users /> : <Home auth={auth} />}
-          />
-          <Route
-            path="/ranges"
-            element={auth && auth.administrator && !auth.isBanned ? <Ranges /> : <Home auth={auth} />}
-          />
-        </Routes>
+            <Route path="/users" element={auth && auth.administrator && !auth.isBanned ? <Users /> : <Home />} />
+            <Route path="/ranges" element={auth && auth.administrator && !auth.isBanned ? <Ranges /> : <Home />} />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </AuthContext.Provider>
   );
 }
 
