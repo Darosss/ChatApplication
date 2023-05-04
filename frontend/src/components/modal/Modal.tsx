@@ -7,7 +7,7 @@ function ModalCore(props: {
   onClickFn: () => void;
   actionBtnVariant: string;
   actionName: string;
-  body: any; //TODO: change later
+  children?: React.ReactNode;
   postInfo: string;
   closeOnSubmit?: boolean;
 }) {
@@ -33,7 +33,7 @@ function ModalCore(props: {
         <Modal.Header closeButton>
           <Modal.Title>{props.actionName}</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="bg-dark text-light">{props.body}</Modal.Body>
+        <Modal.Body className="bg-dark text-light">{props.children}</Modal.Body>
         <Modal.Footer className="bg-dark">
           <Alert show={showAlert} variant={props.actionBtnVariant + " w-50"}>
             {props.postInfo}
