@@ -39,7 +39,6 @@ class ChatRoomsController {
     if (!createdBy) throw new AppError(500, "Something went wrong");
 
     try {
-      console.log(req.body);
       const room = await this.chatRoomService.createNewRoom({
         name: req.body.name,
         availableRanges: req.body.availableRanges,
