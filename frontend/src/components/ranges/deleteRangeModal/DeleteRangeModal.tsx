@@ -34,13 +34,9 @@ function DeleteRangeModal(props: { rangeId: string; rangeName: string }) {
   };
 
   return (
-    <ModalCore
-      actionName="Delete"
-      body={modalBody()}
-      onClickFn={handleOnDeleteRange}
-      actionBtnVariant="danger"
-      postInfo={postInfo}
-    />
+    <ModalCore actionName="Delete" onClickFn={handleOnDeleteRange} actionBtnVariant="danger" postInfo={postInfo}>
+      {modalBody()}
+    </ModalCore>
   );
 }
 

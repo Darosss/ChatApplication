@@ -116,12 +116,13 @@ function EditProfileModal(props: { user: IUserRes }) {
   return (
     <ModalCore
       actionName="Edit"
-      body={modalBody()}
       onClickFn={handleOnClickEditProfile}
       actionBtnVariant="primary"
       postInfo={postInfo}
       closeOnSubmit={true}
-    />
+    >
+      {modalBody()}
+    </ModalCore>
   );
 }
 

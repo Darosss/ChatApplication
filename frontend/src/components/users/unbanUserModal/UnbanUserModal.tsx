@@ -37,12 +37,13 @@ function UnbanUserModal(props: { userId: string; username: string }) {
   return (
     <ModalCore
       actionName="Unban user"
-      body={modalBody()}
       onClickFn={handleOnClickUnbanUser}
       actionBtnVariant="secondary"
       postInfo={postInfo}
       closeOnSubmit={true}
-    />
+    >
+      {modalBody()}
+    </ModalCore>
   );
 }
 

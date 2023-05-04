@@ -61,12 +61,13 @@ function EditUserModal(props: { userId: string; username: string }) {
   return (
     <ModalCore
       actionName="Ban user"
-      body={modalBody()}
       onClickFn={handleOnClickBanUser}
       actionBtnVariant="danger"
       postInfo={postInfo}
       closeOnSubmit={true}
-    />
+    >
+      {modalBody()}
+    </ModalCore>
   );
 }
 

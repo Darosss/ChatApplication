@@ -30,7 +30,6 @@ function DeleteRoomModal(props: { roomId: string }) {
   return (
     <ModalCore
       actionName="Delete room"
-      body=""
       onClickFn={() => {
         handleOnDeleteRoom();
       }}

@@ -137,12 +137,13 @@ function EditCreateRoomModal(props: {
   return (
     <ModalCore
       actionName={sectionName}
-      body={modalBody()}
       onClickFn={handleOnCreateEditRoom}
       actionBtnVariant="primary"
       postInfo={postInfo}
       closeOnSubmit={true}
-    />
+    >
+      {modalBody()}
+    </ModalCore>
   );
 }
 
