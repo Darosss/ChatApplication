@@ -9,6 +9,7 @@ function ModalCore(props: {
   actionName: string;
   body: any; //TODO: change later
   postInfo: string;
+  closeOnSubmit?: boolean;
 }) {
   const [show, setShow] = useState(false);
 
@@ -16,7 +17,9 @@ function ModalCore(props: {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
   const handleAction = () => {
+    if (props.closeOnSubmit) handleClose();
     props.onClickFn();
     setShowAlert(true);
   };
@@ -26,7 +29,7 @@ function ModalCore(props: {
         {props.actionName}
       </Button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} animation={false} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>{props.actionName}</Modal.Title>
         </Modal.Header>
