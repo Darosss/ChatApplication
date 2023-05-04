@@ -30,12 +30,14 @@ class RangesController {
     try {
       if (!creatorId) throw new AppError(500, "Something went wrong");
 
-      await this.rangeService.createNewRange({
+      const newRange = await this.rangeService.createNewRange({
         name: req.body.name,
         createdBy: creatorId,
       });
 
-      return res.status(201).send({ message: "Created new range" });
+      return res
+        .status(201)
+        .send({ message: "Created new range", range: newRange });
     } catch (err) {
       return next(err);
     }
@@ -70,7 +72,6 @@ class RangesController {
 
   deleteRangeById = async (req: Request, res: Response, next: NextFunction) => {
     const { _id } = req.params;
-
     try {
       this.rangeService.removeRangeById(_id);
       return res.status(200).send({ message: "Successfully deleted range" });
