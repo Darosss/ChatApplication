@@ -66,9 +66,11 @@ class UserService {
     updateData: Partial<UserWithoutPassword>
   ): Promise<UserModel | null> => {
     try {
-      const user = await this.userModel.findByIdAndUpdate(id, updateData, {
-        runValidators: true,
-      });
+      const user = await this.userModel
+        .findByIdAndUpdate(id, updateData, {
+          runValidators: true,
+        })
+        .select({ password: 0 });
 
       return user;
     } catch (err) {
