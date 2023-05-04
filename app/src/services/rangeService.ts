@@ -72,9 +72,8 @@ class RangeService {
 
   removeRangeById = async (id: string) => {
     try {
-      await this.rangeModel.remove({ id: id });
+      await this.rangeModel.findByIdAndDelete({ _id: id });
     } catch (error) {
-      console.error(error);
       handleAppError(error);
       return null;
     }

@@ -21,7 +21,7 @@ class ProfilController {
         { path: "ranges", select: "__v:0" }
       );
 
-      return res.status(200).send({ userDetails: loggedUser });
+      return res.status(200).send({ user: loggedUser });
     } catch (err) {
       return next(err);
     }

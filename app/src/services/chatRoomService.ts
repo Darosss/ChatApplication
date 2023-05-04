@@ -72,7 +72,7 @@ class ChatRoomService {
 
   removeRoomById = async (id: string) => {
     try {
-      await this.chatRoomModel.remove({ id: id });
+      await this.chatRoomModel.findByIdAndDelete({ _id: id });
     } catch (error) {
       console.error(error);
       handleAppError(error);
