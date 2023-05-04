@@ -6,13 +6,13 @@ import useAcciosHook from "@hooks/useAcciosHook";
 
 function UsersList(props: { users: IUserRes[] }) {
   const { users } = props;
-  const { response: rangesRes } = useAcciosHook({
+  const { response: rangesRes } = useAcciosHook<{ ranges: IRangeRes[] }>({
     url: `/ranges`,
     method: "get",
     withCredentials: true,
   });
 
-  const ranges = rangesRes?.data.ranges as IRangeRes[];
+  const ranges = rangesRes?.data.ranges || [];
 
   return (
     <div>

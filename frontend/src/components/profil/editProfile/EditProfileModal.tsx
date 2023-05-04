@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ModalCore from "@components/modal";
 import useAcciosHook from "@hooks/useAcciosHook";
+import usePostInfoHook from "@hooks/usePostInfoHook";
+import { SendDataContext } from "@contexts/SendDataContext";
 
 function EditProfileModal(props: { user: IUserRes }) {
   const { user } = props;
+
+  const { sendData: refetchData } = useContext(SendDataContext);
+
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -14,9 +19,8 @@ function EditProfileModal(props: { user: IUserRes }) {
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("");
   const [nickColor, setNickColor] = useState("");
-  const [postInfo, setPostInfo] = useState("");
 
-  const { response, error, sendData } = useAcciosHook(
+  const { response, error, sendData } = useAcciosHook<{ message: string }>(
     {
       url: `/profil/edit`,
       method: "patch",
@@ -36,12 +40,6 @@ function EditProfileModal(props: { user: IUserRes }) {
     },
     true,
   );
-  useEffect(() => {
-    setPostInfo(response?.data.message);
-  }, [response]);
-  useEffect(() => {
-    if (error) setPostInfo(error.message);
-  }, [error]);
 
   useEffect(() => {
     setFirstname(user.firstname as string);
@@ -54,8 +52,12 @@ function EditProfileModal(props: { user: IUserRes }) {
     setNickColor(user.nickColor as string);
   }, [user]);
 
-  const editProfile = () => {
-    sendData();
+  const { postInfo } = usePostInfoHook(response?.data.message, error?.message);
+
+  const handleOnClickEditProfile = () => {
+    sendData().then(() => {
+      refetchData();
+    });
   };
 
   const createProfileInput = (name: string, onChangeFn: (value: any) => void, value = "", type = "text") => {
@@ -115,9 +117,10 @@ function EditProfileModal(props: { user: IUserRes }) {
     <ModalCore
       actionName="Edit"
       body={modalBody()}
-      onClickFn={editProfile}
-      actionBtnVariant="danger"
+      onClickFn={handleOnClickEditProfile}
+      actionBtnVariant="primary"
       postInfo={postInfo}
+      closeOnSubmit={true}
     />
   );
 }

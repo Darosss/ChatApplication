@@ -1,25 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import ModalCore from "@components/modal";
 import useAcciosHook from "@hooks/useAcciosHook";
+import usePostInfoHook from "@hooks/usePostInfoHook";
+import { SendDataContext } from "@contexts/SendDataContext";
 
 function UnbanUserModal(props: { userId: string; username: string }) {
   const { userId, username } = props;
-
-  const [postInfo, setPostInfo] = useState("");
+  const { sendData: refetchData } = useContext(SendDataContext);
 
   const {
     response: unbanResponse,
     error: unbanError,
     sendData: unbanUser,
-  } = useAcciosHook({ url: `/users/admin/unban/${userId}`, method: "patch", withCredentials: true });
+  } = useAcciosHook<{ message: string; user: IUserRes }>({
+    url: `/users/admin/unban/${userId}`,
+    method: "patch",
+    withCredentials: true,
+  });
 
-  useEffect(() => {
-    if (unbanResponse) setPostInfo(unbanResponse?.data.message);
-  }, [unbanResponse]);
+  const { postInfo } = usePostInfoHook(unbanResponse?.data.message, unbanError?.message);
 
-  useEffect(() => {
-    if (unbanError) setPostInfo(unbanError.message);
-  }, [unbanError]);
+  const handleOnClickUnbanUser = () => {
+    unbanUser().then(() => {
+      refetchData();
+    });
+  };
 
   const modalBody = () => {
     return (
@@ -33,9 +38,10 @@ function UnbanUserModal(props: { userId: string; username: string }) {
     <ModalCore
       actionName="Unban user"
       body={modalBody()}
-      onClickFn={unbanUser}
+      onClickFn={handleOnClickUnbanUser}
       actionBtnVariant="secondary"
       postInfo={postInfo}
+      closeOnSubmit={true}
     />
   );
 }

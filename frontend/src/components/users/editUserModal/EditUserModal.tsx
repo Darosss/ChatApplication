@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ModalCore from "@components/modal";
-import EditCreateRoomModal from "@components/Rooms/editCreateRoomModal";
+import EditCreateRoomModal from "@components/rooms/editCreateRoomModal";
 import useAcciosHook from "@hooks/useAcciosHook";
+import { SendDataContext } from "@contexts/SendDataContext";
+import usePostInfoHook from "@hooks/usePostInfoHook";
 
 function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRangeRes[] }) {
   const { user, ranges, users } = props;
+  const { sendData: refetchData } = useContext(SendDataContext);
 
   const [username, setUsername] = useState("");
   const [userRanges, setUserRanges] = useState<string[]>([]);
@@ -18,10 +21,8 @@ function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRang
 
   const [userChatRooms, setUserChatRooms] = useState<IChatRoomRes[]>();
 
-  const [postInfo, setPostInfo] = useState("");
-
   useEffect(() => {
-    if (!user) return; //if roomId = undefined is not editing so return
+    if (!user) return;
     setUsername(user.username);
     setFirstname(user.firstname as string);
     setSurname(user.surname as string);
@@ -31,17 +32,13 @@ function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRang
     setPhoneNumber(user.phoneNumber as string);
     setNickColor(user.nickColor as string);
     setEmail(user.email as string);
-
-    // setRanges(res.data.ranges);
-
-    // setUserChatRooms(res.data.chatRooms);
   }, [user]);
 
   const {
     response: userEditResponse,
     error: userEditError,
     sendData: userEdit,
-  } = useAcciosHook(
+  } = useAcciosHook<{ message: string; user: IUserRes }>(
     {
       url: `users/admin/edit/${user._id}`,
       method: "patch",
@@ -61,7 +58,7 @@ function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRang
     true,
   );
 
-  const { response: usersRoomResponse } = useAcciosHook({
+  const { response: usersRoomResponse } = useAcciosHook<{ chatRooms: IChatRoomRes[] }>({
     url: `users/rooms/${user._id}`,
     method: "get",
     withCredentials: true,
@@ -71,13 +68,13 @@ function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRang
     setUserChatRooms(usersRoomResponse?.data.chatRooms);
   }, [usersRoomResponse]);
 
-  useEffect(() => {
-    setPostInfo(userEditResponse?.data.message);
-  }, [userEditResponse]);
+  const { postInfo } = usePostInfoHook(userEditResponse?.data.message, userEditError?.message);
 
-  useEffect(() => {
-    if (userEditError) setPostInfo(userEditError?.message);
-  }, [userEditError]);
+  const handleOnClickEditUser = () => {
+    userEdit().then(() => {
+      refetchData();
+    });
+  };
 
   const createSelect = (label: string) => {
     return (
@@ -160,9 +157,10 @@ function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRang
     <ModalCore
       actionName="Edit user"
       body={modalBody()}
-      onClickFn={userEdit}
+      onClickFn={handleOnClickEditUser}
       actionBtnVariant="primary"
       postInfo={postInfo}
+      closeOnSubmit={true}
     />
   );
 }

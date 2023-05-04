@@ -1,40 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ModalCore from "@components/modal";
 import useAcciosHook from "@hooks/useAcciosHook";
+import { SendDataContext } from "@contexts/SendDataContext";
+import usePostInfoHook from "@hooks/usePostInfoHook";
 
 function EditRangeModal(props: { range?: IRangeRes; sectionName?: string }) {
-  const { range = undefined, sectionName = "" } = props;
+  const { range, sectionName = "" } = props;
+  const { sendData: refetchData } = useContext(SendDataContext);
 
   const [rangeName, setRangeName] = useState("");
-  const [postInfo, setPostInfo] = useState("");
-
-  const { response, error, sendData } = useAcciosHook(
+  const { response, error, sendData } = useAcciosHook<{ message: string; range: IRangeRes }>(
     {
       url: "ranges/admin" + (range ? `/edit/${range._id}` : "/create"),
       method: `${range ? "patch" : "post"}`,
       withCredentials: true,
-      data: {
-        name: rangeName,
-      },
+      data: { name: rangeName },
     },
     true,
   );
-
-  useEffect(() => {
-    setPostInfo(response?.data.message);
-  }, [response]);
-
-  useEffect(() => {
-    if (error) setPostInfo(error.message);
-  }, [error]);
+  const { postInfo } = usePostInfoHook(response?.data.message, error?.message);
 
   useEffect(() => {
     if (!range) return;
     setRangeName(range.name);
   }, [range]);
 
-  const createOrEditRange = () => {
-    sendData();
+  const handleOnCreateEditRange = () => {
+    sendData().then(() => {
+      refetchData();
+    });
   };
 
   const modalBody = () => {
@@ -57,9 +51,10 @@ function EditRangeModal(props: { range?: IRangeRes; sectionName?: string }) {
     <ModalCore
       actionName={sectionName}
       body={modalBody()}
-      onClickFn={createOrEditRange}
+      onClickFn={handleOnCreateEditRange}
       actionBtnVariant="primary"
       postInfo={postInfo}
+      closeOnSubmit={true}
     />
   );
 }

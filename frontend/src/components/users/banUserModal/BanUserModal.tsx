@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import ModalCore from "@components/modal";
 import useAcciosHook from "@hooks/useAcciosHook";
+import usePostInfoHook from "@hooks/usePostInfoHook";
+import { SendDataContext } from "@contexts/SendDataContext";
 
 function EditUserModal(props: { userId: string; username: string }) {
   const { userId, username } = props;
+
+  const { sendData: refetchData } = useContext(SendDataContext);
   const [banTime, setBanTime] = useState("");
   const [banReason, setBanReason] = useState("");
-
-  const [postInfo, setPostInfo] = useState("");
 
   const {
     response: banResponse,
     error: banError,
     sendData: banUser,
-  } = useAcciosHook({
+  } = useAcciosHook<{ message: string; user: IUserRes }>({
     url: `/users/admin/ban/${userId}`,
     method: "patch",
     withCredentials: true,
@@ -22,14 +24,13 @@ function EditUserModal(props: { userId: string; username: string }) {
       banReason: banReason,
     },
   });
+  const { postInfo } = usePostInfoHook(banResponse?.data.message, banError?.message);
 
-  useEffect(() => {
-    if (banResponse) setPostInfo(banResponse?.data.message);
-  }, [banResponse]);
-
-  useEffect(() => {
-    if (banError) setPostInfo(banError.message);
-  }, [banError]);
+  const handleOnClickBanUser = () => {
+    banUser().then(() => {
+      refetchData();
+    });
+  };
 
   const modalBody = () => {
     return (
@@ -61,9 +62,10 @@ function EditUserModal(props: { userId: string; username: string }) {
     <ModalCore
       actionName="Ban user"
       body={modalBody()}
-      onClickFn={banUser}
+      onClickFn={handleOnClickBanUser}
       actionBtnVariant="danger"
       postInfo={postInfo}
+      closeOnSubmit={true}
     />
   );
 }

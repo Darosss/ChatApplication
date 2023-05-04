@@ -1,22 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import ModalCore from "@components/modal";
 import useAcciosHook from "@hooks/useAcciosHook";
+import usePostInfoHook from "@hooks/usePostInfoHook";
+import { SendDataContext } from "@contexts/SendDataContext";
 
 function DeleteRangeModal(props: { rangeId: string; rangeName: string }) {
   const { rangeId, rangeName } = props;
+  const { sendData: refetchData } = useContext(SendDataContext);
 
-  const [postInfo, setPostInfo] = useState("");
-
-  const { response, sendData: deleteRange } = useAcciosHook({
+  const {
+    response,
+    error,
+    sendData: deleteRange,
+  } = useAcciosHook<{ message: string }>({
     url: `ranges/admin/delete/${rangeId}`,
     method: "delete",
     withCredentials: true,
   });
 
-  useEffect(() => {
-    setPostInfo(response?.data.message);
-  }, [response]);
+  const { postInfo } = usePostInfoHook(response?.data.message, error?.message);
 
+  const handleOnDeleteRange = () => {
+    deleteRange().then(() => {
+      refetchData();
+    });
+  };
   const modalBody = () => {
     return (
       <div>
@@ -29,7 +37,7 @@ function DeleteRangeModal(props: { rangeId: string; rangeName: string }) {
     <ModalCore
       actionName="Delete"
       body={modalBody()}
-      onClickFn={deleteRange}
+      onClickFn={handleOnDeleteRange}
       actionBtnVariant="danger"
       postInfo={postInfo}
     />

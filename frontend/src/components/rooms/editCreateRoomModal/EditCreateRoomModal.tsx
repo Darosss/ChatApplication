@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ModalCore from "@components/modal";
 import useAcciosHook from "@hooks/useAcciosHook";
+import { SendDataContext } from "@contexts/SendDataContext";
+import usePostInfoHook from "@hooks/usePostInfoHook";
 
 function EditCreateRoomModal(props: {
   room?: IChatRoomRes;
@@ -9,14 +11,23 @@ function EditCreateRoomModal(props: {
   sectionName: string;
   isEdit?: boolean;
 }) {
-  const { room = undefined, sectionName = "", ranges, users } = props;
+  const { room, sectionName = "", ranges, users } = props;
+
+  const { sendData: refetchData } = useContext(SendDataContext);
 
   const [roomName, setRoomName] = useState("");
   const [roomRanges, setRoomRanges] = useState<string[]>();
   const [roomAllowedUsers, setRoomAllowedUsers] = useState<string[]>();
   const [roomBannedUsers, setRoomBannedUsers] = useState<string[]>();
 
-  const { response, error, sendData } = useAcciosHook(
+  const {
+    response,
+    error,
+    sendData: sendEditCreateData,
+  } = useAcciosHook<{
+    message: string;
+    room: IChatRoomRes;
+  }>(
     {
       url: "rooms" + (room ? `/edit/${room._id}` : "/create"),
       method: `${room ? "patch" : "post"}`,
@@ -30,34 +41,27 @@ function EditCreateRoomModal(props: {
     },
     true,
   );
-
-  const [postInfo, setPostInfo] = useState("");
-
-  useEffect(() => {
-    setPostInfo(response?.data.message);
-  }, [response]);
+  const { postInfo } = usePostInfoHook(response?.data.message, error?.message);
 
   useEffect(() => {
-    if (error) setPostInfo(error.message);
-  }, [error]);
-
-  useEffect(() => {
-    if (!room) return; //if roomId = undefined is not editing so return
+    if (!room) return;
     setRoomName(room.name);
     setRoomRanges(room.availableRanges);
     setRoomAllowedUsers(room.allowedUsers);
     setRoomBannedUsers(room.bannedUsers);
   }, [room]);
 
-  const createOrEdit = () => {
-    sendData();
+  const handleOnCreateEditRoom = () => {
+    sendEditCreateData().then(() => {
+      refetchData();
+    });
   };
 
   const createSelect = (
     label: string,
-    setState: any,
-    funcOptions: any, // TODO: add JSX element as function
-    selectValue: any, // TODO: add state type
+    setState: React.Dispatch<React.SetStateAction<string[] | undefined>>,
+    funcOptions: () => JSX.Element[] | undefined,
+    selectValue: string[] | undefined,
   ) => {
     return (
       <div>
@@ -95,7 +99,10 @@ function EditCreateRoomModal(props: {
       );
     });
   };
-  const handleMultipleSelect = (options: any, setState: (arg: any) => void /* TODO: add type for state */) => {
+  const handleMultipleSelect = (
+    options: HTMLCollectionOf<HTMLOptionElement>,
+    setState: React.Dispatch<React.SetStateAction<string[] | undefined>>,
+  ) => {
     const selectedOptions = [...options].map((option) => option.value);
     setState(selectedOptions);
   };
@@ -131,9 +138,10 @@ function EditCreateRoomModal(props: {
     <ModalCore
       actionName={sectionName}
       body={modalBody()}
-      onClickFn={createOrEdit}
+      onClickFn={handleOnCreateEditRoom}
       actionBtnVariant="primary"
       postInfo={postInfo}
+      closeOnSubmit={true}
     />
   );
 }
