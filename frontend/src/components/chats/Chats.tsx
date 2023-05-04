@@ -1,6 +1,5 @@
-import React, { useState, useRef, useEffect, useReducer } from "react";
+import React, { useState, useRef, useEffect, useReducer, useContext } from "react";
 import ChatRoom from "./chatRoom";
-import useAcciosHook from "@hooks/useAcciosHook";
 import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
@@ -18,13 +17,16 @@ import { IMessageSocket } from "@libs/types/socket";
 import { scrollToBottom } from "@utils/scrollToBottom.util";
 import ChatOnlineUsers from "./chatOnlineUsers";
 import InfoSidebar from "@components/infoSidebar";
+import { AuthContext } from "@contexts/authContext";
+import { useGetLoggedUserRooms } from "@hooks/roomsApi";
 
 type Timer = ReturnType<typeof setTimeout>;
 
-function Chats(props: { auth: IAuth }) {
+function Chats() {
   const [, forceUpdate] = useReducer((x) => x + 1, 0); //update state
 
-  const { auth } = props;
+  const { auth } = useContext(AuthContext);
+
   const { username } = auth;
 
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
@@ -33,19 +35,18 @@ function Chats(props: { auth: IAuth }) {
   const [localMessages, setLocalMessages] = useState<Map<string, IMessageSocket[]>>(
     new Map<string, IMessageSocket[]>(),
   );
+  const [chatRooms, setChatRooms] = useState<IChatRoomRes[]>([]);
 
   const chatList = useRef<HTMLDivElement>(null);
   const usersOnlineTable = useRef<HTMLDivElement>(null);
 
   const typingTimeoutMs = 5000;
 
-  const { response: roomsResponse } = useAcciosHook({
-    url: `rooms/users-rooms`,
-    method: "get",
-    withCredentials: true,
-  });
+  const { roomsResponse } = useGetLoggedUserRooms();
 
-  const chatRooms = roomsResponse?.data.userChatRooms as IChatRoomRes[];
+  useEffect(() => {
+    if (roomsResponse) setChatRooms(roomsResponse.data.rooms);
+  }, [roomsResponse]);
 
   useEffect(() => {
     let typingTimeout: Timer;

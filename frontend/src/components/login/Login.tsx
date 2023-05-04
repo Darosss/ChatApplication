@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Button, Col, Form } from "react-bootstrap";
-import useAcciosHook from "@hooks/useAcciosHook";
 import { Link } from "react-router-dom";
 import PostInfo from "@components/postInfo";
 import { Formik } from "formik";
 import { object, string } from "yup";
+import usePostInfoHook from "@hooks/usePostInfoHook";
+import { useLogin } from "@hooks/authApi";
+import { SendDataContext } from "@contexts/SendDataContext";
 
 interface LoginFields {
   username: string;
@@ -17,27 +19,13 @@ const logInSchema = object<LoginFields>().shape({
 });
 
 function Login() {
-  const [postInfo, setPostInfo] = useState("");
-  const {
-    response: loginResponse,
-    error: loginError,
-    sendData: sendLoginData,
-  } = useAcciosHook(
-    {
-      url: `/login`,
-      method: "post",
-      withCredentials: true,
-    },
-    true,
-  );
+  const { sendData: refetchSession } = useContext(SendDataContext);
+  const { loginResponse, loginError, login } = useLogin();
+  const { postInfo } = usePostInfoHook(loginResponse?.data.message, loginError?.message);
 
   useEffect(() => {
-    if (loginResponse) setPostInfo(loginResponse?.data?.message);
-  }, [loginResponse]);
-
-  useEffect(() => {
-    if (loginError) setPostInfo(loginError.message);
-  }, [loginError]);
+    if (loginResponse) refetchSession();
+  }, [loginResponse, refetchSession]);
 
   return (
     <div>
@@ -49,7 +37,7 @@ function Login() {
           validationSchema={logInSchema}
           initialValues={{ username: "", password: "" }}
           onSubmit={(values, actions) => {
-            sendLoginData<LoginFields>(values);
+            login<LoginFields>(values);
             actions.setSubmitting(false);
           }}
         >

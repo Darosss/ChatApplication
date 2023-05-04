@@ -1,23 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import ModalCore from "@components/modal";
-import useAcciosHook from "@hooks/useAcciosHook";
 import { SendDataContext } from "@contexts/SendDataContext";
 import usePostInfoHook from "@hooks/usePostInfoHook";
+import { useCreateOrUpdateRange } from "@hooks/rangesApi";
 
 function EditRangeModal(props: { range?: IRangeRes; sectionName?: string }) {
   const { range, sectionName = "" } = props;
   const { sendData: refetchData } = useContext(SendDataContext);
 
   const [rangeName, setRangeName] = useState("");
-  const { response, error, sendData } = useAcciosHook<{ message: string; range: IRangeRes }>(
-    {
-      url: "ranges/admin" + (range ? `/edit/${range._id}` : "/create"),
-      method: `${range ? "patch" : "post"}`,
-      withCredentials: true,
-      data: { name: rangeName },
-    },
-    true,
-  );
+
+  const { response, error, sendData } = useCreateOrUpdateRange({ name: rangeName }, range?._id);
   const { postInfo } = usePostInfoHook(response?.data.message, error?.message);
 
   useEffect(() => {

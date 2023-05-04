@@ -1,29 +1,17 @@
 import React, { useContext, useState } from "react";
 import ModalCore from "@components/modal";
-import useAcciosHook from "@hooks/useAcciosHook";
 import usePostInfoHook from "@hooks/usePostInfoHook";
 import { SendDataContext } from "@contexts/SendDataContext";
+import { useBanUser } from "@hooks/usersApi";
 
 function EditUserModal(props: { userId: string; username: string }) {
   const { userId, username } = props;
 
   const { sendData: refetchData } = useContext(SendDataContext);
-  const [banTime, setBanTime] = useState("");
+  const [banTime, setBanTime] = useState<number>();
   const [banReason, setBanReason] = useState("");
 
-  const {
-    response: banResponse,
-    error: banError,
-    sendData: banUser,
-  } = useAcciosHook<{ message: string; user: IUserRes }>({
-    url: `/users/admin/ban/${userId}`,
-    method: "patch",
-    withCredentials: true,
-    data: {
-      banTime: banTime,
-      banReason: banReason,
-    },
-  });
+  const { banResponse, banError, banUser } = useBanUser(userId, { banTime: banTime || 5, banReason: banReason });
   const { postInfo } = usePostInfoHook(banResponse?.data.message, banError?.message);
 
   const handleOnClickBanUser = () => {
@@ -45,7 +33,7 @@ function EditUserModal(props: { userId: string; username: string }) {
           type="number"
           className="form-control"
           value={banTime || ""}
-          onChange={(e) => setBanTime(e.target.value)}
+          onChange={(e) => setBanTime(e.target.valueAsNumber)}
         />
         <label className="form-label ">Ban reason</label>
         <input

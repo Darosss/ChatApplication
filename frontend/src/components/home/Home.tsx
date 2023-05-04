@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "@contexts/authContext";
 
-function Home(props: { auth: IAuth }) {
-  const { auth } = props;
+function Home() {
+  const { auth } = useContext(AuthContext);
 
   return (
     <div className="section-header">

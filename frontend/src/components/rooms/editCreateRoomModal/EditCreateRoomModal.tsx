@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import ModalCore from "@components/modal";
-import useAcciosHook from "@hooks/useAcciosHook";
 import { SendDataContext } from "@contexts/SendDataContext";
 import usePostInfoHook from "@hooks/usePostInfoHook";
+import { useCreateOrUpdateRoom } from "@hooks/roomsApi";
 
 function EditCreateRoomModal(props: {
   room?: IChatRoomRes;
@@ -16,30 +16,18 @@ function EditCreateRoomModal(props: {
   const { sendData: refetchData } = useContext(SendDataContext);
 
   const [roomName, setRoomName] = useState("");
-  const [roomRanges, setRoomRanges] = useState<string[]>();
-  const [roomAllowedUsers, setRoomAllowedUsers] = useState<string[]>();
-  const [roomBannedUsers, setRoomBannedUsers] = useState<string[]>();
+  const [roomRanges, setRoomRanges] = useState<string[]>([]);
+  const [roomAllowedUsers, setRoomAllowedUsers] = useState<string[]>([]);
+  const [roomBannedUsers, setRoomBannedUsers] = useState<string[]>([]);
 
-  const {
-    response,
-    error,
-    sendData: sendEditCreateData,
-  } = useAcciosHook<{
-    message: string;
-    room: IChatRoomRes;
-  }>(
+  const { response, error, sendData } = useCreateOrUpdateRoom(
     {
-      url: "rooms" + (room ? `/edit/${room._id}` : "/create"),
-      method: `${room ? "patch" : "post"}`,
-      withCredentials: true,
-      data: {
-        name: roomName,
-        availableRanges: roomRanges,
-        allowedUsers: roomAllowedUsers,
-        bannedUsers: roomBannedUsers,
-      },
+      name: roomName,
+      availableRanges: roomRanges,
+      allowedUsers: roomAllowedUsers,
+      bannedUsers: roomBannedUsers,
     },
-    true,
+    room?._id,
   );
   const { postInfo } = usePostInfoHook(response?.data.message, error?.message);
 
@@ -52,14 +40,14 @@ function EditCreateRoomModal(props: {
   }, [room]);
 
   const handleOnCreateEditRoom = () => {
-    sendEditCreateData().then(() => {
+    sendData().then(() => {
       refetchData();
     });
   };
 
   const createSelect = (
     label: string,
-    setState: React.Dispatch<React.SetStateAction<string[] | undefined>>,
+    setState: React.Dispatch<React.SetStateAction<string[]>>,
     funcOptions: () => JSX.Element[] | undefined,
     selectValue: string[] | undefined,
   ) => {
@@ -101,7 +89,7 @@ function EditCreateRoomModal(props: {
   };
   const handleMultipleSelect = (
     options: HTMLCollectionOf<HTMLOptionElement>,
-    setState: React.Dispatch<React.SetStateAction<string[] | undefined>>,
+    setState: React.Dispatch<React.SetStateAction<string[]>>,
   ) => {
     const selectedOptions = [...options].map((option) => option.value);
     setState(selectedOptions);

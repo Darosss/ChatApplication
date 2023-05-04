@@ -1,26 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import UsersList from "./usersList";
-import useAcciosHook from "@hooks/useAcciosHook";
 import { SendDataContext } from "@contexts/SendDataContext";
+import { useGetUsers } from "@hooks/usersApi";
 
 function Users() {
-  const {
-    response: usersRes,
-    loading: loadingUsers,
-    sendData: refetchUsers,
-  } = useAcciosHook<{ users: IUserRes[] }>({
-    url: `/users`,
-    method: "get",
-    withCredentials: true,
-  });
-  const users = usersRes?.data.users;
+  const { usersResponse, usersLoading, refetchUsers } = useGetUsers();
+
+  const [users, setUsers] = useState<IUserRes[]>([]);
+
+  useEffect(() => {
+    if (usersResponse) setUsers(usersResponse.data.users);
+  }, [usersResponse]);
 
   return (
     <SendDataContext.Provider value={{ sendData: refetchUsers }}>
       <div>
         <div className="section-header">
-          <h1> Users list {loadingUsers ? " Fetching data..." : null}</h1>
+          <h1> Users list {usersLoading ? " Fetching data..." : null}</h1>
         </div>
         {users ? <UsersList users={users} /> : null}
       </div>

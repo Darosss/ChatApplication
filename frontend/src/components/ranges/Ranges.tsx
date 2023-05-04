@@ -1,26 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import EditCreateRangeModal from "./editCreateRangeModal";
 import DeleteRangeModal from "./deleteRangeModal";
-import useAcciosHook from "@hooks/useAcciosHook";
 import { SendDataContext } from "@contexts/SendDataContext";
+import { useGetRanges } from "@hooks/rangesApi";
 
 function Ranges() {
-  const {
-    response: rangesRes,
-    loading: loadingRanges,
-    sendData: refetchRanges,
-  } = useAcciosHook<{ ranges: IRangeRes[] }>({
-    url: `/ranges`,
-    method: "get",
-    withCredentials: true,
-  });
-  const ranges = rangesRes?.data.ranges;
+  const { rangesResponse, rangesLoading, refetchRanges } = useGetRanges();
+
+  const [ranges, setRanges] = useState<IRangeRes[]>([]);
+
+  useEffect(() => {
+    if (rangesResponse) setRanges(rangesResponse.data.ranges);
+  }, [rangesResponse]);
 
   return (
     <SendDataContext.Provider value={{ sendData: refetchRanges }}>
       <div>
         <div className="section-header">
-          <h1> Ranges list {loadingRanges ? "  Fetching data..." : null}</h1>
+          <h1> Ranges list {rangesLoading ? "  Fetching data..." : null}</h1>
         </div>
         <div>
           <table className="table table-sm table-dark ranges-list">

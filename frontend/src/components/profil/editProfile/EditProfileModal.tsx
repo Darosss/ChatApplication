@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import ModalCore from "@components/modal";
-import useAcciosHook from "@hooks/useAcciosHook";
 import usePostInfoHook from "@hooks/usePostInfoHook";
 import { SendDataContext } from "@contexts/SendDataContext";
+import { useProfilEdit } from "@hooks/profilApi";
 
 function EditProfileModal(props: { user: IUserRes }) {
   const { user } = props;
@@ -14,48 +14,40 @@ function EditProfileModal(props: { user: IUserRes }) {
   const [firstname, setFirstname] = useState("");
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
-  const [birthday, setBirthday] = useState("");
+  const [birthday, setBirthday] = useState<Date>(new Date());
   const [country, setCountry] = useState("");
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("");
   const [nickColor, setNickColor] = useState("");
 
-  const { response, error, sendData } = useAcciosHook<{ message: string }>(
-    {
-      url: `/profil/edit`,
-      method: "patch",
-      withCredentials: true,
-      data: {
-        oldPassword: oldPassword,
-        newPassword: newPassword,
-        firstname: firstname,
-        surname: surname,
-        email: email,
-        birthday: birthday,
-        country: country,
-        phoneNumber: phone,
-        gender: gender,
-        nickColor: nickColor,
-      },
-    },
-    true,
-  );
+  const { profilEditResponse, profilEditError, profilEdit } = useProfilEdit({
+    oldPassword: oldPassword,
+    newPassword: newPassword,
+    firstname: firstname,
+    surname: surname,
+    email: email,
+    birthday: birthday,
+    country: country,
+    phoneNumber: phone,
+    gender: gender,
+    nickColor: nickColor,
+  });
 
   useEffect(() => {
     setFirstname(user.firstname as string);
     setSurname(user.surname as string);
     setEmail(user.email as string);
-    setBirthday(user.birthday ? user.birthday?.toString().split("T")[0] : "");
+    setBirthday(user.birthday);
     setCountry(user.country as string);
     setPhone(user.phoneNumber as string);
     setGender(user.gender as string);
     setNickColor(user.nickColor as string);
   }, [user]);
 
-  const { postInfo } = usePostInfoHook(response?.data.message, error?.message);
+  const { postInfo } = usePostInfoHook(profilEditResponse?.data.message, profilEditError?.message);
 
   const handleOnClickEditProfile = () => {
-    sendData().then(() => {
+    profilEdit().then(() => {
       refetchData();
     });
   };
@@ -100,7 +92,7 @@ function EditProfileModal(props: { user: IUserRes }) {
         <label className="form-label">Email</label>
         {createProfileInput("email", setEmail, email)}
         <label className="form-label">Birthday</label>
-        {createProfileInput("birthday", setBirthday, birthday, "date")}
+        {createProfileInput("birthday", setBirthday, birthday ? birthday?.toString().split("T")[0] : "", "date")}
         <label className="form-label">Country</label>
         {createProfileInput("country", setCountry, country)}
         <label className="form-label">Gender</label>

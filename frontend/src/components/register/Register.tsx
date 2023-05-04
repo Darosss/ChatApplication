@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import useAcciosHook from "@hooks/useAcciosHook";
+import React from "react";
 import { Link } from "react-router-dom";
 import PostInfo from "@components/postInfo";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { Formik } from "formik";
 import { object, string, date, number } from "yup";
+import { useRegister } from "@hooks/authApi";
+import usePostInfoHook from "@hooks/usePostInfoHook";
 
 interface RegisterFields {
   username: string;
@@ -35,26 +36,9 @@ const registerSchema = object<RegisterFields>().shape({
   phone: number().required("Required!"),
 });
 
-function App() {
-  const [postInfo, setPostInfo] = useState("");
-
-  const {
-    response: registerResponse,
-    error: registerError,
-    sendData: sendRegisterData,
-  } = useAcciosHook({
-    url: `/register`,
-    method: "post",
-    withCredentials: true,
-  });
-
-  useEffect(() => {
-    if (registerResponse) setPostInfo(registerResponse?.data.message);
-  }, [registerResponse]);
-
-  useEffect(() => {
-    if (registerError) setPostInfo(registerError?.message);
-  }, [registerError]);
+function Register() {
+  const { registerResponse, registerError, register } = useRegister();
+  const { postInfo } = usePostInfoHook(registerResponse?.data.message, registerError?.message);
 
   return (
     <div>
@@ -77,7 +61,7 @@ function App() {
             phone: "",
           }}
           onSubmit={(values, actions) => {
-            sendRegisterData<RegisterFields>(values);
+            register(values);
             actions.setSubmitting(false);
           }}
         >
@@ -241,4 +225,4 @@ function App() {
   );
 }
 
-export default App;
+export default Register;

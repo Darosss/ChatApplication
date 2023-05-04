@@ -1,25 +1,17 @@
 import React, { useContext } from "react";
 import ModalCore from "@components/modal";
-import useAcciosHook from "@hooks/useAcciosHook";
 import { SendDataContext } from "@contexts/SendDataContext";
 import usePostInfoHook from "@hooks/usePostInfoHook";
+import { useDeleteRoom } from "@hooks/roomsApi";
 
 function DeleteRoomModal(props: { roomId: string }) {
   const { roomId } = props;
 
   const { sendData: refetchData } = useContext(SendDataContext);
 
-  const {
-    response,
-    error,
-    sendData: deleteRoom,
-  } = useAcciosHook<{ message: string }>({
-    url: `rooms/delete/${roomId}`,
-    method: "delete",
-    withCredentials: true,
-  });
+  const { roomDeleteResponse, roomDeleteError, deleteRoom } = useDeleteRoom(roomId);
 
-  const { postInfo } = usePostInfoHook(response?.data.message, error?.message);
+  const { postInfo } = usePostInfoHook(roomDeleteResponse?.data.message, roomDeleteError?.message);
 
   const handleOnDeleteRoom = () => {
     deleteRoom().then(() => {

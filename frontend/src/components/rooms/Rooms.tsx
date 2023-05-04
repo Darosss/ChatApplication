@@ -1,28 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import UserRoomsList from "./userRoomsList";
-import useAcciosHook from "@hooks/useAcciosHook";
 import { SendDataContext } from "@contexts/SendDataContext";
+import { useGetUsers } from "@hooks/usersApi";
+import { useGetRanges } from "@hooks/rangesApi";
+import { useGetRooms } from "@hooks/roomsApi";
 
 function Rooms() {
-  const { response: roomsRes, sendData: refetchRooms } = useAcciosHook<{ usersRooms: IChatRoomRes[] }>({
-    url: `/rooms`,
-    method: "get",
-    withCredentials: true,
-  });
-  const { response: rangesRes } = useAcciosHook<{ ranges: IRangeRes[] }>({
-    url: `/ranges`,
-    method: "get",
-    withCredentials: true,
-  });
-  const { response: usersRes } = useAcciosHook<{ users: IUserRes[] }>({
-    url: `/users`,
-    method: "get",
-    withCredentials: true,
-  });
+  const { roomsResponse, refetchRooms } = useGetRooms();
+  const { rangesResponse } = useGetRanges();
+  const { usersResponse } = useGetUsers();
 
-  const rooms = roomsRes?.data.usersRooms;
-  const ranges = rangesRes?.data.ranges;
-  const users = usersRes?.data.users;
+  const [rooms, setRooms] = useState<IChatRoomRes[]>([]);
+  const [ranges, setRanges] = useState<IRangeRes[]>([]);
+  const [users, setUsers] = useState<IUserRes[]>([]);
+
+  useEffect(() => {
+    if (roomsResponse) setRooms(roomsResponse.data.rooms);
+  }, [roomsResponse]);
+
+  useEffect(() => {
+    if (rangesResponse) setRanges(rangesResponse.data.ranges);
+  }, [rangesResponse]);
+
+  useEffect(() => {
+    if (usersResponse) setUsers(usersResponse.data.users);
+  }, [usersResponse]);
 
   return (
     <SendDataContext.Provider value={{ sendData: refetchRooms }}>

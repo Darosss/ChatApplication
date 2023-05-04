@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import ModalCore from "@components/modal";
 import EditCreateRoomModal from "@components/rooms/editCreateRoomModal";
-import useAcciosHook from "@hooks/useAcciosHook";
 import { SendDataContext } from "@contexts/SendDataContext";
 import usePostInfoHook from "@hooks/usePostInfoHook";
+import { useEditUser, useGetUsersRooms } from "@hooks/usersApi";
 
 function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRangeRes[] }) {
   const { user, ranges, users } = props;
@@ -34,35 +34,19 @@ function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRang
     setEmail(user.email as string);
   }, [user]);
 
-  const {
-    response: userEditResponse,
-    error: userEditError,
-    sendData: userEdit,
-  } = useAcciosHook<{ message: string; user: IUserRes }>(
-    {
-      url: `users/admin/edit/${user._id}`,
-      method: "patch",
-      withCredentials: true,
-      data: {
-        username: username,
-        firstname: firstname,
-        surname: surname,
-        country: country,
-        gender: gender,
-        nickColor: nickColor,
-        email: email,
-        phoneNumber: phoneNumber,
-        ranges: userRanges,
-      },
-    },
-    true,
-  );
-
-  const { response: usersRoomResponse } = useAcciosHook<{ chatRooms: IChatRoomRes[] }>({
-    url: `users/rooms/${user._id}`,
-    method: "get",
-    withCredentials: true,
+  const { userEditResponse, userEditError, userEdit } = useEditUser(user._id, {
+    username: username,
+    firstname: firstname,
+    surname: surname,
+    country: country,
+    gender: gender,
+    nickColor: nickColor,
+    email: email,
+    phoneNumber: phoneNumber,
+    ranges: userRanges,
   });
+
+  const { usersRoomResponse } = useGetUsersRooms(user._id);
 
   useEffect(() => {
     setUserChatRooms(usersRoomResponse?.data.chatRooms);

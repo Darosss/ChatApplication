@@ -1,18 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import EditUserModal from "../editUserModal";
 import BanUserModal from "../banUserModal";
 import UnbanUserModal from "../unbanUserModal";
-import useAcciosHook from "@hooks/useAcciosHook";
+import { useGetRanges } from "@hooks/rangesApi";
 
 function UsersList(props: { users: IUserRes[] }) {
   const { users } = props;
-  const { response: rangesRes } = useAcciosHook<{ ranges: IRangeRes[] }>({
-    url: `/ranges`,
-    method: "get",
-    withCredentials: true,
-  });
+  const [ranges, setRanges] = useState<IRangeRes[]>([]);
+  const { rangesResponse } = useGetRanges();
 
-  const ranges = rangesRes?.data.ranges || [];
+  useEffect(() => {
+    if (rangesResponse) setRanges(rangesResponse.data.ranges);
+  }, [rangesResponse]);
 
   return (
     <div>
