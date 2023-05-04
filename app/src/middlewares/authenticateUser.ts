@@ -10,7 +10,7 @@ export default function (req: Request, res: Response, next: NextFunction) {
     }
     if (!user)
       return res
-        .status(200)
+        .status(401)
         .send({ message: "Username or password does not match" });
 
     req.logIn(user, (error) => {
@@ -21,9 +21,11 @@ export default function (req: Request, res: Response, next: NextFunction) {
           username: user.username,
         };
         req.session = {};
+
         req.session.jwt = jwt.sign(userReturnObject, jwtSecretKey, {
           expiresIn: 86400,
         });
+
         next();
       }
     });

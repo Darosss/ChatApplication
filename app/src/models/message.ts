@@ -1,7 +1,7 @@
 import { Model, model, Schema } from "mongoose";
-import { IMessageDocument } from "@types";
+import { MessageDocument } from "@types";
 
-const messageSchema: Schema<IMessageDocument> = new Schema({
+const messageSchema: Schema<MessageDocument> = new Schema({
   message: {
     type: String,
     required: true,
@@ -23,4 +23,4 @@ const messageSchema: Schema<IMessageDocument> = new Schema({
   },
 });
 
-export const Message: Model<IMessageDocument> = model("Message", messageSchema);
+export const Message: Model<MessageDocument> = model("Message", messageSchema);

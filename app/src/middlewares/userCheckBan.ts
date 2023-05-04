@@ -1,7 +1,7 @@
 import { Response, NextFunction } from "express";
 import { User } from "@/models/user";
 import { RequestUserAuth } from "@types";
-import { IUserDocument } from "@types";
+import { UserDocument } from "@types";
 
 export default async function (
   req: RequestUserAuth,
@@ -11,14 +11,14 @@ export default async function (
   if (req.user === undefined) return next();
   else {
     const currUser = req.user?.id;
-    const loggedUser = (await User.findById(currUser)) as IUserDocument;
+    const loggedUser = (await User.findById(currUser)) as UserDocument;
     if (checkBanDate(loggedUser.banExpiresDate)) await unban(loggedUser);
 
     return next();
   }
 }
 
-const unban = async function (user: IUserDocument) {
+const unban = async function (user: UserDocument) {
   user.isBanned = false;
   try {
     await user.save();

@@ -1,29 +1,28 @@
 import { Router } from "express";
 import isAdmin from "@/middlewares/isAdmin";
-import {
-  createNewRange,
-  deleteRangeById,
-  editRangeById,
-  getListOfRanges,
-  getRangeById,
-} from "../controllers/ranges.controller";
+import { rangesController } from "../controllers/ranges.controller";
 import isValidMongooseId from "@/middlewares/isValidMongooseId";
 
 const router = Router();
 
-router.get("/", getListOfRanges);
+router.get("/", rangesController.getListOfRanges);
 
-router.get("/:_id/", isValidMongooseId, getRangeById);
+router.get("/:_id/", isValidMongooseId, rangesController.getRangeById);
 
-router.post("/admin/create", isAdmin, createNewRange);
+router.post("/admin/create", isAdmin, rangesController.createNewRange);
 
-router.post("/admin/edit/:_id/", isValidMongooseId, isAdmin, editRangeById);
+router.patch(
+  "/admin/edit/:_id/",
+  isValidMongooseId,
+  isAdmin,
+  rangesController.editRangeById
+);
 
 router.delete(
   "/admin/delete/:_id/",
   isValidMongooseId,
   isAdmin,
-  deleteRangeById
+  rangesController.deleteRangeById
 );
 
 export default router;

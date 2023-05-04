@@ -1,0 +1,14 @@
+.chat-scrollable {
+  width: 100%;
+  height: 40vh;
+  max-height: 40vh;
+  overflow: auto;
+}
+
+td.row-btn-send {
+  vertical-align: middle;
+}
+
+.online-users-button {
+  font-size: 1.5vmin !important;
+}

@@ -1,7 +1,7 @@
 import { Model, model, Schema } from "mongoose";
-import { IRangeDocument } from "@types";
+import { RangeDocument } from "@types";
 
-const rangeSchema: Schema<IRangeDocument> = new Schema({
+const rangeSchema: Schema<RangeDocument> = new Schema({
   name: {
     type: String,
     required: true,
@@ -19,4 +19,4 @@ const rangeSchema: Schema<IRangeDocument> = new Schema({
   },
 });
 
-export const Range: Model<IRangeDocument> = model("Range", rangeSchema);
+export const Range: Model<RangeDocument> = model("Range", rangeSchema);

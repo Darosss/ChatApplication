@@ -23,7 +23,7 @@ export interface SocketData {
 
 interface IRoomOnlineUsers {
   roomId: string;
-  roomUsers: string[];
+  roomUsers: [string, string][];
   username?: string;
 }
 
@@ -37,5 +37,5 @@ interface IMessageSocket {
   userId: string;
   message: string;
   sender?: string;
-  date?: Date;
+  date: Date;
 }

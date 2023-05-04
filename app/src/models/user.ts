@@ -1,8 +1,8 @@
-import { Callback, model, Schema, Model } from "mongoose";
+import { model, Schema, Model } from "mongoose";
 import bcrypt from "bcrypt";
 import passportLocalMongoose from "passport-local-mongoose";
 
-import { IUserDocument } from "@types";
+import { UserDocument } from "@types";
 import {
   birthdayValidation,
   emailValidation,
@@ -11,7 +11,7 @@ import {
   usernameValidation,
 } from "../validators/userModel.validator";
 
-const userSchema: Schema<IUserDocument> = new Schema({
+const userSchema: Schema<UserDocument> = new Schema({
   username: {
     type: String,
     required: [true, "Username is required"],
@@ -88,8 +88,9 @@ const userSchema: Schema<IUserDocument> = new Schema({
 });
 userSchema.plugin(passportLocalMongoose);
 
-userSchema.pre<IUserDocument>("save", function (next) {
+userSchema.pre<UserDocument>("save", function (next) {
   if (!this.isModified("password")) return next();
+
   bcrypt.hash(this.password as string, 10, (err, hash) => {
     if (err) return next(err);
     this.password = hash;
@@ -97,14 +98,11 @@ userSchema.pre<IUserDocument>("save", function (next) {
   });
 });
 
-userSchema.methods.comparePassword = function (
-  candidatePassword: string,
-  cb: Callback
-) {
-  bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
-    if (err) return cb(err, "Not same password");
-    cb(null, isMatch);
-  });
+userSchema.methods.comparePassword = async function (
+  password: string
+): Promise<boolean> {
+  const result = await bcrypt.compare(password, this.password);
+  return result;
 };
 
-export const User: Model<IUserDocument> = model("User", userSchema);
+export const User: Model<UserDocument> = model("User", userSchema);

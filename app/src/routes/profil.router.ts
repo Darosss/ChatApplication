@@ -1,13 +1,10 @@
 import { Router } from "express";
-import {
-  editUserProfile,
-  getUserProfile,
-} from "../controllers/profil.controller";
+import { profilController } from "../controllers/profil.controller";
 
 const router = Router();
 
-router.get("/", getUserProfile);
+router.get("/", profilController.getUserProfile);
 
-router.post("/edit", editUserProfile);
+router.patch("/edit", profilController.editUserProfile);
 
 export default router;

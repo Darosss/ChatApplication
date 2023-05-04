@@ -1,8 +1,8 @@
 import { Model, model, Schema } from "mongoose";
-import { IChatRoomDocument } from "@types";
+import { ChatRoomDocument } from "@types";
 import { nameValidation } from "../validators/roomModel.validator";
 
-const chatRoomSchema: Schema<IChatRoomDocument> = new Schema({
+const chatRoomSchema: Schema<ChatRoomDocument> = new Schema({
   name: {
     type: String,
     required: [true, "Name is required"],
@@ -34,7 +34,7 @@ const chatRoomSchema: Schema<IChatRoomDocument> = new Schema({
   },
 });
 
-export const ChatRoom: Model<IChatRoomDocument> = model(
+export const ChatRoom: Model<ChatRoomDocument> = model(
   "chatRoom",
   chatRoomSchema
 );

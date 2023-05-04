@@ -1,34 +1,28 @@
 import "module-alias/register";
 import * as dotenv from "dotenv";
-import path from "path";
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
+import { envFilePath } from "./config/globalPaths";
+
+dotenv.config({ path: envFilePath });
 
 import app from "./app";
-import http from "http";
-import mongoose, { ConnectOptions } from "mongoose";
-import { Server } from "socket.io";
-import socket from "./socket";
 
 import validateEnv from "@/utils/validateEnv";
-import { backendPort, databaseUrl, frontendUrl } from "./config/envVariables";
+import { backendPort, databaseUrl } from "./config/envVariables";
+import { initDatabase } from "./config/database";
 
 validateEnv();
-const httpServer = new http.Server(app);
 
-const socketIO = new Server(httpServer, {
-  cors: {
-    origin: frontendUrl,
-    credentials: true,
-    allowedHeaders:
-      "X-Requested-With, content-type, x-access-token, Origin, Content-Type, Accept, Set-Cookie, Cookie",
-    methods: ["GET", "POST", "DELETE"],
-  },
-});
-socket(socketIO);
+async function startServer() {
+  try {
+    await initDatabase(databaseUrl);
 
-//MONGODB database connection
-mongoose.connect(databaseUrl, { useNewUrlParser: true } as ConnectOptions);
+    const port = Number(backendPort) || 5000;
+    app.listen(port, () => {
+      console.log(`application is running on: ${port}`);
+    });
+  } catch (err) {
+    console.error(`Error starting server: ${err}`);
+  }
+}
 
-httpServer.listen(backendPort, () => {
-  console.log(`application is running at:`, httpServer.address());
-});
+startServer();

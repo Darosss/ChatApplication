@@ -1,0 +1,15 @@
+div.chat-section-wide {
+  display: block;
+}
+
+div.chat-section {
+  display: none;
+}
+
+div.chats-item {
+  width: 100%;
+  max-height: calc(50px + 5vmin);
+  max-height: calc(50px + 5vmin);
+  overflow-y: auto;
+  overflow-wrap: break-word;
+}

@@ -1,0 +1,12 @@
+.post-info {
+  font-size: 2vmin;
+  display: flex;
+  justify-content: center;
+  color: red;
+}
+
+@media screen and (max-width: 767px) {
+  .post-info {
+    width: 100%;
+  }
+}

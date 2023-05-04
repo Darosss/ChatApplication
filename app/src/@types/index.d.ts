@@ -1,13 +1,13 @@
 import { Request } from "express";
-import { Document, Types } from "mongoose";
+import { Document } from "mongoose";
 
 interface RequestUserAuth extends Request {
   user?: {
-    id?: string;
+    id?: string | null;
   };
 }
 
-interface IMongooseError extends Error {
+interface MongooseError extends Error {
   name: string;
   message: string;
   stack?: string;
@@ -17,38 +17,38 @@ interface IMongooseError extends Error {
   index: number;
   path?: string;
 }
-interface IChatRoom {
-  _id: Types.ObjectId;
+
+interface ChatRoomModel {
+  _id: string;
   name: string;
-  availableRanges: Types.ObjectId[];
-  allowedUsers: Types.ObjectId[];
-  bannedUsers: Types.ObjectId[];
-  createdBy: Types.ObjectId;
+  availableRanges: string[] | RangeModel;
+  allowedUsers: string[] | UserWithoutPassword[];
+  bannedUsers: string[] | UserWithoutPassword[];
+  createdBy: string | UserWithoutPassword;
 }
 
-type IChatRoomDocument = IChatRoom & Document;
+type ChatRoomDocument = ChatRoomModel & Document;
 
-interface IMessage {
+interface MessageModel {
   _id: string;
   message: string;
-  sender: Types.ObjectId;
+  sender: string | UserModel;
   sentTime: Date;
-  whereSent: Types.ObjectId;
+  whereSent: string | ChatRoomModel;
 }
 
-type IMessageDocument = IMessage & Document;
+type MessageDocument = MessageModel & Document;
 
-interface IRange {
+interface RangeModel {
   _id: string;
   name: string;
   createdAt: Date;
-  createdBy: Types.ObjectId;
+  createdBy: string | UserModel;
 }
 
-type IRangeDocument = IRange & Document;
+type RangeDocument = RangeModel & Document;
 
-interface IUser {
-  comparePassword(password: string, cb: Callback): boolean;
+interface UserModel {
   _id: string;
   username: string;
   password: string;
@@ -56,7 +56,7 @@ interface IUser {
   surname: string;
   createdAt: Date;
   birthday: Date;
-  ranges: Types.ObjectId[];
+  ranges: string[] | RangeModel[];
   administrator: boolean;
   moderator: boolean;
   country: string;
@@ -70,24 +70,30 @@ interface IUser {
   banReason: string;
 }
 
-type IUserDocument = IUser & Document;
+interface UserMethods {
+  comparePassword(password: string): Promise<boolean>;
+}
 
-interface IUserRoomsFilter {
+type UserWithoutPassword = Omit<UserModel, "password">;
+
+type UserDocument = UserModel & UserMethods & Document;
+
+interface UserRoomsFilter {
   $or: [
     { createdBy: string },
     //if room created by user
     {
-      availableRanges: { $in: Types.ObjectId[] };
+      availableRanges: { $in: string[] | RangeModel[] };
       //user has range that chatrom require
     },
     {
-      allowedUsers: { $eq: string[] };
+      allowedUsers: { $eq: string[] | UserModel[] };
       //user is allowed in chatroom
     }
   ];
   $and: [
     {
-      bannedUsers: { $ne: string[] };
+      bannedUsers: { $ne: string[] | UserModel[] };
       //user is not banned in chatroom
     }
   ];

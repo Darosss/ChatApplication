@@ -9,5 +9,5 @@ export default function isValidMongooseId(
   const { _id } = req.params;
   if (isValidObjectId(_id)) return next();
 
-  res.send({ message: `${_id} is not proper id` });
+  res.status(400).send({ message: `${_id} is not proper id` });
 }

@@ -1,8 +1,8 @@
 import { User } from "@/models/user";
-import { IUserRoomsFilter } from "@types";
+import { UserRoomsFilter } from "@types";
 
 const makeUserChatFilter = async (userId: string) => {
-  let userChatsFilter: IUserRoomsFilter;
+  let userChatsFilter: UserRoomsFilter;
   try {
     const currentUser = await User.findById(userId);
     if (!currentUser) return null;
