@@ -3,6 +3,7 @@ import ModalCore from "@components/modal";
 import usePostInfoHook from "@hooks/usePostInfoHook";
 import { SendDataContext } from "@contexts/SendDataContext";
 import { useProfilEdit } from "@hooks/profilApi";
+import { useRefetchData } from "@hooks/useAcciosHook";
 
 function EditProfileModal(props: { user: IUserRes }) {
   const { user } = props;
@@ -46,10 +47,10 @@ function EditProfileModal(props: { user: IUserRes }) {
 
   const { postInfo } = usePostInfoHook(profilEditResponse?.data.message, profilEditError?.message);
 
+  useRefetchData(profilEditResponse, refetchData);
+
   const handleOnClickEditProfile = () => {
-    profilEdit().then(() => {
-      refetchData();
-    });
+    profilEdit();
   };
 
   const createProfileInput = (name: string, onChangeFn: (value: any) => void, value = "", type = "text") => {

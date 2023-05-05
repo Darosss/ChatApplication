@@ -4,6 +4,7 @@ import EditCreateRoomModal from "@components/rooms/editCreateRoomModal";
 import { SendDataContext } from "@contexts/SendDataContext";
 import usePostInfoHook from "@hooks/usePostInfoHook";
 import { useEditUser, useGetUsersRooms } from "@hooks/usersApi";
+import { useRefetchData } from "@hooks/useAcciosHook";
 
 function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRangeRes[] }) {
   const { user, ranges, users } = props;
@@ -54,10 +55,10 @@ function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRang
 
   const { postInfo } = usePostInfoHook(userEditResponse?.data.message, userEditError?.message);
 
+  useRefetchData(userEditResponse, refetchData);
+
   const handleOnClickEditUser = () => {
-    userEdit().then(() => {
-      refetchData();
-    });
+    userEdit();
   };
 
   const createSelect = (label: string) => {

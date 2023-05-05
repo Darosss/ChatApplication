@@ -3,6 +3,7 @@ import ModalCore from "@components/modal";
 import { SendDataContext } from "@contexts/SendDataContext";
 import usePostInfoHook from "@hooks/usePostInfoHook";
 import { useDeleteRoom } from "@hooks/roomsApi";
+import { useRefetchData } from "@hooks/useAcciosHook";
 
 function DeleteRoomModal(props: { roomId: string }) {
   const { roomId } = props;
@@ -13,10 +14,10 @@ function DeleteRoomModal(props: { roomId: string }) {
 
   const { postInfo } = usePostInfoHook(roomDeleteResponse?.data.message, roomDeleteError?.message);
 
+  useRefetchData(roomDeleteResponse, refetchData);
+
   const handleOnDeleteRoom = () => {
-    deleteRoom().then(() => {
-      refetchData();
-    });
+    deleteRoom();
   };
 
   return (

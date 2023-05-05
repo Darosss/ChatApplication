@@ -3,6 +3,7 @@ import ModalCore from "@components/modal";
 import { SendDataContext } from "@contexts/SendDataContext";
 import usePostInfoHook from "@hooks/usePostInfoHook";
 import { useCreateOrUpdateRange } from "@hooks/rangesApi";
+import { useRefetchData } from "@hooks/useAcciosHook";
 
 function EditRangeModal(props: { range?: IRangeRes; sectionName?: string }) {
   const { range, sectionName = "" } = props;
@@ -18,10 +19,10 @@ function EditRangeModal(props: { range?: IRangeRes; sectionName?: string }) {
     setRangeName(range.name);
   }, [range]);
 
+  useRefetchData(response, refetchData);
+
   const handleOnCreateEditRange = () => {
-    sendData().then(() => {
-      refetchData();
-    });
+    sendData();
   };
 
   const modalBody = () => {

@@ -3,6 +3,7 @@ import ModalCore from "@components/modal";
 import { SendDataContext } from "@contexts/SendDataContext";
 import usePostInfoHook from "@hooks/usePostInfoHook";
 import { useCreateOrUpdateRoom } from "@hooks/roomsApi";
+import { useRefetchData } from "@hooks/useAcciosHook";
 
 function EditCreateRoomModal(props: {
   room?: IChatRoomRes;
@@ -31,6 +32,8 @@ function EditCreateRoomModal(props: {
   );
   const { postInfo } = usePostInfoHook(response?.data.message, error?.message);
 
+  useRefetchData(response, refetchData);
+
   useEffect(() => {
     if (!room) return;
     setRoomName(room.name);
@@ -40,9 +43,7 @@ function EditCreateRoomModal(props: {
   }, [room]);
 
   const handleOnCreateEditRoom = () => {
-    sendData().then(() => {
-      refetchData();
-    });
+    sendData();
   };
 
   const createSelect = (

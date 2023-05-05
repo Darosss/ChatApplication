@@ -3,6 +3,7 @@ import ModalCore from "@components/modal";
 import usePostInfoHook from "@hooks/usePostInfoHook";
 import { SendDataContext } from "@contexts/SendDataContext";
 import { useBanUser } from "@hooks/usersApi";
+import { useRefetchData } from "@hooks/useAcciosHook";
 
 function EditUserModal(props: { userId: string; username: string }) {
   const { userId, username } = props;
@@ -14,10 +15,10 @@ function EditUserModal(props: { userId: string; username: string }) {
   const { banResponse, banError, banUser } = useBanUser(userId, { banTime: banTime || 5, banReason: banReason });
   const { postInfo } = usePostInfoHook(banResponse?.data.message, banError?.message);
 
+  useRefetchData(banResponse, refetchData);
+
   const handleOnClickBanUser = () => {
-    banUser().then(() => {
-      refetchData();
-    });
+    banUser();
   };
 
   const modalBody = () => {
