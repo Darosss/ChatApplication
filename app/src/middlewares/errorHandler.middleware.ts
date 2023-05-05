@@ -1,49 +1,25 @@
-import { MongooseError, RequestUserAuth } from "@types";
-import { NextFunction, Response } from "express";
+import { AppError } from "@/utils/ErrorHandler";
+import { Request, Response, NextFunction } from "express";
 
-export default function errorHandlerMiddleware(
-  error: MongooseError,
-  req: RequestUserAuth,
+export const errorResponder = (
+  error: AppError,
+  req: Request,
   res: Response,
-  // As documentation says - 4 arguments are needed for error handler to work
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction
-) {
-  if (!(error instanceof Error)) {
-    res.status(400).send({ message: "400" });
-  }
+) => {
+  res.header("Content-Type", "application/json");
 
-  if (error.code && error.code === 11000) {
-    duplicateErrorHandler(error, res);
-  } else if (error.name === "ValidationError") {
-    validationErrorHandler(error, res);
-  } else if (error.name === "CastError") {
-    castErrorHandler(error, res);
-  } else {
-    if (error.message) {
-      console.log(error);
-      res.status(400).send({ message: error.message });
-    } else {
-      res.status(500).send({ message: "An unknown error occured!" });
-    }
-  }
-}
+  const status = error.statusCode || 400;
+  res.status(status).send({ message: error.message, status: status });
+};
 
-function duplicateErrorHandler(error: MongooseError, res: Response) {
-  const fields = Object.keys(error.keyValue);
-  res.status(409).send({
-    message: `An entered ${fields} already exist`,
-    fields: fields,
-  });
-}
+export const invalidPathHandler = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const statusCode = 404;
 
-function validationErrorHandler(error: MongooseError, res: Response) {
-  const errors = Object.values(error.errors).map((err) => err.message);
-  const fields = Object.values(error.errors).map((err) => err.path);
-
-  res.status(400).send({ message: `${errors?.join(", ")}`, fields: fields });
-}
-
-function castErrorHandler(error: MongooseError, res: Response) {
-  res.status(400).send({ message: `${error.message}`, fields: error.path });
-}
+  res.status(statusCode);
+  res.send({ message: "Invalid path", status: statusCode });
+};
