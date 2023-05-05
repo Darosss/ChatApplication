@@ -25,12 +25,17 @@ export function useProfilEdit(updateData: LoggedUserUpdateData) {
     response: profilEditResponse,
     error: profilEditError,
     sendData: profilEdit,
-  } = useAcciosHook<{ message: string }>({
-    url: `/profil/edit`,
-    method: "patch",
-    withCredentials: true,
-    data: updateData,
-  });
+  } = useAcciosHook<{ message: string }>(
+    {
+      url: `/profil/edit`,
+      method: "patch",
+      withCredentials: true,
+      data: updateData,
+    },
+    {
+      manual: true,
+    },
+  );
 
   return { profilEditResponse, profilEditError, profilEdit };
 }

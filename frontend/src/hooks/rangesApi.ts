@@ -20,11 +20,16 @@ export function useDeleteRange(rangeId: string) {
     response: rangeDeleteResponse,
     error: rangeDeleteError,
     sendData: deleteRange,
-  } = useAcciosHook<{ message: string }>({
-    url: `ranges/admin/delete/${rangeId}`,
-    method: "delete",
-    withCredentials: true,
-  });
+  } = useAcciosHook<{ message: string }>(
+    {
+      url: `ranges/admin/delete/${rangeId}`,
+      method: "delete",
+      withCredentials: true,
+    },
+    {
+      manual: true,
+    },
+  );
 
   return { rangeDeleteResponse, rangeDeleteError, deleteRange };
 }
@@ -39,7 +44,9 @@ export function useCreateOrUpdateRange(rangeData: RangeUpdateData, rangeId?: str
       withCredentials: true,
       data: rangeData,
     },
-    true,
+    {
+      manual: true,
+    },
   );
 
   return { response, error, sendData };

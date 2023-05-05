@@ -35,11 +35,14 @@ export function useGetRoomMessages(roomId: string) {
     loading: messagesLoading,
     error: messagesError,
     sendData: getRoomMessages,
-  } = useAcciosHook<{ chatRoom: { id: string; messages: IMessagesRes[] } }>({
-    url: `/rooms/${roomId}/messages`,
-    method: "get",
-    withCredentials: true,
-  });
+  } = useAcciosHook<{ chatRoom: { id: string; messages: IMessagesRes[] } }>(
+    {
+      url: `/rooms/${roomId}/messages`,
+      method: "get",
+      withCredentials: true,
+    },
+    { manual: true },
+  );
 
   return { messagesResponse, messagesLoading, messagesError, getRoomMessages };
 }
@@ -47,12 +50,17 @@ export function useGetRoomMessages(roomId: string) {
 export function useCreateOrUpdateRoom(roomData: RoomUpdateData, roomId?: string | undefined) {
   const url = "rooms" + (roomId ? `/edit/${roomId}` : "/create");
   const method = `${roomId ? "patch" : "post"}`;
-  const { response, error, sendData } = useAcciosHook<{ message: string; room: IChatRoomRes }>({
-    url: url,
-    method: method,
-    withCredentials: true,
-    data: roomData,
-  });
+  const { response, error, sendData } = useAcciosHook<{ message: string; room: IChatRoomRes }>(
+    {
+      url: url,
+      method: method,
+      withCredentials: true,
+      data: roomData,
+    },
+    {
+      manual: true,
+    },
+  );
 
   return { response, error, sendData };
 }
@@ -62,11 +70,16 @@ export function useDeleteRoom(roomId: string) {
     response: roomDeleteResponse,
     error: roomDeleteError,
     sendData: deleteRoom,
-  } = useAcciosHook<{ message: string }>({
-    url: `rooms/delete/${roomId}`,
-    method: "delete",
-    withCredentials: true,
-  });
+  } = useAcciosHook<{ message: string }>(
+    {
+      url: `rooms/delete/${roomId}`,
+      method: "delete",
+      withCredentials: true,
+    },
+    {
+      manual: true,
+    },
+  );
 
   return { roomDeleteResponse, roomDeleteError, deleteRoom };
 }

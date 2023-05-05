@@ -31,7 +31,10 @@ export function useRegister() {
       method: "post",
       withCredentials: true,
     },
-    "/login",
+    {
+      redirectUrl: "/login",
+      manual: true,
+    },
   );
 
   return {
@@ -52,7 +55,10 @@ export function useLogout() {
       method: "post",
       withCredentials: true,
     },
-    "/login",
+    {
+      redirectUrl: "/login",
+      manual: true,
+    },
   );
 
   return {
@@ -73,7 +79,10 @@ export function useLogin() {
       method: "post",
       withCredentials: true,
     },
-    "/",
+    {
+      redirectUrl: "/",
+      manual: true,
+    },
   );
 
   return {
