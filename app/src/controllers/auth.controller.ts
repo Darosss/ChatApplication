@@ -39,19 +39,8 @@ class AuthController {
     };
 
     try {
-      const created = await this.userService.createNewUser(
-        userData.username,
-        userData
-      );
-      if (created) {
-        return res
-          .status(201)
-          .send({ message: "Account created successfully" });
-      }
-
-      return res
-        .status(400)
-        .send({ message: "Account with that username already exist" });
+      await this.userService.createNewUser(userData);
+      return res.status(201).send({ message: "Account created successfully" });
     } catch (err) {
       return next(err);
     }
