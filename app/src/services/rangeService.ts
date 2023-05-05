@@ -1,6 +1,6 @@
 import { RangeModel, RangeDocument } from "@types";
 import { Range } from "@/models/range";
-import { handleAppError } from "@/utils/ErrorHandler";
+import { AppError, handleAppError } from "@/utils/ErrorHandler";
 import { FilterQuery, Model, PopulateOptions, ProjectionType } from "mongoose";
 
 type RangeCreateData = Omit<RangeModel, "_id" | "createdAt">;
@@ -31,6 +31,22 @@ class RangeService {
   ): Promise<RangeModel | null> => {
     try {
       const range = await this.rangeModel.findById(id, projection);
+      if (populate) await range?.populate(populate);
+
+      return range;
+    } catch (error) {
+      console.error(error);
+      handleAppError(error);
+      return null;
+    }
+  };
+
+  getOneRange = async (
+    projection: FilterQuery<RangeDocument> = {},
+    populate?: PopulateOptions[]
+  ): Promise<RangeModel | null> => {
+    try {
+      const range = await this.rangeModel.findOne(projection);
       if (populate) await range?.populate(populate);
 
       return range;
