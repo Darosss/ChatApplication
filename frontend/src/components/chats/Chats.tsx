@@ -47,7 +47,7 @@ function Chats() {
 
   const { roomsResponse } = useGetLoggedUserRooms();
 
-  const { messagesResponse, messagesLoading, getRoomMessages } = useGetRoomMessages(viewedRoomId);
+  const { messagesResponse, getRoomMessages } = useGetRoomMessages(viewedRoomId);
 
   useEffect(() => {
     if (roomsResponse) setChatRooms(roomsResponse.data.rooms);
