@@ -117,7 +117,7 @@ function Chats() {
   }, []);
 
   useEffect(() => {
-    getRoomMessages();
+    if (viewedRoomId) getRoomMessages();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewedRoomId]);
 
