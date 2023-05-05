@@ -31,6 +31,7 @@ function ChatRoom(props: {
   }, [room]);
 
   const sendMessage = () => {
+    if (msgToSend.length < 1) return;
     const msg = {
       roomId: room._id,
       userId: userId,
