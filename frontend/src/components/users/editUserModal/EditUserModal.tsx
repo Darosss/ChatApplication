@@ -138,13 +138,7 @@ function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRang
   };
 
   return (
-    <ModalCore
-      actionName="Edit user"
-      onClickFn={handleOnClickEditUser}
-      actionBtnVariant="primary"
-      postInfo={postInfo}
-      closeOnSubmit={true}
-    >
+    <ModalCore actionName="Edit user" onClickFn={handleOnClickEditUser} actionBtnVariant="primary" postInfo={postInfo}>
       {modalBody()}
     </ModalCore>
   );

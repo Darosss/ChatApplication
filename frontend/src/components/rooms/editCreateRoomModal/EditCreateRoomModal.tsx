@@ -128,7 +128,6 @@ function EditCreateRoomModal(props: {
       onClickFn={handleOnCreateEditRoom}
       actionBtnVariant="primary"
       postInfo={postInfo}
-      closeOnSubmit={true}
     >
       {modalBody()}
     </ModalCore>

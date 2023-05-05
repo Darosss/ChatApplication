@@ -46,7 +46,6 @@ function EditRangeModal(props: { range?: IRangeRes; sectionName?: string }) {
       onClickFn={handleOnCreateEditRange}
       actionBtnVariant="primary"
       postInfo={postInfo}
-      closeOnSubmit={true}
     >
       {modalBody()}
     </ModalCore>
