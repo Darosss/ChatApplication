@@ -37,7 +37,10 @@ interface IUserRes {
 }
 
 interface UserUpdateData
-  extends Pick<"username" | "firstname" | "surname" | "country" | "gender" | "nickColor" | "email" | "phoneNumber"> {
+  extends Pick<
+    IUserRes,
+    "username" | "firstname" | "surname" | "country" | "gender" | "nickColor" | "email" | "phoneNumber"
+  > {
   ranges: string[];
 }
 
