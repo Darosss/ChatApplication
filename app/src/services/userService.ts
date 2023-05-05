@@ -1,6 +1,6 @@
 import { UserModel, UserDocument, UserWithoutPassword } from "@types";
 import { User } from "@/models/user";
-import { handleAppError } from "@/utils/ErrorHandler";
+import { AppError, handleAppError } from "@/utils/ErrorHandler";
 import { FilterQuery, Model, PopulateOptions, ProjectionType } from "mongoose";
 
 type UserCreateData = Omit<
@@ -57,6 +57,22 @@ class UserService {
     } catch (err) {
       console.error(err);
       handleAppError(err);
+      return null;
+    }
+  };
+
+  getOneUser = async (
+    projection: FilterQuery<UserDocument> = {},
+    populate?: PopulateOptions[]
+  ): Promise<UserModel | null> => {
+    try {
+      const user = await this.userModel.findOne(projection);
+      if (populate) await user?.populate(populate);
+
+      return user;
+    } catch (error) {
+      console.error(error);
+      handleAppError(error);
       return null;
     }
   };
