@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Alert from "react-bootstrap/Alert";
@@ -7,8 +7,9 @@ function ModalCore(props: {
   onClickFn: () => void;
   actionBtnVariant: string;
   actionName: string;
-  children?: React.ReactNode;
   postInfo: string;
+  children?: React.ReactNode;
+  onShowFn?: () => void;
   closeOnSubmit?: boolean;
 }) {
   const [show, setShow] = useState(false);
@@ -23,6 +24,14 @@ function ModalCore(props: {
     props.onClickFn();
     setShowAlert(true);
   };
+
+  useEffect(() => {
+    if (show && props.onShowFn) {
+      props.onShowFn();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [show]);
+
   return (
     <>
       <Button variant={props.actionBtnVariant} className="modal-core-btn" onClick={handleShow}>
