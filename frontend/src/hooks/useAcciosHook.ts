@@ -4,19 +4,23 @@ import { useNavigate } from "react-router-dom";
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 
-function useAcciosHook<T = unknown>(axiosParams: AxiosRequestConfig, redirectUrl?: string) {
+interface AcciosHookOptions {
+  redirectUrl?: string;
+  manual?: boolean;
+}
+
+function useAcciosHook<T = unknown>(axiosParams: AxiosRequestConfig, options?: AcciosHookOptions) {
   const [response, setResponse] = useState<AxiosResponse<T>>();
   const [error, setError] = useState<AxiosError>();
   const [loading, setLoading] = useState(axiosParams.method === "GET" || axiosParams.method === "get");
   const navigate = useNavigate();
-
   async function fetchData(params: AxiosRequestConfig) {
     axios(params)
       .then((res) => {
         setResponse(res);
 
-        if (redirectUrl) {
-          navigate(redirectUrl);
+        if (options?.redirectUrl) {
+          navigate(options.redirectUrl);
         }
       })
       .catch((error) => {
@@ -37,9 +41,8 @@ function useAcciosHook<T = unknown>(axiosParams: AxiosRequestConfig, redirectUrl
   }
 
   useEffect(() => {
-    if (axiosParams.method === "GET" || axiosParams.method === "get") {
-      fetchData(axiosParams);
-    }
+    if (axiosParams.method?.toLowerCase() !== "get" || options?.manual) return;
+    fetchData(axiosParams);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -49,7 +52,8 @@ function useAcciosHook<T = unknown>(axiosParams: AxiosRequestConfig, redirectUrl
 export function useRefetchData(response: AxiosResponse<unknown> | undefined, cb: () => void) {
   useEffect(() => {
     if (response) cb();
-  }, [response, cb]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response]);
 }
 
 export default useAcciosHook;
