@@ -47,7 +47,7 @@ function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRang
     ranges: userRanges,
   });
 
-  const { usersRoomResponse } = useGetUsersRooms(user._id);
+  const { usersRoomResponse, refetchUsersRooms } = useGetUsersRooms(user._id);
 
   useEffect(() => {
     setUserChatRooms(usersRoomResponse?.data.chatRooms);
@@ -139,7 +139,15 @@ function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRang
   };
 
   return (
-    <ModalCore actionName="Edit user" onClickFn={handleOnClickEditUser} actionBtnVariant="primary" postInfo={postInfo}>
+    <ModalCore
+      actionName="Edit user"
+      onClickFn={handleOnClickEditUser}
+      actionBtnVariant="primary"
+      postInfo={postInfo}
+      onShowFn={() => {
+        refetchUsersRooms();
+      }}
+    >
       {modalBody()}
     </ModalCore>
   );
