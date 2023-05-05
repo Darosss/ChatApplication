@@ -1,6 +1,6 @@
 import { ChatRoomModel, ChatRoomDocument } from "@types";
 import { ChatRoom } from "@/models/chatRoom";
-import { handleAppError } from "@/utils/ErrorHandler";
+import { AppError, handleAppError } from "@/utils/ErrorHandler";
 import { FilterQuery, Model, PopulateOptions, ProjectionType } from "mongoose";
 
 type ChatRoomCreateData = Omit<ChatRoomModel, "_id">;
@@ -27,6 +27,22 @@ class ChatRoomService {
   ): Promise<ChatRoomModel | null> => {
     try {
       const chatRoom = await this.chatRoomModel.findById(id, projection);
+      if (populate) await chatRoom?.populate(populate);
+
+      return chatRoom;
+    } catch (error) {
+      console.error(error);
+      handleAppError(error);
+      return null;
+    }
+  };
+
+  getOneRoom = async (
+    projection: FilterQuery<ChatRoomDocument> = {},
+    populate?: PopulateOptions[]
+  ): Promise<ChatRoomModel | null> => {
+    try {
+      const chatRoom = await this.chatRoomModel.findOne(projection);
       if (populate) await chatRoom?.populate(populate);
 
       return chatRoom;
