@@ -46,4 +46,10 @@ function useAcciosHook<T = unknown>(axiosParams: AxiosRequestConfig, redirectUrl
   return { response, error, loading, sendData };
 }
 
+export function useRefetchData(response: AxiosResponse<unknown> | undefined, cb: () => void) {
+  useEffect(() => {
+    if (response) cb();
+  }, [response, cb]);
+}
+
 export default useAcciosHook;
