@@ -58,14 +58,22 @@ class ChatRoomService {
     updateData: Partial<ChatRoomModel>
   ): Promise<ChatRoomModel | null> => {
     try {
-      const chatRoom = await this.chatRoomModel.findByIdAndUpdate(
-        id,
-        updateData,
-        {
-          runValidators: true,
-        }
-      );
+      const chatRoom = await this.chatRoomModel.findById(id);
 
+      if (!chatRoom) {
+        throw new AppError(404, "Chat room not found");
+      }
+      const existingRoom = await this.chatRoomModel.findOne({
+        name: updateData.name,
+        _id: { $ne: chatRoom.id },
+      });
+
+      if (existingRoom) {
+        throw new AppError(409, "Chat room with that name already exists");
+      }
+
+      Object.assign(chatRoom, updateData);
+      await chatRoom.save();
       return chatRoom;
     } catch (error) {
       console.error(error);

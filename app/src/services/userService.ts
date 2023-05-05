@@ -82,12 +82,22 @@ class UserService {
     updateData: Partial<UserWithoutPassword>
   ): Promise<UserModel | null> => {
     try {
-      const user = await this.userModel
-        .findByIdAndUpdate(id, updateData, {
-          runValidators: true,
-        })
-        .select({ password: 0 });
+      const user = await this.userModel.findById(id);
 
+      if (!user) {
+        throw new AppError(404, "User not found");
+      }
+      const existingUser = await this.userModel.findOne({
+        username: updateData.username,
+        _id: { $ne: user.id },
+      });
+
+      if (existingUser) {
+        throw new AppError(409, "Account with that username already exists");
+      }
+
+      Object.assign(user, updateData);
+      await user.save();
       return user;
     } catch (err) {
       console.error(err);

@@ -62,10 +62,22 @@ class RangeService {
     updateData: Partial<RangeModel>
   ): Promise<RangeModel | null> => {
     try {
-      const range = await this.rangeModel.findByIdAndUpdate(id, updateData, {
-        runValidators: true,
+      const range = await this.rangeModel.findById(id);
+
+      if (!range) {
+        throw new AppError(404, "Range not found");
+      }
+      const existingRange = await this.rangeModel.findOne({
+        name: updateData.name,
+        _id: { $ne: range.id },
       });
 
+      if (existingRange) {
+        throw new AppError(409, "Range with that name already exists");
+      }
+
+      Object.assign(range, updateData);
+      await range.save();
       return range;
     } catch (error) {
       console.error(error);
