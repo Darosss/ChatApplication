@@ -4,6 +4,9 @@ import { Server } from "socket.io";
 
 const app = express();
 
+import morgan from "morgan";
+import path from "path";
+import { createStream } from "rotating-file-stream";
 import cors from "cors";
 import session from "cookie-session";
 import helmet from "helmet";
@@ -18,6 +21,13 @@ import { initRoutes } from "./routes";
 import { corsOptions } from "./config/corsOptions";
 import { cookieSessionOpt } from "./config/cookieSessionOptions";
 import socket from "./socket";
+
+//logging
+const accessLogStream = createStream("access.log", {
+  interval: "1d", // rotate daily
+  path: path.join(__dirname, "logs"),
+});
+app.use(morgan("combined", { stream: accessLogStream }));
 
 //Security configs
 app.use(helmet());
