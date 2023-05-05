@@ -26,7 +26,10 @@ const handleAppError = (err: unknown) => {
     throw new AppError(err.statusCode, err.message);
   } else if (err instanceof ErrorMoongose) {
     throw new AppError(400, err.message);
+  } else if (err instanceof Error) {
+    throw new AppError(400, err.message);
   }
+
   throw new AppError();
 };
 
