@@ -76,6 +76,11 @@ class ChatRoomService {
 
   createNewRoom = async (createData: ChatRoomCreateData) => {
     try {
+      const existRoom = await this.getOneRoom({ name: createData.name });
+      if (existRoom) {
+        throw new AppError(409, "Chat room with that name already exists");
+      }
+
       const newRoom = await this.chatRoomModel.create(createData);
 
       return newRoom;
