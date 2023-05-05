@@ -10,7 +10,10 @@ import helmet from "helmet";
 import hpp from "hpp";
 import passport from "@/config/passport.strategy";
 
-import errorHandlerMiddleware from "./middlewares/errorHandler.middleware";
+import {
+  errorResponder,
+  invalidPathHandler,
+} from "./middlewares/errorHandler.middleware";
 import { initRoutes } from "./routes";
 import { corsOptions } from "./config/corsOptions";
 import { cookieSessionOpt } from "./config/cookieSessionOptions";
@@ -35,7 +38,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 initRoutes(app);
 
-app.use(errorHandlerMiddleware);
+app.use(errorResponder);
+app.use(invalidPathHandler);
 
 const httpServer = new http.Server(app);
 
