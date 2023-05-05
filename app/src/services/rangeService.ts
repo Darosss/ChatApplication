@@ -76,6 +76,11 @@ class RangeService {
 
   createNewRange = async (createData: RangeCreateData) => {
     try {
+      const existRange = await this.getOneRange({ name: createData.name });
+      if (existRange) {
+        throw new AppError(409, "Range with that name already exists");
+      }
+
       const newRange = await this.rangeModel.create(createData);
 
       return newRange;
