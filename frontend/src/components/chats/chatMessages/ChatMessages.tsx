@@ -1,22 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Table } from "react-bootstrap";
 import { IMessageSocket } from "@libs/types/socket";
 import ChatMessage from "../chatMessage";
-import { useGetRoomMessages } from "@hooks/roomsApi";
 
-function ChatMessages(props: { roomId: string; localMessages: IMessageSocket[] }) {
-  const { roomId, localMessages } = props;
-  const [roomMessages, setRoomMessages] = useState<IMessagesRes[]>([]);
-
-  const { messagesResponse, messagesLoading } = useGetRoomMessages(roomId);
-  useEffect(() => {
-    if (messagesResponse) setRoomMessages(messagesResponse.data.chatRoom.messages);
-  }, [messagesResponse]);
-
-  if (messagesLoading) return null;
+function ChatMessages(props: { localMessages: IMessageSocket[]; dbMessages: IMessagesRes[] }) {
+  const { localMessages, dbMessages } = props;
 
   const mapMessagesDB = () => {
-    return roomMessages.map((message, index) => {
+    return dbMessages.map((message, index) => {
       return (
         <ChatMessage
           key={index}

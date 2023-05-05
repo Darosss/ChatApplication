@@ -18,7 +18,7 @@ import { scrollToBottom } from "@utils/scrollToBottom.util";
 import ChatOnlineUsers from "./chatOnlineUsers";
 import InfoSidebar from "@components/infoSidebar";
 import { AuthContext } from "@contexts/authContext";
-import { useGetLoggedUserRooms } from "@hooks/roomsApi";
+import { useGetLoggedUserRooms, useGetRoomMessages } from "@hooks/roomsApi";
 
 type Timer = ReturnType<typeof setTimeout>;
 
@@ -35,6 +35,9 @@ function Chats() {
   const [localMessages, setLocalMessages] = useState<Map<string, IMessageSocket[]>>(
     new Map<string, IMessageSocket[]>(),
   );
+
+  const [dbMessages, setDBMessages] = useState<IMessagesRes[]>([]);
+  const [viewedRoomId, setViewedRoomId] = useState<string>("");
   const [chatRooms, setChatRooms] = useState<IChatRoomRes[]>([]);
 
   const chatList = useRef<HTMLDivElement>(null);
@@ -43,6 +46,8 @@ function Chats() {
   const typingTimeoutMs = 5000;
 
   const { roomsResponse } = useGetLoggedUserRooms();
+
+  const { messagesResponse, messagesLoading, getRoomMessages } = useGetRoomMessages(viewedRoomId);
 
   useEffect(() => {
     if (roomsResponse) setChatRooms(roomsResponse.data.rooms);
@@ -111,6 +116,19 @@ function Chats() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    getRoomMessages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewedRoomId]);
+
+  useEffect(() => {
+    setDBMessages(messagesResponse?.data.chatRoom.messages || []);
+  }, [messagesResponse]);
+
+  const handleOnClickChangeRoom = (room: IChatRoomRes) => {
+    setViewedRoomId(room._id);
+  };
+
   return (
     <Tab.Container id="left-tabs-chats">
       <Row className="w-100 mt-4">
@@ -122,7 +140,14 @@ function Chats() {
                 {chatRooms?.map((room) => {
                   return (
                     <Nav.Item key={room._id} className="border border-primary bg-dark rounded mt-1 chats-item">
-                      <Nav.Link eventKey={room._id}> {room.name} </Nav.Link>
+                      <Nav.Link
+                        eventKey={room._id}
+                        onClick={() => {
+                          handleOnClickChangeRoom(room);
+                        }}
+                      >
+                        {room.name}
+                      </Nav.Link>
                     </Nav.Item>
                   );
                 })}
@@ -140,6 +165,7 @@ function Chats() {
                   room={room}
                   auth={auth}
                   localMessages={localMessages.get(room._id)!}
+                  dbMessages={dbMessages}
                   roomOnlineUsers={[...roomIdUsers]}
                   roomTypingUsers={roomsTypingUsers.get(room._id)}
                 />

@@ -13,8 +13,9 @@ function ChatRoom(props: {
   roomOnlineUsers: string[] | undefined;
   roomTypingUsers: string | undefined;
   localMessages: IMessageSocket[];
+  dbMessages: IMessagesRes[];
 }) {
-  const { room, auth, roomOnlineUsers, roomTypingUsers, localMessages } = props;
+  const { room, auth, roomOnlineUsers, roomTypingUsers, localMessages, dbMessages } = props;
   const { username, id: userId } = auth;
 
   const [msgToSend, setMsgToSend] = useState("");
@@ -72,7 +73,7 @@ function ChatRoom(props: {
         <div className="d-flex flex-column">
           <div className="d-flex flex-row">
             <div className="chat-scrollable" id={"scrollable-" + room._id}>
-              <ChatMessages roomId={room._id} localMessages={localMessages} />
+              <ChatMessages localMessages={localMessages} dbMessages={dbMessages} />
             </div>
             {showOnlineUsers && roomOnlineUsers ? (
               <div className="chat-scrollable w-50">
