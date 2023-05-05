@@ -97,12 +97,13 @@ class UserService {
   };
 
   createNewUser = async (
-    username: string,
     createData: UserCreateData
   ): Promise<boolean | null> => {
     try {
-      const user = await this.userModel.findOne({ username: username });
-      if (user) return false;
+      const user = await this.getOneUser({ username: createData.username });
+      if (user) {
+        throw new AppError(409, "Account with that username already exists");
+      }
 
       await this.userModel.create(createData);
 
