@@ -81,7 +81,7 @@ class ChatRoomsController {
 
     try {
       const updatedRoom = await this.chatRoomService.upadeRoomById(_id, {
-        name: req.body.roomName,
+        name: req.body.name,
         availableRanges: req.body.availableRanges,
         allowedUsers: req.body.allowedUsers,
         bannedUsers: req.body.bannedUsers,
