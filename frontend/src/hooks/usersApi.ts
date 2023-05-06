@@ -15,7 +15,7 @@ export function useGetUsers() {
   return { usersResponse, usersLoading, usersError, refetchUsers };
 }
 
-export function useEditUser(userId: string, updateData: UserUpdateData) {
+export function useEditUser(userId: string, updateData?: UserUpdateData) {
   const {
     response: userEditResponse,
     error: userEditError,
