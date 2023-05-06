@@ -4,51 +4,31 @@ import { SendDataContext } from "@contexts/SendDataContext";
 import usePostInfoHook from "@hooks/usePostInfoHook";
 import { useCreateOrUpdateRange } from "@hooks/rangesApi";
 import { useRefetchData } from "@hooks/useAcciosHook";
+import RangeForm from "./RoomForm";
+import PostInfo from "@components/postInfo";
 
 function EditRangeModal(props: { range?: IRangeRes; sectionName?: string }) {
   const { range, sectionName = "" } = props;
   const { sendData: refetchData } = useContext(SendDataContext);
 
-  const [rangeName, setRangeName] = useState("");
+  const [rangeValues, setRangeValues] = useState<RangeUpdateData>({
+    name: "",
+  });
 
-  const { response, error, sendData } = useCreateOrUpdateRange({ name: rangeName }, range?._id);
+  const { response, error, sendData } = useCreateOrUpdateRange(range?._id);
   const { postInfo } = usePostInfoHook(response?.data.message, error?.message);
 
   useEffect(() => {
     if (!range) return;
-    setRangeName(range.name);
+    setRangeValues(range);
   }, [range]);
 
   useRefetchData(response, refetchData);
 
-  const handleOnCreateEditRange = () => {
-    sendData();
-  };
-
-  const modalBody = () => {
-    return (
-      <div>
-        <div>
-          <label className="form-label ">Range name</label>
-          <input
-            type="text"
-            className="form-control"
-            value={rangeName || ""}
-            onChange={(e) => setRangeName(e.target.value)}
-          />
-        </div>
-      </div>
-    );
-  };
-
   return (
-    <ModalCore
-      actionName={sectionName}
-      onClickFn={handleOnCreateEditRange}
-      actionBtnVariant="primary"
-      postInfo={postInfo}
-    >
-      {modalBody()}
+    <ModalCore actionName={sectionName} actionBtnVariant="primary" postInfo={postInfo} form={true}>
+      <RangeForm initialValues={rangeValues} onSubmit={sendData<RangeUpdateData>} actionName={sectionName} />
+      <PostInfo info={postInfo} />
     </ModalCore>
   );
 }
