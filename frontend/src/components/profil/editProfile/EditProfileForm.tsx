@@ -15,7 +15,6 @@ function EditProfileForm(props: EditProfileFormProps) {
       validationSchema={editProfileSchema}
       initialValues={initialValues}
       onSubmit={(values, actions) => {
-        console.log("test");
         onSubmit(values);
         actions.setSubmitting(false);
       }}
