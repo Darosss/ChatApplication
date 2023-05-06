@@ -20,7 +20,7 @@ export function useGetProfilDetails() {
   };
 }
 
-export function useProfilEdit(updateData: LoggedUserUpdateData) {
+export function useProfilEdit(updateData?: LoggedUserUpdateData) {
   const {
     response: profilEditResponse,
     error: profilEditError,

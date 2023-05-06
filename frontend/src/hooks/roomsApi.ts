@@ -47,7 +47,7 @@ export function useGetRoomMessages(roomId: string) {
   return { messagesResponse, messagesLoading, messagesError, getRoomMessages };
 }
 
-export function useCreateOrUpdateRoom(roomData: RoomUpdateData, roomId?: string | undefined) {
+export function useCreateOrUpdateRoom(roomId?: string, roomData?: RoomUpdateData) {
   const url = "rooms" + (roomId ? `/edit/${roomId}` : "/create");
   const method = `${roomId ? "patch" : "post"}`;
   const { response, error, sendData } = useAcciosHook<{ message: string; room: IChatRoomRes }>(

@@ -34,7 +34,7 @@ export function useDeleteRange(rangeId: string) {
   return { rangeDeleteResponse, rangeDeleteError, deleteRange };
 }
 
-export function useCreateOrUpdateRange(rangeData: RangeUpdateData, rangeId?: string | undefined) {
+export function useCreateOrUpdateRange(rangeId?: string, rangeData?: RangeUpdateData) {
   const url = "ranges/admin" + (rangeId ? `/edit/${rangeId}` : "/create");
   const method = `${rangeId ? "patch" : "post"}`;
   const { response, error, sendData } = useAcciosHook<{ message: string; range: IRangeRes }>(
