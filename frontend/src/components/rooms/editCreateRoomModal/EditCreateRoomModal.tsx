@@ -4,6 +4,8 @@ import { SendDataContext } from "@contexts/SendDataContext";
 import usePostInfoHook from "@hooks/usePostInfoHook";
 import { useCreateOrUpdateRoom } from "@hooks/roomsApi";
 import { useRefetchData } from "@hooks/useAcciosHook";
+import RoomForm from "./RoomForm";
+import PostInfo from "@components/postInfo";
 
 function EditCreateRoomModal(props: {
   room?: IChatRoomRes;
@@ -16,121 +18,36 @@ function EditCreateRoomModal(props: {
 
   const { sendData: refetchData } = useContext(SendDataContext);
 
-  const [roomName, setRoomName] = useState("");
-  const [roomRanges, setRoomRanges] = useState<string[]>([]);
-  const [roomAllowedUsers, setRoomAllowedUsers] = useState<string[]>([]);
-  const [roomBannedUsers, setRoomBannedUsers] = useState<string[]>([]);
+  const [roomValues, setRoomValues] = useState<RoomUpdateData>({
+    name: "",
+    availableRanges: [],
+    allowedUsers: [],
+    bannedUsers: [],
+  });
 
-  const { response, error, sendData } = useCreateOrUpdateRoom(
-    {
-      name: roomName,
-      availableRanges: roomRanges,
-      allowedUsers: roomAllowedUsers,
-      bannedUsers: roomBannedUsers,
-    },
-    room?._id,
-  );
+  const { response, error, sendData } = useCreateOrUpdateRoom(room?._id);
   const { postInfo } = usePostInfoHook(response?.data.message, error?.message);
 
   useRefetchData(response, refetchData);
 
   useEffect(() => {
     if (!room) return;
-    setRoomName(room.name);
-    setRoomRanges(room.availableRanges);
-    setRoomAllowedUsers(room.allowedUsers);
-    setRoomBannedUsers(room.bannedUsers);
+    setRoomValues(room);
   }, [room]);
 
-  const handleOnCreateEditRoom = () => {
-    sendData();
-  };
-
-  const createSelect = (
-    label: string,
-    setState: React.Dispatch<React.SetStateAction<string[]>>,
-    funcOptions: () => JSX.Element[] | undefined,
-    selectValue: string[] | undefined,
-  ) => {
-    return (
-      <div>
-        <label className="form-label">{label}</label>
-        <select
-          className="form-select bg-dark text-light"
-          id="room-ranges"
-          multiple
-          value={selectValue}
-          aria-label={"multiple select " + label}
-          onChange={(e) => handleMultipleSelect(e.target.selectedOptions, setState)}
-        >
-          {funcOptions()}
-        </select>
-      </div>
-    );
-  };
-
-  const createSelectRangesOptions = () => {
-    return ranges?.map((range, index) => {
-      return (
-        <option key={index} value={range._id}>
-          {range.name}
-        </option>
-      );
-    });
-  };
-
-  const createSelectUsersListOptions = () => {
-    return users?.map((user, index) => {
-      return (
-        <option key={index} value={user._id}>
-          {user.username}
-        </option>
-      );
-    });
-  };
-  const handleMultipleSelect = (
-    options: HTMLCollectionOf<HTMLOptionElement>,
-    setState: React.Dispatch<React.SetStateAction<string[]>>,
-  ) => {
-    const selectedOptions = [...options].map((option) => option.value);
-    setState(selectedOptions);
-  };
-
-  const createNameRoomInput = () => {
-    return (
-      <div>
-        <label className="form-label">Room name</label>
-        <input
-          name="name"
-          id="room-name"
-          type="text"
-          className="form-control"
-          value={roomName || ""}
-          onChange={(e) => setRoomName(e.target.value)}
-        />
-      </div>
-    );
-  };
-  const modalBody = () => {
-    return (
-      <div>
-        {createNameRoomInput()}
-
-        {createSelect("Available ranges", setRoomRanges, createSelectRangesOptions, roomRanges)}
-        {createSelect("Allow users", setRoomAllowedUsers, createSelectUsersListOptions, roomAllowedUsers)}
-        {createSelect("Ban users", setRoomBannedUsers, createSelectUsersListOptions, roomBannedUsers)}
-      </div>
-    );
-  };
+  if (!ranges || !users) return null;
 
   return (
-    <ModalCore
-      actionName={sectionName}
-      onClickFn={handleOnCreateEditRoom}
-      actionBtnVariant="primary"
-      postInfo={postInfo}
-    >
-      {modalBody()}
+    <ModalCore actionName={sectionName} actionBtnVariant="primary" postInfo={postInfo} form={true}>
+      <RoomForm
+        initialValues={roomValues}
+        onSubmit={sendData<RoomUpdateData>}
+        rangesList={ranges}
+        usersList={users}
+        actionName={sectionName}
+      />
+
+      <PostInfo info={postInfo} />
     </ModalCore>
   );
 }
