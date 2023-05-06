@@ -24,7 +24,7 @@ function App() {
 
   if (authLoading) {
     return (
-      <div className="app-header">
+      <div className="app-wrapper">
         <div className="app-content">
           <Loading />
         </div>
@@ -34,7 +34,7 @@ function App() {
 
   if (auth === undefined || auth === null) {
     return (
-      <div className="app-header">
+      <div className="app-wrapper">
         <div className="app-content">
           <SendDataContext.Provider value={{ sendData: getSession }}>
             <Routes>
@@ -49,7 +49,7 @@ function App() {
   }
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
-      <div className="app-header">
+      <div className="app-wrapper">
         <NavigationBar auth={auth} />
 
         <div className="app-content">
