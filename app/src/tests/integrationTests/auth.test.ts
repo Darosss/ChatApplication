@@ -1,16 +1,10 @@
 import request from "supertest";
 import { app } from "app";
 
-import { describe, it, expect, afterEach } from "@jest/globals";
+import { describe, it, expect } from "@jest/globals";
 
 import { userCookiesToken, userData } from "../test-setup";
-import { User } from "@/models/user";
-
-const registerUser = { ...userData, username: "registerUser" };
-
-afterEach(async () => {
-  await User.findOneAndDelete({ username: registerUser.username });
-});
+import { getFakerUserData } from "../helpers/userData";
 
 describe("authentication api", () => {
   describe("POST /api/v1/login", () => {
@@ -50,7 +44,7 @@ describe("authentication api", () => {
     it("should respond with status code 201 with strong password", function (done) {
       request(app)
         .post("/api/v1/register")
-        .send({ ...userData, username: "registerUser" })
+        .send(getFakerUserData())
         .expect("Content-Type", /json/)
         .expect(201, done);
     });
@@ -58,8 +52,7 @@ describe("authentication api", () => {
       request(app)
         .post("/api/v1/register")
         .send({
-          ...userData,
-          username: "registerUser",
+          ...getFakerUserData(),
           password: "weakpassword",
         })
         .expect("Content-Type", /json/)
@@ -69,7 +62,7 @@ describe("authentication api", () => {
       request(app)
         .post("/api/v1/register")
         .send({
-          ...userData,
+          ...getFakerUserData(),
           username: "  ",
         })
         .expect("Content-Type", /json/)
@@ -79,7 +72,7 @@ describe("authentication api", () => {
       request(app)
         .post("/api/v1/register")
         .send({
-          ...userData,
+          ...getFakerUserData(),
           email: "wrongmail",
         })
         .expect("Content-Type", /json/)
@@ -89,8 +82,8 @@ describe("authentication api", () => {
       request(app)
         .post("/api/v1/register")
         .send({
-          ...userData,
-          phoneNumber: "12",
+          ...getFakerUserData(),
+          phone: "12",
         })
         .expect("Content-Type", /json/)
         .expect(400, done);

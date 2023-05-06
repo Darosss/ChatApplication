@@ -82,6 +82,12 @@ describe("rooms api", () => {
     it("should respond with status code 401 as logged out user", function (done) {
       request(app)
         .post(`/api/v1/rooms/create`)
+        .send({
+          name: faker.name.firstName(),
+          availableRanges: [],
+          allowedUsers: [],
+          bannedUsers: [],
+        })
         .expect("Content-Type", /json/)
         .expect(401, done);
     });
@@ -157,6 +163,7 @@ describe("rooms api", () => {
       request(app)
         .patch(`/api/v1/rooms/edit/${chatRoomData._id}`)
         .set("Cookie", userAdminCookiesToken)
+        .send({ name: faker.commerce.product() })
         .expect("Content-Type", /json/)
         .expect(200, done);
     });
@@ -164,6 +171,7 @@ describe("rooms api", () => {
       request(app)
         .patch(`/api/v1/rooms/edit/${chatRoomData._id}`)
         .set("Cookie", userAdminCookiesToken)
+        .send({ name: faker.commerce.product() })
         .expect("Content-Type", /json/)
         .expect(200, done);
     });
@@ -171,12 +179,14 @@ describe("rooms api", () => {
       request(app)
         .patch(`/api/v1/rooms/edit/wrongId`)
         .set("Cookie", userCookiesToken)
+        .send({ name: faker.commerce.product() })
         .expect("Content-Type", /json/)
         .expect(400, done);
     });
     it("should respond with status code 401 as logged out user", function (done) {
       request(app)
         .patch(`/api/v1/rooms/edit/${chatRoomData._id}`)
+        .send({ name: faker.commerce.product() })
         .expect("Content-Type", /json/)
         .expect(401, done);
     });
