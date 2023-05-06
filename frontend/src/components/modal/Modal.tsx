@@ -11,6 +11,7 @@ function ModalCore(props: {
   children?: React.ReactNode;
   onShowFn?: () => void;
   closeOnSubmit?: boolean;
+  form?: boolean;
 }) {
   const [show, setShow] = useState(false);
 
@@ -42,7 +43,7 @@ function ModalCore(props: {
         <Modal.Header closeButton>
           <Modal.Title>{props.actionName}</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="bg-dark text-light">{props.children}</Modal.Body>
+        <Modal.Body className="bg-dark text-light ">{props.children}</Modal.Body>
         <Modal.Footer className="bg-dark">
           <Alert show={showAlert} variant={props.actionBtnVariant + " w-50"}>
             {props.postInfo}
@@ -53,9 +54,11 @@ function ModalCore(props: {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant={props.actionBtnVariant} onClick={handleAction}>
-            {props.actionName}
-          </Button>
+          {!props.form ? (
+            <Button variant={props.actionBtnVariant} onClick={handleAction}>
+              {props.actionName}
+            </Button>
+          ) : null}
         </Modal.Footer>
       </Modal>
     </>
