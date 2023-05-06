@@ -1,6 +1,6 @@
 import { Model, model, Schema } from "mongoose";
 import { RangeDocument } from "@types";
-import { nameValidation } from "validators/rangeModel.validator";
+import { nameValidation } from "../validators/rangeModel.validator";
 
 const rangeSchema: Schema<RangeDocument> = new Schema({
   name: {
