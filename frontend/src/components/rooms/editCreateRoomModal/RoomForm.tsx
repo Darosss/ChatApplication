@@ -24,7 +24,7 @@ function RoomForm(props: RoomFormProps) {
     >
       {({ handleSubmit, handleChange, values, touched, errors }) => (
         <Form onSubmit={handleSubmit} className="w-100" noValidate>
-          <Form.Group as={Col} className="position-relative" controlId="validation-name">
+          <Form.Group as={Col} controlId="validation-name">
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="text"
@@ -37,7 +37,7 @@ function RoomForm(props: RoomFormProps) {
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
           </Form.Group>
-          <Form.Group as={Col} className="position-relative">
+          <Form.Group as={Col}>
             <Form.Label>Available ranges</Form.Label>
             <Form.Control
               data-show-subtext="true"
@@ -58,7 +58,7 @@ function RoomForm(props: RoomFormProps) {
               })}
             </Form.Control>
           </Form.Group>
-          <Form.Group as={Col} className="position-relative">
+          <Form.Group as={Col}>
             <Form.Label>Allowed users</Form.Label>
             <Form.Control
               size="sm"
@@ -77,7 +77,7 @@ function RoomForm(props: RoomFormProps) {
               })}
             </Form.Control>
           </Form.Group>
-          <Form.Group as={Col} className="position-relative">
+          <Form.Group as={Col}>
             <Form.Label>Banned users</Form.Label>
             <Form.Control
               size="sm"
