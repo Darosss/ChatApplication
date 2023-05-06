@@ -22,7 +22,7 @@ function EditProfileModal(props: { user: IUserRes }) {
     gender: "",
     nickColor: "",
     email: "",
-    phoneNumber: "",
+    phone: "",
   });
 
   const { profilEditResponse, profilEditError, profilEdit } = useProfilEdit();
@@ -31,14 +31,14 @@ function EditProfileModal(props: { user: IUserRes }) {
     setProfilValues({
       oldPassword: "",
       newPassword: "",
-      firstname: user.firstname,
-      surname: user.surname,
+      firstname: user.firstname || "",
+      surname: user.surname || "",
       birthday: user.birthday,
-      country: user.country,
-      gender: user.gender,
-      nickColor: user.nickColor,
+      country: user.country || "",
+      gender: user.gender || "",
+      nickColor: user.nickColor || "",
       email: user.email,
-      phoneNumber: user.phoneNumber,
+      phone: user.phone || "",
     });
   }, [user]);
 

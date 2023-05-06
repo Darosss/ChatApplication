@@ -105,18 +105,18 @@ function EditProfileForm(props: EditProfileFormProps) {
             </Form.Group>
           </Form.Group>
 
-          <Form.Group as={Col} controlId="validation-phoneNumber">
+          <Form.Group as={Col} controlId="validation-phone">
             <Form.Label>Phone</Form.Label>
             <Form.Control
-              name="phoneNumber"
+              name="phone"
               type="text"
-              value={values.phoneNumber}
+              value={values.phone}
               onChange={handleChange}
-              isValid={touched.phoneNumber && !errors.phoneNumber}
-              isInvalid={!!errors.phoneNumber}
+              isValid={touched.phone && !errors.phone}
+              isInvalid={!!errors.phone}
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            <Form.Control.Feedback type="invalid">{errors.phoneNumber}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">{errors.phone}</Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} className="m-5">
             <Button type="submit" className="btn btn-primary w-100">

@@ -113,20 +113,20 @@ function RegisterForm(props: RegisterFormProps) {
                 {!errors.birthday ? null : String(errors.birthday || "")}
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group as={Col} className="position-relative" controlId="validation-phoneNumber">
+            <Form.Group as={Col} className="position-relative" controlId="validation-phone">
               <Form.Label>PhoneNumber</Form.Label>
               <Form.Control
                 type="number"
-                name="phoneNumber"
+                name="phone"
                 placeholder="PhoneNumber"
-                value={values.phoneNumber}
+                value={values.phone}
                 onChange={handleChange}
-                isValid={touched.phoneNumber && !errors.phoneNumber}
-                isInvalid={!!errors.phoneNumber}
+                isValid={touched.phone && !errors.phone}
+                isInvalid={!!errors.phone}
               />
               <Form.Control.Feedback tooltip>Looks good!</Form.Control.Feedback>
               <Form.Control.Feedback tooltip type="invalid">
-                {errors.phoneNumber}
+                {errors.phone}
               </Form.Control.Feedback>
             </Form.Group>
           </Form.Group>

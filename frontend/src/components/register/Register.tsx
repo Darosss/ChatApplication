@@ -17,7 +17,7 @@ function Register() {
     gender: "",
     nickColor: "",
     email: "",
-    phoneNumber: "",
+    phone: "",
   });
   const { registerResponse, registerError, register } = useRegister();
 

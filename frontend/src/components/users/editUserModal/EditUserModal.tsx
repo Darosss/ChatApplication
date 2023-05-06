@@ -20,7 +20,7 @@ function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRang
     gender: "",
     nickColor: "",
     email: "",
-    phoneNumber: "",
+    phone: "",
     ranges: [],
   });
 
@@ -30,14 +30,14 @@ function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRang
     if (!user) return;
     setUserValues({
       username: user.username,
-      firstname: user.firstname,
-      surname: user.surname,
-      country: user.country,
+      firstname: user.firstname || "",
+      surname: user.surname || "",
+      country: user.country || "",
       birthday: user.birthday,
-      gender: user.gender,
-      nickColor: user.nickColor,
+      gender: user.gender || "",
+      nickColor: user.nickColor || "",
       email: user.email,
-      phoneNumber: user.phoneNumber,
+      phone: user.phone || "",
       ranges: user.ranges as string[],
     });
   }, [user]);

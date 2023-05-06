@@ -12,5 +12,5 @@ export const editProfileSchema = object<LoggedUserUpdateData>().shape({
   birthday: date()
     .default(() => new Date())
     .required("Required!"),
-  phoneNumber: number().required("Required!"),
+  phone: number().required("Required!"),
 });

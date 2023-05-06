@@ -13,5 +13,5 @@ export const registerSchema = object<UserRegisterData>().shape({
   birthday: date()
     .default(() => new Date())
     .required("Required!"),
-  phoneNumber: number().required("Required!"),
+  phone: number().required("Required!"),
 });

@@ -9,5 +9,5 @@ export const editUserSchema = object<UserUpdateData>().shape({
   birthday: date()
     .default(() => new Date())
     .required("Required!"),
-  phoneNumber: number().required("Required!"),
+  phone: number().required("Required!"),
 });

@@ -47,7 +47,7 @@ function ProfilDetails(props: { user: IUserRes }) {
           </tr>
           <tr>
             <td>Phone</td>
-            <td>{user.phoneNumber}</td>
+            <td>{user.phone}</td>
           </tr>
           <tr>
             <td>Nick color</td>

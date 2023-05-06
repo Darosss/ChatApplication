@@ -22,12 +22,12 @@ interface IUserRes {
   username: string;
   firstname?: string;
   surname?: string;
-  email?: string;
+  email: string;
   birthday: Date;
   createdAt: Date;
   country?: string;
   gender?: string;
-  phoneNumber?: string;
+  phone?: string;
   nickColor?: string;
   isBanned: boolean;
   bannedDate?: Date;
@@ -39,7 +39,7 @@ interface IUserRes {
 interface UserUpdateData
   extends Pick<
     IUserRes,
-    "username" | "firstname" | "surname" | "birthday" | "country" | "gender" | "nickColor" | "email" | "phoneNumber"
+    "username" | "firstname" | "surname" | "birthday" | "country" | "gender" | "nickColor" | "email" | "phone"
   > {
   ranges: string[];
 }
