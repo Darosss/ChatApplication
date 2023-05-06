@@ -8,7 +8,7 @@ export const editProfileSchema = object<LoggedUserUpdateData>().shape({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{4,}$/,
       "Password must contain at least: 1 upper case, 1 lower case, 1 symbol, 1 number.",
     ),
-  email: string().required("Required!"),
+  email: string().email().required("Required!"),
   birthday: date()
     .default(() => new Date())
     .required("Required!"),
