@@ -4,69 +4,65 @@ import EditProfile from "../editProfile";
 function ProfilDetails(props: { user: IUserRes }) {
   const { user } = props;
   return (
-    <div>
-      <table className="table table-sm table-dark profil-details">
-        <tbody>
-          <tr>
-            <th>Your profile: {user.username}</th>
-            <th>
-              <EditProfile user={user} />
-            </th>
-          </tr>
-          <tr>
-            <td>Username</td>
-            <td>{user.username}</td>
-          </tr>
-          <tr>
-            <td>Firstname</td>
-            <td>{user.firstname}</td>
-          </tr>
-          <tr>
-            <td>Surname</td>
-            <td>{user.surname}</td>
-          </tr>
-          <tr>
-            <td>Email</td>
-            <td>{user.email}</td>
-          </tr>
-          <tr>
-            <td>Birthday</td>
-            <td>{user.birthday ? user.birthday.toString().split("T")[0] : null}</td>
-          </tr>
-          <tr>
-            <td>Created at</td>
-            <td>{user.createdAt ? user.createdAt.toString().replace("T", " ").replace("Z", "") : null}</td>
-          </tr>
-          <tr>
-            <td>Country</td>
-            <td>{user.country}</td>
-          </tr>
-          <tr>
-            <td>Gender</td>
-            <td>{user.gender}</td>
-          </tr>
-          <tr>
-            <td>Phone</td>
-            <td>{user.phone}</td>
-          </tr>
-          <tr>
-            <td>Nick color</td>
-            <td>{user.nickColor}</td>
-          </tr>
-          {user.isBanned ? (
-            <tr>
-              <td>Banned date</td>
-              <td>{user.bannedDate?.toString()}</td>
-            </tr>
-          ) : null}
-          {user.isBanned ? (
-            <tr>
-              <td>Banned expires</td>
-              <td>{user.banExpiresDate?.toString()}</td>
-            </tr>
-          ) : null}
-        </tbody>
-      </table>
+    <div className="data-wrapper">
+      <div>
+        <div>Your profile: {user.username}</div>
+        <div>
+          <EditProfile user={user} />
+        </div>
+      </div>
+      <div>
+        <div>Username</div>
+        <div>{user.username}</div>
+      </div>
+      <div>
+        <div>Firstname</div>
+        <div>{user.firstname}</div>
+      </div>
+      <div>
+        <div>Surname</div>
+        <div>{user.surname}</div>
+      </div>
+      <div>
+        <div>Email</div>
+        <div>{user.email}</div>
+      </div>
+      <div>
+        <div>Birthday</div>
+        <div>{user.birthday ? user.birthday.toString().split("T")[0] : null}</div>
+      </div>
+      <div>
+        <div>Created at</div>
+        <div>{user.createdAt ? user.createdAt.toString().replace("T", " ").replace("Z", "") : null}</div>
+      </div>
+      <div>
+        <div>Country</div>
+        <div>{user.country}</div>
+      </div>
+      <div>
+        <div>Gender</div>
+        <div>{user.gender}</div>
+      </div>
+      <div>
+        <div>Phone</div>
+        <div>{user.phone}</div>
+      </div>
+      <div>
+        <div>Nick color</div>
+        <div>{user.nickColor}</div>
+      </div>
+      {user.isBanned ? (
+        <div>
+          <div>Banned date</div>
+          <div>{user.bannedDate?.toString()}</div>
+        </div>
+      ) : null}
+      {user.isBanned ? (
+        <div>
+          <div>Banned expires</div>
+          <div>{user.banExpiresDate?.toString()}</div>
+        </div>
+      ) : null}
     </div>
   );
 }
