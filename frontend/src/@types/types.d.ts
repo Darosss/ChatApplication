@@ -44,10 +44,21 @@ interface UserUpdateData
   ranges: string[];
 }
 
+interface UserRegisterData extends Omit<UserUpdateData, "ranges"> {
+  password: string;
+  birthday: Date;
+  username: string;
+}
+
 interface LoggedUserUpdateData extends Omit<UserUpdateData, "ranges" | "username"> {
   oldPassword?: string;
   newPassword?: string;
   birthday: Date;
+}
+
+interface LoginFields {
+  username: string;
+  password: string;
 }
 
 interface UserBanData {
