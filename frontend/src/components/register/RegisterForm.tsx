@@ -6,7 +6,7 @@ import { registerSchema } from "./validationSchema";
 
 interface RegisterFormProps {
   initialValues: UserRegisterData;
-  onSubmit: (values: LoggedUserUpdateData) => void;
+  onSubmit: (values: UserRegisterData) => void;
 }
 function RegisterForm(props: RegisterFormProps) {
   const { initialValues, onSubmit } = props;
