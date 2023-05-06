@@ -63,7 +63,7 @@ interface UserModel {
   gender: string;
   nickColor: string;
   email: string;
-  phoneNumber: string;
+  phone: string;
   isBanned: boolean;
   bannedDate: Date;
   banExpiresDate: Date;

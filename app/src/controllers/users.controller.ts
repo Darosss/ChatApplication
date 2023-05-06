@@ -60,7 +60,7 @@ class UsersController {
       gender: req.body.gender,
       nickColor: req.body.nickColor,
       email: req.body.email,
-      phoneNumber: req.body.phoneNumber,
+      phone: req.body.phone,
       ranges: req.body.ranges,
     };
 

@@ -35,7 +35,7 @@ export function birthdayValidation(date: string) {
   if (errorMessages.length > 0) throw Error(errorMessages.join(", "));
 }
 
-export function phoneNumberValidation(phone: string) {
+export function phoneValidation(phone: string) {
   const errorMessages: string[] = [];
 
   if (!validator.isMobilePhone(phone)) {

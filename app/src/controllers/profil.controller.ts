@@ -45,7 +45,7 @@ class ProfilController {
         gender: req.body.gender,
         nickColor: req.body.nickColor,
         email: req.body.email,
-        phoneNumber: req.body.phoneNumber,
+        phone: req.body.phone,
       });
 
       if (req.body.oldPassword || req.body.newPassword) {

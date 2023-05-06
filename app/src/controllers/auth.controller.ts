@@ -35,7 +35,7 @@ class AuthController {
       gender: req.body.gender,
       nickColor: req.body.nickColor,
       email: req.body.email,
-      phoneNumber: req.body.phone,
+      phone: req.body.phone,
     };
 
     try {

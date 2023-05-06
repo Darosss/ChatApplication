@@ -7,7 +7,7 @@ import {
   birthdayValidation,
   emailValidation,
   passwordValidation,
-  phoneNumberValidation,
+  phoneValidation,
   usernameValidation,
 } from "../validators/userModel.validator";
 
@@ -68,9 +68,9 @@ const userSchema: Schema<UserDocument> = new Schema({
     type: String,
     validate: emailValidation,
   },
-  phoneNumber: {
+  phone: {
     type: String,
-    validate: phoneNumberValidation,
+    validate: phoneValidation,
   },
   isBanned: {
     type: Boolean,
