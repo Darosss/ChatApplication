@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import Alert from "react-bootstrap/Alert";
 
 function ModalCore(props: {
-  onClickFn: () => void;
+  onClickFn?: () => void;
   actionBtnVariant: string;
   actionName: string;
   postInfo: string;
@@ -22,7 +22,7 @@ function ModalCore(props: {
 
   const handleAction = () => {
     if (props.closeOnSubmit) handleClose();
-    props.onClickFn();
+    if (props.onClickFn) props.onClickFn();
     setShowAlert(true);
   };
 
