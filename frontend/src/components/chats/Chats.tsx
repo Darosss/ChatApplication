@@ -13,7 +13,7 @@ import {
   onUserTyping,
   subscribeToChat,
 } from "./socket";
-import { IMessageSocket } from "@libs/types/socket";
+import { MessageSocket } from "./socket";
 import { scrollToBottom } from "@utils/scrollToBottom.util";
 import ChatOnlineUsers from "./chatOnlineUsers";
 import InfoSidebar from "@components/infoSidebar";
@@ -32,9 +32,7 @@ function Chats() {
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const [roomsOnlineUsers, setRoomsOnlineUsers] = useState(new Map<string, Map<string, string>>());
   const [roomsTypingUsers, setRoomsTypingUsers] = useState<Map<string, string>>(new Map<string, string>());
-  const [localMessages, setLocalMessages] = useState<Map<string, IMessageSocket[]>>(
-    new Map<string, IMessageSocket[]>(),
-  );
+  const [localMessages, setLocalMessages] = useState<Map<string, MessageSocket[]>>(new Map<string, MessageSocket[]>());
 
   const [dbMessages, setDBMessages] = useState<IMessagesRes[]>([]);
   const [viewedRoomId, setViewedRoomId] = useState<string>("");

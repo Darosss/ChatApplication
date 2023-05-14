@@ -1,11 +1,5 @@
 import { io, Socket } from "socket.io-client";
-import {
-  ClientToServerEvents,
-  IMessageSocket,
-  IRoomOnlineUsers,
-  IUserTyping,
-  ServerToClientEvents,
-} from "@libs/types/socket";
+import { ServerToClientEvents, ClientToServerEvents, IRoomOnlineUsers, IMessageSocket, IUserTyping } from "./types";
 
 let socket: Socket<ServerToClientEvents, ClientToServerEvents>;
 

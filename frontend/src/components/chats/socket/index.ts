@@ -23,3 +23,5 @@ export {
   onUserTyping,
   userTypingEmit,
 };
+
+export * from "./types";

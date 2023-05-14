@@ -7,8 +7,7 @@
       "@/utils/*": ["utils/*"],
       "@/models/*": ["models/*"],
       "@/services/*": ["services/*"],
-      "@/config/*": ["config/*"],
-      "@/libs.global/*": ["../../libs/*"]
+      "@/config/*": ["config/*"]
     },
     "typeRoots": ["@types"],
     "outDir": "dist",

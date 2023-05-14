@@ -2,7 +2,7 @@ import React, { useEffect, useState, KeyboardEvent } from "react";
 
 import { joinRoom, sendMessageSocket, userTypingEmit } from "../socket";
 
-import { IMessageSocket, IRoomOnlineUsers } from "@libs/types/socket";
+import { MessageSocket, RoomOnlineUsers } from "../socket";
 import ChatMessages from "../chatMessages";
 import ChatOnlineUsers from "../chatOnlineUsers";
 import { Button, Tab } from "react-bootstrap";
@@ -12,7 +12,7 @@ function ChatRoom(props: {
   auth: IAuth;
   roomOnlineUsers: string[] | undefined;
   roomTypingUsers: string | undefined;
-  localMessages: IMessageSocket[];
+  localMessages: MessageSocket[];
   dbMessages: IMessagesRes[];
 }) {
   const { room, auth, roomOnlineUsers, roomTypingUsers, localMessages, dbMessages } = props;
@@ -26,7 +26,7 @@ function ChatRoom(props: {
     joinRoom({
       username: username,
       roomId: room._id,
-    } as IRoomOnlineUsers);
+    } as RoomOnlineUsers);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [room]);
 

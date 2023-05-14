@@ -1,9 +1,9 @@
 import React from "react";
 import { Table } from "react-bootstrap";
-import { IMessageSocket } from "@libs/types/socket";
+import { MessageSocket } from "../socket";
 import ChatMessage from "../chatMessage";
 
-function ChatMessages(props: { localMessages: IMessageSocket[]; dbMessages: IMessagesRes[] }) {
+function ChatMessages(props: { localMessages: MessageSocket[]; dbMessages: IMessagesRes[] }) {
   const { localMessages, dbMessages } = props;
 
   const mapMessagesDB = () => {

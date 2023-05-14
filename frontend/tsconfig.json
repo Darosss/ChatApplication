@@ -16,11 +16,10 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "outDir": "./dist",
-    "rootDir": "./src",
     "baseUrl": ".",
     "paths": {
       "@*": ["src/*"],
-      "@libs/*": ["../libs/*"],
+      "@socketTypes": ["../app/src/socket/"],
       "@components/*": ["src/components/*"],
       "@hooks/*": ["src/hooks/*"],
       "@utils/*": ["src/utils/*"],
@@ -28,6 +27,5 @@
     }
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist"],
-  "typeRoots": ["./src/@types", "./node_modules/@types"]
+  "exclude": ["node_modules", "dist"]
 }
