@@ -1,0 +1,18 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "name": "frontend",
+      "path": "frontend"
+    },
+    {
+      "name": "app",
+      "path": "app"
+    }
+  ],
+  "settings": {
+    "jest.disabledWorkspaceFolders": ["ChatApplication"]
+  }
+}
