@@ -1,5 +1,7 @@
 <a name="readme-top"></a>
 
+# !!!README WILL BE UPDATED SOON !!!
+
 # Chat application
 
 <details>
