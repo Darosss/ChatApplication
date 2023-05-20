@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import ChatMessages from "./ChatMessages";
-import { MessageSocket } from "../socket";
+import { MessageSocket } from "@src/socket";
 import { IMessagesRes } from "@src/@types/types";
 import { getMessageData, getMessageSocketData } from "@src/tests/testData";
 

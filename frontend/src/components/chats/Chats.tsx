@@ -12,8 +12,8 @@ import {
   roomOnlineUsers,
   onUserTyping,
   subscribeToChat,
-} from "./socket";
-import { MessageSocket } from "./socket";
+  MessageSocket,
+} from "@src/socket";
 import { scrollToBottom } from "@utils/scrollToBottom.util";
 import ChatOnlineUsers from "./chatOnlineUsers";
 import InfoSidebar from "@components/infoSidebar";

@@ -2,9 +2,8 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import ChatRoom from "./ChatRoom";
 import { faker } from "@faker-js/faker";
-import { getAuthData, getMessageData, getMessageSocketData, getRoomData, getUserData } from "@src/tests/testData";
+import { getAuthData, getMessageData, getMessageSocketData, getRoomData } from "@src/tests/testData";
 import { chatsIds } from "@src/utils/dataTestIdsList";
-import { sendMessageSocket } from "../socket";
 
 describe("ChatRoom", () => {
   test("renders ChatRoom properly with no data at all", () => {

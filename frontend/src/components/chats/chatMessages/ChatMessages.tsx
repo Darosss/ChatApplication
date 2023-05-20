@@ -1,6 +1,6 @@
 import React from "react";
 import { Table } from "react-bootstrap";
-import { MessageSocket } from "../socket";
+import { MessageSocket } from "@src/socket";
 import ChatMessage from "../chatMessage";
 import { IMessagesRes } from "src/@types/types";
 

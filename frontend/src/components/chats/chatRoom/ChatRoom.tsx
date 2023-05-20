@@ -1,8 +1,7 @@
 import React, { useEffect, useState, KeyboardEvent } from "react";
 
-import { joinRoom, sendMessageSocket, userTypingEmit } from "../socket";
+import { joinRoom, sendMessageSocket, userTypingEmit, MessageSocket, RoomOnlineUsers } from "@src/socket";
 
-import { MessageSocket, RoomOnlineUsers } from "../socket";
 import ChatMessages from "../chatMessages";
 import ChatOnlineUsers from "../chatOnlineUsers";
 import { Button, Tab } from "react-bootstrap";
