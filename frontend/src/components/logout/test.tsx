@@ -1,13 +1,14 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import Logout from "./Logout";
-import { RenderRouterAndAuthContextComponent, getAuthData } from "@src/tests/helpers";
+import { RenderRouterAndAuthContextComponent } from "@src/tests/helpers";
 
 import * as authHooks from "@hooks/authApi";
 import { logoutElementId } from "@utils/dataTestIdsList";
 const useLogoutSpyName = "useLogout";
 
 import { AxiosRequestHeaders } from "axios";
+import { getAuthData } from "@src/tests/testData";
 jest.mock("axios");
 
 describe("Logout", () => {
