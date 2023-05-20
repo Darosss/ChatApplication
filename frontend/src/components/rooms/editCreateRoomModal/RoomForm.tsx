@@ -2,6 +2,8 @@ import React from "react";
 import { Formik } from "formik";
 import { roomSchema } from "./validationSchema";
 import { Form, Col, Button } from "react-bootstrap";
+import { RoomUpdateData, IRangeRes, IUserRes } from "src/@types/types";
+import { roomsIds } from "@src/utils/dataTestIdsList";
 
 interface RoomFormProps {
   initialValues: RoomUpdateData;
@@ -23,10 +25,11 @@ function RoomForm(props: RoomFormProps) {
       }}
     >
       {({ handleSubmit, handleChange, values, touched, errors }) => (
-        <Form onSubmit={handleSubmit} className="w-100" noValidate>
+        <Form data-testid={roomsIds.editCreateModal.form} onSubmit={handleSubmit} className="w-100" noValidate>
           <Form.Group as={Col} controlId="validation-name">
             <Form.Label>Name</Form.Label>
             <Form.Control
+              data-testid={roomsIds.editCreateModal.nameInput}
               type="text"
               name="name"
               value={values.name}
@@ -40,6 +43,7 @@ function RoomForm(props: RoomFormProps) {
           <Form.Group as={Col}>
             <Form.Label>Available ranges</Form.Label>
             <Form.Control
+              data-testid={roomsIds.editCreateModal.availableRanges}
               data-show-subtext="true"
               data-live-search="true"
               size="sm"
@@ -61,6 +65,7 @@ function RoomForm(props: RoomFormProps) {
           <Form.Group as={Col}>
             <Form.Label>Allowed users</Form.Label>
             <Form.Control
+              data-testid={roomsIds.editCreateModal.allowedUsers}
               size="sm"
               as="select"
               name="allowedUsers"
@@ -80,6 +85,7 @@ function RoomForm(props: RoomFormProps) {
           <Form.Group as={Col}>
             <Form.Label>Banned users</Form.Label>
             <Form.Control
+              data-testid={roomsIds.editCreateModal.bannedUsers}
               size="sm"
               as="select"
               name="bannedUsers"

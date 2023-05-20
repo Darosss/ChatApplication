@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Alert from "react-bootstrap/Alert";
+import { modalIds } from "@utils/dataTestIdsList";
 
 function ModalCore(props: {
   onClickFn?: () => void;
@@ -12,6 +13,7 @@ function ModalCore(props: {
   onShowFn?: () => void;
   closeOnSubmit?: boolean;
   form?: boolean;
+  dataTestSubmitButtonId?: string;
 }) {
   const [show, setShow] = useState(false);
 
@@ -35,11 +37,16 @@ function ModalCore(props: {
 
   return (
     <>
-      <Button variant={props.actionBtnVariant} className="modal-core-btn" onClick={handleShow}>
+      <Button
+        data-testid={modalIds.toggleBtn}
+        variant={props.actionBtnVariant}
+        className="modal-core-btn"
+        onClick={handleShow}
+      >
         {props.actionName}
       </Button>
 
-      <Modal show={show} animation={false} onHide={handleClose}>
+      <Modal data-testid={modalIds.modal} show={show} animation={false} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>{props.actionName}</Modal.Title>
         </Modal.Header>
@@ -55,7 +62,7 @@ function ModalCore(props: {
             Close
           </Button>
           {!props.form ? (
-            <Button variant={props.actionBtnVariant} onClick={handleAction}>
+            <Button data-testid={props.dataTestSubmitButtonId} variant={props.actionBtnVariant} onClick={handleAction}>
               {props.actionName}
             </Button>
           ) : null}

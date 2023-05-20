@@ -3,6 +3,8 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 import { Formik } from "formik";
 import { editUserSchema } from "./validationSchema";
 import UserRooms from "./UserRooms";
+import { UserUpdateData, IRangeRes, IUserRes, IChatRoomRes } from "src/@types/types";
+import { usersIds } from "@src/utils/dataTestIdsList";
 interface EditUserFormProps {
   initialValues: UserUpdateData;
   onSubmit: (values: UserUpdateData) => void;
@@ -24,11 +26,12 @@ function RegisterForm(props: EditUserFormProps) {
         }}
       >
         {({ handleSubmit, handleChange, values, touched, errors }) => (
-          <Form onSubmit={handleSubmit} className="w-75" noValidate>
+          <Form data-testid={usersIds.editUserModal.form} onSubmit={handleSubmit} className="w-75" noValidate>
             <Form.Group as={Row} className="mt-5">
               <Form.Group as={Col} className="position-relative" controlId="validation-username">
                 <Form.Label>Username</Form.Label>
                 <Form.Control
+                  data-testid={usersIds.editUserModal.usernameInput}
                   type="text"
                   name="username"
                   placeholder="Username"
@@ -45,6 +48,7 @@ function RegisterForm(props: EditUserFormProps) {
               <Form.Group as={Col} className="position-relative" controlId="validation-email">
                 <Form.Label>E-mail</Form.Label>
                 <Form.Control
+                  data-testid={usersIds.editUserModal.emailInput}
                   type="email"
                   name="email"
                   placeholder="E-mail"
@@ -63,17 +67,30 @@ function RegisterForm(props: EditUserFormProps) {
             <Form.Group as={Row} className="mt-5">
               <Form.Group as={Col}>
                 <Form.Label>Firstname</Form.Label>
-                <Form.Control name="firstname" type="text" value={values.firstname} onChange={handleChange} />
+                <Form.Control
+                  data-testid={usersIds.editUserModal.firstnameInput}
+                  name="firstname"
+                  type="text"
+                  value={values.firstname}
+                  onChange={handleChange}
+                />
               </Form.Group>
               <Form.Group as={Col}>
                 <Form.Label>Surname</Form.Label>
-                <Form.Control name="surname" type="text" value={values.surname} onChange={handleChange} />
+                <Form.Control
+                  data-testid={usersIds.editUserModal.surnameInput}
+                  name="surname"
+                  type="text"
+                  value={values.surname}
+                  onChange={handleChange}
+                />
               </Form.Group>
             </Form.Group>
 
             <Form.Group as={Col} controlId="validation-birthday">
               <Form.Label>Birthday</Form.Label>
               <Form.Control
+                data-testid={usersIds.editUserModal.birthdayInput}
                 name="birthday"
                 type="date"
                 value={values.birthday.toString().slice(0, 10)}
@@ -89,21 +106,40 @@ function RegisterForm(props: EditUserFormProps) {
             <Form.Group as={Row} className="mt-5">
               <Form.Group as={Col}>
                 <Form.Label>Country</Form.Label>
-                <Form.Control name="country" type="text" value={values.country} onChange={handleChange} />
+                <Form.Control
+                  data-testid={usersIds.editUserModal.countryInput}
+                  name="country"
+                  type="text"
+                  value={values.country}
+                  onChange={handleChange}
+                />
               </Form.Group>
               <Form.Group as={Col}>
                 <Form.Label>Gender</Form.Label>
-                <Form.Control name="gender" type="text" value={values.gender} onChange={handleChange} />
+                <Form.Control
+                  data-testid={usersIds.editUserModal.genderInput}
+                  name="gender"
+                  type="text"
+                  value={values.gender}
+                  onChange={handleChange}
+                />
               </Form.Group>
               <Form.Group as={Col}>
                 <Form.Label>Nick color</Form.Label>
-                <Form.Control name="nickColor" type="text" value={values.nickColor} onChange={handleChange} />
+                <Form.Control
+                  data-testid={usersIds.editUserModal.nickColorInput}
+                  name="nickColor"
+                  type="text"
+                  value={values.nickColor}
+                  onChange={handleChange}
+                />
               </Form.Group>
             </Form.Group>
 
             <Form.Group as={Col} controlId="validation-phone">
               <Form.Label>Phone</Form.Label>
               <Form.Control
+                data-testid={usersIds.editUserModal.phoneInput}
                 name="phone"
                 type="text"
                 value={values.phone}
@@ -116,7 +152,15 @@ function RegisterForm(props: EditUserFormProps) {
             </Form.Group>
             <Form.Group as={Col}>
               <Form.Label>User ranges</Form.Label>
-              <Form.Control size="sm" as="select" name="ranges" multiple value={values.ranges} onChange={handleChange}>
+              <Form.Control
+                data-testid={usersIds.editUserModal.rangesSelect}
+                size="sm"
+                as="select"
+                name="ranges"
+                multiple
+                value={values.ranges}
+                onChange={handleChange}
+              >
                 {rangesList.map((range, index) => {
                   return (
                     <option key={index} value={range._id} className="border-bottom border-dark">

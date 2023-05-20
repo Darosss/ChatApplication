@@ -6,6 +6,7 @@ import { useCreateOrUpdateRoom } from "@hooks/roomsApi";
 import { useRefetchData } from "@hooks/useAcciosHook";
 import RoomForm from "./RoomForm";
 import PostInfo from "@components/postInfo";
+import { IChatRoomRes, IRangeRes, IUserRes, RoomUpdateData } from "src/@types/types";
 
 function EditCreateRoomModal(props: {
   room?: IChatRoomRes;

@@ -4,8 +4,9 @@ import usePostInfoHook from "@hooks/usePostInfoHook";
 import { SendDataContext } from "@contexts/SendDataContext";
 import { useBanUser } from "@hooks/usersApi";
 import { useRefetchData } from "@hooks/useAcciosHook";
+import { usersIds } from "@src/utils/dataTestIdsList";
 
-function EditUserModal(props: { userId: string; username: string }) {
+function BanUserModal(props: { userId: string; username: string }) {
   const { userId, username } = props;
 
   const { sendData: refetchData } = useContext(SendDataContext);
@@ -33,12 +34,14 @@ function EditUserModal(props: { userId: string; username: string }) {
         <input
           type="number"
           className="form-control"
+          data-testid={usersIds.banUserModal.banTimeInput}
           value={banTime || ""}
           onChange={(e) => setBanTime(e.target.valueAsNumber)}
         />
         <label className="form-label ">Ban reason</label>
         <input
           type="text"
+          data-testid={usersIds.banUserModal.banReasonInput}
           className="form-control"
           value={banReason || ""}
           onChange={(e) => setBanReason(e.target.value)}
@@ -54,10 +57,11 @@ function EditUserModal(props: { userId: string; username: string }) {
       actionBtnVariant="danger"
       postInfo={postInfo}
       closeOnSubmit={true}
+      dataTestSubmitButtonId={usersIds.banUserModal.banSubmitButton}
     >
       {modalBody()}
     </ModalCore>
   );
 }
 
-export default EditUserModal;
+export default BanUserModal;

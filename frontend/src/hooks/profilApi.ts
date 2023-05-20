@@ -1,3 +1,4 @@
+import { IUserRes, LoggedUserUpdateData } from "src/@types/types";
 import useAcciosHook from "./useAcciosHook";
 
 export function useGetProfilDetails() {

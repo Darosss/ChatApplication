@@ -11,14 +11,16 @@
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
     "moduleResolution": "node",
+    "types": ["node"],
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
     "outDir": "./dist",
+
     "baseUrl": ".",
     "paths": {
-      "@*": ["src/*"],
+      "@src/*": ["src/*"],
       "@socketTypes": ["../app/src/socket/"],
       "@components/*": ["src/components/*"],
       "@hooks/*": ["src/hooks/*"],

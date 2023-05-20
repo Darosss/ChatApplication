@@ -4,6 +4,7 @@ import usePostInfoHook from "@hooks/usePostInfoHook";
 import { SendDataContext } from "@contexts/SendDataContext";
 import { useDeleteRange } from "@hooks/rangesApi";
 import { useRefetchData } from "@hooks/useAcciosHook";
+import { rangesIds } from "@src/utils/dataTestIdsList";
 
 function DeleteRangeModal(props: { rangeId: string; rangeName: string }) {
   const { rangeId, rangeName } = props;
@@ -27,7 +28,13 @@ function DeleteRangeModal(props: { rangeId: string; rangeName: string }) {
   };
 
   return (
-    <ModalCore actionName="Delete" onClickFn={handleOnDeleteRange} actionBtnVariant="danger" postInfo={postInfo}>
+    <ModalCore
+      dataTestSubmitButtonId={rangesIds.deleteRangeModal.rangeDeleteSubmitButton}
+      actionName="Delete"
+      onClickFn={handleOnDeleteRange}
+      actionBtnVariant="danger"
+      postInfo={postInfo}
+    >
       {modalBody()}
     </ModalCore>
   );

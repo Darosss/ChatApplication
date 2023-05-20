@@ -4,7 +4,8 @@ import usePostInfoHook from "@hooks/usePostInfoHook";
 import { useLogin } from "@hooks/authApi";
 import { SendDataContext } from "@contexts/SendDataContext";
 import LoginForm from "./LoginForm";
-
+import { LoginFields } from "src/@types/types";
+import { loginlementId } from "@utils/dataTestIdsList";
 function Login() {
   const { sendData: refetchSession } = useContext(SendDataContext);
   const { loginResponse, loginError, login } = useLogin();
@@ -15,7 +16,7 @@ function Login() {
   }, [loginResponse, refetchSession]);
 
   return (
-    <div>
+    <div data-testid={loginlementId}>
       <div className="section-header">
         <h2>Log in to chat room</h2>
       </div>

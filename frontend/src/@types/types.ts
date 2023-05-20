@@ -1,4 +1,4 @@
-interface IAuth {
+export interface IAuth {
   id: string;
   username: string;
   exp: number;
@@ -6,7 +6,7 @@ interface IAuth {
   administrator?: boolean;
   isBanned?: boolean;
 }
-interface IChatRoomRes {
+export interface IChatRoomRes {
   _id: string;
   name: string;
   availableRanges: string[];
@@ -15,9 +15,9 @@ interface IChatRoomRes {
   createdBy: string;
 }
 
-type RoomUpdateData = Omit<IChatRoomRes, "_id" | "createdBy">;
+export type RoomUpdateData = Omit<IChatRoomRes, "_id" | "createdBy">;
 
-interface IUserRes {
+export interface IUserRes {
   _id: string;
   username: string;
   firstname?: string;
@@ -36,7 +36,7 @@ interface IUserRes {
   ranges: IRangeRes[] | string[];
 }
 
-interface UserUpdateData
+export interface UserUpdateData
   extends Pick<
     IUserRes,
     "username" | "firstname" | "surname" | "birthday" | "country" | "gender" | "nickColor" | "email" | "phone"
@@ -44,28 +44,28 @@ interface UserUpdateData
   ranges: string[];
 }
 
-interface UserRegisterData extends Omit<UserUpdateData, "ranges"> {
+export interface UserRegisterData extends Omit<UserUpdateData, "ranges"> {
   password: string;
   birthday: Date;
   username: string;
 }
 
-interface LoggedUserUpdateData extends Omit<UserUpdateData, "ranges" | "username"> {
+export interface LoggedUserUpdateData extends Omit<UserUpdateData, "ranges" | "username"> {
   oldPassword?: string;
   newPassword?: string;
   birthday: Date;
 }
 
-interface LoginFields {
+export interface LoginFields {
   username: string;
   password: string;
 }
 
-interface UserBanData {
+export interface UserBanData {
   banTime: number;
   banReason: string;
 }
-interface IMessagesRes {
+export interface IMessagesRes {
   _id: string;
   roomId: string;
   whereSent: IChatRoomRes;
@@ -74,11 +74,11 @@ interface IMessagesRes {
   sender: IUserRes;
 }
 
-interface IRangeRes {
+export interface IRangeRes {
   _id: string;
   name: string;
   createdAt: Date;
   createdBy: IUserRes;
 }
 
-type RangeUpdateData = Pick<IRangeRes, "name">;
+export type RangeUpdateData = Pick<IRangeRes, "name">;

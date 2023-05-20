@@ -1,10 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function NavigationLink(props: { url: string; name: string }) {
+interface NavigationLinkProps {
+  url: string;
+  name: string;
+  dataTestId: string;
+}
+
+function NavigationLink(props: NavigationLinkProps) {
   return (
     <li>
-      <Link to={props.url} className="nav-li-link">
+      <Link data-testid={props.dataTestId} to={props.url} className="nav-li-link">
         {props.name}
       </Link>
     </li>

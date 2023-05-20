@@ -4,6 +4,7 @@ import { SendDataContext } from "@contexts/SendDataContext";
 import { useGetUsers } from "@hooks/usersApi";
 import { useGetRanges } from "@hooks/rangesApi";
 import { useGetRooms } from "@hooks/roomsApi";
+import { IChatRoomRes, IRangeRes, IUserRes } from "src/@types/types";
 
 function Rooms() {
   const { roomsResponse, refetchRooms } = useGetRooms();
@@ -28,7 +29,7 @@ function Rooms() {
 
   return (
     <SendDataContext.Provider value={{ sendData: refetchRooms }}>
-      <div>
+      <div data-testid="rooms-element">
         <div className="section-header">
           <h1> Your rooms </h1>
         </div>

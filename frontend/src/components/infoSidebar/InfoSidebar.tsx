@@ -1,3 +1,4 @@
+import { infoSidebarIds } from "@utils/dataTestIdsList";
 import React, { useState } from "react";
 import { Button, Offcanvas } from "react-bootstrap";
 
@@ -18,11 +19,12 @@ function InfoSidebar(props: {
   const { title, children, placement = "start", btnText = "Show", backdrop = false, className = "", style } = props;
   return (
     <>
-      <Button variant="primary" className="d-md-none" onClick={handleShow}>
+      <Button data-testid={infoSidebarIds.toggleBtn} variant="primary" className="d-md-none" onClick={handleShow}>
         {btnText}
       </Button>
 
       <Offcanvas
+        data-testid={infoSidebarIds.infoSidebar}
         className={`bg-dark text-light h-50 ${className}`}
         show={show}
         style={style ? style : {}}

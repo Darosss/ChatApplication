@@ -1,9 +1,10 @@
 import React, { useEffect, useContext } from "react";
 import { useLogout } from "@hooks/authApi";
 import { AuthContext } from "@contexts/authContext";
+import { logoutElementId } from "@utils/dataTestIdsList";
 
 function Logout() {
-  const { setAuth } = useContext(AuthContext);
+  const { removeAuth } = useContext(AuthContext);
   const { logoutResponse, logout } = useLogout();
 
   const handleOnClickLogout = () => {
@@ -11,12 +12,16 @@ function Logout() {
   };
 
   useEffect(() => {
-    if (logoutResponse) setAuth(null);
-  }, [logoutResponse, setAuth]);
+    if (logoutResponse) removeAuth();
+  }, [logoutResponse, removeAuth]);
 
   return (
     <li>
-      <button onClick={handleOnClickLogout} className="nav-li-button btn btn-danger w-100">
+      <button
+        data-testid={logoutElementId}
+        onClick={handleOnClickLogout}
+        className="nav-li-button btn btn-danger w-100"
+      >
         Logout
       </button>
     </li>

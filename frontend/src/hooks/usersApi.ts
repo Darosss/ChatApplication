@@ -1,3 +1,4 @@
+import { IUserRes, UserUpdateData, IChatRoomRes, UserBanData } from "src/@types/types";
 import useAcciosHook from "./useAcciosHook";
 
 export function useGetUsers() {

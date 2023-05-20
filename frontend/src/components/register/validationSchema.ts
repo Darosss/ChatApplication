@@ -1,3 +1,4 @@
+import { UserRegisterData } from "src/@types/types";
 import { object, string, date, number } from "yup";
 
 export const registerSchema = object<UserRegisterData>().shape({

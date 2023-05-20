@@ -3,6 +3,7 @@ import EditUserModal from "../editUserModal";
 import BanUserModal from "../banUserModal";
 import UnbanUserModal from "../unbanUserModal";
 import { useGetRanges } from "@hooks/rangesApi";
+import { IUserRes, IRangeRes } from "src/@types/types";
 
 function UsersList(props: { users: IUserRes[] }) {
   const { users } = props;

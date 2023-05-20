@@ -1,3 +1,4 @@
+import { IAuth } from "src/@types/types";
 import useAcciosHook from "./useAcciosHook";
 
 export function useGetSession() {

@@ -4,11 +4,12 @@ import { Link } from "react-router-dom";
 import { Button, Col, Form } from "react-bootstrap";
 import { Formik } from "formik";
 import { logInSchema } from "./validationSchema";
-
+import { LoginFields } from "@src/@types/types";
+import { loginFormIds } from "@utils/dataTestIdsList";
 interface LoginFormProps {
   onSubmit: (values: LoginFields) => void;
 }
-function RegisterForm(props: LoginFormProps) {
+function LoginForm(props: LoginFormProps) {
   const { onSubmit } = props;
 
   return (
@@ -21,10 +22,11 @@ function RegisterForm(props: LoginFormProps) {
       }}
     >
       {({ handleSubmit, handleChange, values, touched, errors }) => (
-        <Form onSubmit={handleSubmit} noValidate>
+        <Form data-testid={loginFormIds.form} onSubmit={handleSubmit} noValidate>
           <Form.Group as={Col} className="position-relative mt-5" controlId="validation-username">
             <Form.Label>Username</Form.Label>
             <Form.Control
+              data-testid={loginFormIds.usernameInput}
               type="text"
               name="username"
               placeholder="Username"
@@ -40,6 +42,7 @@ function RegisterForm(props: LoginFormProps) {
           </Form.Group>
           <Form.Group as={Col} className="position-relative mt-5" controlId="validation-password">
             <Form.Control
+              data-testid={loginFormIds.passwordInput}
               type="password"
               name="password"
               placeholder="Password"
@@ -68,4 +71,4 @@ function RegisterForm(props: LoginFormProps) {
   );
 }
 
-export default RegisterForm;
+export default LoginForm;

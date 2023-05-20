@@ -5,6 +5,8 @@ import PostInfo from "@components/postInfo";
 import { useRegister } from "@hooks/authApi";
 import usePostInfoHook from "@hooks/usePostInfoHook";
 import RegisterForm from "./RegisterForm";
+import { UserRegisterData } from "src/@types/types";
+import { registerElementId } from "@src/utils/dataTestIdsList";
 
 function Register() {
   const [registerInitialValues] = useState<UserRegisterData>({
@@ -24,7 +26,7 @@ function Register() {
   const { postInfo } = usePostInfoHook(registerResponse?.data.message, registerError?.message);
 
   return (
-    <div>
+    <div data-testid={registerElementId}>
       <div className="section-header">
         <h2> Register </h2>
       </div>

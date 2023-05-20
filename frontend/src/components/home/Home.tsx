@@ -5,7 +5,7 @@ function Home() {
   const { auth } = useContext(AuthContext);
 
   return (
-    <div className="section-header">
+    <div className="section-header" data-testid="home-element">
       {auth ? (
         <h1>Welcome back, {auth.username}. How&apos;s goin? </h1>
       ) : (

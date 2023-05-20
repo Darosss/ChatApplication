@@ -1,8 +1,10 @@
 import React from "react";
 
 import EditProfile from "../editProfile";
+import { IUserRes } from "src/@types/types";
 function ProfilDetails(props: { user: IUserRes }) {
   const { user } = props;
+
   return (
     <div className="data-wrapper">
       <div>
@@ -29,7 +31,7 @@ function ProfilDetails(props: { user: IUserRes }) {
       </div>
       <div>
         <div>Birthday</div>
-        <div>{user.birthday ? user.birthday.toString().split("T")[0] : null}</div>
+        <div>{user.birthday ? user.birthday.toISOString().split("T")[0] : null}</div>
       </div>
       <div>
         <div>Created at</div>

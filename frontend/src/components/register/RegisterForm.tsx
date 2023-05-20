@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { Formik } from "formik";
 import { registerSchema } from "./validationSchema";
+import { UserRegisterData } from "src/@types/types";
+import { registerFormIds } from "@src/utils/dataTestIdsList";
 
 interface RegisterFormProps {
   initialValues: UserRegisterData;
@@ -21,11 +23,12 @@ function RegisterForm(props: RegisterFormProps) {
       }}
     >
       {({ handleSubmit, handleChange, values, touched, errors }) => (
-        <Form onSubmit={handleSubmit} className="w-75" noValidate>
+        <Form data-testid={registerFormIds.form} onSubmit={handleSubmit} className="w-75" noValidate>
           <Form.Group as={Row} className="mt-5">
             <Form.Group as={Col} className="position-relative" controlId="validation-username">
               <Form.Label>Username</Form.Label>
               <Form.Control
+                data-testid={registerFormIds.usernameInput}
                 type="text"
                 name="username"
                 placeholder="Username"
@@ -42,6 +45,7 @@ function RegisterForm(props: RegisterFormProps) {
             <Form.Group as={Col} className="position-relative" controlId="validation-email">
               <Form.Label>E-mail</Form.Label>
               <Form.Control
+                data-testid={registerFormIds.emailInput}
                 type="email"
                 name="email"
                 placeholder="E-mail"
@@ -58,6 +62,7 @@ function RegisterForm(props: RegisterFormProps) {
             <Form.Group as={Col} className="position-relative" controlId="validation-password">
               <Form.Label>Password</Form.Label>
               <Form.Control
+                data-testid={registerFormIds.passwordInput}
                 type="password"
                 name="password"
                 autoComplete="on"
@@ -78,6 +83,7 @@ function RegisterForm(props: RegisterFormProps) {
             <Form.Group as={Col}>
               <Form.Label>First name</Form.Label>
               <Form.Control
+                data-testid={registerFormIds.firstnameInput}
                 type="text"
                 name="firstname"
                 placeholder="First name"
@@ -88,6 +94,7 @@ function RegisterForm(props: RegisterFormProps) {
             <Form.Group as={Col}>
               <Form.Label>Surname</Form.Label>
               <Form.Control
+                data-testid={registerFormIds.surnameInput}
                 type="text"
                 name="surname"
                 placeholder="Surname"
@@ -100,10 +107,11 @@ function RegisterForm(props: RegisterFormProps) {
             <Form.Group as={Col} className="position-relative" controlId="validation-birthday">
               <Form.Label>Birthday</Form.Label>
               <Form.Control
+                data-testid={registerFormIds.birthdayInput}
                 type="date"
                 name="birthday"
                 placeholder="Birthday"
-                value={values.birthday.toISOString().slice(0, 10)}
+                value={values.birthday instanceof Date ? values.birthday.toISOString() : String(values.birthday)}
                 onChange={handleChange}
                 isValid={touched.birthday && !errors.birthday}
                 isInvalid={!!errors.birthday}
@@ -116,6 +124,7 @@ function RegisterForm(props: RegisterFormProps) {
             <Form.Group as={Col} className="position-relative" controlId="validation-phone">
               <Form.Label>PhoneNumber</Form.Label>
               <Form.Control
+                data-testid={registerFormIds.phoneInput}
                 type="number"
                 name="phone"
                 placeholder="PhoneNumber"
@@ -134,6 +143,7 @@ function RegisterForm(props: RegisterFormProps) {
             <Form.Group as={Col}>
               <Form.Label>Country</Form.Label>
               <Form.Control
+                data-testid={registerFormIds.countryInput}
                 type="text"
                 name="country"
                 placeholder="Country"
@@ -144,6 +154,7 @@ function RegisterForm(props: RegisterFormProps) {
             <Form.Group as={Col}>
               <Form.Label>Gender</Form.Label>
               <Form.Control
+                data-testid={registerFormIds.genderInput}
                 type="text"
                 name="gender"
                 placeholder="Gender"
@@ -154,6 +165,7 @@ function RegisterForm(props: RegisterFormProps) {
             <Form.Group as={Col}>
               <Form.Label>Nick color</Form.Label>
               <Form.Control
+                data-testid={registerFormIds.nickColorInput}
                 type="text"
                 name="nickColor"
                 placeholder="Nick color"

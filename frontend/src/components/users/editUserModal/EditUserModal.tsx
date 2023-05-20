@@ -6,6 +6,7 @@ import { useEditUser, useGetUsersRooms } from "@hooks/usersApi";
 import { useRefetchData } from "@hooks/useAcciosHook";
 import EditUserForm from "./EditUserForm";
 import PostInfo from "@components/postInfo";
+import { IUserRes, IRangeRes, UserUpdateData, IChatRoomRes } from "src/@types/types";
 
 function EditUserModal(props: { user: IUserRes; users: IUserRes[]; ranges: IRangeRes[] }) {
   const { user, ranges, users } = props;

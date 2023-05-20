@@ -13,11 +13,11 @@ import NavigationBar from "./navigationBar";
 import { useGetSession } from "@hooks/authApi";
 import { AuthContext } from "@contexts/authContext";
 import { SendDataContext } from "@contexts/SendDataContext";
+import { IAuth } from "src/@types/types";
 
 function App() {
   const [auth, setAuth] = useState<IAuth | null>(null);
   const { authResponse, authLoading, getSession } = useGetSession();
-
   useEffect(() => {
     if (authResponse) setAuth(authResponse?.data);
   }, [authResponse]);
@@ -31,6 +31,8 @@ function App() {
       </div>
     );
   }
+
+  const setAuthToNull = () => setAuth(null);
 
   if (auth === undefined || auth === null) {
     return (
@@ -48,9 +50,9 @@ function App() {
     );
   }
   return (
-    <AuthContext.Provider value={{ auth, setAuth }}>
+    <AuthContext.Provider value={{ auth, removeAuth: setAuthToNull }}>
       <div className="app-wrapper">
-        <NavigationBar auth={auth} />
+        <NavigationBar />
 
         <div className="app-content">
           <Routes>
@@ -64,8 +66,8 @@ function App() {
               element={auth && !auth.isBanned ? <Rooms /> : auth.isBanned ? <Profil /> : <Login />}
             />
 
-            <Route path="/users" element={auth && auth.administrator && !auth.isBanned ? <Users /> : <Home />} />
-            <Route path="/ranges" element={auth && auth.administrator && !auth.isBanned ? <Ranges /> : <Home />} />
+            <Route path="/users" element={auth && auth.administrator && !auth.isBanned ? <Users /> : <Profil />} />
+            <Route path="/ranges" element={auth && auth.administrator && !auth.isBanned ? <Ranges /> : <Profil />} />
           </Routes>
         </div>
       </div>

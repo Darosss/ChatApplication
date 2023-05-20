@@ -1,16 +1,17 @@
 import { io, Socket } from "socket.io-client";
-import { ServerToClientEvents, ClientToServerEvents, IRoomOnlineUsers, IMessageSocket, IUserTyping } from "./types";
+import { ServerToClientEvents, ClientToServerEvents, RoomOnlineUsers, MessageSocket, UserTyping } from "./types";
+import { socketEndpoint } from "@src/constants";
 
 let socket: Socket<ServerToClientEvents, ClientToServerEvents>;
 
 export const initiateSocketConnection = () => {
-  socket = io(import.meta.env.VITE_SOCKET_ENDPOINT, {
+  socket = io(socketEndpoint, {
     transports: ["websocket"],
     withCredentials: true,
   });
   console.log("Connecting to socket");
 };
-export const joinRoom = (room: IRoomOnlineUsers) => {
+export const joinRoom = (room: RoomOnlineUsers) => {
   if (socket && room) socket.emit("join_channel", room);
 };
 
@@ -19,7 +20,7 @@ export const disconnectSocket = () => {
   if (socket) socket.disconnect();
 };
 
-export const subscribeToChat = (cb: (err: any, msg: IMessageSocket) => void) => {
+export const subscribeToChat = (cb: (err: any, msg: MessageSocket) => void) => {
   if (!socket) return true;
 
   socket.on("chat_message", (msg) => {
@@ -27,7 +28,7 @@ export const subscribeToChat = (cb: (err: any, msg: IMessageSocket) => void) => 
   });
 };
 
-export const roomOnlineUsers = (cb: (err: any, users: IRoomOnlineUsers) => void) => {
+export const roomOnlineUsers = (cb: (err: any, users: RoomOnlineUsers) => void) => {
   if (!socket) return true;
 
   socket.on("room_online_users", (users) => {
@@ -43,7 +44,7 @@ export const refreshOnlineUsers = (cb: (err: any, users: string[]) => void) => {
   });
 };
 
-export const sendMessageSocket = (message: IMessageSocket) => {
+export const sendMessageSocket = (message: MessageSocket) => {
   if (socket) socket.emit("chat_message", message);
 };
 
@@ -51,7 +52,7 @@ export const userConnectedEmit = (username: string) => {
   socket.emit("user_connected", username);
 };
 
-export const onUserTyping = (cb: (err: any, data: IUserTyping) => void) => {
+export const onUserTyping = (cb: (err: any, data: UserTyping) => void) => {
   if (!socket) return true;
 
   socket.on("user_typing", (data) => {

@@ -1,3 +1,4 @@
+import { RoomUpdateData } from "src/@types/types";
 import { object, string, array } from "yup";
 
 export const roomSchema = object<RoomUpdateData>().shape({

@@ -4,6 +4,7 @@ import usePostInfoHook from "@hooks/usePostInfoHook";
 import { SendDataContext } from "@contexts/SendDataContext";
 import { useUnbanUser } from "@hooks/usersApi";
 import { useRefetchData } from "@hooks/useAcciosHook";
+import { usersIds } from "@src/utils/dataTestIdsList";
 
 function UnbanUserModal(props: { userId: string; username: string }) {
   const { userId, username } = props;
@@ -34,6 +35,7 @@ function UnbanUserModal(props: { userId: string; username: string }) {
       actionBtnVariant="secondary"
       postInfo={postInfo}
       closeOnSubmit={true}
+      dataTestSubmitButtonId={usersIds.unbanUserModal.unbanSubmitButton}
     >
       {modalBody()}
     </ModalCore>

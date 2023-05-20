@@ -1,3 +1,4 @@
+import { UserUpdateData } from "src/@types/types";
 import { object, string, date, number } from "yup";
 
 export const editUserSchema = object<UserUpdateData>().shape({

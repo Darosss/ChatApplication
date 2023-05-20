@@ -6,6 +6,7 @@ import { useProfilEdit } from "@hooks/profilApi";
 import { useRefetchData } from "@hooks/useAcciosHook";
 import EditProfileForm from "./EditProfileForm";
 import PostInfo from "@components/postInfo";
+import { IUserRes, LoggedUserUpdateData } from "src/@types/types";
 
 function EditProfileModal(props: { user: IUserRes }) {
   const { user } = props;

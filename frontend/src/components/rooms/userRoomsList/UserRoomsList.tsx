@@ -1,6 +1,7 @@
 import React from "react";
 import EditCreateRoomModal from "../editCreateRoomModal";
 import DeleteRoomModal from "../deleteRoomModal";
+import { IChatRoomRes, IRangeRes, IUserRes } from "src/@types/types";
 
 function UserRoomsList(props: { rooms: IChatRoomRes[]; ranges: IRangeRes[]; users: IUserRes[] }) {
   const { rooms, ranges, users } = props;

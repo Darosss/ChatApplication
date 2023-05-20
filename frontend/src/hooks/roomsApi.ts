@@ -1,3 +1,4 @@
+import { IChatRoomRes, IMessagesRes, RoomUpdateData } from "src/@types/types";
 import useAcciosHook from "./useAcciosHook";
 
 export function useGetRooms() {

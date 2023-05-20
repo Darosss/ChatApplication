@@ -1,3 +1,4 @@
+import { LoginFields } from "src/@types/types";
 import { object, string } from "yup";
 
 export const logInSchema = object<LoginFields>().shape({

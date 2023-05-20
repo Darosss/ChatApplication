@@ -2,6 +2,8 @@ import React from "react";
 import { Formik } from "formik";
 import { rangeSchema } from "./validationSchema";
 import { Form, Col, Button } from "react-bootstrap";
+import { RangeUpdateData } from "src/@types/types";
+import { rangesIds } from "@src/utils/dataTestIdsList";
 
 interface RangeFormProps {
   initialValues: RangeUpdateData;
@@ -21,10 +23,11 @@ function RangeForm(props: RangeFormProps) {
       }}
     >
       {({ handleSubmit, handleChange, values, touched, errors }) => (
-        <Form onSubmit={handleSubmit} className="w-100" noValidate>
+        <Form data-testid={rangesIds.editCreateModal.form} onSubmit={handleSubmit} className="w-100" noValidate>
           <Form.Group as={Col} className="position-relative" controlId="validation-name">
             <Form.Label>Name</Form.Label>
             <Form.Control
+              data-testid={rangesIds.editCreateModal.nameInput}
               type="text"
               name="name"
               value={values.name}

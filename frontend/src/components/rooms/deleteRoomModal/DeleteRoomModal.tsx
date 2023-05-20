@@ -4,6 +4,7 @@ import { SendDataContext } from "@contexts/SendDataContext";
 import usePostInfoHook from "@hooks/usePostInfoHook";
 import { useDeleteRoom } from "@hooks/roomsApi";
 import { useRefetchData } from "@hooks/useAcciosHook";
+import { roomsIds } from "@src/utils/dataTestIdsList";
 
 function DeleteRoomModal(props: { roomId: string }) {
   const { roomId } = props;
@@ -29,6 +30,7 @@ function DeleteRoomModal(props: { roomId: string }) {
       actionBtnVariant="danger"
       postInfo={postInfo}
       closeOnSubmit={true}
+      dataTestSubmitButtonId={roomsIds.deleteRoomModal.roomDeleteSubmitButton}
     />
   );
 }

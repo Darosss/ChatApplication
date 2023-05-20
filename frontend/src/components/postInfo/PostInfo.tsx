@@ -1,8 +1,9 @@
 import React from "react";
+import { postInfoElementId } from "@utils/dataTestIdsList";
 
 function PostInfo(props: { info: string }) {
   return (
-    <div className="post-info">
+    <div data-testid={postInfoElementId} className="post-info">
       <div>{props.info}</div>
     </div>
   );

@@ -1,3 +1,4 @@
+import { IRangeRes, RangeUpdateData } from "src/@types/types";
 import useAcciosHook from "./useAcciosHook";
 
 export function useGetRanges() {

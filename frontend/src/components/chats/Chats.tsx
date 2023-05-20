@@ -19,6 +19,8 @@ import ChatOnlineUsers from "./chatOnlineUsers";
 import InfoSidebar from "@components/infoSidebar";
 import { AuthContext } from "@contexts/authContext";
 import { useGetLoggedUserRooms, useGetRoomMessages } from "@hooks/roomsApi";
+import { IChatRoomRes, IMessagesRes } from "src/@types/types";
+import { chatsElementId } from "@src/utils/dataTestIdsList";
 
 type Timer = ReturnType<typeof setTimeout>;
 
@@ -132,7 +134,7 @@ function Chats() {
       <Row className="w-100 mt-4">
         <Col md={2}>
           <InfoSidebar title="Available rooms" placement="bottom" btnText="Rooms" backdrop={true}>
-            <div className="d-flex flex-column w-100">
+            <div className="d-flex flex-column w-100" data-testid={chatsElementId}>
               <div className="d-flex chat-section-wide bg-dark justify-content-center">Room list: </div>
               <Nav variant="pills nav-chats chats-list" ref={chatList}>
                 {chatRooms?.map((room) => {

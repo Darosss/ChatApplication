@@ -11,6 +11,7 @@ function HamburgerMenu(props: { menu: any }) {
   return (
     <button
       className="hamburger m-1 mb-2 bg-dark text-light"
+      data-testid="hamburger-menu-element"
       onClick={() => {
         setOpen(!open);
         toggleNavigation();

@@ -2,6 +2,7 @@ import React from "react";
 import { Table } from "react-bootstrap";
 import { MessageSocket } from "../socket";
 import ChatMessage from "../chatMessage";
+import { IMessagesRes } from "src/@types/types";
 
 function ChatMessages(props: { localMessages: MessageSocket[]; dbMessages: IMessagesRes[] }) {
   const { localMessages, dbMessages } = props;

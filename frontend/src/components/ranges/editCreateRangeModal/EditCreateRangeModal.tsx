@@ -4,8 +4,9 @@ import { SendDataContext } from "@contexts/SendDataContext";
 import usePostInfoHook from "@hooks/usePostInfoHook";
 import { useCreateOrUpdateRange } from "@hooks/rangesApi";
 import { useRefetchData } from "@hooks/useAcciosHook";
-import RangeForm from "./RoomForm";
+import RangeForm from "./RangeForm";
 import PostInfo from "@components/postInfo";
+import { IRangeRes, RangeUpdateData } from "src/@types/types";
 
 function EditRangeModal(props: { range?: IRangeRes; sectionName?: string }) {
   const { range, sectionName = "" } = props;

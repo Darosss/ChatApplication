@@ -1,3 +1,4 @@
+import { RangeUpdateData } from "src/@types/types";
 import { object, string } from "yup";
 
 export const rangeSchema = object<RangeUpdateData>().shape({

@@ -2,6 +2,7 @@ import React from "react";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 import EditCreateRoomModal from "@components/rooms/editCreateRoomModal";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
+import { IChatRoomRes, IUserRes, IRangeRes } from "src/@types/types";
 
 interface UserRoomsProps {
   userRooms: IChatRoomRes[];

@@ -3,6 +3,7 @@ import EditCreateRangeModal from "./editCreateRangeModal";
 import DeleteRangeModal from "./deleteRangeModal";
 import { SendDataContext } from "@contexts/SendDataContext";
 import { useGetRanges } from "@hooks/rangesApi";
+import { IRangeRes } from "src/@types/types";
 
 function Ranges() {
   const { rangesResponse, rangesLoading, refetchRanges } = useGetRanges();
@@ -15,7 +16,7 @@ function Ranges() {
 
   return (
     <SendDataContext.Provider value={{ sendData: refetchRanges }}>
-      <div>
+      <div data-testid="ranges-element">
         <div className="section-header">
           <h1> Ranges list {rangesLoading ? "  Fetching data..." : null}</h1>
         </div>

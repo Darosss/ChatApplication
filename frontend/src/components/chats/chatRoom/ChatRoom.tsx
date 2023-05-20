@@ -6,6 +6,8 @@ import { MessageSocket, RoomOnlineUsers } from "../socket";
 import ChatMessages from "../chatMessages";
 import ChatOnlineUsers from "../chatOnlineUsers";
 import { Button, Tab } from "react-bootstrap";
+import { IChatRoomRes, IAuth, IMessagesRes } from "src/@types/types";
+import { chatsIds } from "@src/utils/dataTestIdsList";
 
 function ChatRoom(props: {
   room: IChatRoomRes;
@@ -55,7 +57,7 @@ function ChatRoom(props: {
   };
 
   return (
-    <Tab.Pane key={room._id} eventKey={room._id} className="w-100">
+    <Tab.Pane data-testid={chatsIds.chatRoom} key={room._id} eventKey={room._id} className="w-100">
       <div>
         <div className="d-flex flex-fill justify-content-center bg-dark border-bottom mb-2 position-relative">
           <div className="d-flex">
@@ -63,6 +65,7 @@ function ChatRoom(props: {
           </div>
           <div className="flex-shrink-1 align-self-center position-absolute top-0 end-0">
             <Button
+              data-testid={chatsIds.onlineUsersBtnToggle}
               className="btn btn-dark btn-outline-secondary rounded-circle w-100 btn-sm py-0 online-users-button"
               onClick={() => setShowOnlineUsers(!showOnlineUsers)}
             >
@@ -92,7 +95,11 @@ function ChatRoom(props: {
                 textareaOnKey(e);
               }}
             />
-            <Button className="w-100 btn-secondary btn-lg p-4" onClick={sendMessage}>
+            <Button
+              data-testid={chatsIds.sendMessageBtn}
+              className="w-100 btn-secondary btn-lg p-4"
+              onClick={sendMessage}
+            >
               Send
             </Button>
           </div>
