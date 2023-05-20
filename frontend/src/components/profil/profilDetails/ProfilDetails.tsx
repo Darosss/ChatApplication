@@ -2,7 +2,6 @@ import React from "react";
 
 import EditProfile from "../editProfile";
 import { IUserRes } from "src/@types/types";
-import moment from "moment";
 import { getFormatedDate } from "@src/utils/dates";
 
 function ProfilDetails(props: { user: IUserRes }) {
