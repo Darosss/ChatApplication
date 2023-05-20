@@ -2,6 +2,9 @@ import React from "react";
 
 import EditProfile from "../editProfile";
 import { IUserRes } from "src/@types/types";
+import moment from "moment";
+import { getFormatedDate } from "@src/utils/dates";
+
 function ProfilDetails(props: { user: IUserRes }) {
   const { user } = props;
 
@@ -31,11 +34,11 @@ function ProfilDetails(props: { user: IUserRes }) {
       </div>
       <div>
         <div>Birthday</div>
-        <div>{user.birthday ? user.birthday.toISOString().split("T")[0] : null}</div>
+        <div>{user.birthday ? getFormatedDate(user.birthday) : null}</div>
       </div>
       <div>
         <div>Created at</div>
-        <div>{user.createdAt ? user.createdAt.toString().replace("T", " ").replace("Z", "") : null}</div>
+        <div>{user.createdAt ? getFormatedDate(user.createdAt) : null}</div>
       </div>
       <div>
         <div>Country</div>
@@ -56,13 +59,13 @@ function ProfilDetails(props: { user: IUserRes }) {
       {user.isBanned ? (
         <div>
           <div>Banned date</div>
-          <div>{user.bannedDate?.toString()}</div>
+          <div>{user.bannedDate ? getFormatedDate(user.bannedDate) : null}</div>
         </div>
       ) : null}
       {user.isBanned ? (
         <div>
           <div>Banned expires</div>
-          <div>{user.banExpiresDate?.toString()}</div>
+          <div>{user.banExpiresDate ? getFormatedDate(user.banExpiresDate) : null}</div>
         </div>
       ) : null}
     </div>

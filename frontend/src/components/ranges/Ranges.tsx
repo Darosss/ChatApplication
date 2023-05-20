@@ -4,6 +4,7 @@ import DeleteRangeModal from "./deleteRangeModal";
 import { SendDataContext } from "@contexts/SendDataContext";
 import { useGetRanges } from "@hooks/rangesApi";
 import { IRangeRes } from "src/@types/types";
+import { getFormatedDate } from "@src/utils/dates";
 
 function Ranges() {
   const { rangesResponse, rangesLoading, refetchRanges } = useGetRanges();
@@ -38,7 +39,7 @@ function Ranges() {
                   <tr key={index}>
                     <td>{range.name}</td>
                     <td>{range.createdBy.username}</td>
-                    <td>{range.createdAt.toString().split("T")[0]}</td>
+                    <td>{getFormatedDate(range.createdAt)}</td>
                     <td>
                       <EditCreateRangeModal sectionName="Edit" range={range} />
                     </td>

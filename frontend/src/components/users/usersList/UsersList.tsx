@@ -4,6 +4,7 @@ import BanUserModal from "../banUserModal";
 import UnbanUserModal from "../unbanUserModal";
 import { useGetRanges } from "@hooks/rangesApi";
 import { IUserRes, IRangeRes } from "src/@types/types";
+import { getFormatedDate } from "@src/utils/dates";
 
 function UsersList(props: { users: IUserRes[] }) {
   const { users } = props;
@@ -40,9 +41,13 @@ function UsersList(props: { users: IUserRes[] }) {
                     <BanUserModal userId={user._id} username={user.username} />
                   )}
                 </td>
-                <td>{user?.isBanned ? user.bannedDate?.toString().replace("T", " ").split(".")[0] : "-"}</td>
-                <td>{user.isBanned ? user.banExpiresDate?.toString().replace("T", " ").split(".")[0] : "-"}</td>
-                <td> {user.isBanned ? user.banReason : "-"}</td>
+                {user.isBanned ? (
+                  <>
+                    <td>{user.bannedDate ? getFormatedDate(user.bannedDate) : "-"}</td>
+                    <td>{user.banExpiresDate ? getFormatedDate(user.banExpiresDate) : "-"}</td>
+                    <td> {user.banReason}</td>
+                  </>
+                ) : null}
               </tr>
             );
           })}
