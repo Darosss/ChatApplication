@@ -1,7 +1,5 @@
 <a name="readme-top"></a>
 
-# !!!README WILL BE UPDATED SOON !!!
-
 # Chat application
 
 <details>
@@ -18,9 +16,9 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#configuration">Configuration</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -31,7 +29,7 @@
 
 Chat apllication where you can
 
-`[ADD SCREEN HERE]`
+<img src="./images/chat-room.png" width=500px alt="Create trigger">
 
 - as user:
   - chat with others in chat rooms,
@@ -44,49 +42,69 @@ Chat apllication where you can
 
 ### Built with
 
-- React 18.2.0,
-- Node.js 16.17.0
+- React
+- MongoDB
+- SocketIO
+- Node
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Getting started
 
 ### Prerequisites
 
+- MongoDB(`v6.0.4^`)
+  - Community Server installed and running on your local machine - `<https://www.mongodb.com/try/download/community>
+  - or use online clusters
+- NodeJS - tested on `v20.2.0`
+
 - npm
-  ```sh
-  npm install npm@latest -g
-  ```
+
+```sh
+npm install npm@latest -g
+```
 
 ### Installation
 
 1. Clone the repo
-   ```sh
-   git clone https://github.com/Darosss/ChatApplication.git
-   ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
-3. This is in development so need to create `.env` file in `app` folder with variables as below
-   ```
-   BACKEND_PORT=<port for localhost backend>
-   FRONTEND_URL=<example http://localhost:3000>
-   DATABASE_URL=<Mongodb database URL or URI>
-   COOKIE_SECRET=<cookie secret>
-   JWT_SECRET_KEY=<jwt secret>
-   ```
-4. This is in development so need to create `.env` file in `frontend` folder with variable
-   ```
-   REACT_APP_API_URI=<example http://localhost:5000/api/v1 >
-   REACT_APP_SOCKET_ENDPOINT=<example http://localhost:5000 >
-   ```
-   **_REACT_APP_API_URI_ must contain `/api/v1` after port, it's only route designed**
 
-<!-- USAGE EXAMPLES -->
+```sh
+git clone https://github.com/Darosss/ChatApplication.git
+```
 
-## Usage
+2. Navigate to server folder and install NPM packages
 
-`Add some screens and common usage`
+```sh
+cd app
+npm install
+```
+
+3. Navigate to frontend folder and install NPM packages
+
+```sh
+cd frontend
+npm install
+```
+
+### Configuration
+
+_The app requires several environment variables to be set in the .env file. You can use the .env.example (should be in root directory) file as a template:_
+
+```
+BACKEND_PORT=5000(whatever port u can use)
+FRONTEND_URL=<fe. http://localhost:3000>
+DATABASE_URL=<fe. mongodb url>
+
+COOKIE_SECRET=<cookie secret>
+JWT_SECRET_KEY=<jwt secret>
+
+VITE_BACKEND_URL=<fe. http://localhost:5000/api/v1 >
+VITE_SOCKET_ENDPOINT=<fe. http://localhost:5000 >
+```
+
+_`VITE_BACKEND_URL` - must contain `<backend url with port>/api/v1` something like this. It's only route designed_
+
+_Both `COOKIE_SECRET` and `JWT_SECRET_KEY` are random 32 bytes string. I've used: `crypto.randomBytes(32).toString('hex')`_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -98,8 +116,6 @@ Chat apllication where you can
 - [x] Add ranges system
 - [x] Improve for mobiles
 - [] Add shop with privileges
-
-  See the [open issues](https://github.com/Darosss/ChatApplication/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -117,6 +133,4 @@ Project Link: [https://github.com/Darosss/ChatApplication](https://github.com/Da
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- MARKDOWN LINKS & IMAGES -->
-
-[chat-application-screenshot]: images/chat-application.png
+[chat-room-screenshot]: images/chat-room.png
