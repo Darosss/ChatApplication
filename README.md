@@ -17,6 +17,7 @@
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
         <li><a href="#configuration">Configuration</a></li>
+        <li><a href="#testing">Testing</a></li>
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
@@ -107,6 +108,36 @@ _`VITE_BACKEND_URL` - must contain `<backend url with port>/api/v1` something li
 _Both `COOKIE_SECRET` and `JWT_SECRET_KEY` are random 32 bytes string. I've used: `crypto.randomBytes(32).toString('hex')`_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Testing
+
+- backend:
+
+  1. For test backend first we need to recreate testEnv file in `app/src/tests/settings`
+     (in this folder should be testEnv.example which can be used for example)
+
+  ```js
+  process.env.BACKEND_PORT = 5001;
+  process.env.DATABASE_URL = ""; //fe. mongodb://127.0.0.1:27017/testdb, could be online cluster too
+  process.env.COOKIE_SECRET = ""; //fe. 32 bytes hex string:
+  //require("crypto").randomBytes(32).toString('hex')
+
+  process.env.JWT_SECRET_KEY = ""; //fe. 32 bytes hex string:
+  //require("crypto").randomBytes(32).toString('hex')
+  process.env.NODE_ENV = "test";
+  ```
+
+  2. Then just run from app folder
+
+  ```sh
+  npm test
+  ```
+
+- frontend:
+  1.simply navigate to frontend folder and run:
+  ```sh
+  npm test
+  ```
 
 ## Roadmap
 
