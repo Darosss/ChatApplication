@@ -1,0 +1,9 @@
+*.env
+
+
+app/node_modules
+app/dist
+**logs
+app/src/tests/settings/testEnv.ts
+frontend/node_modules
+frontend/dist
