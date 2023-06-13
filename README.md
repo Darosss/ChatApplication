@@ -158,7 +158,7 @@ Distributed under the MIT License. See `LICENSE.md` for more information.
 
 ## Contact
 
-Darosss - daroinf12@gmail.com
+Darosss - darosss12@proton.me
 
 Project Link: [https://github.com/Darosss/ChatApplication](https://github.com/Darosss/ChatApplication)
 
